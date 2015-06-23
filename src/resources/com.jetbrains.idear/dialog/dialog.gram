@@ -1,0 +1,25 @@
+#JSGF V1.0;
+
+grammar dialog;
+
+<digit> = oh    |
+          zero  |
+          one   |
+          two   |
+          three |
+          four  |
+          five  |
+          six   |
+          seven |
+          eight |
+          nine  ;
+
+<number> = <digit>+ [point <digit>+];
+
+<menu_command> =  open [file | edit | view | navigate | code | settings];
+
+<editor_command> = [expand | shrink] selection;
+
+<global_command> = focus [editor | project];
+
+public <command> = <menu_command> | <editor_command> | <global_command>;

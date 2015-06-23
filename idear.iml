@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PLUGIN_MODULE" version="4">
+  <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/META-INF/plugin.xml" />
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="freetts" level="project" />
+    <orderEntry type="library" name="sphinx4-core-1.0-20150223.210646-7" level="project" />
+    <orderEntry type="library" name="sphinx4-data-1.0-20150223.210601-7" level="project" />
+    <orderEntry type="library" name="rxjava-1.0.12" level="project" />
+    <orderEntry type="library" name="rxjava-async-util-0.21.0" level="project" />
+  </component>
+</module>
