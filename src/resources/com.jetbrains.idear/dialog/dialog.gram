@@ -16,7 +16,7 @@ grammar dialog;
 
 <number> = <digit>+ [point <digit>+];
 
-<menu_command> =  open [file | edit | view | navigate | code | settings];
+<menu_command> =  open [file | edit | view | navigate | code | settings]+;
 
 <editor_command> = [expand | shrink] selection;
 

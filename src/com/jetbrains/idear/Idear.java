@@ -48,38 +48,24 @@ public class Idear implements ApplicationComponent {
 
                 if (utterance.startsWith("open")) {
                     if (utterance.endsWith("settings")) {
-                        try {
-                            EventQueue.invokeAndWait(() -> {AnAction aa = ActionManager.getInstance().getAction(IdeActions.ACTION_SHOW_SETTINGS);
-                            aa.actionPerformed(new AnActionEvent(null,
-                                    DataManager.getInstance().getDataContext(),
-                                    ActionPlaces.UNKNOWN, aa.getTemplatePresentation(),
-                                    ActionManager.getInstance(), 0)); });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else if (utterance.endsWith("edit")) {
-
-                    } else if (utterance.endsWith("navigate")) {
-
-                    } else if (utterance.endsWith("code")) {
-
-                    } else if (utterance.endsWith("analyze")) {
-
+                            invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
                     }
                 }
 
 
                 if (utterance.startsWith("focus")) {
                     if (utterance.endsWith("editor")) {
-
+                        invokeAction(IdeActions.ACTION_EDITOR_ESCAPE);
+                    } else if (utterance.endsWith("project")) {
+                        invokeAction(IdeActions.GROUP_PROJECT_VIEW_POPUP);
                     }
                 }
 
                 if (utterance.endsWith("selection")) {
                     if (utterance.startsWith("expand")) {
-
+                        invokeAction(IdeActions.ACTION_EXPAND_REGION_RECURSIVELY);
                     } else if (utterance.startsWith("shrink")) {
-
+                        invokeAction(IdeActions.ACTION_COLLAPSE_REGION_RECURSIVELY);
                     }
                 }
 
@@ -93,6 +79,20 @@ public class Idear implements ApplicationComponent {
                 }
             }
         }).start();
+    }
+
+    private void invokeAction(final String actionShowSettings) {
+        try {
+            EventQueue.invokeAndWait(() -> {
+                AnAction aa = ActionManager.getInstance().getAction(actionShowSettings);
+                aa.actionPerformed(new AnActionEvent(null,
+                        DataManager.getInstance().getDataContext(),
+                        ActionPlaces.UNKNOWN, aa.getTemplatePresentation(),
+                        ActionManager.getInstance(), 0));
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
