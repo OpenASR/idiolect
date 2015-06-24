@@ -2,8 +2,7 @@
 
 grammar dialog;
 
-<digit> = oh    |
-          zero  |
+<digit> = zero  |
           one   |
           two   |
           three |
@@ -14,12 +13,29 @@ grammar dialog;
           eight |
           nine  ;
 
-<number> = <digit>+ [point <digit>+];
+<number> = <digit>+;
 
-<menu_command> =  open [file | edit | view | navigate | code | settings]+;
+<menu_command> =  open <menu_item>;
 
-<editor_command> = [expand | shrink] selection;
+<menu_item> = file | edit | view | navigate | code | settings | recent | terminal;
 
-<global_command> = focus [editor | project];
+<editor_command> = <expand_shrink> selection |
+page [up | down] |
+goto line <number> |
+[next | previous] [line | method | error] |
+inspect code;
 
-public <command> = <menu_command> | <editor_command> | <global_command>;
+<expand_shrink> = expand | shrink;
+
+<global_command> = focus <view>;
+
+<view> = editor | project;
+
+<speech_command> = speech <speech_action>;
+
+<speech_action> = pause | resume;
+
+<keyboard_command> = press [enter | escape | tab | undo | delete];
+public <command> = <menu_command> |
+<editor_command> | <global_command> |
+<speech_command> | <keyboard_command>;
