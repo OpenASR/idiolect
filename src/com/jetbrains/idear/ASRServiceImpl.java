@@ -9,6 +9,7 @@ import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ASRServiceImpl implements ASRService {
@@ -24,9 +25,9 @@ public class ASRServiceImpl implements ASRService {
     private LiveSpeechRecognizer recognizer;
     private Robot robot;
 
-    private AtomicReference<Status> status = new AtomicReference<>(Status.INACTIVE);
+    private final AtomicReference<Status> status = new AtomicReference<>(Status.INIT);
 
-    /* package */ void init() {
+    void init() {
         Configuration configuration = new Configuration();
 
         configuration.setAcousticModelPath(ACOUSTIC_MODEL);
@@ -37,17 +38,13 @@ public class ASRServiceImpl implements ASRService {
         configuration.setGrammarName("dialog");
 
         try {
-
             recognizer = new LiveSpeechRecognizer(configuration);
-
         } catch (IOException e) {
-            System.err.println("Couldn't initialize speech recognizer.");
+            logger.error("Couldn't initialize speech recognizer:", e);
         }
 
         try {
-
             robot = new Robot();
-
         } catch (AWTException e) {
             e.printStackTrace();
         }
@@ -57,18 +54,15 @@ public class ASRServiceImpl implements ASRService {
         speechThread.start();
     }
 
-    /* package */ void dispose() {
-
+    void dispose() {
         // Deactivate in the first place, therefore actually
         // prevent activation upon the user-input
-
         deactivate();
-
         terminate();
     }
 
     private void terminate() {
-
+        recognizer.stopRecognition();
     }
 
     private Status setStatus(Status s) {
@@ -85,18 +79,16 @@ public class ASRServiceImpl implements ASRService {
         if (getStatus() == Status.ACTIVE)
             return Status.ACTIVE;
 
-        recognizer.startRecognition(true);
+        if (getStatus() == Status.INIT) {
+            // Cold start prune cache
+            recognizer.startRecognition(true);
+        }
 
         return setStatus(Status.ACTIVE);
     }
 
     @Override
     public Status deactivate() {
-        if (getStatus() == Status.INACTIVE)
-            return Status.INACTIVE;
-
-        recognizer.stopRecognition();
-
         return setStatus(Status.INACTIVE);
     }
 
@@ -104,71 +96,87 @@ public class ASRServiceImpl implements ASRService {
         @Override
         public void run() {
             while (!isTerminated()) {
+                String result = null;
+
+                // This blocks on a recognition result
                 if (isActive()) {
-                    String result = recognizer.getResult().getHypothesis();
+                    result = getResultFromRecognizer();
+                }
 
+                // This may happen 10-15 seconds later
+                if (isActive() && result != null) {
                     logger.debug("Recognized: " + result);
+                    applyAction(result);
+                }
+            }
+        }
 
-                    if (result.startsWith("open")) {
-                        if (result.endsWith("settings")) {
-                            invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
-                        } else if (result.endsWith("recent")) {
-                            invokeAction(IdeActions.ACTION_RECENT_FILES);
-                        } else if (result.endsWith("terminal")) {
-                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
-                        }
-                    } else if (result.startsWith("focus")) {
-                        if (result.endsWith("editor")) {
-                            pressKeystroke(KeyEvent.VK_ESCAPE);
-                        } else if (result.endsWith("project")) {
-                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
-                        }
-                    } else if (result.endsWith("selection")) {
-                        if (result.startsWith("expand")) {
-                            pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
-                        } else if (result.startsWith("shrink")) {
-                            pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
-                        }
-                    } else if (result.startsWith("press")) {
-                        if (result.endsWith("delete")) {
-                            pressKeystroke(KeyEvent.VK_DELETE);
-                        } else if (result.endsWith("enter")) {
-                            pressKeystroke(KeyEvent.VK_ENTER);
-                        } else if (result.endsWith("escape")) {
-                            pressKeystroke(KeyEvent.VK_ESCAPE);
-                        } else if (result.endsWith("tab")) {
-                            pressKeystroke(KeyEvent.VK_TAB);
-                        } else if (result.endsWith("undo")) {
-                            pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
-                        }
-                    } else if (result.startsWith("next")) {
-                        if (result.endsWith("line")) {
-                            pressKeystroke(KeyEvent.VK_DOWN);
-                        } else if (result.endsWith("page")) {
-                            pressKeystroke(KeyEvent.VK_PAGE_DOWN);
-                        } else if (result.endsWith("method")) {
-                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
-                        }
-                    } else if (result.startsWith("previous")) {
-                        if (result.endsWith("line")) {
-                            pressKeystroke(KeyEvent.VK_UP);
-                        } else if (result.endsWith("page")) {
-                            pressKeystroke(KeyEvent.VK_PAGE_UP);
-                        } else if (result.endsWith("method")) {
-                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
-                        }
-                    } else if (result.startsWith("inspect code")) {
-                        pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
-                    }
+        private String getResultFromRecognizer() {
+            return recognizer.getResult().getHypothesis();
+        }
 
-                    if (result.startsWith("speech pause")) {
-                        while (true) {
-                            result = recognizer.getResult().getHypothesis();
-                            if (result.equals("speech resume")) {
-                                break;
-                            }
-                        }
-                    }
+        private void applyAction(String result) {
+            if (result.startsWith("open")) {
+                if (result.endsWith("settings")) {
+                    invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
+                } else if (result.endsWith("recent")) {
+                    invokeAction(IdeActions.ACTION_RECENT_FILES);
+                } else if (result.endsWith("terminal")) {
+                    pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
+                }
+            } else if (result.startsWith("focus")) {
+                if (result.endsWith("editor")) {
+                    pressKeystroke(KeyEvent.VK_ESCAPE);
+                } else if (result.endsWith("project")) {
+                    pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
+                }
+            } else if (result.endsWith("selection")) {
+                if (result.startsWith("expand")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
+                } else if (result.startsWith("shrink")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
+                }
+            } else if (result.startsWith("press")) {
+                if (result.endsWith("delete")) {
+                    pressKeystroke(KeyEvent.VK_DELETE);
+                } else if (result.endsWith("enter")) {
+                    pressKeystroke(KeyEvent.VK_ENTER);
+                } else if (result.endsWith("escape")) {
+                    pressKeystroke(KeyEvent.VK_ESCAPE);
+                } else if (result.endsWith("tab")) {
+                    pressKeystroke(KeyEvent.VK_TAB);
+                } else if (result.endsWith("undo")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
+                }
+            } else if (result.startsWith("next")) {
+                if (result.endsWith("line")) {
+                    pressKeystroke(KeyEvent.VK_DOWN);
+                } else if (result.endsWith("page")) {
+                    pressKeystroke(KeyEvent.VK_PAGE_DOWN);
+                } else if (result.endsWith("method")) {
+                    pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
+                }
+            } else if (result.startsWith("previous")) {
+                if (result.endsWith("line")) {
+                    pressKeystroke(KeyEvent.VK_UP);
+                } else if (result.endsWith("page")) {
+                    pressKeystroke(KeyEvent.VK_PAGE_UP);
+                } else if (result.endsWith("method")) {
+                    pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
+                }
+            } else if (result.startsWith("inspect code")) {
+                pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
+            } else if (result.startsWith("speech pause")) {
+                pauseSpeech();
+            }
+        }
+
+        private void pauseSpeech() {
+            String result;
+            while (isActive()) {
+                result = getResultFromRecognizer();
+                if (result.equals("speech resume")) {
+                    break;
                 }
             }
         }
@@ -197,12 +205,12 @@ public class ASRServiceImpl implements ASRService {
             EventQueue.invokeAndWait(() -> {
                 AnAction anAction = ActionManager.getInstance().getAction(action);
                 anAction.actionPerformed(new AnActionEvent(null,
-                    DataManager.getInstance().getDataContext(),
-                    ActionPlaces.UNKNOWN, anAction.getTemplatePresentation(),
-                    ActionManager.getInstance(), 0));
+                        DataManager.getInstance().getDataContext(),
+                        ActionPlaces.UNKNOWN, anAction.getTemplatePresentation(),
+                        ActionManager.getInstance(), 0));
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InterruptedException | InvocationTargetException e) {
+            logger.error("Could not invoke action:", e);
         }
     }
 }
