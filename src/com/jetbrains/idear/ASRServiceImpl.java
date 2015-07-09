@@ -67,6 +67,10 @@ public class ASRServiceImpl implements ASRService {
         terminate();
     }
 
+    private void terminate() {
+
+    }
+
     private Status setStatus(Status s) {
         return status.getAndSet(s);
     }
@@ -93,7 +97,7 @@ public class ASRServiceImpl implements ASRService {
 
         recognizer.stopRecognition();
 
-        return status = Status.INACTIVE;
+        return setStatus(Status.INACTIVE);
     }
 
     private class ASRControlLoop implements Runnable {

@@ -10,5 +10,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sphinx4-core-1.0-20150630" level="project" />
+    <orderEntry type="library" name="marytts-runtime-5.1.2-jar-with-dependencies" level="project" />
+    <orderEntry type="library" name="voice-cmu-slt-hsmm-5.1.2" level="project" />
+    <orderEntry type="library" name="marytts-lang-en-5.1.2" level="project" />
+    <orderEntry type="library" name="sphinx4-core-1.0-20150630.174404-9-sources" level="project" />
   </component>
 </module>
