@@ -1,0 +1,11 @@
+<idea-plugin version="2">
+
+    <extensions defaultExtensionNs="com.intellij">
+        <intentionAction>
+            <className>com.jetbrains.idear.JavaPronouncer</className>
+        </intentionAction>
+    </extensions>
+
+    <actions>
+    </actions>
+</idea-plugin>
