@@ -28,6 +28,10 @@
         <applicationService serviceInterface="com.jetbrains.idear.ASRService" serviceImplementation="com.jetbrains.idear.ASRServiceImpl">
         </applicationService>
 
+        <applicationService serviceInterface="com.jetbrains.idear.TextToSpeechService" serviceImplementation="com.jetbrains.idear.TTSService">
+        </applicationService>
+
+
     </extensions>
 
     <application-components>
