@@ -9,10 +9,11 @@ import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ASRServiceImpl implements ASRService {
 
-    private final Thread speechThread = new Thread(new ASRControlLoop());
+    private final Thread speechThread = new Thread(new ASRControlLoop(), "ARS Thread");
 
     private static final String ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us";
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
@@ -23,13 +24,9 @@ public class ASRServiceImpl implements ASRService {
     private LiveSpeechRecognizer recognizer;
     private Robot robot;
 
-    private Status status = Status.INACTIVE;
+    private AtomicReference<Status> status = new AtomicReference<>(Status.INACTIVE);
 
-    ASRServiceImpl() {
-        init();
-    }
-
-    private void init() {
+    /* package */ void init() {
         Configuration configuration = new Configuration();
 
         configuration.setAcousticModelPath(ACOUSTIC_MODEL);
@@ -60,9 +57,23 @@ public class ASRServiceImpl implements ASRService {
         speechThread.start();
     }
 
+    /* package */ void dispose() {
+
+        // Deactivate in the first place, therefore actually
+        // prevent activation upon the user-input
+
+        deactivate();
+
+        terminate();
+    }
+
+    private Status setStatus(Status s) {
+        return status.getAndSet(s);
+    }
+
     @Override
     public Status getStatus() {
-        return status;
+        return status.get();
     }
 
     @Override
@@ -72,7 +83,7 @@ public class ASRServiceImpl implements ASRService {
 
         recognizer.startRecognition(true);
 
-        return status = Status.ACTIVE;
+        return setStatus(Status.ACTIVE);
     }
 
     @Override
