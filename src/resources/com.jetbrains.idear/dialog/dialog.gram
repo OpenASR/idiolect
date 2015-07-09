@@ -21,9 +21,10 @@ grammar dialog;
 
 <editor_command> = <expand_shrink> selection |
 page [up | down] |
-goto line <number> |
-[next | previous] [line | method | error] |
-inspect code;
+[following | previous] [line | method | error] |
+inspect code | <refactoring> ;
+
+<refactoring> = extract this method | extract this parameter;
 
 <expand_shrink> = expand | shrink;
 

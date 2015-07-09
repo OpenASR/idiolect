@@ -24,6 +24,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <applicationService serviceInterface="com.jetbrains.idear.TTSService"
+                            serviceImplementation="com.jetbrains.idear.TTSService"/>
     </extensions>
 
     <application-components>

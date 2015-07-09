@@ -97,13 +97,13 @@ public class VoiceControlAction extends AnAction {
                     } else if (result.endsWith("terminal")) {
                         pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                     }
-                } else if (result.startsWith("focus")) {
-                    if (result.endsWith("editor")) {
-                        pressKeystroke(KeyEvent.VK_ESCAPE);
-                    } else if (result.endsWith("project")) {
-                        pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
-                    }
-                } else if (result.endsWith("selection")) {
+                    } else if (result.startsWith("focus")) {
+                        if (result.endsWith("editor")) {
+                            pressKeystroke(KeyEvent.VK_ESCAPE);
+                        } else if (result.endsWith("project")) {
+                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
+                        }
+                    } else if (result.endsWith("selection")) {
                     if (result.startsWith("expand")) {
                         pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
                     } else if (result.startsWith("shrink")) {
@@ -121,7 +121,13 @@ public class VoiceControlAction extends AnAction {
                     } else if (result.endsWith("undo")) {
                         pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                     }
-                } else if (result.startsWith("next")) {
+                } else if(result.startsWith("extract this")) {
+                    if (result.endsWith("method")) {
+                        pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_M);
+                    } else if (result.endsWith("parameter")) {
+                        pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_P);
+                    }
+                } else if (result.startsWith("following")) {
                     if (result.endsWith("line")) {
                         pressKeystroke(KeyEvent.VK_DOWN);
                     } else if (result.endsWith("page")) {
