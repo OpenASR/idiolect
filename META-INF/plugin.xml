@@ -23,17 +23,22 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+
+        <applicationService serviceInterface="com.jetbrains.idear.ASRService" serviceImplementation="com.jetbrains.idear.ASRServiceImpl">
+        </applicationService>
+
     </extensions>
 
     <application-components>
-        <!-- Add your application components here -->
+
         <component>
             <implementation-class>com.jetbrains.idear.Idear</implementation-class>
         </component>
+
         <component>
             <implementation-class>com.jetbrains.idear.SpeechService</implementation-class>
         </component>
+
     </application-components>
 
     <project-components>
@@ -42,11 +47,19 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="VoiceControlAction" class="com.jetbrains.idear.VoiceControlAction" text="VoiceControlAction"
-                description="Initiate voice control."
-                icon="/com/jetbrains/idear/icons/speech.png">
-            <add-to-group group-id="ToolbarMakeGroup" anchor="first"/>
-        </action>
+        <group id="Idear.Menu" text="_Voice" description="Voice control">
+            <add-to-group group-id="MainMenu" anchor="first"/>
+
+            <action id="Idear.VoiceControlActivationAction" class="com.jetbrains.idear.VoiceControlActivationAction" text="Start"
+                    description="Start VC"
+                    icon="/com/jetbrains/idear/icons/speech.png">
+            </action>
+
+            <action id="Idear.VoiceControlDeactivationAction" class="com.jetbrains.idear.VoiceControlDeactivationAction" text="Stop"
+                    description="Start VC"
+                    icon="/com/jetbrains/idear/icons/speech.png">
+            </action>
+        </group>
     </actions>
 
 </idea-plugin>

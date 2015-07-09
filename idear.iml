@@ -9,10 +9,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="freetts" level="project" />
-    <orderEntry type="library" name="sphinx4-core-1.0-20150223.210646-7" level="project" />
-    <orderEntry type="library" name="sphinx4-data-1.0-20150223.210601-7" level="project" />
-    <orderEntry type="library" name="rxjava-1.0.12" level="project" />
-    <orderEntry type="library" name="rxjava-async-util-0.21.0" level="project" />
+    <orderEntry type="library" name="sphinx4-core-1.0-20150630" level="project" />
   </component>
 </module>
