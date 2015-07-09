@@ -109,63 +109,94 @@ public class ASRServiceImpl implements ASRService {
     }
 
     private class ASRControlLoop implements Runnable {
+
+        public static final String FUCK = "fuck";
+        public static final String OPEN = "open";
+        public static final String SETTINGS = "settings";
+        public static final String RECENT = "recent";
+        public static final String TERMINAL = "terminal";
+        public static final String FOCUS = "focus";
+        public static final String EDITOR = "editor";
+        public static final String PROJECT = "project";
+        public static final String SELECTION = "selection";
+        public static final String EXPAND = "expand";
+        public static final String SHRINK = "shrink";
+        public static final String PRESS = "press";
+        public static final String DELETE = "delete";
+        public static final String ENTER = "enter";
+        public static final String ESCAPE = "escape";
+        public static final String TAB = "tab";
+        public static final String UNDO = "undo";
+        public static final String NEXT = "next";
+        public static final String LINE = "line";
+        public static final String PAGE = "page";
+        public static final String METHOD = "method";
+        public static final String PREVIOUS = "previous";
+        public static final String INSPECT_CODE = "inspect code";
+
         @Override
         public void run() {
             while (!isTerminated()) {
                 if (isActive()) {
                     String result = recognizer.getResult().getHypothesis();
 
-                    logger.debug("Recognized: " + result);
+                    //logger.info("Recognized: " + result);
+                    System.out.println("Recognized: " + result);
 
-                    if (result.startsWith("open")) {
-                        if (result.endsWith("settings")) {
+                    // Ok, something screwed up
+
+                    if (result.equals(FUCK))
+                        invokeAction(IdeActions.ACTION_UNDO);
+
+                    if (result.startsWith(OPEN)) {
+                        if (result.endsWith(SETTINGS)) {
                             invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
-                        } else if (result.endsWith("recent")) {
+                        } else if (result.endsWith(RECENT)) {
                             invokeAction(IdeActions.ACTION_RECENT_FILES);
-                        } else if (result.endsWith("terminal")) {
+                        } else if (result.endsWith(TERMINAL)) {
                             pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                         }
-                    } else if (result.startsWith("focus")) {
-                        if (result.endsWith("editor")) {
+                    } else if (result.startsWith(FOCUS)) {
+                        if (result.endsWith(EDITOR)) {
                             pressKeystroke(KeyEvent.VK_ESCAPE);
-                        } else if (result.endsWith("project")) {
+                        } else if (result.endsWith(PROJECT)) {
                             pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
                         }
-                    } else if (result.endsWith("selection")) {
-                        if (result.startsWith("expand")) {
+                    } else if (result.endsWith(SELECTION)) {
+                        if (result.startsWith(EXPAND)) {
                             pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
-                        } else if (result.startsWith("shrink")) {
+                        } else if (result.startsWith(SHRINK)) {
                             pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
                         }
-                    } else if (result.startsWith("press")) {
-                        if (result.endsWith("delete")) {
+                    } else if (result.startsWith(PRESS)) {
+                        if (result.endsWith(DELETE)) {
                             pressKeystroke(KeyEvent.VK_DELETE);
-                        } else if (result.endsWith("enter")) {
+                        } else if (result.endsWith(ENTER)) {
                             pressKeystroke(KeyEvent.VK_ENTER);
-                        } else if (result.endsWith("escape")) {
+                        } else if (result.endsWith(ESCAPE)) {
                             pressKeystroke(KeyEvent.VK_ESCAPE);
-                        } else if (result.endsWith("tab")) {
+                        } else if (result.endsWith(TAB)) {
                             pressKeystroke(KeyEvent.VK_TAB);
-                        } else if (result.endsWith("undo")) {
+                        } else if (result.endsWith(UNDO)) {
                             pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                         }
-                    } else if (result.startsWith("next")) {
-                        if (result.endsWith("line")) {
+                    } else if (result.startsWith(NEXT)) {
+                        if (result.endsWith(LINE)) {
                             pressKeystroke(KeyEvent.VK_DOWN);
-                        } else if (result.endsWith("page")) {
+                        } else if (result.endsWith(PAGE)) {
                             pressKeystroke(KeyEvent.VK_PAGE_DOWN);
-                        } else if (result.endsWith("method")) {
+                        } else if (result.endsWith(METHOD)) {
                             pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
                         }
-                    } else if (result.startsWith("previous")) {
-                        if (result.endsWith("line")) {
+                    } else if (result.startsWith(PREVIOUS)) {
+                        if (result.endsWith(LINE)) {
                             pressKeystroke(KeyEvent.VK_UP);
-                        } else if (result.endsWith("page")) {
+                        } else if (result.endsWith(PAGE)) {
                             pressKeystroke(KeyEvent.VK_PAGE_UP);
-                        } else if (result.endsWith("method")) {
+                        } else if (result.endsWith(METHOD)) {
                             pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
                         }
-                    } else if (result.startsWith("inspect code")) {
+                    } else if (result.startsWith(INSPECT_CODE)) {
                         pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
                     }
 
