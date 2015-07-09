@@ -1,11 +1,9 @@
 package com.jetbrains.idear;
 
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.components.ServiceManager;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by breandan on 6/22/2015.
- */
 public class Idear implements ApplicationComponent {
 
 
@@ -14,12 +12,12 @@ public class Idear implements ApplicationComponent {
 
     @Override
     public void initComponent() {
-
+        ((ASRServiceImpl) ServiceManager.getService(ASRService.class)).init();
     }
 
     @Override
     public void disposeComponent() {
-
+        ((ASRServiceImpl) ServiceManager.getService(ASRService.class)).dispose();
     }
 
     @Override
