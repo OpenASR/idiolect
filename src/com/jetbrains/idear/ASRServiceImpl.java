@@ -2,7 +2,6 @@ package com.jetbrains.idear;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
