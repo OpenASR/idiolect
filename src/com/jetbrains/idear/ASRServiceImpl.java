@@ -91,9 +91,21 @@ public class ASRServiceImpl implements ASRService {
         if (getStatus() == Status.INACTIVE)
             return Status.INACTIVE;
 
-        recognizer.stopRecognition();
+        Status s;
 
-        return status = Status.INACTIVE;
+        try {
+
+            recognizer.stopRecognition();
+
+        } finally {
+            s = setStatus(Status.INACTIVE);
+        }
+
+        return s;
+    }
+
+    private void terminate() {
+        setStatus(Status.TERMINATED);
     }
 
     private class ASRControlLoop implements Runnable {
