@@ -16,7 +16,7 @@ import java.util.Scanner;
 /**
  * Created by breandan on 7/9/2015.
  */
-public class TTSService {
+public class TTSService implements TextToSpeechService {
     private static final Logger logger = LoggerFactory.getLogger(TTSService.class);
     private static MaryInterface maryTTS;
     private Voice voice;
