@@ -36,7 +36,7 @@ public class TTSServiceImpl implements TTSService {
             maryTTS.setLocale(voice.getLocale());
             maryTTS.setVoice(voice.getName());
         } catch (MaryConfigurationException e) {
-            logger.error(e.getLocalizedMessage(), e);
+            e.printStackTrace();
         }
     }
 

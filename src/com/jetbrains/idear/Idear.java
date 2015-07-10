@@ -13,11 +13,13 @@ public class Idear implements ApplicationComponent {
     @Override
     public void initComponent() {
         ServiceManager.getService(ASRService.class).init();
+//        ServiceManager.getService(TTSService.class).init(); //TODO Why does this break TTS? init() is empty...
     }
 
     @Override
     public void disposeComponent() {
         ServiceManager.getService(ASRService.class).dispose();
+//        ServiceManager.getService(TTSService.class).dispose();
     }
 
     @Override
