@@ -19,7 +19,7 @@ public class ASRServiceImpl implements ASRService {
     private final Thread speechThread = new Thread(new ASRControlLoop(), "ARS Thread");
 
     private static final String ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us";
-    private static final String CONFIGURATION_PATH = "resource:/com.jetbrains.idear/co";
+    private static final String CONFIGURATION_PATH = "resource:/com.jetbrains.idear";
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
     private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/grammars";
 
@@ -30,7 +30,6 @@ public class ASRServiceImpl implements ASRService {
     private final AtomicReference<Status> status = new AtomicReference<>(Status.INIT);
 
     public void init() {
-        configurationManager = new ConfigurationManager(CONFIGURATION_PATH);
         Configuration configuration = new Configuration();
 
         configuration.setAcousticModelPath(ACOUSTIC_MODEL);
