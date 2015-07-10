@@ -27,7 +27,7 @@ public class ASRServiceImpl implements ASRService {
 
     private final AtomicReference<Status> status = new AtomicReference<>(Status.INIT);
 
-    void init() {
+    public void init() {
         Configuration configuration = new Configuration();
 
         configuration.setAcousticModelPath(ACOUSTIC_MODEL);
@@ -54,7 +54,7 @@ public class ASRServiceImpl implements ASRService {
         speechThread.start();
     }
 
-    void dispose() {
+    public void dispose() {
         // Deactivate in the first place, therefore actually
         // prevent activation upon the user-input
         deactivate();

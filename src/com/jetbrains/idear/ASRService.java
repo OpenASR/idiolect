@@ -2,6 +2,10 @@ package com.jetbrains.idear;
 
 public interface ASRService {
 
+    void init();
+
+    void dispose();
+
     enum Status {
         INIT,
         ACTIVE,

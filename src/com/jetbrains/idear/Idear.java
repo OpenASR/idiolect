@@ -12,12 +12,12 @@ public class Idear implements ApplicationComponent {
 
     @Override
     public void initComponent() {
-        ((ASRServiceImpl) ServiceManager.getService(ASRService.class)).init();
+        ServiceManager.getService(ASRService.class).init();
     }
 
     @Override
     public void disposeComponent() {
-        ((ASRServiceImpl) ServiceManager.getService(ASRService.class)).dispose();
+        ServiceManager.getService(ASRService.class).dispose();
     }
 
     @Override

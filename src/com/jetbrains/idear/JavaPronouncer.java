@@ -4,7 +4,6 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
@@ -15,8 +14,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class JavaPronouncer implements IntentionAction {
 
@@ -60,8 +57,8 @@ public class JavaPronouncer implements IntentionAction {
         try {
             ClassLoader classLoader = plugin.getPluginClassLoader();
             Thread.currentThread().setContextClassLoader(classLoader);
-            TextToSpeechService service = ServiceManager.getService(TextToSpeechService.class);
-            service.say(converter.toText());
+            TTSService service = ServiceManager.getService(TTSService.class);
+            service.say(converter.toText(editor.getDocument().getText(range)));
         } finally {
             Thread.currentThread().setContextClassLoader(prev);
         }
