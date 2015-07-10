@@ -2,16 +2,19 @@ package com.jetbrains.idear;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.diagnostic.Logger;
+import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import edu.cmu.sphinx.api.Configuration;
-import edu.cmu.sphinx.api.LiveSpeechRecognizer;
+import edu.cmu.sphinx.api.SpeechResult;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 
 public class ASRServiceImpl implements ASRService {
+
+    public static final double MASTER_GAIN = 0.85;
 
     private final Thread speechThread = new Thread(new ASRControlLoop(), "ARS Thread");
 
@@ -19,9 +22,9 @@ public class ASRServiceImpl implements ASRService {
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
     private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/dialog/";
 
-    private static final Logger logger = Logger.getInstance(ASRServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(ASRServiceImpl.class.getSimpleName());
 
-    private LiveSpeechRecognizer recognizer;
+    private CustomLiveSpeechRecognizer recognizer;
     private Robot robot;
 
     private AtomicReference<Status> status = new AtomicReference<>(Status.INACTIVE);
@@ -38,7 +41,9 @@ public class ASRServiceImpl implements ASRService {
 
         try {
 
-            recognizer = new LiveSpeechRecognizer(configuration);
+            recognizer = new CustomLiveSpeechRecognizer(configuration);
+
+            recognizer.setMasterGain(MASTER_GAIN);
 
         } catch (IOException e) {
             System.err.println("Couldn't initialize speech recognizer.");
@@ -138,72 +143,75 @@ public class ASRServiceImpl implements ASRService {
         public void run() {
             while (!isTerminated()) {
                 if (isActive()) {
-                    String result = recognizer.getResult().getHypothesis();
+                    SpeechResult result = recognizer.getResult();
 
-                    //logger.info("Recognized: " + result);
-                    System.out.println("Recognized: " + result);
+                    logger.info("Recognized:    ");
+                    logger.info("\tTop H:       " + result.getHypothesis());
+                    logger.info("\tTop 3H:      " + result.getNbest(3));
+
+                    String topH = result.getHypothesis();
 
                     // Ok, something screwed up
 
-                    if (result.equals(FUCK))
+                    if (topH.equals(FUCK))
                         invokeAction(IdeActions.ACTION_UNDO);
 
-                    if (result.startsWith(OPEN)) {
-                        if (result.endsWith(SETTINGS)) {
+                    if (topH.startsWith(OPEN)) {
+                        if (topH.endsWith(SETTINGS)) {
                             invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
-                        } else if (result.endsWith(RECENT)) {
+                        } else if (topH.endsWith(RECENT)) {
                             invokeAction(IdeActions.ACTION_RECENT_FILES);
-                        } else if (result.endsWith(TERMINAL)) {
+                        } else if (topH.endsWith(TERMINAL)) {
                             pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                         }
-                    } else if (result.startsWith(FOCUS)) {
-                        if (result.endsWith(EDITOR)) {
+                    } else if (topH.startsWith(FOCUS)) {
+                        if (topH.endsWith(EDITOR)) {
                             pressKeystroke(KeyEvent.VK_ESCAPE);
-                        } else if (result.endsWith(PROJECT)) {
+                        } else if (topH.endsWith(PROJECT)) {
                             pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
                         }
-                    } else if (result.endsWith(SELECTION)) {
-                        if (result.startsWith(EXPAND)) {
+                    } else if (topH.endsWith(SELECTION)) {
+                        if (topH.startsWith(EXPAND)) {
                             pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
-                        } else if (result.startsWith(SHRINK)) {
+                        } else if (topH.startsWith(SHRINK)) {
                             pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
                         }
-                    } else if (result.startsWith(PRESS)) {
-                        if (result.endsWith(DELETE)) {
+                    } else if (topH.startsWith(PRESS)) {
+                        if (topH.endsWith(DELETE)) {
                             pressKeystroke(KeyEvent.VK_DELETE);
-                        } else if (result.endsWith(ENTER)) {
+                        } else if (topH.endsWith(ENTER)) {
                             pressKeystroke(KeyEvent.VK_ENTER);
-                        } else if (result.endsWith(ESCAPE)) {
+                        } else if (topH.endsWith(ESCAPE)) {
                             pressKeystroke(KeyEvent.VK_ESCAPE);
-                        } else if (result.endsWith(TAB)) {
+                        } else if (topH.endsWith(TAB)) {
                             pressKeystroke(KeyEvent.VK_TAB);
-                        } else if (result.endsWith(UNDO)) {
+                        } else if (topH.endsWith(UNDO)) {
                             pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                         }
-                    } else if (result.startsWith(NEXT)) {
-                        if (result.endsWith(LINE)) {
+                    } else if (topH.startsWith(NEXT)) {
+                        if (topH.endsWith(LINE)) {
                             pressKeystroke(KeyEvent.VK_DOWN);
-                        } else if (result.endsWith(PAGE)) {
+                        } else if (topH.endsWith(PAGE)) {
                             pressKeystroke(KeyEvent.VK_PAGE_DOWN);
-                        } else if (result.endsWith(METHOD)) {
+                        } else if (topH.endsWith(METHOD)) {
                             pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
                         }
-                    } else if (result.startsWith(PREVIOUS)) {
-                        if (result.endsWith(LINE)) {
+                    } else if (topH.startsWith(PREVIOUS)) {
+                        if (topH.endsWith(LINE)) {
                             pressKeystroke(KeyEvent.VK_UP);
-                        } else if (result.endsWith(PAGE)) {
+                        } else if (topH.endsWith(PAGE)) {
                             pressKeystroke(KeyEvent.VK_PAGE_UP);
-                        } else if (result.endsWith(METHOD)) {
+                        } else if (topH.endsWith(METHOD)) {
                             pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
                         }
-                    } else if (result.startsWith(INSPECT_CODE)) {
+                    } else if (topH.startsWith(INSPECT_CODE)) {
                         pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
                     }
 
-                    if (result.startsWith("speech pause")) {
+                    if (topH.startsWith("speech pause")) {
                         while (true) {
-                            result = recognizer.getResult().getHypothesis();
-                            if (result.equals("speech resume")) {
+                            topH = recognizer.getResult().getHypothesis();
+                            if (topH.equals("speech resume")) {
                                 break;
                             }
                         }
