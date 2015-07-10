@@ -1,29 +1,35 @@
 package com.jetbrains.idear;
 
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.extensions.PluginId;
 import opennlp.tools.cmdline.parser.ParserTool;
 import opennlp.tools.parser.Parse;
 import opennlp.tools.parser.Parser;
 import opennlp.tools.parser.ParserFactory;
 import opennlp.tools.parser.ParserModel;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
-public class NlpParserService {
+public class NlpParserService extends ParserService {
+    private String path;
     private Parser parser;
 
+    @TestOnly
+    public NlpParserService(String testPath) {
+        this.path = testPath;
+    }
+
     public NlpParserService() {
-        initParser();
     }
 
     @Nullable
-    public Parse parseSentence(String sentence) throws IOException {
+    public Parse parseSentence(String sentence) {
         if (parser == null) {
             throw new IllegalStateException();
         }
@@ -32,7 +38,7 @@ public class NlpParserService {
         return topParses[0];
     }
 
-    private void initParser() {
+    public void init() {
         ParserModel model = readParserModel();
         if (model == null) return;
         parser = ParserFactory.create(model);
@@ -42,50 +48,27 @@ public class NlpParserService {
     private ParserModel readParserModel() {
         ParserModel model = null;
         try {
-            InputStream is = new FileInputStream("en-parser-chunking.bin");
-            model = new ParserModel(is);
-            is.close();
+            model = new ParserModel(getModelInputStream());
+            getModelInputStream().close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return model;
     }
 
-    public List<Parse> findLeafVerbs(@NotNull Parse root) {
-        if (root.getChildCount() == 0) {
-            if (root.getParent().getType().startsWith("VB")) {
-                return ContainerUtil.newSmartList(root.getParent());
-            }
-            return ContainerUtil.emptyList();
+    private InputStream getModelInputStream() throws FileNotFoundException {
+        if (path != null) {
+            return new FileInputStream(path);
         }
 
-        List<Parse> verbs = new SmartList<>();
-        for (Parse child : root.getChildren()) {
-            verbs.addAll(findLeafVerbs(child));
-        }
+        PluginId id = PluginId.getId("com.jetbrains.idear");
+        IdeaPluginDescriptor plugin = PluginManager.getPlugin(id);
 
-        return verbs;
+        assert plugin != null;
+
+        ClassLoader classLoader = plugin.getPluginClassLoader();
+        return classLoader.getResourceAsStream("en-parser-chunking.bin");
     }
-
-
-    public static void main(String[] args) {
-        try {
-            NlpParserService nlpParserService = new NlpParserService();
-
-            Parse parse = nlpParserService.parseSentence("idea find usages of class X");
-            System.out.println(parse);
-
-
-            List<Parse> leafVerbs = nlpParserService.findLeafVerbs(parse);
-
-            System.out.println();
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
 }
 

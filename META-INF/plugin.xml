@@ -34,6 +34,9 @@
         <applicationService serviceInterface="com.jetbrains.idear.GrammarService" serviceImplementation="com.jetbrains.idear.GrammarServiceImpl">
         </applicationService>
 
+        <applicationService serviceInterface="com.jetbrains.idear.ParserService" serviceImplementation="com.jetbrains.idear.NlpParserService">
+        </applicationService>
+
     </extensions>
 
     <application-components>

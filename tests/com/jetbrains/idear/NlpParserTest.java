@@ -14,7 +14,8 @@ public class NlpParserTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        myParser = new NlpParserService();
+        myParser = new NlpParserService("en-parser-chunking.bin");
+        myParser.init();
     }
 
     @Test
