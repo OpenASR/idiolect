@@ -164,6 +164,12 @@ public class ASRServiceImpl implements ASRService {
                 } else if (result.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
                 }
+            } else if (result.startsWith("extract this")) {
+                if (result.endsWith("method")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_M);
+                } else if (result.endsWith("parameter")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_P);
+                }
             } else if (result.startsWith("inspect code")) {
                 pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
             } else if (result.startsWith("speech pause")) {
