@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
+import edu.cmu.sphinx.util.props.ConfigurationManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -13,21 +14,23 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ASRServiceImpl implements ASRService {
+    private static final Logger logger = Logger.getInstance(ASRServiceImpl.class);
 
     private final Thread speechThread = new Thread(new ASRControlLoop(), "ARS Thread");
 
     private static final String ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us";
+    private static final String CONFIGURATION_PATH = "resource:/com.jetbrains.idear/co";
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
-    private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/dialog/";
+    private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/grammars";
 
-    private static final Logger logger = Logger.getInstance(ASRServiceImpl.class);
-
+    private ConfigurationManager configurationManager;
     private LiveSpeechRecognizer recognizer;
     private Robot robot;
 
     private final AtomicReference<Status> status = new AtomicReference<>(Status.INIT);
 
     public void init() {
+        configurationManager = new ConfigurationManager(CONFIGURATION_PATH);
         Configuration configuration = new Configuration();
 
         configuration.setAcousticModelPath(ACOUSTIC_MODEL);

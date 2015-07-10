@@ -16,6 +16,7 @@ public class Idear implements ApplicationComponent {
     @Override
     public void initComponent() {
         ServiceManager.getService(ASRService.class).init();
+        ServiceManager.getService(GrammarService.class).init();
         initTTSService();
     }
 
