@@ -1,13 +1,10 @@
 package com.jetbrains.idear;
 
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
@@ -49,19 +46,8 @@ public class JavaPronouncer implements IntentionAction {
 
         CodeToTextConverter converter = new CodeToTextConverter(psiFile, range, caretOffset);
 
-        PluginId id = PluginId.getId("com.jetbrains.idear");
-        IdeaPluginDescriptor plugin = PluginManager.getPlugin(id);
-        assert plugin != null;
-
-        ClassLoader prev = Thread.currentThread().getContextClassLoader();
-        try {
-            ClassLoader classLoader = plugin.getPluginClassLoader();
-            Thread.currentThread().setContextClassLoader(classLoader);
-            TTSService service = ServiceManager.getService(TTSService.class);
-            service.say(converter.toText(editor.getDocument().getText(range)));
-        } finally {
-            Thread.currentThread().setContextClassLoader(prev);
-        }
+        TTSService service = ServiceManager.getService(TTSService.class);
+        service.say(converter.toText());
     }
 
     @Override
