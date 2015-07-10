@@ -36,10 +36,6 @@
             <implementation-class>com.jetbrains.idear.Idear</implementation-class>
         </component>
 
-        <component>
-            <implementation-class>com.jetbrains.idear.SpeechService</implementation-class>
-        </component>
-
     </application-components>
 
     <project-components>

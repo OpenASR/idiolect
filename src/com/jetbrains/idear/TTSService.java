@@ -50,9 +50,7 @@ public class TTSService {
             AudioPlayer player = new AudioPlayer(audio);
             player.start();
             player.join();
-        } catch (SynthesisException e) {
-            logger.error(e.getLocalizedMessage(), e);
-        } catch (InterruptedException e) {
+        } catch (SynthesisException | InterruptedException e) {
             logger.error(e.getLocalizedMessage(), e);
         }
     }
