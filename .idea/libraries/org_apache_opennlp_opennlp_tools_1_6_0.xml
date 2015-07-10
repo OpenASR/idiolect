@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="org.apache.opennlp:opennlp-tools:1.6.0" type="repository">
+    <properties maven-id="org.apache.opennlp:opennlp-tools:1.6.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/opennlp/opennlp-tools/1.6.0/opennlp-tools-1.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

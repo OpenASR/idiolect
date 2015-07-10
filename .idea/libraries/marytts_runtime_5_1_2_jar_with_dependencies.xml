@@ -4,6 +4,11 @@
       <root url="jar://$PROJECT_DIR$/lib/marytts-runtime-5.1.2-jar-with-dependencies.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$USER_HOME$/opennlp/opennlp-tools/src/main/java" />
+      <root url="file://$USER_HOME$/opennlp/opennlp-tools/src/test/java" />
+      <root url="file://$USER_HOME$/opennlp/opennlp-uima/src/main/java" />
+      <root url="file://$USER_HOME$/opennlp/opennlp-uima/src/test/java" />
+    </SOURCES>
   </library>
 </component>
