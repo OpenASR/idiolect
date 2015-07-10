@@ -2,6 +2,8 @@ package com.jetbrains.idear.recognizer;
 
 import edu.cmu.sphinx.api.AbstractSpeechRecognizer;
 import edu.cmu.sphinx.api.Configuration;
+import edu.cmu.sphinx.decoder.ResultListener;
+import edu.cmu.sphinx.frontend.endpoint.SpeechClassifier;
 import edu.cmu.sphinx.frontend.util.StreamDataSource;
 
 import java.io.IOException;
@@ -10,6 +12,8 @@ import java.io.IOException;
  * High-level class for live speech recognition.
  */
 public class CustomLiveSpeechRecognizer extends AbstractSpeechRecognizer {
+
+    public static final int SPEECH_SENSITIVITY = 20;
 
     private final CustomMicrophone microphone;
 
@@ -23,8 +27,11 @@ public class CustomLiveSpeechRecognizer extends AbstractSpeechRecognizer {
     {
         super(configuration);
         microphone = new CustomMicrophone(16000, 16, true, false);
-        context.getInstance(StreamDataSource.class)
-            .setInputStream(microphone.getStream());
+
+        context .getInstance(StreamDataSource.class)
+                .setInputStream(microphone.getStream());
+
+        context.setLocalProperty(String.format("speechClassifier->%s", SpeechClassifier.PROP_THRESHOLD), SPEECH_SENSITIVITY);
     }
 
     /**
@@ -50,7 +57,19 @@ public class CustomLiveSpeechRecognizer extends AbstractSpeechRecognizer {
         recognizer.deallocate();
     }
 
+    public void addResultListener(ResultListener listener) {
+        recognizer.addResultListener(listener);
+    }
+
+    public void removeResultListener(ResultListener listener) {
+        recognizer.removeResultListener(listener);
+    }
+
     public void setMasterGain(double mg) {
         microphone.setMasterGain(mg);
+    }
+
+    public void setNoiseLevel(double mg) {
+        microphone.setNoiseLevel(mg);
     }
 }

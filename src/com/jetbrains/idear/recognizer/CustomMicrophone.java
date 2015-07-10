@@ -10,19 +10,6 @@ public class CustomMicrophone {
 
     private final TargetDataLine line;
     private final AudioInputStreamWithAdjustableGain inputStream;
-//    private final FloatControl masterGainControl;
-
-//    private static FloatControl findMGControl(TargetDataLine line) {
-//
-//        final CompoundControl cc = (CompoundControl) line.getControls()[0];
-//        final Control[] controls = cc.getMemberControls();
-//
-//        for (final Control c : controls)
-//            if (c instanceof FloatControl)
-//                return ((FloatControl)c);
-//
-//        return null;
-//    }
 
     public CustomMicrophone(
         float sampleRate,
@@ -64,6 +51,13 @@ public class CustomMicrophone {
 
     /* package */ void setMasterGain(double mg) {
         double pmg = inputStream.setMasterGain(mg);
+
+        logger.info("Microphone: LINE_IN VOL = " + pmg);
+        logger.info("Microphone: LINE_IN VOL = " + mg);
+    }
+
+    /* package */ void setNoiseLevel(double mg) {
+        double pmg = inputStream.setNoiseLevel(mg);
 
         logger.info("Microphone: LINE_IN VOL = " + pmg);
         logger.info("Microphone: LINE_IN VOL = " + mg);
