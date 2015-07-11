@@ -9,7 +9,7 @@ public class CustomMicrophone {
     private static final Logger logger = Logger.getLogger(CustomMicrophone.class.getSimpleName());
 
     private final TargetDataLine line;
-    private final AudioInputStreamWithAdjustableGain inputStream;
+    private final AudioInputStream inputStream;
 
     public CustomMicrophone(
         float sampleRate,
@@ -49,21 +49,21 @@ public class CustomMicrophone {
         line.stop();
     }
 
-    /* package */ void setMasterGain(double mg) {
-        double pmg = inputStream.setMasterGain(mg);
+//    /* package */ void setMasterGain(double mg) {
+//        double pmg = inputStream.setMasterGain(mg);
+//
+//        logger.info("Microphone: LINE_IN VOL = " + pmg);
+//        logger.info("Microphone: LINE_IN VOL = " + mg);
+//    }
+//
+//    /* package */ void setNoiseLevel(double mg) {
+//        double pmg = inputStream.setNoiseLevel(mg);
+//
+//        logger.info("Microphone: LINE_IN VOL = " + pmg);
+//        logger.info("Microphone: LINE_IN VOL = " + mg);
+//    }
 
-        logger.info("Microphone: LINE_IN VOL = " + pmg);
-        logger.info("Microphone: LINE_IN VOL = " + mg);
-    }
-
-    /* package */ void setNoiseLevel(double mg) {
-        double pmg = inputStream.setNoiseLevel(mg);
-
-        logger.info("Microphone: LINE_IN VOL = " + pmg);
-        logger.info("Microphone: LINE_IN VOL = " + mg);
-    }
-
-    public InputStream getStream() {
+    public AudioInputStream getStream() {
         return inputStream;
     }
 }

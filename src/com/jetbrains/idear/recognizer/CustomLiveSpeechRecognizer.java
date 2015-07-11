@@ -65,11 +65,11 @@ public class CustomLiveSpeechRecognizer extends AbstractSpeechRecognizer {
         recognizer.removeResultListener(listener);
     }
 
-    public void setMasterGain(double mg) {
-        microphone.setMasterGain(mg);
-    }
-
-    public void setNoiseLevel(double mg) {
-        microphone.setNoiseLevel(mg);
-    }
+//    public void setMasterGain(double mg) {
+//        microphone.setMasterGain(mg);
+//    }
+//
+//    public void setNoiseLevel(double mg) {
+//        microphone.setNoiseLevel(mg);
+//    }
 }
