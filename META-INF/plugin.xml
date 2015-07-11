@@ -63,7 +63,7 @@
 
         <action id="SpeechStuff"
                 text="Invoke by speech"
-                class="com.jetbrains.idear.ActionBySelectedTextForTestOnly"/>
+                class="com.jetbrains.idear.ExecuteActionFromPredefinedText"/>
     </actions>
 
 </idea-plugin>
