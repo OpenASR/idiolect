@@ -3,33 +3,29 @@ package com.jetbrains.idear;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
+import com.jetbrains.idear.actions.recognition.TextToActionConverter;
 
-public class ActionBySelectedTextForTestOnly extends AnAction {
+public class ExecuteActionFromPredefinedText extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
 
-        String text = "idea extract variable";
+//        String text = "idea extract to field";
+//        String text = "idea extract to variable";
+        String text = "idea inline";
 
-        ParsedActionInfoProvider provider = new ParsedActionInfoProvider(text);
-        Action action = provider.getAction();
-        if (action == null) return;
-
-        if (action.getId().length() > 0) {
-            invokeActionById(editor, action.getId());
-        }
+        TextToActionConverter provider = new TextToActionConverter();
+        AnAction anAction = provider.extractAction(text);
+        invoke(editor, anAction);
     }
 
-
-    private void invokeActionById(Editor editor, String action) {
-        AnAction inline = ActionManager.getInstance().getAction(action);
-
+    private void invoke(Editor editor, AnAction action) {
         DataManager manager = DataManager.getInstance();
         if (manager != null) {
             DataContext context = manager.getDataContext(editor.getContentComponent());
-            inline.actionPerformed(new AnActionEvent(null, context, "", inline.getTemplatePresentation(), ActionManager.getInstance(), 0));
+            action.actionPerformed(new AnActionEvent(null, context, "", action.getTemplatePresentation(), ActionManager.getInstance(), 0));
         }
     }
 
