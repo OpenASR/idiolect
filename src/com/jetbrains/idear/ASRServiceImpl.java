@@ -2,14 +2,18 @@ package com.jetbrains.idear;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.components.ServiceManager;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
+import edu.cmu.sphinx.util.props.ConfigurationManager;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ASRServiceImpl implements ASRService {
@@ -20,18 +24,18 @@ public class ASRServiceImpl implements ASRService {
 
     private static final String ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us";
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
-    private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/dialog/";
+    private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/grammars";
 
     private static final Logger logger = Logger.getLogger(ASRServiceImpl.class.getSimpleName());
 
     private CustomLiveSpeechRecognizer recognizer;
+    private ConfigurationManager configurationManager;
     private Robot robot;
 
-    private AtomicReference<Status> status = new AtomicReference<>(Status.INACTIVE);
+    private final AtomicReference<Status> status = new AtomicReference<>(Status.INIT);
 
-    /* package */ void init() {
+    public void init() {
         Configuration configuration = new Configuration();
-
         configuration.setAcousticModelPath(ACOUSTIC_MODEL);
         configuration.setDictionaryPath(DICTIONARY_PATH);
         configuration.setGrammarPath(GRAMMAR_PATH);
@@ -40,19 +44,14 @@ public class ASRServiceImpl implements ASRService {
         configuration.setGrammarName("dialog");
 
         try {
-
             recognizer = new CustomLiveSpeechRecognizer(configuration);
-
             recognizer.setMasterGain(MASTER_GAIN);
-
         } catch (IOException e) {
-            System.err.println("Couldn't initialize speech recognizer.");
+            logger.log(Level.SEVERE, "Couldn't initialize speech recognizer:", e);
         }
 
         try {
-
             robot = new Robot();
-
         } catch (AWTException e) {
             e.printStackTrace();
         }
@@ -62,14 +61,15 @@ public class ASRServiceImpl implements ASRService {
         speechThread.start();
     }
 
-    /* package */ void dispose() {
-
+    public void dispose() {
         // Deactivate in the first place, therefore actually
         // prevent activation upon the user-input
-
         deactivate();
-
         terminate();
+    }
+
+    private void terminate() {
+        recognizer.stopRecognition();
     }
 
     private Status setStatus(Status s) {
@@ -86,31 +86,17 @@ public class ASRServiceImpl implements ASRService {
         if (getStatus() == Status.ACTIVE)
             return Status.ACTIVE;
 
-        recognizer.startRecognition(true);
+        if (getStatus() == Status.INIT) {
+            // Cold start prune cache
+            recognizer.startRecognition(true);
+        }
 
         return setStatus(Status.ACTIVE);
     }
 
     @Override
     public Status deactivate() {
-        if (getStatus() == Status.INACTIVE)
-            return Status.INACTIVE;
-
-        Status s;
-
-        try {
-
-            recognizer.stopRecognition();
-
-        } finally {
-            s = setStatus(Status.INACTIVE);
-        }
-
-        return s;
-    }
-
-    private void terminate() {
-        setStatus(Status.TERMINATED);
+        return setStatus(Status.INACTIVE);
     }
 
     private class ASRControlLoop implements Runnable {
@@ -142,80 +128,116 @@ public class ASRServiceImpl implements ASRService {
         @Override
         public void run() {
             while (!isTerminated()) {
+                String result = null;
+
+                // This blocks on a recognition result
                 if (isActive()) {
-                    SpeechResult result = recognizer.getResult();
+                    result = getResultFromRecognizer();
+                }
 
-                    logger.info("Recognized:    ");
-                    logger.info("\tTop H:       " + result.getHypothesis());
-                    logger.info("\tTop 3H:      " + result.getNbest(3));
+                // This may happen 10-15 seconds later
+                if (isActive() && result != null) {
+                    logger.log(Level.INFO, "Recognized: " + result);
+                    applyAction(result);
+                }
+            }
+        }
 
-                    String topH = result.getHypothesis();
+        private String getResultFromRecognizer() {
+            SpeechResult result = recognizer.getResult();
+            
+            logger.info("Recognized:    ");
+            logger.info("\tTop H:       " + result.getHypothesis());
+            logger.info("\tTop 3H:      " + result.getNbest(3));
+            
+            return result.getHypothesis();
+        }
 
-                    // Ok, something screwed up
+        private void applyAction(String result) {
+            if (result.equals(FUCK))
+                invokeAction(IdeActions.ACTION_UNDO);
+            
+            if (result.startsWith("open")) {
+                if (result.endsWith("settings")) {
+                    invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
+                } else if (result.endsWith("recent")) {
+                    invokeAction(IdeActions.ACTION_RECENT_FILES);
+                } else if (result.endsWith("terminal")) {
+                    pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
+                }
+            } else if (result.startsWith("focus")) {
+                if (result.endsWith("editor")) {
+                    pressKeystroke(KeyEvent.VK_ESCAPE);
+                } else if (result.endsWith("project")) {
+                    pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
+                }
+            } else if (result.endsWith("selection")) {
+                if (result.startsWith("expand")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
+                } else if (result.startsWith("shrink")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
+                }
+            } else if (result.startsWith("press")) {
+                if (result.endsWith("delete")) {
+                    pressKeystroke(KeyEvent.VK_DELETE);
+                } else if (result.endsWith("enter")) {
+                    pressKeystroke(KeyEvent.VK_ENTER);
+                } else if (result.endsWith("escape")) {
+                    pressKeystroke(KeyEvent.VK_ESCAPE);
+                } else if (result.endsWith("tab")) {
+                    pressKeystroke(KeyEvent.VK_TAB);
+                } else if (result.endsWith("undo")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
+                }
+            } else if (result.startsWith("next")) {
+                if (result.endsWith("line")) {
+                    pressKeystroke(KeyEvent.VK_DOWN);
+                } else if (result.endsWith("page")) {
+                    pressKeystroke(KeyEvent.VK_PAGE_DOWN);
+                } else if (result.endsWith("method")) {
+                    pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
+                }
+            } else if (result.startsWith("previous")) {
+                if (result.endsWith("line")) {
+                    pressKeystroke(KeyEvent.VK_UP);
+                } else if (result.endsWith("page")) {
+                    pressKeystroke(KeyEvent.VK_PAGE_UP);
+                } else if (result.endsWith("method")) {
+                    pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
+                }
+            } else if (result.startsWith("extract this")) {
+                if (result.endsWith("method")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_M);
+                } else if (result.endsWith("parameter")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_P);
+                }
+            } else if (result.startsWith("inspect code")) {
+                pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
+            } else if (result.startsWith("speech pause")) {
+                pauseSpeech();
+            } else if (result.startsWith("okay google")) {
+                fireGoogleSearch();
+            }
+        }
 
-                    if (topH.equals(FUCK))
-                        invokeAction(IdeActions.ACTION_UNDO);
+        private void fireGoogleSearch() {
+            GoogleService gs = ServiceManager.getService(GoogleService.class);
+            String searchQuery = gs.getTextForLastUtterance();
 
-                    if (topH.startsWith(OPEN)) {
-                        if (topH.endsWith(SETTINGS)) {
-                            invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
-                        } else if (topH.endsWith(RECENT)) {
-                            invokeAction(IdeActions.ACTION_RECENT_FILES);
-                        } else if (topH.endsWith(TERMINAL)) {
-                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
-                        }
-                    } else if (topH.startsWith(FOCUS)) {
-                        if (topH.endsWith(EDITOR)) {
-                            pressKeystroke(KeyEvent.VK_ESCAPE);
-                        } else if (topH.endsWith(PROJECT)) {
-                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
-                        }
-                    } else if (topH.endsWith(SELECTION)) {
-                        if (topH.startsWith(EXPAND)) {
-                            pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
-                        } else if (topH.startsWith(SHRINK)) {
-                            pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
-                        }
-                    } else if (topH.startsWith(PRESS)) {
-                        if (topH.endsWith(DELETE)) {
-                            pressKeystroke(KeyEvent.VK_DELETE);
-                        } else if (topH.endsWith(ENTER)) {
-                            pressKeystroke(KeyEvent.VK_ENTER);
-                        } else if (topH.endsWith(ESCAPE)) {
-                            pressKeystroke(KeyEvent.VK_ESCAPE);
-                        } else if (topH.endsWith(TAB)) {
-                            pressKeystroke(KeyEvent.VK_TAB);
-                        } else if (topH.endsWith(UNDO)) {
-                            pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
-                        }
-                    } else if (topH.startsWith(NEXT)) {
-                        if (topH.endsWith(LINE)) {
-                            pressKeystroke(KeyEvent.VK_DOWN);
-                        } else if (topH.endsWith(PAGE)) {
-                            pressKeystroke(KeyEvent.VK_PAGE_DOWN);
-                        } else if (topH.endsWith(METHOD)) {
-                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
-                        }
-                    } else if (topH.startsWith(PREVIOUS)) {
-                        if (topH.endsWith(LINE)) {
-                            pressKeystroke(KeyEvent.VK_UP);
-                        } else if (topH.endsWith(PAGE)) {
-                            pressKeystroke(KeyEvent.VK_PAGE_UP);
-                        } else if (topH.endsWith(METHOD)) {
-                            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
-                        }
-                    } else if (topH.startsWith(INSPECT_CODE)) {
-                        pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
-                    }
+            if (searchQuery == null || searchQuery.isEmpty()) {
+                return;
+            }
 
-                    if (topH.startsWith("speech pause")) {
-                        while (true) {
-                            topH = recognizer.getResult().getHypothesis();
-                            if (topH.equals("speech resume")) {
-                                break;
-                            }
-                        }
-                    }
+            ServiceManager.getService(TTSService.class).say("I think you said " + searchQuery + ", searching Google now");
+            gs.searchGoogle(searchQuery);
+        }
+
+        private void pauseSpeech() {
+            String result;
+            while (isActive()) {
+                result = getResultFromRecognizer();
+                if (result.equals("speech resume")) {
+                    break;
                 }
             }
         }
@@ -244,12 +266,18 @@ public class ASRServiceImpl implements ASRService {
             EventQueue.invokeAndWait(() -> {
                 AnAction anAction = ActionManager.getInstance().getAction(action);
                 anAction.actionPerformed(new AnActionEvent(null,
-                    DataManager.getInstance().getDataContext(),
-                    ActionPlaces.UNKNOWN, anAction.getTemplatePresentation(),
+                        DataManager.getInstance().getDataContext(),
+                        ActionPlaces.UNKNOWN, anAction.getTemplatePresentation(),
                     ActionManager.getInstance(), 0));
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InterruptedException | InvocationTargetException e) {
+            logger.log(Level.SEVERE, "Could not invoke action:", e);
         }
+    }
+
+    public static void main(String[] args) {
+        ASRServiceImpl asrService = new ASRServiceImpl();
+        asrService.init();
+        asrService.activate();
     }
 }

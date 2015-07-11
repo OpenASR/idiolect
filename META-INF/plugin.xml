@@ -21,10 +21,24 @@
     <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
+    <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
 
         <applicationService serviceInterface="com.jetbrains.idear.ASRService" serviceImplementation="com.jetbrains.idear.ASRServiceImpl">
+        </applicationService>
+
+        <applicationService serviceInterface="com.jetbrains.idear.TTSService" serviceImplementation="com.jetbrains.idear.TTSServiceImpl">
+        </applicationService>
+
+        <applicationService serviceInterface="com.jetbrains.idear.GrammarService" serviceImplementation="com.jetbrains.idear.GrammarServiceImpl">
+        </applicationService>
+
+        <applicationService serviceInterface="com.jetbrains.idear.GoogleService" serviceImplementation="com.jetbrains.idear.GoogleService">
+        </applicationService>
+
+
+        <applicationService serviceInterface="com.jetbrains.idear.ParserService" serviceImplementation="com.jetbrains.idear.NlpParserService">
         </applicationService>
 
     </extensions>
@@ -35,10 +49,6 @@
             <implementation-class>com.jetbrains.idear.Idear</implementation-class>
         </component>
 
-        <component>
-            <implementation-class>com.jetbrains.idear.SpeechService</implementation-class>
-        </component>
-
     </application-components>
 
     <project-components>
@@ -46,20 +56,14 @@
     </project-components>
 
     <actions>
-        <!-- Add your actions here -->
-        <group id="Idear.Menu" text="_Voice" description="Voice control">
-            <add-to-group group-id="MainMenu" anchor="first"/>
+        <action id="Idear.NewTest" class="com.jetbrains.idear.VoiceRecordControllerAction" text="Voice control"
+                description="Test" icon="/com/jetbrains/idear/icons/start.png">
+            <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
+        </action>
 
-            <action id="Idear.VoiceControlActivationAction" class="com.jetbrains.idear.VoiceControlActivationAction" text="Start"
-                    description="Start VC"
-                    icon="/com/jetbrains/idear/icons/speech.png">
-            </action>
-
-            <action id="Idear.VoiceControlDeactivationAction" class="com.jetbrains.idear.VoiceControlDeactivationAction" text="Stop"
-                    description="Start VC"
-                    icon="/com/jetbrains/idear/icons/speech.png">
-            </action>
-        </group>
+        <action id="SpeechStuff"
+                text="Invoke by speech"
+                class="com.jetbrains.idear.ActionBySelectedTextForTestOnly"/>
     </actions>
 
 </idea-plugin>
