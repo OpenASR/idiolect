@@ -23,7 +23,7 @@ public class ASRServiceImpl implements ASRService {
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
     private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/grammars";
 
-    private static final URL CONFIG_PATH = ASRServiceImpl.class.getResource("/com.jetbrains.idear/sphinx_config.xml");
+    private static final URL CONFIG_PATH = ASRServiceImpl.class.getResource("/com.jetbrains.idear/default.config.xml");
 
     private ConfigurationManager configurationManager;
     private LiveSpeechRecognizer recognizer;
@@ -177,7 +177,13 @@ public class ASRServiceImpl implements ASRService {
                 pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
             } else if (result.startsWith("speech pause")) {
                 pauseSpeech();
+            } else if (result.startsWith("okay google")) {
+                fireGoogleSearch();
             }
+        }
+
+        private void fireGoogleSearch() {
+
         }
 
         private void pauseSpeech() {

@@ -37,6 +37,10 @@ inspect code | <refactoring> ;
 <speech_action> = pause | resume;
 
 <keyboard_command> = press [enter | escape | tab | undo | delete];
+
+<google_command> = okay google;
+
 public <command> = <menu_command> |
 <editor_command> | <global_command> |
-<speech_command> | <keyboard_command>;
+<speech_command> | <keyboard_command> |
+<google_command>;
