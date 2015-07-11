@@ -56,6 +56,10 @@
                 description="Test" icon="/com/jetbrains/idear/icons/start.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
+
+        <action id="SpeechStuff"
+                text="Invoke by speech"
+                class="com.jetbrains.idear.ActionBySelectedTextForTestOnly"/>
     </actions>
 
 </idea-plugin>
