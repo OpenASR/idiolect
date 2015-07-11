@@ -2,6 +2,7 @@ package com.jetbrains.idear;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
@@ -167,14 +168,14 @@ public class ASRServiceImpl implements ASRService {
 
         private void applyAction(String c) {
             if (c.equals(FUCK)) {
-                invokeAction(IdeActions.ACTION_UNDO);
+                invokeAction((String) IdeActions.ACTION_UNDO);
             }
 
             else if (c.startsWith("open")) {
                 if (c.endsWith("settings")) {
-                    invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
+                    invokeAction((String) IdeActions.ACTION_SHOW_SETTINGS);
                 } else if (c.endsWith("recent")) {
-                    invokeAction(IdeActions.ACTION_RECENT_FILES);
+                    invokeAction((String) IdeActions.ACTION_RECENT_FILES);
                 } else if (c.endsWith("terminal")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
@@ -248,12 +249,44 @@ public class ASRServiceImpl implements ASRService {
 
             else if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
                 beep();
-                /* ... */
+                fireVoiceCommand();
             }
 
             else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
                 beep();
                 fireGoogleSearch();
+            }
+        }
+
+        private void fireVoiceCommand() {
+            try {
+                recordFromMic("/tmp/X.wav");
+
+                GoogleService gs = ServiceManager.getService(GoogleService.class);
+
+                Pair<String, Double> commandTuple = gs.getBestTextForUtterance(new File("/tmp/X.wav"));
+
+                if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
+                    return;
+
+//                ServiceManager
+//                    .getService(TTSService.class)
+//                    .say("I think you said " + commandTuple.first + ", searching Google now");
+
+                DataContext parent = DataManager.getInstance().getDataContext();
+                AnActionEvent e =
+                    new AnActionEvent(
+                        null,
+                        SimpleDataContext.getSimpleContext(VoiceAction.KEY.getName(), commandTuple.first, parent),
+                        ActionPlaces.UNKNOWN,
+                        new Presentation(),
+                        ActionManager.getInstance(),
+                        0);
+
+                invokeAction("Idear.VoiceAction", e);
+
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
             }
         }
 
@@ -329,16 +362,25 @@ public class ASRServiceImpl implements ASRService {
     }
 
     private void invokeAction(final String action) {
+        invokeAction(
+            action,
+            new AnActionEvent(null,
+                DataManager.getInstance().getDataContext(),
+                ActionPlaces.UNKNOWN,
+                new Presentation(),
+                ActionManager.getInstance(),
+                0)
+        );
+    }
+
+    private void invokeAction(String action, AnActionEvent e) {
         try {
             EventQueue.invokeAndWait(() -> {
                 AnAction anAction = ActionManager.getInstance().getAction(action);
-                anAction.actionPerformed(new AnActionEvent(null,
-                        DataManager.getInstance().getDataContext(),
-                        ActionPlaces.UNKNOWN, anAction.getTemplatePresentation(),
-                    ActionManager.getInstance(), 0));
+                anAction.actionPerformed(e);
             });
-        } catch (InterruptedException | InvocationTargetException e) {
-            logger.log(Level.SEVERE, "Could not invoke action:", e);
+        } catch (InterruptedException | InvocationTargetException _) {
+            logger.log(Level.SEVERE, "Could not invoke action:", _);
         }
     }
 

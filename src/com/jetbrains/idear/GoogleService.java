@@ -60,6 +60,9 @@ public class GoogleService {
             }
         }
 
+        if (best != null)
+            logger.info("BEST/UTT: " + best);
+
         return best;
     }
 

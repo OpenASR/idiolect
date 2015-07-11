@@ -61,9 +61,13 @@
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 
-        <action id="SpeechStuff"
+        <action id="Idear.SpeechStuff"
                 text="Invoke by speech"
                 class="com.jetbrains.idear.ExecuteActionFromPredefinedText"/>
+
+        <action id="Idear.VoiceAction"
+                text="Invoke by voice-command"
+                class="com.jetbrains.idear.VoiceAction"/>
     </actions>
 
 </idea-plugin>
