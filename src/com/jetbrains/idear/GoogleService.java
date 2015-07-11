@@ -29,7 +29,7 @@ public class GoogleService {
     private static final String URL_PRE = "https://www.google.com/speech-api/v2/recognize";
     private static final String URL_SEARCH = "https://www.google.com/search?q=";
 
-    private List<Pair<String, Double>> getTextForLastUtteranceInternal() {
+    private List<Pair<String, Double>> getRecognizedTextForUtteranceInternal(File utterance) {
         try {
 
             HttpResponse<JsonNode> jsonResponse = Unirest.post(URL_PRE)
@@ -38,7 +38,7 @@ public class GoogleService {
                     .queryString("lang", "en-us")
                     .queryString("key", API_KEY)
                     .header("Content-Type", "audio/l16; rate=16000;")
-                    .body(Files.readAllBytes(getLastRecordedUtterance().toPath()))
+                    .body(Files.readAllBytes(utterance.toPath()))
                     .asJson();
 
             // This is a ass-hack, due to the fact, that GSAPI responds
@@ -52,15 +52,23 @@ public class GoogleService {
         return Collections.emptyList();
     }
 
-    Pair<String, Double> getBestTextForLastUtterance() {
+    private Pair<String, Double> getBestTextForUtteranceInternal(File file) {
         Pair<String, Double> best = null;
-        for (Pair<String, Double> p : getTextForLastUtteranceInternal()) {
+        for (Pair<String, Double> p : getRecognizedTextForUtteranceInternal(file)) {
             if (best == null || p.second != null && best.second == null || p.second != null && best.second != null && p.second > best.second) {
                 best = p;
             }
         }
 
         return best;
+    }
+
+    public Pair<String, Double> getBestTextForLastUtterance() {
+        return getBestTextForUtterance(getLastRecordedUtterance());
+    }
+
+    public Pair<String, Double> getBestTextForUtterance(File file) {
+        return getBestTextForUtteranceInternal(file);
     }
 
     private List<Pair<String, Double>> parseGSAPIResponse(String r) throws JSONException {
@@ -104,7 +112,7 @@ public class GoogleService {
         // TODO
     }
 
-
+    // TODO: move out
     private static File getLastRecordedUtterance() {
         File dir = new File(System.getProperty("user.dir"));
         File lastRecorded = dir;
@@ -134,6 +142,6 @@ public class GoogleService {
     }
 
     public static void main(String[] args) {
-        System.out.println(new GoogleService().getTextForLastUtteranceInternal());
+        System.out.println(new GoogleService().getBestTextForLastUtterance());
     }
 }
