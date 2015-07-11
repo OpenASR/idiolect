@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ASRServiceImpl implements ASRService {
@@ -19,9 +20,10 @@ public class ASRServiceImpl implements ASRService {
     private final Thread speechThread = new Thread(new ASRControlLoop(), "ARS Thread");
 
     private static final String ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us";
-    private static final String CONFIGURATION_PATH = "resource:/com.jetbrains.idear";
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
     private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/grammars";
+
+    private static final URL CONFIG_PATH = ASRServiceImpl.class.getResource("/com.jetbrains.idear/sphinx_config.xml");
 
     private ConfigurationManager configurationManager;
     private LiveSpeechRecognizer recognizer;
@@ -31,7 +33,6 @@ public class ASRServiceImpl implements ASRService {
 
     public void init() {
         Configuration configuration = new Configuration();
-
         configuration.setAcousticModelPath(ACOUSTIC_MODEL);
         configuration.setDictionaryPath(DICTIONARY_PATH);
         configuration.setGrammarPath(GRAMMAR_PATH);
@@ -220,5 +221,11 @@ public class ASRServiceImpl implements ASRService {
         } catch (InterruptedException | InvocationTargetException e) {
             logger.error("Could not invoke action:", e);
         }
+    }
+
+    public static void main(String[] args) {
+        ASRServiceImpl asrService = new ASRServiceImpl();
+        asrService.init();
+        asrService.activate();
     }
 }

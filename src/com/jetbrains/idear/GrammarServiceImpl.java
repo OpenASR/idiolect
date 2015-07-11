@@ -17,8 +17,6 @@ import org.slf4j.LoggerFactory;
 public class GrammarServiceImpl implements Disposable, GrammarService {
     private static final Logger logger = LoggerFactory.getLogger(TTSServiceImpl.class);
 
-
-
     @Override
     public void dispose() {
         Disposer.dispose(this);

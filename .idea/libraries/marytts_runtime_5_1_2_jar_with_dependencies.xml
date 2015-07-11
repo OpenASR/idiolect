@@ -1,14 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="libraryTable">
   <library name="marytts-runtime-5.1.2-jar-with-dependencies">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/marytts-runtime-5.1.2-jar-with-dependencies.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$USER_HOME$/opennlp/opennlp-tools/src/main/java" />
-      <root url="file://$USER_HOME$/opennlp/opennlp-tools/src/test/java" />
-      <root url="file://$USER_HOME$/opennlp/opennlp-uima/src/main/java" />
-      <root url="file://$USER_HOME$/opennlp/opennlp-uima/src/test/java" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>
