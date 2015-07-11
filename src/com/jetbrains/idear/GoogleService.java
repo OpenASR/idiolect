@@ -6,4 +6,5 @@ package com.jetbrains.idear;
 public interface GoogleService {
     String getTextForLastUtterance();
     void searchGoogle(String s);
+    void textToSpeech(String s);
 }

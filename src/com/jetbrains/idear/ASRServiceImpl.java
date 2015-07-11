@@ -185,7 +185,14 @@ public class ASRServiceImpl implements ASRService {
 
         private void fireGoogleSearch() {
             GoogleService gs = ServiceManager.getService(GoogleService.class);
-            gs.searchGoogle(gs.getTextForLastUtterance());
+            String searchQuery = gs.getTextForLastUtterance();
+
+            if (searchQuery == null || searchQuery.isEmpty()) {
+                return;
+            }
+
+            ServiceManager.getService(TTSService.class).say("I think you said " + searchQuery + ", searching Google now");
+            gs.searchGoogle(searchQuery);
         }
 
         private void pauseSpeech() {
