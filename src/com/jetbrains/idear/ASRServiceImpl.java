@@ -147,17 +147,18 @@ public class ASRServiceImpl implements ASRService {
             SpeechResult result = recognizer.getResult();
             
             logger.info("Recognized:    ");
-            logger.info("\tTop H:       " + result.getHypothesis());
+            logger.info("\tTop H:       " + result.getResult() + " / " + result.getResult().getBestToken() + " / " + result.getResult().getBestPronunciationResult());
             logger.info("\tTop 3H:      " + result.getNbest(3));
             
             return result.getHypothesis();
         }
 
         private void applyAction(String result) {
-            if (result.equals(FUCK))
+            if (result.equals(FUCK)) {
                 invokeAction(IdeActions.ACTION_UNDO);
+            }
             
-            if (result.startsWith("open")) {
+            else if (result.startsWith("open")) {
                 if (result.endsWith("settings")) {
                     invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
                 } else if (result.endsWith("recent")) {
@@ -165,19 +166,25 @@ public class ASRServiceImpl implements ASRService {
                 } else if (result.endsWith("terminal")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
-            } else if (result.startsWith("focus")) {
+            }
+
+            else if (result.startsWith("focus")) {
                 if (result.endsWith("editor")) {
                     pressKeystroke(KeyEvent.VK_ESCAPE);
                 } else if (result.endsWith("project")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
                 }
-            } else if (result.endsWith("selection")) {
+            }
+
+            else if (result.endsWith("selection")) {
                 if (result.startsWith("expand")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
                 } else if (result.startsWith("shrink")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
                 }
-            } else if (result.startsWith("press")) {
+            }
+
+            else if (result.startsWith("press")) {
                 if (result.endsWith("delete")) {
                     pressKeystroke(KeyEvent.VK_DELETE);
                 } else if (result.endsWith("enter")) {
@@ -189,7 +196,9 @@ public class ASRServiceImpl implements ASRService {
                 } else if (result.endsWith("undo")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                 }
-            } else if (result.startsWith("next")) {
+            }
+
+            else if (result.startsWith("next")) {
                 if (result.endsWith("line")) {
                     pressKeystroke(KeyEvent.VK_DOWN);
                 } else if (result.endsWith("page")) {
@@ -197,7 +206,9 @@ public class ASRServiceImpl implements ASRService {
                 } else if (result.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
                 }
-            } else if (result.startsWith("previous")) {
+            }
+
+            else if (result.startsWith("previous")) {
                 if (result.endsWith("line")) {
                     pressKeystroke(KeyEvent.VK_UP);
                 } else if (result.endsWith("page")) {
@@ -205,17 +216,25 @@ public class ASRServiceImpl implements ASRService {
                 } else if (result.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
                 }
-            } else if (result.startsWith("extract this")) {
+            }
+
+            else if (result.startsWith("extract this")) {
                 if (result.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_M);
                 } else if (result.endsWith("parameter")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_P);
                 }
-            } else if (result.startsWith("inspect code")) {
+            }
+
+            else if (result.startsWith("inspect code")) {
                 pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
-            } else if (result.startsWith("speech pause")) {
+            }
+
+            else if (result.startsWith("speech pause")) {
                 pauseSpeech();
-            } else if (result.startsWith("okay google")) {
+            }
+
+            else if (result.startsWith("okay google")) {
                 fireGoogleSearch();
             }
         }
@@ -275,6 +294,7 @@ public class ASRServiceImpl implements ASRService {
         }
     }
 
+    // This is for testing purposes solely
     public static void main(String[] args) {
         ASRServiceImpl asrService = new ASRServiceImpl();
         asrService.init();
