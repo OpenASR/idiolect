@@ -53,11 +53,12 @@ public <command> =  /50/ <activation_command>    |
                     /10/ <speech_command>        |
                     /10/ <keyboard_command>; */
 
-<google_command> = okay google;
+<google_command> = (okay | ok) google;
 
 public <command> =  <activation_command>    |
                     <menu_command>          |
                     <editor_command>        |
                     <global_command>        |
                     <speech_command>        |
+                    <google_command>        |
                     <keyboard_command>;

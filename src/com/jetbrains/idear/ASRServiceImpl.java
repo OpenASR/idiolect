@@ -3,6 +3,7 @@ package com.jetbrains.idear;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.util.Pair;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
 public class ASRServiceImpl implements ASRService {
 
     public static final double MASTER_GAIN = 0.85;
+    public static final double CONFIDENCE_LEVEL_THRESHOLD = 0.5;
 
     private final Thread speechThread = new Thread(new ASRControlLoop(), "ARS Thread");
 
@@ -124,6 +126,8 @@ public class ASRServiceImpl implements ASRService {
         public static final String METHOD = "method";
         public static final String PREVIOUS = "previous";
         public static final String INSPECT_CODE = "inspect code";
+        public static final String OKAY_GOOGLE = "okay google";
+        public static final String OK_GOOGLE = "ok google";
 
         @Override
         public void run() {
@@ -153,102 +157,102 @@ public class ASRServiceImpl implements ASRService {
             return result.getHypothesis();
         }
 
-        private void applyAction(String result) {
-            if (result.equals(FUCK)) {
+        private void applyAction(String c) {
+            if (c.equals(FUCK)) {
                 invokeAction(IdeActions.ACTION_UNDO);
             }
             
-            else if (result.startsWith("open")) {
-                if (result.endsWith("settings")) {
+            else if (c.startsWith("open")) {
+                if (c.endsWith("settings")) {
                     invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
-                } else if (result.endsWith("recent")) {
+                } else if (c.endsWith("recent")) {
                     invokeAction(IdeActions.ACTION_RECENT_FILES);
-                } else if (result.endsWith("terminal")) {
+                } else if (c.endsWith("terminal")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
             }
 
-            else if (result.startsWith("focus")) {
-                if (result.endsWith("editor")) {
+            else if (c.startsWith("focus")) {
+                if (c.endsWith("editor")) {
                     pressKeystroke(KeyEvent.VK_ESCAPE);
-                } else if (result.endsWith("project")) {
+                } else if (c.endsWith("project")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
                 }
             }
 
-            else if (result.endsWith("selection")) {
-                if (result.startsWith("expand")) {
+            else if (c.endsWith("selection")) {
+                if (c.startsWith("expand")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
-                } else if (result.startsWith("shrink")) {
+                } else if (c.startsWith("shrink")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
                 }
             }
 
-            else if (result.startsWith("press")) {
-                if (result.endsWith("delete")) {
+            else if (c.startsWith("press")) {
+                if (c.endsWith("delete")) {
                     pressKeystroke(KeyEvent.VK_DELETE);
-                } else if (result.endsWith("enter")) {
+                } else if (c.endsWith("enter")) {
                     pressKeystroke(KeyEvent.VK_ENTER);
-                } else if (result.endsWith("escape")) {
+                } else if (c.endsWith("escape")) {
                     pressKeystroke(KeyEvent.VK_ESCAPE);
-                } else if (result.endsWith("tab")) {
+                } else if (c.endsWith("tab")) {
                     pressKeystroke(KeyEvent.VK_TAB);
-                } else if (result.endsWith("undo")) {
+                } else if (c.endsWith("undo")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                 }
             }
 
-            else if (result.startsWith("next")) {
-                if (result.endsWith("line")) {
+            else if (c.startsWith("next")) {
+                if (c.endsWith("line")) {
                     pressKeystroke(KeyEvent.VK_DOWN);
-                } else if (result.endsWith("page")) {
+                } else if (c.endsWith("page")) {
                     pressKeystroke(KeyEvent.VK_PAGE_DOWN);
-                } else if (result.endsWith("method")) {
+                } else if (c.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
                 }
             }
 
-            else if (result.startsWith("previous")) {
-                if (result.endsWith("line")) {
+            else if (c.startsWith("previous")) {
+                if (c.endsWith("line")) {
                     pressKeystroke(KeyEvent.VK_UP);
-                } else if (result.endsWith("page")) {
+                } else if (c.endsWith("page")) {
                     pressKeystroke(KeyEvent.VK_PAGE_UP);
-                } else if (result.endsWith("method")) {
+                } else if (c.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
                 }
             }
 
-            else if (result.startsWith("extract this")) {
-                if (result.endsWith("method")) {
+            else if (c.startsWith("extract this")) {
+                if (c.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_M);
-                } else if (result.endsWith("parameter")) {
+                } else if (c.endsWith("parameter")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_P);
                 }
             }
 
-            else if (result.startsWith("inspect code")) {
+            else if (c.startsWith("inspect code")) {
                 pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
             }
 
-            else if (result.startsWith("speech pause")) {
+            else if (c.startsWith("speech pause")) {
                 pauseSpeech();
             }
 
-            else if (result.startsWith("okay google")) {
+            else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
                 fireGoogleSearch();
             }
         }
 
         private void fireGoogleSearch() {
             GoogleService gs = ServiceManager.getService(GoogleService.class);
-            String searchQuery = gs.getTextForLastUtterance();
+            Pair<String, Double> searchQuery = gs.getBestTextForLastUtterance();
 
-            if (searchQuery == null || searchQuery.isEmpty()) {
+            if (searchQuery == null || searchQuery.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */) {
                 return;
             }
 
             ServiceManager.getService(TTSService.class).say("I think you said " + searchQuery + ", searching Google now");
-            gs.searchGoogle(searchQuery);
+            gs.searchGoogle(searchQuery.first);
         }
 
         private void pauseSpeech() {
