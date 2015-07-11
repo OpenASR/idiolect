@@ -238,7 +238,13 @@ public class ASRServiceImpl implements ASRService {
                 pauseSpeech();
             }
 
+            else if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
+                beep();
+                /* ... */
+            }
+
             else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
+                beep();
                 fireGoogleSearch();
             }
         }
@@ -296,6 +302,28 @@ public class ASRServiceImpl implements ASRService {
         } catch (InterruptedException | InvocationTargetException e) {
             logger.log(Level.SEVERE, "Could not invoke action:", e);
         }
+    }
+
+    // Helpers
+
+    public static synchronized void beep() {
+        Thread t = new Thread(() -> {
+            try {
+                Clip clip = AudioSystem.getClip();
+                AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                    ASRServiceImpl.class.getResourceAsStream("/com.jetbrains.idear/sounds/beep.wav"));
+                clip.open(inputStream);
+                clip.start();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+
+        t.start();
+
+        try {
+            t.join();
+        } catch (InterruptedException _) {}
     }
 
     // This is for testing purposes solely
