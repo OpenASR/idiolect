@@ -37,6 +37,10 @@ public class ExecuteActionFromPredefinedText extends AnAction {
             for (char c : type.toCharArray()) {
                 typing.actionPerformed(editor, c, context);
             }
+
+            action = ActionManager.getInstance().getAction("NextTemplateVariable");
+            action.actionPerformed(new AnActionEvent(null, context, "", action.getTemplatePresentation(), ActionManager.getInstance(), 0));
+
         }
     }
 
