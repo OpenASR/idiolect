@@ -59,6 +59,11 @@ public class NlpParserTest {
     }
 
     @Test
+    public void testExtractIntroduce_Field() throws Exception {
+        doTestExtractAction("Idea introduce field", "introduce");
+    }
+
+    @Test
     public void testInline_Field() throws Exception {
         doTestExtractAction("Idea inline", "inline");
     }
