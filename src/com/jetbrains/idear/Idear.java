@@ -17,6 +17,7 @@ public class Idear implements ApplicationComponent {
     public void initComponent() {
         ServiceManager.getService(ASRService.class).init();
         ServiceManager.getService(GrammarService.class).init();
+        ParserService.getInstance().init();
         initTTSService();
     }
 
@@ -40,6 +41,7 @@ public class Idear implements ApplicationComponent {
     public void disposeComponent() {
         ServiceManager.getService(ASRService.class).dispose();
         ServiceManager.getService(TTSService.class).dispose();
+        ParserService.getInstance().dispose();
     }
 
     @Override

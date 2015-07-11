@@ -34,6 +34,9 @@
         <applicationService serviceInterface="com.jetbrains.idear.GrammarService" serviceImplementation="com.jetbrains.idear.GrammarServiceImpl">
         </applicationService>
 
+        <applicationService serviceInterface="com.jetbrains.idear.ParserService" serviceImplementation="com.jetbrains.idear.NlpParserService">
+        </applicationService>
+
     </extensions>
 
     <application-components>
@@ -53,6 +56,10 @@
                 description="Test" icon="/com/jetbrains/idear/icons/start.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
+
+        <action id="SpeechStuff"
+                text="Invoke by speech"
+                class="com.jetbrains.idear.ActionBySelectedTextForTestOnly"/>
     </actions>
 
 </idea-plugin>
