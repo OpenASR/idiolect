@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ASRServiceImpl implements ASRService {
@@ -23,8 +22,6 @@ public class ASRServiceImpl implements ASRService {
     private static final String ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us";
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
     private static final String GRAMMAR_PATH = "resource:/com.jetbrains.idear/grammars";
-
-    private static final URL CONFIG_PATH = ASRServiceImpl.class.getResource("/com.jetbrains.idear/default.config.xml");
 
     private ConfigurationManager configurationManager;
     private LiveSpeechRecognizer recognizer;
