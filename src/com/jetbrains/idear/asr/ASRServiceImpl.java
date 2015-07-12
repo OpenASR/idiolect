@@ -150,7 +150,7 @@ public class ASRServiceImpl implements ASRService {
                 if (isInit()) {
                     if (result.equals(HI_IDEA)) {
                         // Greet invoker
-                        say("Hi, Alexey");
+                        say("Hi");
                         invokeAction("Idear.Start");
                     }
                 } else if (isActive()) {
