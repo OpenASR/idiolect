@@ -9,9 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Idear implements ApplicationComponent {
 
-
-    public Idear() {
-    }
+    public Idear() {}
 
     @Override
     public void initComponent() {

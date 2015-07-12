@@ -37,7 +37,6 @@
         <applicationService serviceInterface="com.jetbrains.idear.GoogleService" serviceImplementation="com.jetbrains.idear.GoogleService">
         </applicationService>
 
-
         <applicationService serviceInterface="com.jetbrains.idear.ParserService" serviceImplementation="com.jetbrains.idear.NlpParserService">
         </applicationService>
 

@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
+import com.intellij.util.Consumer;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import com.jetbrains.idear.recognizer.CustomMicrophone;
 import edu.cmu.sphinx.api.Configuration;
@@ -273,17 +274,21 @@ public class ASRServiceImpl implements ASRService {
 //                    .getService(TTSService.class)
 //                    .say("I think you said " + commandTuple.first + ", searching Google now");
 
-                DataContext parent = DataManager.getInstance().getDataContext();
-                AnActionEvent e =
-                    new AnActionEvent(
-                        null,
-                        SimpleDataContext.getSimpleContext(VoiceAction.KEY.getName(), commandTuple.first, parent),
-                        ActionPlaces.UNKNOWN,
-                        new Presentation(),
-                        ActionManager.getInstance(),
-                        0);
+                DataManager .getInstance()
+                            .getDataContextFromFocus()
+                            .doWhenDone((Consumer<DataContext>) parent -> {
+                                AnActionEvent e =
+                                    new AnActionEvent(
+                                        null,
+                                        SimpleDataContext.getSimpleContext(VoiceAction.KEY.getName(), commandTuple.first, parent),
+                                        ActionPlaces.UNKNOWN,
+                                        new Presentation(),
+                                        ActionManager.getInstance(),
+                                        0);
 
-                invokeAction("Idear.VoiceAction", e);
+                                invokeAction("Idear.VoiceAction", e);
+                            });
+
 
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
