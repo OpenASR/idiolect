@@ -16,8 +16,8 @@ public class ExecuteActionFromPredefinedText extends AnAction {
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
 
 //        String text = "idea extract to field";
-        String text = "idea extract to variable name";
-//        String text = "idea inline";
+//        String text = "idea extract to variable name";
+        String text = "idea inline";
 
         TextToActionConverter provider = new TextToActionConverter();
         ActionCallInfo info = provider.extractAction(text);

@@ -50,6 +50,7 @@
 
     <extensions defaultExtensionNs="com.jetbrains.idear">
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.ExtractActionRecognizer"/>
+        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.InlineActionRecognizer"/>
     </extensions>
 
 
