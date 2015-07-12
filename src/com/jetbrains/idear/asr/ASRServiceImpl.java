@@ -23,7 +23,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -55,7 +54,7 @@ public class ASRServiceImpl implements ASRService {
         configuration.setGrammarPath(GRAMMAR_PATH);
         configuration.setUseGrammar(true);
 
-        configuration.setGrammarName("dialog");
+        configuration.setGrammarName("command");
 
         try {
             recognizer = new CustomLiveSpeechRecognizer(configuration);
@@ -70,8 +69,10 @@ public class ASRServiceImpl implements ASRService {
             e.printStackTrace();
         }
 
-        // Fire up control-loop
+        // Start-up recognition facilities
+        recognizer.startRecognition(true);
 
+        // Fire up control-loop
         speechThread.start();
     }
 
@@ -100,17 +101,17 @@ public class ASRServiceImpl implements ASRService {
         if (getStatus() == Status.ACTIVE)
             return Status.ACTIVE;
 
-        if (getStatus() == Status.INIT) {
-            // Cold start prune cache
-            recognizer.startRecognition(true);
-        }
+//        if (getStatus() == Status.INIT) {
+//            // Cold start prune cache
+//            recognizer.startRecognition(true);
+//        }
 
         return setStatus(Status.ACTIVE);
     }
 
     @Override
     public Status deactivate() {
-        return setStatus(Status.INACTIVE);
+        return setStatus(Status.STANDBY);
     }
 
     private class ASRControlLoop implements Runnable {
@@ -142,20 +143,23 @@ public class ASRServiceImpl implements ASRService {
         public static final String OK_GOOGLE = "ok google";
         public static final String OKAY_IDEA = "okay idea";
         public static final String OK_IDEA = "ok idea";
+        public static final String HI_IDEA = "hi idea";
 
         @Override
         public void run() {
             while (!isTerminated()) {
-                String result = null;
-
                 // This blocks on a recognition result
-                if (isActive()) {
-                    result = getResultFromRecognizer();
-                }
+                String result = getResultFromRecognizer();
 
-                // This may happen 10-15 seconds later
-                if (isActive() && result != null) {
+                if (isInit()) {
+                    if (result.equals(HI_IDEA)) {
+                        // Greet invoker
+                        say("Hi, Alexey");
+                        invokeAction("Idear.Start");
+                    }
+                } else if (isActive()) {
                     logger.log(Level.INFO, "Recognized: " + result);
+
                     applyAction(result);
                 }
             }
@@ -172,8 +176,14 @@ public class ASRServiceImpl implements ASRService {
         }
 
         private void applyAction(String c) {
-            if (c.equals(FUCK)) {
-                invokeAction((String) IdeActions.ACTION_UNDO);
+
+            if (c.equals(HI_IDEA)) {
+                // Greet some more
+                say("Hi, again!");
+            }
+
+            else if (c.equals(FUCK)) {
+                invokeAction(IdeActions.ACTION_UNDO);
             }
 
             else if (c.startsWith("open")) {
@@ -343,6 +353,10 @@ public class ASRServiceImpl implements ASRService {
 
     private boolean isTerminated() {
         return getStatus() == Status.TERMINATED;
+    }
+
+    public boolean isInit() {
+        return getStatus() == Status.INIT;
     }
 
     private boolean isActive() {

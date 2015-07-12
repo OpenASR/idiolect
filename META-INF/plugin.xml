@@ -69,8 +69,8 @@
     </project-components>
 
     <actions>
-        <action id="Idear.NewTest" class="com.jetbrains.idear.VoiceRecordControllerAction" text="Voice control"
-                description="Test" icon="/com.jetbrains.idear/icons/start.png">
+        <action id="Idear.Start" class="com.jetbrains.idear.VoiceRecordControllerAction" text="Voice control"
+                description="Start" icon="/com.jetbrains.idear/icons/start.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 

@@ -3,13 +3,12 @@ package com.jetbrains.idear.asr;
 public interface ASRService {
 
     void init();
-
     void dispose();
 
     enum Status {
         INIT,
         ACTIVE,
-        INACTIVE,
+        STANDBY,
         TERMINATED
     }
 
