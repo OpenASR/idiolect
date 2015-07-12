@@ -183,14 +183,12 @@ public class ASRServiceImpl implements ASRService {
                 //invokeAction(IdeActions.ACTION_UNDO);
             }
 
-            else if (c.startsWith("open")) {
-                if (c.endsWith("settings")) {
-                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_S);
-                    //invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
-                } else if (c.endsWith("recent")) {
-                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_E);
-                    //invokeAction(IdeActions.ACTION_RECENT_FILES);
-                } else if (c.endsWith("terminal")) {
+            else if (c.startsWith(OPEN)) {
+                if (c.endsWith(SETTINGS)) {
+                    invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
+                } else if (c.endsWith(RECENT)) {
+                    invokeAction(IdeActions.ACTION_RECENT_FILES);
+                } else if (c.endsWith(TERMINAL)) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
             }
