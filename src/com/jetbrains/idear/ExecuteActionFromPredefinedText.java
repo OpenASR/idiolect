@@ -27,20 +27,32 @@ public class ExecuteActionFromPredefinedText extends AnAction {
     private void invoke(Editor editor, ActionCallInfo info) {
         AnAction action = ActionManager.getInstance().getAction(info.actionId);
         String type = info.typeAfter;
+        boolean isHitTabAfter = info.hitTabAfter;
 
         DataManager manager = DataManager.getInstance();
         if (manager != null) {
             DataContext context = manager.getDataContext(editor.getContentComponent());
             action.actionPerformed(new AnActionEvent(null, context, "", action.getTemplatePresentation(), ActionManager.getInstance(), 0));
 
-            TypedAction typing = EditorActionManager.getInstance().getTypedAction();
-            for (char c : type.toCharArray()) {
-                typing.actionPerformed(editor, c, context);
+            if (type != null) {
+                typeText(editor, type, context);
             }
 
-            action = ActionManager.getInstance().getAction("NextTemplateVariable");
-            action.actionPerformed(new AnActionEvent(null, context, "", action.getTemplatePresentation(), ActionManager.getInstance(), 0));
+            if (isHitTabAfter) {
+                hitTab(context);
+            }
+        }
+    }
 
+    private void hitTab(DataContext context) {
+        AnAction action = ActionManager.getInstance().getAction("NextTemplateVariable");
+        action.actionPerformed(new AnActionEvent(null, context, "", action.getTemplatePresentation(), ActionManager.getInstance(), 0));
+    }
+
+    private void typeText(Editor editor, String type, DataContext context) {
+        TypedAction typing = EditorActionManager.getInstance().getTypedAction();
+        for (char c : type.toCharArray()) {
+            typing.actionPerformed(editor, c, context);
         }
     }
 

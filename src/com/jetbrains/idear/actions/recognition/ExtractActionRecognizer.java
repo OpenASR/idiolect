@@ -44,6 +44,7 @@ public class ExtractActionRecognizer implements ActionRecognizer {
 
         ActionCallInfo info = new ActionCallInfo(actionId, EmptyRunnable.INSTANCE);
         info.setTypeAfter(next);
+        info.setHitTabAfter(true);
         return info;
     }
 
