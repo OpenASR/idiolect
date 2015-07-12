@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -277,21 +278,17 @@ public class ASRServiceImpl implements ASRService {
 //                    .getService(TTSService.class)
 //                    .say("I think you said " + commandTuple.first + ", searching Google now");
 
-                DataManager .getInstance()
-                            .getDataContextFromFocus()
-                            .doWhenDone((Consumer<DataContext>) parent -> {
-                                AnActionEvent e =
-                                    new AnActionEvent(
-                                        null,
-                                        SimpleDataContext.getSimpleContext(ExecuteVoiceCommandAction.KEY.getName(), commandTuple.first, parent),
-                                        ActionPlaces.UNKNOWN,
-                                        new Presentation(),
-                                        ActionManager.getInstance(),
-                                        0);
-
-                                invokeAction("Idear.VoiceAction", e);
-                            });
-
+                invokeAction(
+                    "Idear.VoiceAction",
+                    dataContext -> new AnActionEvent(
+                                            null,
+                                            SimpleDataContext.getSimpleContext(ExecuteVoiceCommandAction.KEY.getName(), commandTuple.first, dataContext),
+                                            ActionPlaces.UNKNOWN,
+                                            new Presentation(),
+                                            ActionManager.getInstance(),
+                                            0
+                                        )
+                );
 
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
@@ -372,24 +369,24 @@ public class ASRServiceImpl implements ASRService {
     private void invokeAction(final String action) {
         invokeAction(
             action,
-            new AnActionEvent(null,
-                DataManager.getInstance().getDataContext(),
-                ActionPlaces.UNKNOWN,
-                new Presentation(),
-                ActionManager.getInstance(),
-                0)
+            dataContext -> {
+                return new AnActionEvent(null,
+                    DataManager.getInstance().getDataContext(),
+                    ActionPlaces.UNKNOWN,
+                    new Presentation(),
+                    ActionManager.getInstance(),
+                    0);
+            }
         );
     }
 
-    private void invokeAction(String action, AnActionEvent e) {
-        try {
-            EventQueue.invokeAndWait(() -> {
+    private void invokeAction(String action, Function<DataContext, AnActionEvent> actionFactory) {
+        DataManager.getInstance().getDataContextFromFocus().doWhenDone(
+            (Consumer<DataContext>) dataContext -> EventQueue.invokeLater(() -> {
                 AnAction anAction = ActionManager.getInstance().getAction(action);
-                anAction.actionPerformed(e);
-            });
-        } catch (InterruptedException | InvocationTargetException _) {
-            logger.log(Level.SEVERE, "Could not invoke action:", _);
-        }
+                anAction.actionPerformed(actionFactory.apply(dataContext));
+            })
+        );
     }
 
     // Helpers
