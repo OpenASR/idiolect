@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.actions;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
@@ -8,7 +8,7 @@ import com.intellij.openapi.editor.actionSystem.TypedAction;
 import com.jetbrains.idear.actions.recognition.ActionCallInfo;
 import com.jetbrains.idear.actions.recognition.TextToActionConverter;
 
-public class ExecuteActionFromPredefinedText extends AnAction {
+public abstract class ExecuteActionByCommandText extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -26,9 +26,10 @@ public class ExecuteActionFromPredefinedText extends AnAction {
         invoke(editor, info);
     }
 
-    private void invoke(Editor editor, ActionCallInfo info) {
+    protected void invoke(Editor editor, ActionCallInfo info) {
         AnAction action = ActionManager.getInstance().getAction(info.actionId);
         String type = info.typeAfter;
+        boolean isHitTabAfter = info.hitTabAfter;
 
         DataManager manager = DataManager.getInstance();
         if (manager != null) {
