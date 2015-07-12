@@ -34,7 +34,7 @@ public class ASRServiceImpl implements ASRService {
     public static final double MASTER_GAIN = 0.85;
     public static final double CONFIDENCE_LEVEL_THRESHOLD = 0.5;
 
-    private final Thread speechThread = new Thread(new ASRControlLoop(), "ARS Thread");
+    private final Thread speechThread = new Thread(new ASRControlLoop(), "ASR Thread");
 
     private static final String ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us";
     private static final String DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict";
