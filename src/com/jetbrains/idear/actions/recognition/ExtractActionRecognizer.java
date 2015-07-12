@@ -3,6 +3,7 @@ package com.jetbrains.idear.actions.recognition;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.containers.ContainerUtil;
+import freemarker.template.utility.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,21 +31,26 @@ public class ExtractActionRecognizer implements ActionRecognizer {
 
         if (data == null) return null;
 
+        ActionCallInfo info = new ActionCallInfo(data.first);
         int index = data.second;
 
-        String next = null;
-        if (index + 1 < words.length) {
-            next = words[index + 1];
-            if (next.equals("to") && index + 2 < words.length) {
-                next = words[index + 2];
-            }
+        StringBuilder newName = new StringBuilder();
+        int newNameStartIndex = index + 1 < words.length && words[index + 1].equals("to")
+                ? index + 2
+                : index + 1;
+
+        boolean first = true;
+        for (int i = newNameStartIndex; i < words.length; i++) {
+            String word = first ? words[i] : StringUtil.capitalize(words[i]);
+            newName.append(word);
+            first = false;
         }
 
-        String actionId = data.first;
+        if (newName.length() > 0) {
+            info.setTypeAfter(newName.toString());
+            info.setHitTabAfter(true);
+        }
 
-        ActionCallInfo info = new ActionCallInfo(actionId);
-        info.setTypeAfter(next);
-        info.setHitTabAfter(true);
         return info;
     }
 
