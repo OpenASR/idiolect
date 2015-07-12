@@ -17,7 +17,7 @@ grammar dialog;
 
 <menu_command> =  open <menu_item>;
 
-<menu_item> = file | edit | view | navigate | code | settings | recent | terminal;
+<menu_item> = settings | recent | terminal;
 
 <init_command> = hi idea;
 
@@ -44,7 +44,9 @@ grammar dialog;
 
 <speech_action> = pause | resume;
 
-<keyboard_command> = press [enter | escape | tab | undo | delete];
+<debug_command> = toggle break point | view break points | step over | step into;
+
+<keyboard_command> = press [return | escape | tab | undo | delete] key;
 
 <next_command> = [following | previous] [line | method | error];
 
@@ -57,4 +59,5 @@ public <command> =  <init_command>          |
                     <focus_command>         |
                     <speech_command>        |
                     <google_command>        |
+                    <debug_command>         |
                     <keyboard_command>;

@@ -1,6 +1,8 @@
 package com.jetbrains.idear.actions;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.jetbrains.idear.actions.recognition.ActionCallInfo;
 import com.jetbrains.idear.actions.recognition.TextToActionConverter;
@@ -13,7 +15,7 @@ public class ExecuteActionFromPredefinedText extends ExecuteActionByCommandText 
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
 
 //        String text = "idea extract to field";
-        String text = "idea extract to variable name";
+        String text = "idea rename to my super test";
 //        String text = "idea inline";
 
         TextToActionConverter provider = new TextToActionConverter(e.getDataContext());

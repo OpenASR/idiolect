@@ -6,22 +6,19 @@ import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
-import com.jetbrains.idear.GoogleService;
-import com.jetbrains.idear.tts.TTSService;
+import com.jetbrains.idear.GoogleHelper;
 import com.jetbrains.idear.actions.ExecuteVoiceCommandAction;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import com.jetbrains.idear.recognizer.CustomMicrophone;
+import com.jetbrains.idear.tts.TTSService;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
-import edu.cmu.sphinx.util.props.ConfigurationManager;
 
-import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -42,7 +39,6 @@ public class ASRServiceImpl implements ASRService {
     private static final Logger logger = Logger.getLogger(ASRServiceImpl.class.getSimpleName());
 
     private CustomLiveSpeechRecognizer recognizer;
-    private ConfigurationManager configurationManager;
     private Robot robot;
 
     private final AtomicReference<Status> status = new AtomicReference<>(Status.INIT);
@@ -183,14 +179,17 @@ public class ASRServiceImpl implements ASRService {
             }
 
             else if (c.equals(FUCK)) {
-                invokeAction(IdeActions.ACTION_UNDO);
+                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
+                //invokeAction(IdeActions.ACTION_UNDO);
             }
 
             else if (c.startsWith("open")) {
                 if (c.endsWith("settings")) {
-                    invokeAction((String) IdeActions.ACTION_SHOW_SETTINGS);
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_S);
+                    //invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
                 } else if (c.endsWith("recent")) {
-                    invokeAction((String) IdeActions.ACTION_RECENT_FILES);
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_E);
+                    //invokeAction(IdeActions.ACTION_RECENT_FILES);
                 } else if (c.endsWith("terminal")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
@@ -213,15 +212,15 @@ public class ASRServiceImpl implements ASRService {
             }
 
             else if (c.startsWith("press")) {
-                if (c.endsWith("delete")) {
+                if (c.contains("delete")) {
                     pressKeystroke(KeyEvent.VK_DELETE);
-                } else if (c.endsWith("enter")) {
+                } else if (c.contains("return")) {
                     pressKeystroke(KeyEvent.VK_ENTER);
-                } else if (c.endsWith("escape")) {
+                } else if (c.contains("escape")) {
                     pressKeystroke(KeyEvent.VK_ESCAPE);
-                } else if (c.endsWith("tab")) {
+                } else if (c.contains("tab")) {
                     pressKeystroke(KeyEvent.VK_TAB);
-                } else if (c.endsWith("undo")) {
+                } else if (c.contains("undo")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                 }
             }
@@ -271,13 +270,27 @@ public class ASRServiceImpl implements ASRService {
                 beep();
                 fireGoogleSearch();
             }
+
+            else if(c.contains("break point")) {
+                if (c.startsWith("toggle")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_F8);
+                } else if(c.startsWith("view")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_F8);
+                }
+            }
+
+            else if (c.startsWith("step")) {
+                if (c.endsWith("over")) {
+                    pressKeystroke(KeyEvent.VK_F8);
+                } else if (c.endsWith("into")) {
+                    pressKeystroke(KeyEvent.VK_F7);
+                }
+            }
         }
 
         private void fireVoiceCommand() {
             try {
-                recordFromMic(3500, "/tmp/X.wav");
-
-                Pair<String, Double> commandTuple = ServiceManager.getService(GoogleService.class).getBestTextForUtterance(new File("/tmp/X.wav"));
+                Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic());
 
                 if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
@@ -300,44 +313,26 @@ public class ASRServiceImpl implements ASRService {
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
             }
+
         }
 
         private void fireGoogleSearch() {
 
             try {
-                GoogleService gs = ServiceManager.getService(GoogleService.class);
-
-                recordFromMic(4500, "/tmp/X.wav");
-
-                Pair<String, Double> searchQueryTuple = gs.getBestTextForUtterance(new File("/tmp/X.wav"));
+                Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic());
 
                 if (searchQueryTuple == null || searchQueryTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
 
-                say("I think you said " + searchQueryTuple.first + ", searching Google");
+                ServiceManager
+                    .getService(TTSService.class)
+                    .say("I think you said " + searchQueryTuple.first + ", searching Google now");
 
-                gs.searchGoogle(searchQueryTuple.first);
+                GoogleHelper.searchGoogle(searchQueryTuple.first);
 
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
             }
-        }
-
-        private void recordFromMic(int duration, String path) throws IOException {
-            final CustomMicrophone mic = new CustomMicrophone(16000, 16, true, false);
-
-            new Thread(() -> {
-                try {
-                    Thread.sleep(duration);
-                } catch (InterruptedException _) {
-                } finally {
-                    mic.stopRecording();
-                }
-            }).start();
-
-            mic.startRecording();
-
-            AudioSystem.write(mic.getStream(), AudioFileFormat.Type.WAVE, new File(path));
         }
 
         private void pauseSpeech() {

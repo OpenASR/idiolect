@@ -38,9 +38,6 @@
         <applicationService serviceInterface="com.jetbrains.idear.asr.GrammarService" serviceImplementation="com.jetbrains.idear.asr.GrammarServiceImpl">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.GoogleService" serviceImplementation="com.jetbrains.idear.GoogleService">
-        </applicationService>
-
         <applicationService serviceInterface="com.jetbrains.idear.nlp.ParserService" serviceImplementation="com.jetbrains.idear.nlp.NlpParserService">
         </applicationService>
 
@@ -53,6 +50,8 @@
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.RunActionRecognizer"/>
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.DebugActionRecognizer"/>
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.FindUsagesActionRecognizer"/>
+        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.NavigateToDeclarationRecognizer"/>
+        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.RenameActionRecognizer"/>
     </extensions>
 
 
