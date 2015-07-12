@@ -7,10 +7,10 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
 import com.jetbrains.idear.GoogleService;
-import com.jetbrains.idear.tts.TTSService;
 import com.jetbrains.idear.actions.ExecuteVoiceCommandAction;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import com.jetbrains.idear.recognizer.CustomMicrophone;
+import com.jetbrains.idear.tts.TTSService;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
 import edu.cmu.sphinx.util.props.ConfigurationManager;
@@ -23,7 +23,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -178,9 +177,9 @@ public class ASRServiceImpl implements ASRService {
 
             else if (c.startsWith("open")) {
                 if (c.endsWith("settings")) {
-                    invokeAction((String) IdeActions.ACTION_SHOW_SETTINGS);
+                    invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
                 } else if (c.endsWith("recent")) {
-                    invokeAction((String) IdeActions.ACTION_RECENT_FILES);
+                    invokeAction(IdeActions.ACTION_RECENT_FILES);
                 } else if (c.endsWith("terminal")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
@@ -262,7 +261,7 @@ public class ASRServiceImpl implements ASRService {
                 fireGoogleSearch();
             }
 
-            else if(c.contains("breakpoint")) {
+            else if(c.contains("break point")) {
                 if (c.startsWith("toggle")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_F8);
                 } else if(c.startsWith("view")) {
@@ -277,6 +276,8 @@ public class ASRServiceImpl implements ASRService {
                     pressKeystroke(KeyEvent.VK_F7);
                 }
             }
+
+
         }
 
         private void fireVoiceCommand() {

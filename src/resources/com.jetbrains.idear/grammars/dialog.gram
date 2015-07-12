@@ -17,7 +17,7 @@ grammar dialog;
 
 <menu_command> =  open <menu_item>;
 
-<menu_item> = file | edit | view | navigate | code | settings | recent | terminal;
+<menu_item> = settings | recent | terminal;
 
 <activation_command> = (okay | ok) idea;
 
@@ -43,7 +43,7 @@ grammar dialog;
 
 <speech_action> = pause | resume;
 
-<debug_command> = toggle breakpoint | view breakpoints | step over | step into;
+<debug_command> = toggle break point | view break points | step over | step into;
 
 <keyboard_command> = press [enter | escape | tab | undo | delete];
 
