@@ -2,7 +2,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <intentionAction>
-            <className>com.jetbrains.idear.JavaPronouncer</className>
+            <className>com.jetbrains.idear.tts.JavaPronouncer</className>
         </intentionAction>
     </extensions>
 

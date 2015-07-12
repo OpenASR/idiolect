@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.tts;
 
 public interface TTSService {
     void init();

@@ -1,5 +1,6 @@
 package com.jetbrains.idear.actions.recognition;
 
+import com.intellij.openapi.actionSystem.DataContext;
 import org.jetbrains.annotations.NotNull;
 
 public class InlineActionRecognizer implements ActionRecognizer {
@@ -10,8 +11,8 @@ public class InlineActionRecognizer implements ActionRecognizer {
     }
 
     @Override
-    public ActionCallInfo getActionInfo(@NotNull String sentence) {
+    public ActionCallInfo getActionInfo(@NotNull String sentence, DataContext dataContext) {
         if (!isMatching(sentence)) return null;
-        return new ActionCallInfo("Inline", null);
+        return new ActionCallInfo("Inline");
     }
 }

@@ -1,6 +1,6 @@
 package com.jetbrains.idear.actions.recognition;
 
-import com.intellij.openapi.util.EmptyRunnable;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class ExtractActionRecognizer implements ActionRecognizer {
 
     @Override
     @Nullable
-    public ActionCallInfo getActionInfo(@NotNull String sentence) {
+    public ActionCallInfo getActionInfo(@NotNull String sentence, DataContext dataContext) {
         if (!isMatching(sentence)) return null;
 
         String[] words = sentence.split(" ");
@@ -42,7 +42,7 @@ public class ExtractActionRecognizer implements ActionRecognizer {
 
         String actionId = data.first;
 
-        ActionCallInfo info = new ActionCallInfo(actionId, EmptyRunnable.INSTANCE);
+        ActionCallInfo info = new ActionCallInfo(actionId);
         info.setTypeAfter(next);
         info.setHitTabAfter(true);
         return info;

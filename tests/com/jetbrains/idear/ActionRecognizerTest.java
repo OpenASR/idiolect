@@ -1,5 +1,7 @@
 package com.jetbrains.idear;
 
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.jetbrains.idear.actions.recognition.ActionCallInfo;
 import com.jetbrains.idear.actions.recognition.ExtractActionRecognizer;
 import org.junit.Test;
@@ -16,9 +18,9 @@ public class ActionRecognizerTest {
         ExtractActionRecognizer recognizer = new ExtractActionRecognizer();
         assertTrue(recognizer.isMatching(text));
 
-        ActionCallInfo info = recognizer.getActionInfo(text);
-        assertEquals("IntroduceVariable", info.actionId);
-        assertEquals("myTest", info.typeAfter);
+        ActionCallInfo info = recognizer.getActionInfo(text, getEmptyDataContext());
+        assertEquals("IntroduceVariable", info.getActionId());
+        assertEquals("myTest", info.getTypeAfter());
     }
 
     @Test
@@ -27,7 +29,11 @@ public class ActionRecognizerTest {
         ExtractActionRecognizer recognizer = new ExtractActionRecognizer();
         assertTrue(recognizer.isMatching(text));
 
-        ActionCallInfo info = recognizer.getActionInfo(text);
-        assertEquals("IntroduceVariable", info.actionId);
+        ActionCallInfo info = recognizer.getActionInfo(text, getEmptyDataContext());
+        assertEquals("IntroduceVariable", info.getActionId());
+    }
+
+    private static DataContext getEmptyDataContext() {
+        return SimpleDataContext.getSimpleContext("", null);
     }
 }

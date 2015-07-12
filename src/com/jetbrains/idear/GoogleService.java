@@ -75,10 +75,10 @@ public class GoogleService {
     }
 
     private List<Pair<String, Double>> parseGSAPIResponse(String r) throws JSONException {
+        List<Pair<String, Double>> res = new ArrayList<>();
+
         JSONObject o = new JSONObject(r.substring(13));
         JSONArray results = o.getJSONArray("result");
-
-        List<Pair<String, Double>> res = new ArrayList<>();
 
         for (int i = 0; i < results.length(); ++i) {
             JSONArray as = ((JSONObject) results.get(i)).getJSONArray("alternative");

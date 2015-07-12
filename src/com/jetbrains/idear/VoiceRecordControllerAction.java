@@ -3,6 +3,8 @@ package com.jetbrains.idear;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.components.ServiceManager;
+import com.jetbrains.idear.asr.ASRService;
+import com.jetbrains.idear.presentation.Icons;
 
 public class VoiceRecordControllerAction extends AnAction {
     private volatile boolean isRecording = false;

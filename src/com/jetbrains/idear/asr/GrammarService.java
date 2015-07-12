@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.asr;
 
 /**
  * Created by breandan on 7/10/2015.

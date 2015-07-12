@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.nlp;
 
 import com.intellij.openapi.components.ServiceManager;
 import opennlp.tools.parser.Parse;

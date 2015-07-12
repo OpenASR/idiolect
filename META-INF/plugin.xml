@@ -29,20 +29,19 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
-        <applicationService serviceInterface="com.jetbrains.idear.ASRService" serviceImplementation="com.jetbrains.idear.ASRServiceImpl">
+        <applicationService serviceInterface="com.jetbrains.idear.asr.ASRService" serviceImplementation="com.jetbrains.idear.asr.ASRServiceImpl">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.TTSService" serviceImplementation="com.jetbrains.idear.TTSServiceImpl">
+        <applicationService serviceInterface="com.jetbrains.idear.tts.TTSService" serviceImplementation="com.jetbrains.idear.tts.TTSServiceImpl">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.GrammarService" serviceImplementation="com.jetbrains.idear.GrammarServiceImpl">
+        <applicationService serviceInterface="com.jetbrains.idear.asr.GrammarService" serviceImplementation="com.jetbrains.idear.asr.GrammarServiceImpl">
         </applicationService>
 
         <applicationService serviceInterface="com.jetbrains.idear.GoogleService" serviceImplementation="com.jetbrains.idear.GoogleService">
         </applicationService>
 
-
-        <applicationService serviceInterface="com.jetbrains.idear.ParserService" serviceImplementation="com.jetbrains.idear.NlpParserService">
+        <applicationService serviceInterface="com.jetbrains.idear.nlp.ParserService" serviceImplementation="com.jetbrains.idear.nlp.NlpParserService">
         </applicationService>
 
     </extensions>
@@ -53,6 +52,7 @@
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.InlineActionRecognizer"/>
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.RunActionRecognizer"/>
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.DebugActionRecognizer"/>
+        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.FindUsagesActionRecognizer"/>
     </extensions>
 
 
@@ -70,17 +70,17 @@
 
     <actions>
         <action id="Idear.NewTest" class="com.jetbrains.idear.VoiceRecordControllerAction" text="Voice control"
-                description="Test" icon="/com/jetbrains/idear/icons/start.png">
+                description="Test" icon="/com.jetbrains.idear/icons/start.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 
         <action id="Idear.SpeechStuff"
                 text="Invoke by speech"
-                class="com.jetbrains.idear.ExecuteActionFromPredefinedText"/>
+                class="com.jetbrains.idear.actions.ExecuteActionFromPredefinedText"/>
 
         <action id="Idear.VoiceAction"
                 text="Invoke by voice-command"
-                class="com.jetbrains.idear.VoiceAction"/>
+                class="com.jetbrains.idear.actions.ExecuteVoiceCommandAction"/>
     </actions>
 
 </idea-plugin>

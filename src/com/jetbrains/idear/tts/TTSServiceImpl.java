@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.tts;
 
 import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
