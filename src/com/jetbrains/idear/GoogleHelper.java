@@ -1,6 +1,7 @@
 package com.jetbrains.idear;
 
 import com.intellij.openapi.util.Pair;
+import com.jetbrains.idear.recognizer.CustomMicrophone;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -13,8 +14,6 @@ import java.awt.*;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,9 +65,6 @@ public class GoogleHelper {
         return best;
     }
 
-    public static Pair<String, Double> getBestTextForLastUtterance() {
-        return getBestTextForUtterance(getLastRecordedUtterance());
-    }
 
     public static Pair<String, Double> getBestTextForUtterance(File file) {
         return getBestTextForUtteranceInternal(file);
@@ -111,36 +107,15 @@ public class GoogleHelper {
         }
     }
 
-    // TODO: move out
-    private static File getLastRecordedUtterance() {
-        File dir = new File(System.getProperty("user.dir"));
-        File lastRecorded = dir;
-        FileTime bestTime = FileTime.fromMillis(0);
-
-        for (File f : dir.listFiles()) {
-            if (f.getName().endsWith("wav")) {
-                FileTime currentTime = getTimeCreated(f);
-                if (currentTime.compareTo(bestTime) > 0) {
-                    lastRecorded = f;
-                    bestTime = currentTime;
-                }
-            }
-        }
-
-        return lastRecorded;
-    }
-
-    private static FileTime getTimeCreated(File f) {
+    public static void main(String[] args) {
         try {
-            return Files.readAttributes(f.toPath(), BasicFileAttributes.class).creationTime();
+            CustomMicrophone.recordFromMic();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return FileTime.fromMillis(0);
-    }
+        Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(new File("/tmp/X.wav"));
 
-    public static void main(String[] args) {
-        System.out.println(new GoogleHelper().getBestTextForLastUtterance());
+        System.out.println(searchQueryTuple.first);
     }
 }

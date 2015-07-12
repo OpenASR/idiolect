@@ -14,13 +14,11 @@ import com.jetbrains.idear.tts.TTSService;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
 
-import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -281,16 +279,10 @@ public class ASRServiceImpl implements ASRService {
 
         private void fireVoiceCommand() {
             try {
-                recordFromMic("/tmp/X.wav");
-
-                Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(new File("/tmp/X.wav"));
+                Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic());
 
                 if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
-
-//                ServiceManager
-//                    .getService(TTSService.class)
-//                    .say("I think you said " + commandTuple.first + ", searching Google now");
 
                 invokeAction(
                     "Idear.VoiceAction",
@@ -310,14 +302,10 @@ public class ASRServiceImpl implements ASRService {
 
         }
 
-        public static final int DURATION = 4500;
 
         private void fireGoogleSearch() {
-
             try {
-                recordFromMic("/tmp/X.wav");
-
-                Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(new File("/tmp/X.wav"));
+                Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic());
 
                 if (searchQueryTuple == null || searchQueryTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
@@ -333,22 +321,7 @@ public class ASRServiceImpl implements ASRService {
             }
         }
 
-        private void recordFromMic(String filepath) throws IOException {
-            final CustomMicrophone mic = new CustomMicrophone(16000, 16, true, false);
 
-            new Thread(() -> {
-                try {
-                    Thread.sleep(DURATION);
-                } catch (InterruptedException _) {
-                } finally {
-                    mic.stopRecording();
-                }
-            }).start();
-
-            mic.startRecording();
-
-            AudioSystem.write(mic.getStream(), AudioFileFormat.Type.WAVE, new File(filepath));
-        }
 
         private void pauseSpeech() {
             String result;

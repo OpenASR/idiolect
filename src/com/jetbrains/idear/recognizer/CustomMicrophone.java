@@ -1,24 +1,27 @@
 package com.jetbrains.idear.recognizer;
 
 import javax.sound.sampled.*;
-import java.io.InputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 public class CustomMicrophone {
-
     private static final Logger logger = Logger.getLogger(CustomMicrophone.class.getSimpleName());
 
     private final TargetDataLine line;
     private final AudioInputStream inputStream;
 
+    private static final int DURATION = 4500;
+    private static final String TEMP_FILE = "/tmp/X.wav";
+
     public CustomMicrophone(
-        float sampleRate,
-        int sampleSize,
-        boolean signed,
-        boolean bigEndian) {
+            float sampleRate,
+            int sampleSize,
+            boolean signed,
+            boolean bigEndian) {
 
         AudioFormat format =
-            new AudioFormat(sampleRate, sampleSize, 1, signed, bigEndian);
+                new AudioFormat(sampleRate, sampleSize, 1, signed, bigEndian);
 
         try {
 
@@ -38,7 +41,6 @@ public class CustomMicrophone {
 
         inputStream = new AudioInputStreamWithAdjustableGain(line);
     }
-
 
 
     public void startRecording() {
@@ -65,5 +67,29 @@ public class CustomMicrophone {
 
     public AudioInputStream getStream() {
         return inputStream;
+    }
+
+
+    //TODO Refactor this API into a CustomMicrophone instance
+    public static File recordFromMic() throws IOException {
+        CustomMicrophone mic = new CustomMicrophone(16000, 16, true, false);
+
+        //Why is this in a thread?
+        new Thread(() -> {
+            try {
+                Thread.sleep(DURATION);
+            } catch (InterruptedException _) {
+            } finally {
+                mic.stopRecording();
+            }
+        }).start();
+
+        mic.startRecording();
+
+        File out = new File(TEMP_FILE);
+
+        AudioSystem.write(mic.getStream(), AudioFileFormat.Type.WAVE, out);
+
+        return out;
     }
 }
