@@ -23,6 +23,10 @@
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
 
+    <extensionPoints>
+        <extensionPoint name="actionRecognizer" interface="com.jetbrains.idear.actions.recognition.ActionRecognizer"/>
+    </extensionPoints>
+
     <extensions defaultExtensionNs="com.intellij">
 
         <applicationService serviceInterface="com.jetbrains.idear.ASRService" serviceImplementation="com.jetbrains.idear.ASRServiceImpl">
@@ -42,6 +46,12 @@
         </applicationService>
 
     </extensions>
+
+
+    <extensions defaultExtensionNs="com.jetbrains.idear">
+        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.ExtractActionRecognizer"/>
+    </extensions>
+
 
     <application-components>
 
