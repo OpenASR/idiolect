@@ -369,14 +369,14 @@ public class ASRServiceImpl implements ASRService {
     private void invokeAction(final String action) {
         invokeAction(
             action,
-            dataContext -> {
-                return new AnActionEvent(null,
-                    DataManager.getInstance().getDataContext(),
+            dataContext ->
+                new AnActionEvent(null,
+                    dataContext,
                     ActionPlaces.UNKNOWN,
                     new Presentation(),
                     ActionManager.getInstance(),
-                    0);
-            }
+                    0
+                )
         );
     }
 
