@@ -21,15 +21,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GoogleService {
+public class GoogleHelper {
 
-    private Logger logger = Logger.getLogger(GoogleService.class.getSimpleName());
+    private static Logger logger = Logger.getLogger(GoogleHelper.class.getSimpleName());
 
     private static final String API_KEY = "AIzaSyB0DS1X9_qkZw2keZWw9p9EwUb9cV2bYsw";
     private static final String URL_PRE = "https://www.google.com/speech-api/v2/recognize";
     private static final String URL_SEARCH = "https://www.google.com/search?q=";
 
-    private List<Pair<String, Double>> getRecognizedTextForUtteranceInternal(File utterance) {
+    private static List<Pair<String, Double>> getRecognizedTextForUtteranceInternal(File utterance) {
         try {
 
             HttpResponse<JsonNode> jsonResponse = Unirest.post(URL_PRE)
@@ -52,7 +52,7 @@ public class GoogleService {
         return Collections.emptyList();
     }
 
-    private Pair<String, Double> getBestTextForUtteranceInternal(File file) {
+    private static Pair<String, Double> getBestTextForUtteranceInternal(File file) {
         Pair<String, Double> best = null;
         for (Pair<String, Double> p : getRecognizedTextForUtteranceInternal(file)) {
             if (best == null || p.second != null && best.second == null || p.second != null && best.second != null && p.second > best.second) {
@@ -66,15 +66,15 @@ public class GoogleService {
         return best;
     }
 
-    public Pair<String, Double> getBestTextForLastUtterance() {
+    public static Pair<String, Double> getBestTextForLastUtterance() {
         return getBestTextForUtterance(getLastRecordedUtterance());
     }
 
-    public Pair<String, Double> getBestTextForUtterance(File file) {
+    public static Pair<String, Double> getBestTextForUtterance(File file) {
         return getBestTextForUtteranceInternal(file);
     }
 
-    private List<Pair<String, Double>> parseGSAPIResponse(String r) throws JSONException {
+    private static List<Pair<String, Double>> parseGSAPIResponse(String r) throws JSONException {
         List<Pair<String, Double>> res = new ArrayList<>();
 
         JSONObject o = new JSONObject(r.substring(13));
@@ -91,7 +91,7 @@ public class GoogleService {
         return res;
     }
 
-    private String slurp(InputStream is) throws IOException {
+    private static String slurp(InputStream is) throws IOException {
         StringBuilder b = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String in;
@@ -102,17 +102,13 @@ public class GoogleService {
         return b.toString();
     }
 
-    public void searchGoogle(String s) {
+    public static void searchGoogle(String s) {
         try {
             Desktop.getDesktop().browse(java.net.URI.create(URL_SEARCH + URLEncoder.encode(s, "UTF-8")));
         }
         catch (java.io.IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void textToSpeech(String s) {
-        // TODO
     }
 
     // TODO: move out
@@ -145,6 +141,6 @@ public class GoogleService {
     }
 
     public static void main(String[] args) {
-        System.out.println(new GoogleService().getBestTextForLastUtterance());
+        System.out.println(new GoogleHelper().getBestTextForLastUtterance());
     }
 }

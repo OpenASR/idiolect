@@ -6,14 +6,13 @@ import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
-import com.jetbrains.idear.GoogleService;
+import com.jetbrains.idear.GoogleHelper;
 import com.jetbrains.idear.actions.ExecuteVoiceCommandAction;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import com.jetbrains.idear.recognizer.CustomMicrophone;
 import com.jetbrains.idear.tts.TTSService;
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
-import edu.cmu.sphinx.util.props.ConfigurationManager;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -42,7 +41,6 @@ public class ASRServiceImpl implements ASRService {
     private static final Logger logger = Logger.getLogger(ASRServiceImpl.class.getSimpleName());
 
     private CustomLiveSpeechRecognizer recognizer;
-    private ConfigurationManager configurationManager;
     private Robot robot;
 
     private final AtomicReference<Status> status = new AtomicReference<>(Status.INIT);
@@ -285,9 +283,7 @@ public class ASRServiceImpl implements ASRService {
             try {
                 recordFromMic("/tmp/X.wav");
 
-                GoogleService gs = ServiceManager.getService(GoogleService.class);
-
-                Pair<String, Double> commandTuple = gs.getBestTextForUtterance(new File("/tmp/X.wav"));
+                Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(new File("/tmp/X.wav"));
 
                 if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
@@ -311,6 +307,7 @@ public class ASRServiceImpl implements ASRService {
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
             }
+
         }
 
         public static final int DURATION = 4500;
@@ -320,9 +317,7 @@ public class ASRServiceImpl implements ASRService {
             try {
                 recordFromMic("/tmp/X.wav");
 
-                GoogleService gs = ServiceManager.getService(GoogleService.class);
-
-                Pair<String, Double> searchQueryTuple = gs.getBestTextForUtterance(new File("/tmp/X.wav"));
+                Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(new File("/tmp/X.wav"));
 
                 if (searchQueryTuple == null || searchQueryTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
@@ -331,7 +326,7 @@ public class ASRServiceImpl implements ASRService {
                     .getService(TTSService.class)
                     .say("I think you said " + searchQueryTuple.first + ", searching Google now");
 
-                gs.searchGoogle(searchQueryTuple.first);
+                GoogleHelper.searchGoogle(searchQueryTuple.first);
 
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
