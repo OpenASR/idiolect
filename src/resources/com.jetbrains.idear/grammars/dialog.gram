@@ -43,6 +43,8 @@ grammar dialog;
 
 <speech_action> = pause | resume;
 
+<debug_command> = toggle breakpoint | view breakpoints | step over | step into;
+
 <keyboard_command> = press [enter | escape | tab | undo | delete];
 
 /*
@@ -61,4 +63,5 @@ public <command> =  <activation_command>    |
                     <global_command>        |
                     <speech_command>        |
                     <google_command>        |
+                    <debug_command>         |
                     <keyboard_command>;

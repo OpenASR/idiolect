@@ -256,6 +256,22 @@ public class ASRServiceImpl implements ASRService {
                 beep();
                 fireGoogleSearch();
             }
+
+            else if(c.contains("breakpoint")) {
+                if (c.startsWith("toggle")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_F8);
+                } else if(c.startsWith("view")) {
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_F8);
+                }
+            }
+
+            else if (c.startsWith("step")) {
+                if (c.endsWith("over")) {
+                    pressKeystroke(KeyEvent.VK_F8);
+                } else if (c.endsWith("into")) {
+                    pressKeystroke(KeyEvent.VK_F7);
+                }
+            }
         }
 
         private void fireVoiceCommand() {

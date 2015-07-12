@@ -13,6 +13,9 @@ import java.io.IOException;
  */
 public class CustomLiveSpeechRecognizer extends AbstractSpeechRecognizer {
 
+    /*
+     * sphinx4 default sensitivity is 13.
+     */
     public static final int SPEECH_SENSITIVITY = 20;
 
     private final CustomMicrophone microphone;
