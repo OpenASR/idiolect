@@ -6,6 +6,7 @@ import com.intellij.find.findUsages.FindUsagesOptions;
 import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -13,6 +14,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.UsageTarget;
 import com.intellij.usages.UsageView;
+import com.jetbrains.idear.tts.TTSService;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -49,15 +51,22 @@ public class FindUsagesActionRecognizer implements ActionRecognizer {
 
         PsiElement[] targets = null;
 
+        String targetName   = null;
+        String subject      = null;
+
         if (wordsSet.contains("field")) {
-            String targetName = extractNameOf("field", words);
+            subject     = "field";
+            targetName  = extractNameOf("field", words);
+
             if (targetName.isEmpty())
                 return aci;
 
             targets = new PsiElement[] { klass.findFieldByName(targetName, /*checkBases*/ true) };
 
         } else if (wordsSet.contains("method")) {
-            String targetName = extractNameOf("method", words);
+            subject     = "method";
+            targetName  = extractNameOf("method", words);
+
             if (targetName.isEmpty())
                 return aci;
 
@@ -79,6 +88,10 @@ public class FindUsagesActionRecognizer implements ActionRecognizer {
                 0
                 )
         );
+
+        // TODO(kudinkin): move it to appropriate place
+        ServiceManager  .getService(TTSService.class)
+                        .say("Looking for usages of the " + subject + " " + targetName);
 
         return aci;
     }

@@ -1,0 +1,60 @@
+#JSGF V1.0;
+
+grammar dialog;
+
+<digit> = zero  |
+          one   |
+          two   |
+          three |
+          four  |
+          five  |
+          six   |
+          seven |
+          eight |
+          nine  ;
+
+<number> = <digit>+;
+
+<menu_command> =  open <menu_item>;
+
+<menu_item> = file | edit | view | navigate | code | settings | recent | terminal;
+
+<init_command> = hi idea;
+
+<activation_command> = (okay | ok) idea;
+
+<goto_command>  = goto [ line <number> ];
+
+<editor_command> =  <selection_command>                             |
+                    <goto_command>                                  |
+                    <refactoring_command>                           |
+                    <next_command>                                  |
+
+                    page [up | down]                                |
+                    fuck  /* that's a fancy undo alternative */     |
+                    inspect code;
+
+<refactoring_command> = extract this (method | parameter);
+
+<selection_command> = (expand | shrink) selection;
+
+<focus_command> = focus (editor | project);
+
+<speech_command> = speech <speech_action>;
+
+<speech_action> = pause | resume;
+
+<keyboard_command> = press [enter | escape | tab | undo | delete];
+
+<next_command> = [following | previous] [line | method | error];
+
+<google_command> = (okay | ok) google;
+
+public <command> =  <init_command>          |
+                    <activation_command>    |
+                    <menu_command>          |
+                    <editor_command>        |
+                    <focus_command>         |
+                    <speech_command>        |
+                    <google_command>        |
+                    <keyboard_command>;
