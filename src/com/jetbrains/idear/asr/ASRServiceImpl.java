@@ -265,18 +265,15 @@ public class ASRServiceImpl implements ASRService {
 
         private void fireVoiceCommand() {
             try {
-                recordFromMic("/tmp/X.wav");
+                recordFromMic(3500, "/tmp/X.wav");
 
-                GoogleService gs = ServiceManager.getService(GoogleService.class);
-
-                Pair<String, Double> commandTuple = gs.getBestTextForUtterance(new File("/tmp/X.wav"));
+                Pair<String, Double> commandTuple = ServiceManager.getService(GoogleService.class).getBestTextForUtterance(new File("/tmp/X.wav"));
 
                 if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
 
-//                ServiceManager
-//                    .getService(TTSService.class)
-//                    .say("I think you said " + commandTuple.first + ", searching Google now");
+                // Notify of successful proceed
+                beep();
 
                 invokeAction(
                     "Idear.VoiceAction",
@@ -295,23 +292,19 @@ public class ASRServiceImpl implements ASRService {
             }
         }
 
-        public static final int DURATION = 4500;
-
         private void fireGoogleSearch() {
 
             try {
-                recordFromMic("/tmp/X.wav");
-
                 GoogleService gs = ServiceManager.getService(GoogleService.class);
+
+                recordFromMic(4500, "/tmp/X.wav");
 
                 Pair<String, Double> searchQueryTuple = gs.getBestTextForUtterance(new File("/tmp/X.wav"));
 
                 if (searchQueryTuple == null || searchQueryTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
 
-                ServiceManager
-                    .getService(TTSService.class)
-                    .say("I think you said " + searchQueryTuple.first + ", searching Google now");
+                say("I think you said " + searchQueryTuple.first + ", searching Google");
 
                 gs.searchGoogle(searchQueryTuple.first);
 
@@ -320,12 +313,12 @@ public class ASRServiceImpl implements ASRService {
             }
         }
 
-        private void recordFromMic(String filepath) throws IOException {
+        private void recordFromMic(int duration, String path) throws IOException {
             final CustomMicrophone mic = new CustomMicrophone(16000, 16, true, false);
 
             new Thread(() -> {
                 try {
-                    Thread.sleep(DURATION);
+                    Thread.sleep(duration);
                 } catch (InterruptedException _) {
                 } finally {
                     mic.stopRecording();
@@ -334,7 +327,7 @@ public class ASRServiceImpl implements ASRService {
 
             mic.startRecording();
 
-            AudioSystem.write(mic.getStream(), AudioFileFormat.Type.WAVE, new File(filepath));
+            AudioSystem.write(mic.getStream(), AudioFileFormat.Type.WAVE, new File(path));
         }
 
         private void pauseSpeech() {
@@ -390,6 +383,11 @@ public class ASRServiceImpl implements ASRService {
     }
 
     // Helpers
+
+    public static synchronized void say(String something) {
+        ServiceManager  .getService(TTSService.class)
+                        .say(something);
+    }
 
     public static synchronized void beep() {
         Thread t = new Thread(() -> {
