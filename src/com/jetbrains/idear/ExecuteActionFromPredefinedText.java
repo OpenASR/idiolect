@@ -17,7 +17,9 @@ public class ExecuteActionFromPredefinedText extends AnAction {
 
 //        String text = "idea extract to field";
 //        String text = "idea extract to variable name";
-        String text = "idea inline";
+//        String text = "idea inline";
+
+        String text = "idra debug";
 
         TextToActionConverter provider = new TextToActionConverter();
         ActionCallInfo info = provider.extractAction(text);
