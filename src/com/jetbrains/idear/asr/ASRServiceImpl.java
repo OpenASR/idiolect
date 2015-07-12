@@ -172,14 +172,17 @@ public class ASRServiceImpl implements ASRService {
 
         private void applyAction(String c) {
             if (c.equals(FUCK)) {
-                invokeAction((String) IdeActions.ACTION_UNDO);
+                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
+                //invokeAction((String) IdeActions.ACTION_UNDO);
             }
 
             else if (c.startsWith("open")) {
                 if (c.endsWith("settings")) {
-                    invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_S);
+                    //invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
                 } else if (c.endsWith("recent")) {
-                    invokeAction(IdeActions.ACTION_RECENT_FILES);
+                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_E);
+                    //invokeAction(IdeActions.ACTION_RECENT_FILES);
                 } else if (c.endsWith("terminal")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
@@ -383,19 +386,19 @@ public class ASRServiceImpl implements ASRService {
         }
     }
 
-    private void invokeAction(final String action) {
-        invokeAction(
-            action,
-            dataContext -> {
-                return new AnActionEvent(null,
+    /*
+        // Disabled until we can use Action once and for all (Robot is easier to test anyway)
+        private void invokeAction(final String action) {
+            invokeAction(
+                action,
+                dataContext -> new AnActionEvent(null,
                     DataManager.getInstance().getDataContext(),
                     ActionPlaces.UNKNOWN,
                     new Presentation(),
                     ActionManager.getInstance(),
-                    0);
-            }
-        );
-    }
+                    0)
+            );
+    }*/
 
     private void invokeAction(String action, Function<DataContext, AnActionEvent> actionFactory) {
         DataManager.getInstance().getDataContextFromFocus().doWhenDone(
