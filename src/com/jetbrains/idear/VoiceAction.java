@@ -17,16 +17,16 @@ public class VoiceAction extends AnAction {
         DataContext dataContext = e.getDataContext();
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
 
-        TextToActionConverter provider = new TextToActionConverter();
+        TextToActionConverter provider = new TextToActionConverter(e.getDataContext());
         ActionCallInfo callInfo = provider.extractAction(e.getData(KEY));
         invoke(editor, callInfo);
     }
 
     private void invoke(Editor editor, ActionCallInfo info) {
-        AnAction action = ActionManager.getInstance().getAction(info.actionId);
+        AnAction action = ActionManager.getInstance().getAction(info.getActionId());
 
-        String type = info.typeAfter;
-        boolean isHitTabAfter = info.hitTabAfter;
+        String type = info.getTypeAfter();
+        boolean isHitTabAfter = info.getHitTabAfter();
 
         DataManager manager = DataManager.getInstance();
         if (manager != null) {

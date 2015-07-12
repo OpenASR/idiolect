@@ -21,20 +21,21 @@ public abstract class ExecuteActionByCommandText extends AnAction {
 
         String text = "idra debug";
 
-        TextToActionConverter provider = new TextToActionConverter();
+        TextToActionConverter provider = new TextToActionConverter(e.getDataContext());
         ActionCallInfo info = provider.extractAction(text);
         invoke(editor, info);
     }
 
     protected void invoke(Editor editor, ActionCallInfo info) {
-        AnAction action = ActionManager.getInstance().getAction(info.actionId);
-        String type = info.typeAfter;
-        boolean isHitTabAfter = info.hitTabAfter;
+        AnAction action = ActionManager.getInstance().getAction(info.getActionId());
+        String type = info.getTypeAfter();
+        boolean isHitTabAfter = info.getHitTabAfter();
 
         DataManager manager = DataManager.getInstance();
         if (manager != null) {
             DataContext context = manager.getDataContext(editor.getContentComponent());
-            action.actionPerformed(new AnActionEvent(null, context, "", action.getTemplatePresentation(), ActionManager.getInstance(), 0));
+
+            action.actionPerformed(buildActionEvent(info, action, context));
 
             if (type != null) {
                 typeText(editor, type, context);
@@ -67,5 +68,11 @@ public abstract class ExecuteActionByCommandText extends AnAction {
             Presentation presentation = event.getPresentation();
             presentation.setEnabled(true);
         }
+    }
+
+    private static AnActionEvent buildActionEvent(ActionCallInfo info, AnAction action, DataContext context) {
+        return info.getActionEvent() != null
+             ? info.getActionEvent()
+             : new AnActionEvent(null, context, "", action.getTemplatePresentation(), ActionManager.getInstance(), 0);
     }
 }

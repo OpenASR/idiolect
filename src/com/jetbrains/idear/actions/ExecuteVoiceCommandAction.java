@@ -17,7 +17,7 @@ public class ExecuteVoiceCommandAction extends ExecuteActionByCommandText {
         DataContext dataContext = e.getDataContext();
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
 
-        TextToActionConverter provider = new TextToActionConverter();
+        TextToActionConverter provider = new TextToActionConverter(e.getDataContext());
         invoke(editor, provider.extractAction(e.getData(KEY)));
     }
 

@@ -16,7 +16,7 @@ public class ExecuteActionFromPredefinedText extends ExecuteActionByCommandText 
         String text = "idea extract to variable name";
 //        String text = "idea inline";
 
-        TextToActionConverter provider = new TextToActionConverter();
+        TextToActionConverter provider = new TextToActionConverter(e.getDataContext());
         ActionCallInfo info = provider.extractAction(text);
         invoke(editor, info);
     }

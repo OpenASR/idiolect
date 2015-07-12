@@ -1,22 +1,34 @@
 package com.jetbrains.idear.actions.recognition;
 
+import com.intellij.openapi.actionSystem.AnActionEvent;
+
 public class ActionCallInfo {
-    public Runnable action;
+    private String actionId;
 
-    public String actionId;
-    public String typeAfter;
-    public boolean hitTabAfter;
+    private String typeAfter;
+    private boolean hitTabAfter;
 
-    public ActionCallInfo(String actionId, Runnable action) {
+    public AnActionEvent actionEvent;
+
+    public ActionCallInfo(String actionId) {
         this.actionId = actionId;
-        this.action = action;
     }
+
+    public String getActionId() { return actionId; }
 
     public void setTypeAfter(String typeAfter) {
         this.typeAfter = typeAfter;
     }
 
+    public String getTypeAfter() { return typeAfter; }
+
     public void setHitTabAfter(boolean value) {
         hitTabAfter = value;
     }
+
+    public boolean getHitTabAfter() { return hitTabAfter; }
+
+    public void setActionEvent(AnActionEvent actionEvent) { this.actionEvent = actionEvent; }
+
+    public AnActionEvent getActionEvent() { return actionEvent; }
 }

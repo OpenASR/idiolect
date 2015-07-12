@@ -1,5 +1,6 @@
 package com.jetbrains.idear.actions.recognition;
 
+import com.intellij.openapi.actionSystem.DataContext;
 import org.jetbrains.annotations.NotNull;
 
 //only selected configuration
@@ -11,7 +12,7 @@ public class DebugActionRecognizer implements ActionRecognizer {
     }
 
     @Override
-    public ActionCallInfo getActionInfo(@NotNull String sentence) {
-        return new ActionCallInfo("Debug", null);
+    public ActionCallInfo getActionInfo(@NotNull String sentence, DataContext dataContext) {
+        return new ActionCallInfo("Debug");
     }
 }
