@@ -1,0 +1,112 @@
+package com.jetbrains.idear.actions.recognition;
+
+import com.intellij.codeInsight.TargetElementUtil;
+import com.intellij.find.FindManager;
+import com.intellij.find.findUsages.FindUsagesOptions;
+import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.usages.UsageTarget;
+import com.intellij.usages.UsageView;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
+//runs only selected configuration
+public class FindUsagesActionRecognizer implements ActionRecognizer {
+
+    @Override
+    public boolean isMatching(@NotNull String sentence) {
+        return sentence.contains("find") /* && (sentence.contains("usages") || sentence.contains("usage")) */;
+    }
+
+    @Override
+    public ActionCallInfo getActionInfo(@NotNull String sentence, DataContext dataContext) {
+        ActionCallInfo aci = new ActionCallInfo("FindUsages");
+
+        // Ok, that's lame
+        List<String>    words       = Arrays.asList(sentence.split("\\W+"));
+        HashSet<String> wordsSet    = new HashSet<>(words);
+
+        final Editor editor     = CommonDataKeys.EDITOR.getData(dataContext);
+        final Project project   = CommonDataKeys.PROJECT.getData(dataContext);
+
+        if (editor == null || project == null)
+            return aci;
+
+        final PsiElement    e       = findElementUnderCaret(editor, project);
+        final PsiClass      klass   = findContainingClass(e);
+
+        if (klass == null)
+            return aci;
+
+        PsiElement[] targets = null;
+
+        if (wordsSet.contains("field")) {
+            String targetName = extractNameOf("field", words);
+            if (targetName.isEmpty())
+                return aci;
+
+            targets = new PsiElement[] { klass.findFieldByName(targetName, /*checkBases*/ true) };
+
+        } else if (wordsSet.contains("method")) {
+            String targetName = extractNameOf("method", words);
+            if (targetName.isEmpty())
+                return aci;
+
+            targets = klass.findMethodsByName(targetName, /*checkBases*/ true);
+        }
+
+        if (targets == null)
+            return aci;
+
+        // TODO(kudinkin): need to cure this pain someday
+
+        aci.setActionEvent(
+            new AnActionEvent(
+                null,
+                SimpleDataContext.getSimpleContext(UsageView.USAGE_TARGETS_KEY.getName(), prepare(targets[0]), dataContext),
+                ActionPlaces.UNKNOWN,
+                new Presentation(),
+                ActionManager.getInstance(),
+                0
+                )
+        );
+
+        return aci;
+    }
+
+    private static PsiClass findContainingClass(PsiElement e) {
+        return PsiTreeUtil.getParentOfType(e, PsiClass.class);
+    }
+
+    private static UsageTarget[] prepare(PsiElement target) {
+        return new UsageTarget[] { new PsiElement2UsageTargetAdapter(target) };
+    }
+
+    private static PsiElement findElementUnderCaret(Editor editor, Project project) {
+        PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+
+        if (psiFile == null)
+            return null;
+
+        return psiFile.findElementAt(editor.getCaretModel().getOffset());
+    }
+
+    private static String extractNameOf(String pivot, List<String> sentence) {
+        StringBuilder target = new StringBuilder();
+
+        for (int i = sentence.indexOf(pivot) + 1; i < sentence.size(); ++i) {
+            target.append(sentence.get(i));
+        }
+
+        return target.toString();
+    }
+}
