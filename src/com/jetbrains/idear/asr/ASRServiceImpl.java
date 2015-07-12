@@ -205,15 +205,15 @@ public class ASRServiceImpl implements ASRService {
             }
 
             else if (c.startsWith("press")) {
-                if (c.endsWith("delete")) {
+                if (c.contains("delete")) {
                     pressKeystroke(KeyEvent.VK_DELETE);
-                } else if (c.endsWith("enter")) {
+                } else if (c.contains("return")) {
                     pressKeystroke(KeyEvent.VK_ENTER);
-                } else if (c.endsWith("escape")) {
+                } else if (c.contains("escape")) {
                     pressKeystroke(KeyEvent.VK_ESCAPE);
-                } else if (c.endsWith("tab")) {
+                } else if (c.contains("tab")) {
                     pressKeystroke(KeyEvent.VK_TAB);
-                } else if (c.endsWith("undo")) {
+                } else if (c.contains("undo")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                 }
             }
@@ -279,8 +279,6 @@ public class ASRServiceImpl implements ASRService {
                     pressKeystroke(KeyEvent.VK_F7);
                 }
             }
-
-
         }
 
         private void fireVoiceCommand() {

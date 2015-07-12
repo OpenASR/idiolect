@@ -45,7 +45,7 @@ grammar dialog;
 
 <debug_command> = toggle break point | view break points | step over | step into;
 
-<keyboard_command> = press [enter | escape | tab | undo | delete];
+<keyboard_command> = press [return | escape | tab | undo | delete] key;
 
 /*
 public <command> =  /50/ <activation_command>    |
