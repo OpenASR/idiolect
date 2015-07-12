@@ -5,6 +5,7 @@ public class ActionCallInfo {
 
     public String actionId;
     public String typeAfter;
+    public boolean hitTabAfter;
 
     public ActionCallInfo(String actionId, Runnable action) {
         this.actionId = actionId;
@@ -13,5 +14,9 @@ public class ActionCallInfo {
 
     public void setTypeAfter(String typeAfter) {
         this.typeAfter = typeAfter;
+    }
+
+    public void setHitTabAfter(boolean value) {
+        hitTabAfter = value;
     }
 }

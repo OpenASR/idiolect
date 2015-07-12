@@ -8,27 +8,25 @@ import com.intellij.openapi.editor.actionSystem.TypedAction;
 import com.jetbrains.idear.actions.recognition.ActionCallInfo;
 import com.jetbrains.idear.actions.recognition.TextToActionConverter;
 
-public class ExecuteActionFromPredefinedText extends AnAction {
+public class VoiceAction extends AnAction {
+
+    /* package */ final static DataKey<String> KEY = DataKey.create("Idear.VoiceCommand.Text");
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
         Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
 
-//        String text = "idea extract to field";
-//        String text = "idea extract to variable name";
-//        String text = "idea inline";
-
-        String text = "idra debug";
-
         TextToActionConverter provider = new TextToActionConverter();
-        ActionCallInfo info = provider.extractAction(text);
-        invoke(editor, info);
+        ActionCallInfo callInfo = provider.extractAction(e.getData(KEY));
+        invoke(editor, callInfo);
     }
 
     private void invoke(Editor editor, ActionCallInfo info) {
         AnAction action = ActionManager.getInstance().getAction(info.actionId);
+
         String type = info.typeAfter;
+        boolean isHitTabAfter = info.hitTabAfter;
 
         DataManager manager = DataManager.getInstance();
         if (manager != null) {
