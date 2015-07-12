@@ -28,6 +28,8 @@ public class GoogleHelper {
     private static final String URL_PRE = "https://www.google.com/speech-api/v2/recognize";
     private static final String URL_SEARCH = "https://www.google.com/search?q=";
 
+    private static final String ONE_MORE_API_KEY = "AIzaSyDhaglUIfPFvtYqKKpmhLQfkeiBBzgT2XE";
+
     private static List<Pair<String, Double>> getRecognizedTextForUtteranceInternal(File utterance) {
         try {
 
