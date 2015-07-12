@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.actions;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;

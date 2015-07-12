@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.asr;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
@@ -6,6 +6,9 @@ import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
+import com.jetbrains.idear.GoogleService;
+import com.jetbrains.idear.tts.TTSService;
+import com.jetbrains.idear.actions.ExecuteVoiceCommandAction;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import com.jetbrains.idear.recognizer.CustomMicrophone;
 import edu.cmu.sphinx.api.Configuration;
@@ -280,7 +283,7 @@ public class ASRServiceImpl implements ASRService {
                                 AnActionEvent e =
                                     new AnActionEvent(
                                         null,
-                                        SimpleDataContext.getSimpleContext(VoiceAction.KEY.getName(), commandTuple.first, parent),
+                                        SimpleDataContext.getSimpleContext(ExecuteVoiceCommandAction.KEY.getName(), commandTuple.first, parent),
                                         ActionPlaces.UNKNOWN,
                                         new Presentation(),
                                         ActionManager.getInstance(),

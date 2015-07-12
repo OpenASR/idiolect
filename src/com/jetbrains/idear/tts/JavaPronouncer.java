@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.tts;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.lang.java.JavaLanguage;
@@ -9,6 +9,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
+import com.jetbrains.idear.CodeToTextConverter;
+import com.jetbrains.idear.tts.TTSService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 

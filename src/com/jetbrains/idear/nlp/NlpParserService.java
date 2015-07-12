@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.nlp;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;

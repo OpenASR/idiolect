@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.asr;
 
 public interface ASRService {
 

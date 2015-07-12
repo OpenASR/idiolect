@@ -5,6 +5,9 @@ import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.PluginId;
+import com.jetbrains.idear.asr.ASRService;
+import com.jetbrains.idear.asr.GrammarService;
+import com.jetbrains.idear.tts.TTSService;
 import org.jetbrains.annotations.NotNull;
 
 public class Idear implements ApplicationComponent {

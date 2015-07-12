@@ -1,4 +1,4 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.asr;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.util.Disposer;
+import com.jetbrains.idear.tts.TTSServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

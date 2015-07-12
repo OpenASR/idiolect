@@ -1,5 +1,6 @@
 package com.jetbrains.idear;
 
+import com.jetbrains.idear.nlp.NlpParserService;
 import opennlp.tools.parser.Parse;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -1,10 +1,7 @@
-package com.jetbrains.idear;
+package com.jetbrains.idear.actions;
 
-import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorActionManager;
-import com.intellij.openapi.editor.actionSystem.TypedAction;
 import com.jetbrains.idear.actions.recognition.ActionCallInfo;
 import com.jetbrains.idear.actions.recognition.TextToActionConverter;
 

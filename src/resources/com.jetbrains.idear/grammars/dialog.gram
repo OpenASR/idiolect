@@ -23,12 +23,12 @@ grammar dialog;
 
 <global_command> = focus <view>;
 
-<editor_command> =  <expand_shrink> selection                   |
-                    page [up | down]                            |
-                    goto line <number>                          |
-                    [following | previous] [line | method | error]   |
-                    fuck  /* that's a fancy undo alternative */ |
-                    inspect code                                | 
+<editor_command> =  <expand_shrink> selection                       |
+                    page [up | down]                                |
+                    goto line <number>                              |
+                    [following | previous] [line | method | error]  |
+                    fuck  /* that's a fancy undo alternative */     |
+                    inspect code                                    |
                     <refactoring>;
 
 <refactoring> = extract this method | extract this parameter;
