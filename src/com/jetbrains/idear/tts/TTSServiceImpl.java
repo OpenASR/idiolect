@@ -56,7 +56,7 @@ public class TTSServiceImpl implements TTSService {
             player.start();
             player.join();
         } catch (SynthesisException | InterruptedException e) {
-            logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
+            logger.log(Level.SEVERE, String.format("Sorry! Could not pronounce '%s'", text), e);
         }
     }
 
