@@ -27,6 +27,7 @@ grammar dialog;
 
 <editor_command> =  <selection_command>                             |
                     <goto_command>                                  |
+                    <navigate_command>                              |
                     <refactoring_command>                           |
                     <next_command>                                  |
                     <where_am_i_command>                            |
@@ -56,6 +57,8 @@ grammar dialog;
 <google_command> = (okay | ok) google;
 
 <joke_command> = tell me a joke | who is there | wait who | who are you;
+
+<navigate_command> = navigate;
 
 public <command> =  <init_command>          |
                     <activation_command>    |

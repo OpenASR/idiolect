@@ -141,6 +141,7 @@ public class ASRServiceImpl implements ASRService {
         public static final String OK_IDEA = "ok idea";
         public static final String HI_IDEA = "hi idea";
         public static final String WHERE_AM_I = "where am i";
+        public static final String NAVIGATE = "navigate";
 
 
         @Override
@@ -193,6 +194,10 @@ public class ASRServiceImpl implements ASRService {
                 } else if (c.endsWith(TERMINAL)) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
+            }
+
+            else if (c.startsWith(NAVIGATE)) {
+                invokeAction("GotoDeclaration");
             }
 
             else if (c.equals(WHERE_AM_I)) {
