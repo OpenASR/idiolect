@@ -56,6 +56,8 @@ grammar dialog;
 
 <google_command> = (okay | ok) google;
 
+<check_not_null> = check not null;
+
 <joke_command> = tell me a joke | who is there | wait who | who are you;
 
 <navigate_command> = navigate;
@@ -69,4 +71,5 @@ public <command> =  <init_command>          |
                     <google_command>        |
                     <debug_command>         |
                     <joke_command>          |
+                    <check_not_null>        |
                     <keyboard_command>;
