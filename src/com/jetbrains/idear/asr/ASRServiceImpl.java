@@ -273,13 +273,15 @@ public class ASRServiceImpl implements ASRService {
                 if (r.isMatching(c)) {
                     DataManager.getInstance()
                             .getDataContextFromFocus()
-                            .doWhenDone((Consumer<DataContext>) dataContext -> ApplicationManager
-                                    .getApplication()
-                                    .runWriteAction(() -> {
-                                        r.getActionInfo(c, dataContext);
-                                    }));
+                            .doWhenDone((Consumer<DataContext>) dataContext -> run(r, c, dataContext));
                 }
             }
+        }
+
+        private void run(SurroundWithNoNullCheckRecognizer rec, String c, DataContext dataContext) {
+            ApplicationManager.getApplication().runWriteAction(() -> {
+                rec.getActionInfo(c, dataContext);
+            });
         }
 
         private void tellJoke() {
