@@ -52,6 +52,8 @@ grammar dialog;
 
 <google_command> = (okay | ok) google;
 
+<joke_command> = tell me a joke | who is there | wait who | who are you;
+
 public <command> =  <init_command>          |
                     <activation_command>    |
                     <menu_command>          |
@@ -60,4 +62,5 @@ public <command> =  <init_command>          |
                     <speech_command>        |
                     <google_command>        |
                     <debug_command>         |
+                    <joke_command>          |
                     <keyboard_command>;

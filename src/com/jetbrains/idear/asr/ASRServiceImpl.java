@@ -284,7 +284,45 @@ public class ASRServiceImpl implements ASRService {
                     pressKeystroke(KeyEvent.VK_F7);
                 }
             }
+
+            else if (c.startsWith("tell me a joke")) {
+                tellJoke();
+            }
         }
+
+        private void tellJoke() {
+            ServiceManager
+                    .getService(TTSService.class)
+                    .say("knock, knock, knock, knock, knock");
+
+            String result = null;
+            while (!"who is there".equals(result)) {
+                result = getResultFromRecognizer();
+            }
+
+            ServiceManager
+                    .getService(TTSService.class)
+                    .say("Hang on, I will be right back");
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ServiceManager
+                    .getService(TTSService.class)
+                    .say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va");
+
+            while (!result.contains("wait who")) {
+                result = getResultFromRecognizer();
+            }
+
+            ServiceManager
+                    .getService(TTSService.class)
+                    .say("Did I stutter? It is me, Jah java va va, va, va. Open up already.");
+        }
+
 
         private void fireVoiceCommand() {
             try {
