@@ -314,7 +314,8 @@ public class ASRServiceImpl implements ASRService {
                     .getService(TTSService.class)
                     .say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va");
 
-            while (!result.contains("wait who")) {
+            while (!result.contains("wait who") &&
+                    !result.contains("who are you")) {
                 result = getResultFromRecognizer();
             }
 
