@@ -44,7 +44,7 @@ grammar dialog;
 
 <focus_command> = focus (editor | project);
 
-<run_command> = run;
+<run_command> = execute;
 
 <speech_command> = speech <speech_action>;
 
