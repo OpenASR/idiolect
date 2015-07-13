@@ -52,6 +52,7 @@
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.FindUsagesActionRecognizer"/>
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.NavigateToDeclarationRecognizer"/>
         <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.RenameActionRecognizer"/>
+        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
     </extensions>
 
 

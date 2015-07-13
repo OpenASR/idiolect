@@ -8,6 +8,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
 import com.jetbrains.idear.GoogleHelper;
 import com.jetbrains.idear.actions.ExecuteVoiceCommandAction;
+import com.jetbrains.idear.actions.recognition.SurroundWithNoNullCheckRecognizer;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import com.jetbrains.idear.recognizer.CustomMicrophone;
 import com.jetbrains.idear.tts.TTSService;
@@ -294,6 +295,15 @@ public class ASRServiceImpl implements ASRService {
 
             else if (c.startsWith("tell me a joke")) {
                 tellJoke();
+            }
+
+            else if (c.contains("check")) {
+                SurroundWithNoNullCheckRecognizer r = new SurroundWithNoNullCheckRecognizer();
+                if (r.isMatching(c)) {
+                    DataManager.getInstance().getDataContextFromFocus().doWhenDone((Consumer<DataContext>) dataContext -> {
+                        r.getActionInfo(c, dataContext);
+                    });
+                }
             }
         }
 
