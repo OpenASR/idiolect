@@ -80,6 +80,12 @@
         <action id="Idear.VoiceAction"
                 text="Invoke by voice-command"
                 class="com.jetbrains.idear.actions.ExecuteVoiceCommandAction"/>
+
+        <!-- Home-grown actions -->
+
+        <action id="Idear.WhereAmI"
+                text="Name the place you are"
+                class="com.jetbrains.idear.actions.WhereAmIAction"/>
     </actions>
 
 </idea-plugin>

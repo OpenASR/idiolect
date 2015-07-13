@@ -29,10 +29,13 @@ grammar dialog;
                     <goto_command>                                  |
                     <refactoring_command>                           |
                     <next_command>                                  |
+                    <where_am_i_command>                            |
 
                     page [up | down]                                |
                     fuck  /* that's a fancy undo alternative */     |
                     inspect code;
+
+<where_am_i_command> = where am i;
 
 <refactoring_command> = extract this (method | parameter);
 

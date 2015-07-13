@@ -140,6 +140,7 @@ public class ASRServiceImpl implements ASRService {
         public static final String OKAY_IDEA = "okay idea";
         public static final String OK_IDEA = "ok idea";
         public static final String HI_IDEA = "hi idea";
+        public static final String WHERE_AM_I = "where am i";
 
         @Override
         public void run() {
@@ -191,6 +192,11 @@ public class ASRServiceImpl implements ASRService {
                 } else if (c.endsWith(TERMINAL)) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
+            }
+
+            else if (c.equals(WHERE_AM_I)) {
+                 // TODO(kudinkin): extract to action
+                invokeAction("Idear.WhereAmI");
             }
 
             else if (c.startsWith("focus")) {
