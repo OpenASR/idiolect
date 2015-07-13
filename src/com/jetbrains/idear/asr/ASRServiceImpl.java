@@ -214,12 +214,12 @@ public class ASRServiceImpl implements ASRService {
                 }
             }
 
-            else if (c.endsWith("selection")) {
-                if (c.startsWith("expand")) {
-                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
-                } else if (c.startsWith("shrink")) {
-                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
-                }
+            else if (c.startsWith("expand")) {
+                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
+            }
+
+            else if (c.startsWith("shrink")) {
+                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
             }
 
             else if (c.startsWith("press")) {
@@ -346,7 +346,7 @@ public class ASRServiceImpl implements ASRService {
                     .say("Did I stutter? It is me, Jah java va va, va, va. Open up already!");
         }
 
-        private static final long COMMAND_DURATION = 3000;
+        private static final long COMMAND_DURATION = 3500;
 
         private void fireVoiceCommand() {
             try {
