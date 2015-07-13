@@ -223,7 +223,7 @@ public class ASRServiceImpl implements ASRService {
                 }
             }
 
-            else if (c.startsWith("next")) {
+            else if (c.startsWith("following")) {
                 if (c.endsWith("line")) {
                     pressKeystroke(KeyEvent.VK_DOWN);
                 } else if (c.endsWith("page")) {
@@ -321,7 +321,7 @@ public class ASRServiceImpl implements ASRService {
 
             ServiceManager
                     .getService(TTSService.class)
-                    .say("Did I stutter? It is me, Jah java va va, va, va. Open up already.");
+                    .say("Did I stutter? It is me, Jah java va va, va, va. Open up already!");
         }
 
 
