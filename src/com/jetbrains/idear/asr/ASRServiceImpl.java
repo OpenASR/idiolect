@@ -142,6 +142,7 @@ public class ASRServiceImpl implements ASRService {
         public static final String HI_IDEA = "hi idea";
         public static final String WHERE_AM_I = "where am i";
 
+
         @Override
         public void run() {
             while (!isTerminated()) {
@@ -330,10 +331,11 @@ public class ASRServiceImpl implements ASRService {
                     .say("Did I stutter? It is me, Jah java va va, va, va. Open up already!");
         }
 
+        private static final long COMMAND_DURATION = 3000;
 
         private void fireVoiceCommand() {
             try {
-                Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic());
+                Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(COMMAND_DURATION));
 
                 if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
@@ -359,10 +361,12 @@ public class ASRServiceImpl implements ASRService {
 
         }
 
+        private static final long GOOGLE_QUERY_DURATION = 3000;
+
         private void fireGoogleSearch() {
 
             try {
-                Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic());
+                Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION));
 
                 if (searchQueryTuple == null || searchQueryTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;

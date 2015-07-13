@@ -71,13 +71,13 @@ public class CustomMicrophone {
 
 
     //TODO Refactor this API into a CustomMicrophone instance
-    public static File recordFromMic() throws IOException {
+    public static File recordFromMic(long duration) throws IOException {
         CustomMicrophone mic = new CustomMicrophone(16000, 16, true, false);
 
         //Why is this in a thread?
         new Thread(() -> {
             try {
-                Thread.sleep(DURATION);
+                Thread.sleep(duration);
             } catch (InterruptedException _) {
             } finally {
                 mic.stopRecording();
