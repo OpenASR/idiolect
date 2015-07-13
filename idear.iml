@@ -13,9 +13,8 @@
     <orderEntry type="library" name="marytts-runtime-5.1.2-jar-with-dependencies" level="project" />
     <orderEntry type="library" name="voice-cmu-slt-hsmm-5.1.2" level="project" />
     <orderEntry type="library" name="marytts-lang-en-5.1.2" level="project" />
-    <orderEntry type="library" name="sphinx4-core-1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="sphinx4-core-1.0-SNAPSHOT-sources" level="project" />
     <orderEntry type="library" name="opennlp-tools-1.6.0" level="project" />
+    <orderEntry type="library" name="sphinx4-core-1.0-20150630.174404-9" level="project" />
     <orderEntry type="library" name="unirest-java-1.4.6" level="project" />
   </component>
 </module>
