@@ -6,18 +6,18 @@ import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
 import marytts.modules.synthesis.Voice;
 import marytts.util.data.audio.AudioPlayer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sound.sampled.AudioInputStream;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by breandan on 7/9/2015.
  */
 public class TTSServiceImpl implements TTSService {
-    private static final Logger logger = LoggerFactory.getLogger(TTSServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(TTSServiceImpl.class.getSimpleName());
     private static MaryInterface maryTTS;
     private Voice voice;
 
@@ -56,7 +56,7 @@ public class TTSServiceImpl implements TTSService {
             player.start();
             player.join();
         } catch (SynthesisException | InterruptedException e) {
-            logger.error(e.getLocalizedMessage(), e);
+            logger.log(Level.SEVERE, String.format("Sorry! Could not pronounce '%s'", text), e);
         }
     }
 

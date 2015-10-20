@@ -27,18 +27,24 @@ grammar dialog;
 
 <editor_command> =  <selection_command>                             |
                     <goto_command>                                  |
+                    <navigate_command>                              |
                     <refactoring_command>                           |
                     <next_command>                                  |
+                    <where_am_i_command>                            |
 
                     page [up | down]                                |
                     fuck  /* that's a fancy undo alternative */     |
                     inspect code;
 
+<where_am_i_command> = where am i;
+
 <refactoring_command> = extract this (method | parameter);
 
-<selection_command> = (expand | shrink) selection;
+<selection_command> = expand | shrink;
 
 <focus_command> = focus (editor | project);
+
+<run_command> = execute;
 
 <speech_command> = speech <speech_action>;
 
@@ -52,7 +58,11 @@ grammar dialog;
 
 <google_command> = (okay | ok) google;
 
+<check_not_null> = check not null;
+
 <joke_command> = tell me a joke | who is there | wait who | who are you;
+
+<navigate_command> = navigate;
 
 public <command> =  <init_command>          |
                     <activation_command>    |
@@ -61,6 +71,8 @@ public <command> =  <init_command>          |
                     <focus_command>         |
                     <speech_command>        |
                     <google_command>        |
+                    <run_command>           |
                     <debug_command>         |
-                    <joke_command>          |
+                    /*<joke_command>        |*/
+                    <check_not_null>        |
                     <keyboard_command>;

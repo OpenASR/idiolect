@@ -19,7 +19,7 @@ public abstract class ExecuteActionByCommandText extends AnAction {
 //        String text = "idea extract to variable name";
 //        String text = "idea inline";
 
-        String text = "idra debug";
+        String text = "surround with not null check";
 
         TextToActionConverter provider = new TextToActionConverter(e.getDataContext());
         ActionCallInfo info = provider.extractAction(text);

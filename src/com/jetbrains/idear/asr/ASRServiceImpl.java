@@ -3,11 +3,13 @@ package com.jetbrains.idear.asr;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
 import com.jetbrains.idear.GoogleHelper;
 import com.jetbrains.idear.actions.ExecuteVoiceCommandAction;
+import com.jetbrains.idear.actions.recognition.SurroundWithNoNullCheckRecognizer;
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import com.jetbrains.idear.recognizer.CustomMicrophone;
 import com.jetbrains.idear.tts.TTSService;
@@ -140,6 +142,10 @@ public class ASRServiceImpl implements ASRService {
         public static final String OKAY_IDEA = "okay idea";
         public static final String OK_IDEA = "ok idea";
         public static final String HI_IDEA = "hi idea";
+        public static final String WHERE_AM_I = "where am i";
+        public static final String NAVIGATE = "navigate";
+        public static final String EXECUTE = "execute";
+
 
         @Override
         public void run() {
@@ -176,14 +182,10 @@ public class ASRServiceImpl implements ASRService {
             if (c.equals(HI_IDEA)) {
                 // Greet some more
                 say("Hi, again!");
-            }
-
-            else if (c.equals(FUCK)) {
+            } else if (c.equals(FUCK)) {
                 pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                 //invokeAction(IdeActions.ACTION_UNDO);
-            }
-
-            else if (c.startsWith(OPEN)) {
+            } else if (c.startsWith(OPEN)) {
                 if (c.endsWith(SETTINGS)) {
                     invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
                 } else if (c.endsWith(RECENT)) {
@@ -191,25 +193,24 @@ public class ASRServiceImpl implements ASRService {
                 } else if (c.endsWith(TERMINAL)) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
                 }
-            }
-
-            else if (c.startsWith("focus")) {
+            } else if (c.startsWith(NAVIGATE)) {
+                invokeAction("GotoDeclaration");
+            } else if (c.startsWith(EXECUTE)) {
+                invokeAction("Run");
+            } else if (c.equals(WHERE_AM_I)) {
+                // TODO(kudinkin): extract to action
+                invokeAction("Idear.WhereAmI");
+            } else if (c.startsWith("focus")) {
                 if (c.endsWith("editor")) {
                     pressKeystroke(KeyEvent.VK_ESCAPE);
                 } else if (c.endsWith("project")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
                 }
-            }
-
-            else if (c.endsWith("selection")) {
-                if (c.startsWith("expand")) {
-                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
-                } else if (c.startsWith("shrink")) {
-                    pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
-                }
-            }
-
-            else if (c.startsWith("press")) {
+            } else if (c.startsWith("expand")) {
+                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
+            } else if (c.startsWith("shrink")) {
+                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
+            } else if (c.startsWith("press")) {
                 if (c.contains("delete")) {
                     pressKeystroke(KeyEvent.VK_DELETE);
                 } else if (c.contains("return")) {
@@ -221,9 +222,7 @@ public class ASRServiceImpl implements ASRService {
                 } else if (c.contains("undo")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
                 }
-            }
-
-            else if (c.startsWith("following")) {
+            } else if (c.startsWith("following")) {
                 if (c.endsWith("line")) {
                     pressKeystroke(KeyEvent.VK_DOWN);
                 } else if (c.endsWith("page")) {
@@ -231,9 +230,7 @@ public class ASRServiceImpl implements ASRService {
                 } else if (c.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
                 }
-            }
-
-            else if (c.startsWith("previous")) {
+            } else if (c.startsWith("previous")) {
                 if (c.endsWith("line")) {
                     pressKeystroke(KeyEvent.VK_UP);
                 } else if (c.endsWith("page")) {
@@ -241,53 +238,50 @@ public class ASRServiceImpl implements ASRService {
                 } else if (c.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
                 }
-            }
-
-            else if (c.startsWith("extract this")) {
+            } else if (c.startsWith("extract this")) {
                 if (c.endsWith("method")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_M);
                 } else if (c.endsWith("parameter")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_P);
                 }
-            }
-
-            else if (c.startsWith("inspect code")) {
+            } else if (c.startsWith("inspect code")) {
                 pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
-            }
-
-            else if (c.startsWith("speech pause")) {
+            } else if (c.startsWith("speech pause")) {
                 pauseSpeech();
-            }
-
-            else if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
+            } else if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
                 beep();
                 fireVoiceCommand();
-            }
-
-            else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
+            } else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
                 beep();
                 fireGoogleSearch();
-            }
-
-            else if(c.contains("break point")) {
+            } else if (c.contains("break point")) {
                 if (c.startsWith("toggle")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_F8);
-                } else if(c.startsWith("view")) {
+                } else if (c.startsWith("view")) {
                     pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_F8);
                 }
-            }
-
-            else if (c.startsWith("step")) {
+            } else if (c.startsWith("step")) {
                 if (c.endsWith("over")) {
                     pressKeystroke(KeyEvent.VK_F8);
                 } else if (c.endsWith("into")) {
                     pressKeystroke(KeyEvent.VK_F7);
                 }
-            }
-
-            else if (c.startsWith("tell me a joke")) {
+            } else if (c.startsWith("tell me a joke")) {
                 tellJoke();
+            } else if (c.contains("check")) {
+                SurroundWithNoNullCheckRecognizer r = new SurroundWithNoNullCheckRecognizer();
+                if (r.isMatching(c)) {
+                    DataManager.getInstance()
+                            .getDataContextFromFocus()
+                            .doWhenDone((Consumer<DataContext>) dataContext -> run(r, c, dataContext));
+                }
             }
+        }
+
+        private void run(SurroundWithNoNullCheckRecognizer rec, String c, DataContext dataContext) {
+            ApplicationManager.getApplication().runWriteAction(() -> {
+                rec.getActionInfo(c, dataContext);
+            });
         }
 
         private void tellJoke() {
@@ -324,10 +318,11 @@ public class ASRServiceImpl implements ASRService {
                     .say("Did I stutter? It is me, Jah java va va, va, va. Open up already!");
         }
 
+        private static final long COMMAND_DURATION = 3500;
 
         private void fireVoiceCommand() {
             try {
-                Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic());
+                Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(COMMAND_DURATION));
 
                 if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
@@ -336,15 +331,15 @@ public class ASRServiceImpl implements ASRService {
                 beep();
 
                 invokeAction(
-                    "Idear.VoiceAction",
-                    dataContext -> new AnActionEvent(
-                                            null,
-                                            SimpleDataContext.getSimpleContext(ExecuteVoiceCommandAction.KEY.getName(), commandTuple.first, dataContext),
-                                            ActionPlaces.UNKNOWN,
-                                            new Presentation(),
-                                            ActionManager.getInstance(),
-                                            0
-                                        )
+                        "Idear.VoiceAction",
+                        dataContext -> new AnActionEvent(
+                                null,
+                                SimpleDataContext.getSimpleContext(ExecuteVoiceCommandAction.KEY.getName(), commandTuple.first, dataContext),
+                                ActionPlaces.UNKNOWN,
+                                new Presentation(),
+                                ActionManager.getInstance(),
+                                0
+                        )
                 );
 
             } catch (IOException e) {
@@ -353,17 +348,19 @@ public class ASRServiceImpl implements ASRService {
 
         }
 
+        private static final long GOOGLE_QUERY_DURATION = 3000;
+
         private void fireGoogleSearch() {
 
             try {
-                Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic());
+                Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION));
 
                 if (searchQueryTuple == null || searchQueryTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                     return;
 
                 ServiceManager
-                    .getService(TTSService.class)
-                    .say("I think you said " + searchQueryTuple.first + ", searching Google now");
+                        .getService(TTSService.class)
+                        .say("I think you said " + searchQueryTuple.first + ", searching Google now");
 
                 GoogleHelper.searchGoogle(searchQueryTuple.first);
 
@@ -407,32 +404,32 @@ public class ASRServiceImpl implements ASRService {
 
     private void invokeAction(final String action) {
         invokeAction(
-            action,
-            dataContext ->
-                new AnActionEvent(null,
-                    dataContext,
-                    ActionPlaces.UNKNOWN,
-                    new Presentation(),
-                    ActionManager.getInstance(),
-                    0
-                )
+                action,
+                dataContext ->
+                        new AnActionEvent(null,
+                                dataContext,
+                                ActionPlaces.UNKNOWN,
+                                new Presentation(),
+                                ActionManager.getInstance(),
+                                0
+                        )
         );
     }
 
     private void invokeAction(String action, Function<DataContext, AnActionEvent> actionFactory) {
         DataManager.getInstance().getDataContextFromFocus().doWhenDone(
-            (Consumer<DataContext>) dataContext -> EventQueue.invokeLater(() -> {
-                AnAction anAction = ActionManager.getInstance().getAction(action);
-                anAction.actionPerformed(actionFactory.apply(dataContext));
-            })
+                (Consumer<DataContext>) dataContext -> EventQueue.invokeLater(() -> {
+                    AnAction anAction = ActionManager.getInstance().getAction(action);
+                    anAction.actionPerformed(actionFactory.apply(dataContext));
+                })
         );
     }
 
     // Helpers
 
     public static synchronized void say(String something) {
-        ServiceManager  .getService(TTSService.class)
-                        .say(something);
+        ServiceManager.getService(TTSService.class)
+                .say(something);
     }
 
     public static synchronized void beep() {
@@ -440,7 +437,7 @@ public class ASRServiceImpl implements ASRService {
             try {
                 Clip clip = AudioSystem.getClip();
                 AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                    ASRServiceImpl.class.getResourceAsStream("/com.jetbrains.idear/sounds/beep.wav"));
+                        ASRServiceImpl.class.getResourceAsStream("/com.jetbrains.idear/sounds/beep.wav"));
                 clip.open(inputStream);
                 clip.start();
             } catch (Exception e) {
@@ -452,7 +449,8 @@ public class ASRServiceImpl implements ASRService {
 
         try {
             t.join();
-        } catch (InterruptedException _) {}
+        } catch (InterruptedException _) {
+        }
     }
 
     // This is for testing purposes solely

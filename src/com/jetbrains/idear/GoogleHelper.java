@@ -24,11 +24,11 @@ public class GoogleHelper {
 
     private static Logger logger = Logger.getLogger(GoogleHelper.class.getSimpleName());
 
-    private static final String API_KEY = "AIzaSyB0DS1X9_qkZw2keZWw9p9EwUb9cV2bYsw";
+//    private static final String API_KEY = "AIzaSyB0DS1X9_qkZw2keZWw9p9EwUb9cV2bYsw";
     private static final String URL_PRE = "https://www.google.com/speech-api/v2/recognize";
     private static final String URL_SEARCH = "https://www.google.com/search?q=";
 
-    private static final String ONE_MORE_API_KEY = "AIzaSyDhaglUIfPFvtYqKKpmhLQfkeiBBzgT2XE";
+    private static final String API_KEY = "AIzaSyDhaglUIfPFvtYqKKpmhLQfkeiBBzgT2XE";
 
     private static List<Pair<String, Double>> getRecognizedTextForUtteranceInternal(File utterance) {
         try {
@@ -111,7 +111,7 @@ public class GoogleHelper {
 
     public static void main(String[] args) {
         try {
-            CustomMicrophone.recordFromMic();
+            CustomMicrophone.recordFromMic(4500);
         } catch (IOException e) {
             e.printStackTrace();
         }

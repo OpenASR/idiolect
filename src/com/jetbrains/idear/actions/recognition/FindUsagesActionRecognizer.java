@@ -14,6 +14,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.UsageTarget;
 import com.intellij.usages.UsageView;
+import com.jetbrains.idear.psi.PsiUtil;
 import com.jetbrains.idear.tts.TTSService;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,8 +44,8 @@ public class FindUsagesActionRecognizer implements ActionRecognizer {
         if (editor == null || project == null)
             return aci;
 
-        final PsiElement    e       = findElementUnderCaret(editor, project);
-        final PsiClass      klass   = findContainingClass(e);
+        final PsiElement    e       = PsiUtil.findElementUnderCaret(editor, project);
+        final PsiClass      klass   = PsiUtil.findContainingClass(e);
 
         if (klass == null)
             return aci;
@@ -96,21 +97,8 @@ public class FindUsagesActionRecognizer implements ActionRecognizer {
         return aci;
     }
 
-    private static PsiClass findContainingClass(PsiElement e) {
-        return PsiTreeUtil.getParentOfType(e, PsiClass.class);
-    }
-
     private static UsageTarget[] prepare(PsiElement target) {
         return new UsageTarget[] { new PsiElement2UsageTargetAdapter(target) };
-    }
-
-    private static PsiElement findElementUnderCaret(Editor editor, Project project) {
-        PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
-
-        if (psiFile == null)
-            return null;
-
-        return psiFile.findElementAt(editor.getCaretModel().getOffset());
     }
 
     private static String extractNameOf(String pivot, List<String> sentence) {
