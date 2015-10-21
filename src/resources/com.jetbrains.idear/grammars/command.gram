@@ -40,7 +40,7 @@ grammar dialog;
 
 <refactoring_command> = extract this (method | parameter);
 
-<selection_command> = expand | shrink;
+<selection_command> = grow | shrink;
 
 <focus_command> = focus (editor | project);
 
@@ -75,4 +75,6 @@ public <command> =  <init_command>          |
                     <debug_command>         |
                     /*<joke_command>        |*/
                     <check_not_null>        |
-                    <keyboard_command>;
+                    <keyboard_command>      |
+                    <word>;
+

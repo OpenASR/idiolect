@@ -114,7 +114,6 @@ public class ASRServiceImpl implements ASRService {
 
     private class ASRControlLoop implements Runnable {
 
-        public static final String FUCK = "fuck";
         public static final String OPEN = "open";
         public static final String SETTINGS = "settings";
         public static final String RECENT = "recent";
@@ -170,6 +169,10 @@ public class ASRServiceImpl implements ASRService {
         private String getResultFromRecognizer() {
             SpeechResult result = recognizer.getResult();
 
+            System.out.println("Recognized: ");
+            System.out.println("\tTop H:       " + result.getResult() + " / " + result.getResult().getBestToken() + " / " + result.getResult().getBestPronunciationResult());
+            System.out.println("\tTop 3H:      " + result.getNbest(3));
+
             logger.info("Recognized:    ");
             logger.info("\tTop H:       " + result.getResult() + " / " + result.getResult().getBestToken() + " / " + result.getResult().getBestPronunciationResult());
             logger.info("\tTop 3H:      " + result.getNbest(3));
@@ -182,9 +185,6 @@ public class ASRServiceImpl implements ASRService {
             if (c.equals(HI_IDEA)) {
                 // Greet some more
                 say("Hi, again!");
-            } else if (c.equals(FUCK)) {
-                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
-                //invokeAction(IdeActions.ACTION_UNDO);
             } else if (c.startsWith(OPEN)) {
                 if (c.endsWith(SETTINGS)) {
                     invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
@@ -206,7 +206,7 @@ public class ASRServiceImpl implements ASRService {
                 } else if (c.endsWith("project")) {
                     pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
                 }
-            } else if (c.startsWith("expand")) {
+            } else if (c.startsWith("grow")) {
                 pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
             } else if (c.startsWith("shrink")) {
                 pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
@@ -279,8 +279,10 @@ public class ASRServiceImpl implements ASRService {
         }
 
         private void run(SurroundWithNoNullCheckRecognizer rec, String c, DataContext dataContext) {
-            ApplicationManager.getApplication().runWriteAction(() -> {
-                rec.getActionInfo(c, dataContext);
+            EventQueue.invokeLater(() -> {
+                ApplicationManager.getApplication().runWriteAction(() -> {
+                    rec.getActionInfo(c, dataContext);
+                });
             });
         }
 

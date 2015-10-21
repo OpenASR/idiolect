@@ -53,7 +53,6 @@ public class SurroundWithNoNullCheckRecognizer implements ActionRecognizer {
             result[i] = new ApplyIntentionAction(descriptor, actionText, editor, file);
         }
 
-
         ApplyIntentionAction nNull = result[1];
 
         DataManager manager = DataManager.getInstance();

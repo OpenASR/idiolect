@@ -16,5 +16,14 @@
     <orderEntry type="library" name="opennlp-tools-1.6.0" level="project" />
     <orderEntry type="library" name="sphinx4-core-1.0-20150630.174404-9" level="project" />
     <orderEntry type="library" name="unirest-java-1.4.6" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/freemarker-2.3.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
