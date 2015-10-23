@@ -31,9 +31,7 @@ grammar dialog;
                     <refactoring_command>                           |
                     <next_command>                                  |
                     <where_am_i_command>                            |
-
                     page [up | down]                                |
-                    fuck  /* that's a fancy undo alternative */     |
                     inspect code;
 
 <where_am_i_command> = where am i;
@@ -73,8 +71,6 @@ public <command> =  <init_command>          |
                     <google_command>        |
                     <run_command>           |
                     <debug_command>         |
-                    /*<joke_command>        |*/
+                    <joke_command>          |
                     <check_not_null>        |
-                    <keyboard_command>      |
-                    <word>;
-
+                    <keyboard_command>      ;

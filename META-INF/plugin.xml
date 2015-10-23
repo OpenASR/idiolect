@@ -41,6 +41,9 @@
         <applicationService serviceInterface="com.jetbrains.idear.nlp.ParserService" serviceImplementation="com.jetbrains.idear.nlp.NlpParserService">
         </applicationService>
 
+        <applicationService serviceInterface="com.jetbrains.idear.ide.IDEService" serviceImplementation="com.jetbrains.idear.ide.IDEServiceImpl">
+        </applicationService>
+
     </extensions>
 
 
@@ -86,6 +89,16 @@
         <action id="Idear.WhereAmI"
                 text="Name the place you are"
                 class="com.jetbrains.idear.actions.WhereAmIAction"/>
+
+        <action id="AceJumpAction"
+                class="com.johnlindquist.acejump.AceJumpAction"
+                text="Ace Jump"
+                description="Search and navigate to result">
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="ctrl SEMICOLON"/>
+            <keyboard-shortcut keymap="Mac OS X" first-keystroke="ctrl SEMICOLON"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl SEMICOLON"/>
+        </action>
     </actions>
 
 </idea-plugin>

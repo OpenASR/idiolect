@@ -10,7 +10,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import com.jetbrains.idear.CodeToTextConverter;
-import com.jetbrains.idear.tts.TTSService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
