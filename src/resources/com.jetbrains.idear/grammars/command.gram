@@ -40,7 +40,7 @@ grammar dialog;
 
 <selection_command> = grow | shrink;
 
-<focus_command> = focus (editor | project);
+<focus_command> = focus (editor | project | symbols);
 
 <run_command> = execute;
 
@@ -54,13 +54,19 @@ grammar dialog;
 
 <next_command> = [following | previous] [line | method | error];
 
-<google_command> = (okay | ok) google;
-
 <check_not_null> = check not null;
 
 <joke_command> = tell me a joke | who is there | wait who | who are you;
 
 <navigate_command> = navigate;
+
+<jump_command> = jump <number>;
+
+<number> = <hundreds> | <tens> | <teens> | <ones>;
+<hundreds> = <ones> hundred [<tens> | <teens> | <ones>];
+<tens> = (twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety) [<ones>];
+<teens> = ten | eleven | twelve | thirteen | fourteen | fifteen | sixteen | seventeen | eighteen | nineteen;
+<ones> = one | two | three | four | five | six | seven | eight | nine;
 
 public <command> =  <init_command>          |
                     <activation_command>    |
@@ -68,9 +74,9 @@ public <command> =  <init_command>          |
                     <editor_command>        |
                     <focus_command>         |
                     <speech_command>        |
-                    <google_command>        |
                     <run_command>           |
                     <debug_command>         |
                     <joke_command>          |
                     <check_not_null>        |
-                    <keyboard_command>      ;
+                    <keyboard_command>      |
+                    <jump_command>;

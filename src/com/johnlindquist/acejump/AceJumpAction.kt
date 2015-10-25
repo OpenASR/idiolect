@@ -49,6 +49,8 @@ public open class AceJumpAction() : DumbAwareAction() {
         val aceJumper = AceJumper(editor, document)
         val aceCanvas = AceCanvas()
         val searchBox = SearchBox()
+        aceFinder.findAllVisibleSymbols();
+        searchBox.disableSearch();
         val textAndOffsetHash = HashMap<String, Int>()
 
         fun showJumpers(textPointPairs: List<Pair<String, Point>>?) {

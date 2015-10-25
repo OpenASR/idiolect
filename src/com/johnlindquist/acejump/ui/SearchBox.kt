@@ -28,7 +28,6 @@ public class SearchBox: JTextField() {
     override fun paintBorder(p0: Graphics?) {
     }
 
-
     //todo: I need to really rethink this entire approach
     override fun processKeyEvent(p0: KeyEvent) {
         if (getText()?.length() == 0) {

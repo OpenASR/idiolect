@@ -16,12 +16,17 @@ public class IDEServiceImpl implements IDEService {
 
     private Robot robot;
 
-    public void init() {
+    public IDEServiceImpl() {
         try {
             robot = new Robot();
         } catch (AWTException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void init() {
+
     }
 
     @Override
@@ -52,7 +57,17 @@ public class IDEServiceImpl implements IDEService {
         );
     }
 
-    public void pressKeystroke(final int... keys) {
+    public void type(final int... keys) {
+        for (int key : keys) {
+            robot.keyPress(key);
+        }
+
+        for (int key : keys) {
+            robot.keyRelease(key);
+        }
+    }
+
+    public void type(final char... keys) {
         for (int key : keys) {
             robot.keyPress(key);
         }

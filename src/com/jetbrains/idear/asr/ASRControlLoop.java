@@ -8,6 +8,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
 import com.jetbrains.idear.GoogleHelper;
+import com.jetbrains.idear.WordToNumberConverter;
 import com.jetbrains.idear.actions.ExecuteVoiceCommandAction;
 import com.jetbrains.idear.actions.recognition.SurroundWithNoNullCheckRecognizer;
 import com.jetbrains.idear.ide.IDEService;
@@ -49,7 +50,7 @@ public class ASRControlLoop implements Runnable {
     public static final String EDITOR = "editor";
     public static final String PROJECT = "project";
     public static final String SELECTION = "selection";
-    public static final String EXPAND = "expand";
+    public static final String EXPAND = "grow";
     public static final String SHRINK = "shrink";
     public static final String PRESS = "press";
     public static final String DELETE = "delete";
@@ -128,25 +129,28 @@ public class ASRControlLoop implements Runnable {
             // TODO(kudinkin): extract to action
             ideService.invokeAction("Idear.WhereAmI");
         } else if (c.startsWith("focus")) {
-            if (c.endsWith("editor")) {
+            if (c.endsWith(EDITOR)) {
                 pressKeystroke(KeyEvent.VK_ESCAPE);
-            } else if (c.endsWith("project")) {
+            } else if (c.endsWith(PROJECT)) {
                 pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
+            } else if(c.endsWith("symbols")) {
+                ideService.invokeAction("AceJumpAction");
+                ideService.type(("" + recognizeNumber()).toCharArray());
             }
-        } else if (c.startsWith("grow")) {
+        } else if (c.startsWith(EXPAND)) {
             pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
-        } else if (c.startsWith("shrink")) {
+        } else if (c.startsWith(SHRINK)) {
             pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
         } else if (c.startsWith("press")) {
             if (c.contains("delete")) {
                 pressKeystroke(KeyEvent.VK_DELETE);
             } else if (c.contains("return")) {
                 pressKeystroke(KeyEvent.VK_ENTER);
-            } else if (c.contains("escape")) {
+            } else if (c.contains(ESCAPE)) {
                 pressKeystroke(KeyEvent.VK_ESCAPE);
-            } else if (c.contains("tab")) {
+            } else if (c.contains(TAB)) {
                 pressKeystroke(KeyEvent.VK_TAB);
-            } else if (c.contains("undo")) {
+            } else if (c.contains(UNDO)) {
                 pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
             }
         } else if (c.startsWith("following")) {
@@ -207,7 +211,7 @@ public class ASRControlLoop implements Runnable {
 
     private void pressKeystroke(final int... keys) {
         ServiceManager.getService(IDEService.class)
-                .pressKeystroke(keys);
+                .type(keys);
     }
 
     private void run(SurroundWithNoNullCheckRecognizer rec, String c, DataContext dataContext) {
@@ -310,6 +314,15 @@ public class ASRControlLoop implements Runnable {
             if (result.equals("speech resume")) {
                 break;
             }
+        }
+    }
+
+    private int recognizeNumber() {
+        String result;
+        while(true) {
+            result = getResultFromRecognizer();
+            if(result.startsWith("jump "))
+                return WordToNumberConverter.getNumber(result.substring(5));
         }
     }
 

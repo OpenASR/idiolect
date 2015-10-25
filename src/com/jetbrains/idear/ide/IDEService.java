@@ -24,7 +24,9 @@ public interface IDEService {
 
     void dispose();
 
-    void pressKeystroke(final int... keys);
+    void type(final int... keys);
+    void type(final char... keys);
+
 
     void invokeAction(final String action);
 

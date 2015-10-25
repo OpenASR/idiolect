@@ -18,7 +18,7 @@ import javax.swing.event.ChangeListener
 
 public class AceFinder(val project: Project, val document: DocumentImpl, val editor: EditorImpl, val virtualFile: VirtualFile) {
     companion object AceFinder {
-        val ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
+        val ALLOWED_CHARACTERS = "1234567890";
         val END_OF_LINE = "\\n";
         val BEGINNING_OF_LINE = "^.|\\n(?<!.\\n)";
         val CODE_INDENTS = "^\\s*\\S";
