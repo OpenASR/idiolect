@@ -144,42 +144,6 @@ public class AceFinder(val project: Project, val document: DocumentImpl, val edi
         });
     }
 
-    fun findAllVisible(): List<Int> {
-        //System.out.println("----- findAllVisible");
-        val visualLineAtTopOfScreen = EditorHelper.getVisualLineAtTopOfScreen(editor)
-        val firstLine = EditorHelper.visualLineToLogicalLine(editor, visualLineAtTopOfScreen)
-        var offset = EditorHelper.getLineStartOffset(editor, firstLine)
-
-        val height = EditorHelper.getScreenHeight(editor)
-        val top = EditorHelper.getVisualLineAtTopOfScreen(editor)
-
-        var lastLine = top + height
-        lastLine = EditorHelper.visualLineToLogicalLine(editor, lastLine)
-
-        var endOffset = EditorHelper.normalizeOffset(editor, lastLine, EditorHelper.getLineEndOffset(editor, lastLine, true), true)
-        var text = document.getCharsSequence().toString().get(offset, endOffset)
-        var offsets = ArrayList<Int>()
-
-        var foundOffset = 0
-        while (0 < text.length) {
-            var result = findManager.findString(text, foundOffset, findModel, virtualFile);
-            if (!result.isStringFound()) {
-                //System.out.println(findModel.getStringToFind() + ": not found");
-                break;
-            }
-            var resultOffset: Int
-            if (getEndOffset) {
-                resultOffset = result.getEndOffset() - 1;
-            } else {
-                resultOffset = result.getStartOffset();
-            }
-            offsets.add(resultOffset + offset + customOffset);
-            foundOffset = result.getEndOffset();
-        }
-
-        return offsets;
-    }
-
     public fun expandResults() {
         startResult += allowedCount
         endResult += allowedCount

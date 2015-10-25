@@ -22,7 +22,6 @@ import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,11 +29,14 @@ import java.util.logging.Logger;
  * Created by breandan on 10/23/2015.
  */
 public class ASRControlLoop implements Runnable {
+    private final IDEService ideService;
     private CustomLiveSpeechRecognizer recognizer;
 
     public ASRControlLoop(CustomLiveSpeechRecognizer recognizer) {
         // Start-up recognition facilities
         this.recognizer = recognizer;
+
+        this.ideService = ServiceManager.getService(IDEService.class);
     }
 
     private static final Logger logger = Logger.getLogger(ASRControlLoop.class.getSimpleName());
@@ -81,7 +83,7 @@ public class ASRControlLoop implements Runnable {
                 if (result.equals(HI_IDEA)) {
                     // Greet invoker
                     say("Hi");
-                    invokeAction("Idear.Start");
+                    ideService.invokeAction("Idear.Start");
                 }
             } else if (ListeningState.isActive()) {
                 logger.log(Level.INFO, "Recognized: " + result);
@@ -112,19 +114,19 @@ public class ASRControlLoop implements Runnable {
             say("Hi, again!");
         } else if (c.startsWith(OPEN)) {
             if (c.endsWith(SETTINGS)) {
-                invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
+                ideService.invokeAction(IdeActions.ACTION_SHOW_SETTINGS);
             } else if (c.endsWith(RECENT)) {
-                invokeAction(IdeActions.ACTION_RECENT_FILES);
+                ideService.invokeAction(IdeActions.ACTION_RECENT_FILES);
             } else if (c.endsWith(TERMINAL)) {
                 pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
             }
         } else if (c.startsWith(NAVIGATE)) {
-            invokeAction("GotoDeclaration");
+            ideService.invokeAction("GotoDeclaration");
         } else if (c.startsWith(EXECUTE)) {
-            invokeAction("Run");
+            ideService.invokeAction("Run");
         } else if (c.equals(WHERE_AM_I)) {
             // TODO(kudinkin): extract to action
-            invokeAction("Idear.WhereAmI");
+            ideService.invokeAction("Idear.WhereAmI");
         } else if (c.startsWith("focus")) {
             if (c.endsWith("editor")) {
                 pressKeystroke(KeyEvent.VK_ESCAPE);
@@ -205,7 +207,7 @@ public class ASRControlLoop implements Runnable {
 
     private void pressKeystroke(final int... keys) {
         ServiceManager.getService(IDEService.class)
-                .pressKeystroke();
+                .pressKeystroke(keys);
     }
 
     private void run(SurroundWithNoNullCheckRecognizer rec, String c, DataContext dataContext) {
@@ -262,7 +264,7 @@ public class ASRControlLoop implements Runnable {
             // Notify of successful proceed
             beep();
 
-            invokeAction(
+            ideService.invokeAction(
                     "Idear.VoiceAction",
                     dataContext -> new AnActionEvent(
                             null,
@@ -309,30 +311,6 @@ public class ASRControlLoop implements Runnable {
                 break;
             }
         }
-    }
-
-
-    private void invokeAction(final String action) {
-        invokeAction(
-                action,
-                dataContext ->
-                        new AnActionEvent(null,
-                                dataContext,
-                                ActionPlaces.UNKNOWN,
-                                new Presentation(),
-                                ActionManager.getInstance(),
-                                0
-                        )
-        );
-    }
-
-    private void invokeAction(String action, Function<DataContext, AnActionEvent> actionFactory) {
-        DataManager.getInstance().getDataContextFromFocus().doWhenDone(
-                (Consumer<DataContext>) dataContext -> EventQueue.invokeLater(() -> {
-                    AnAction anAction = ActionManager.getInstance().getAction(action);
-                    anAction.actionPerformed(actionFactory.apply(dataContext));
-                })
-        );
     }
 
     // Helpers
