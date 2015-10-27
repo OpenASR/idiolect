@@ -21,10 +21,12 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.awt.event.KeyEvent.*;
 
 /**
  * Created by breandan on 10/23/2015.
@@ -54,6 +56,7 @@ public class ASRControlLoop implements Runnable {
     public static final String SHRINK = "shrink";
     public static final String PRESS = "press";
     public static final String DELETE = "delete";
+    public static final String DEBUG = "debug";
     public static final String ENTER = "enter";
     public static final String ESCAPE = "escape";
     public static final String TAB = "tab";
@@ -105,6 +108,7 @@ public class ASRControlLoop implements Runnable {
         logger.info("\tTop H:       " + result.getResult() + " / " + result.getResult().getBestToken() + " / " + result.getResult().getBestPronunciationResult());
         logger.info("\tTop 3H:      " + result.getNbest(3));
 
+        Collection<String> c = result.getNbest(3);
         return result.getHypothesis();
     }
 
@@ -119,7 +123,7 @@ public class ASRControlLoop implements Runnable {
             } else if (c.endsWith(RECENT)) {
                 ideService.invokeAction(IdeActions.ACTION_RECENT_FILES);
             } else if (c.endsWith(TERMINAL)) {
-                pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_F12);
+                pressKeystroke(VK_ALT, VK_F12);
             }
         } else if (c.startsWith(NAVIGATE)) {
             ideService.invokeAction("GotoDeclaration");
@@ -130,53 +134,67 @@ public class ASRControlLoop implements Runnable {
             ideService.invokeAction("Idear.WhereAmI");
         } else if (c.startsWith("focus")) {
             if (c.endsWith(EDITOR)) {
-                pressKeystroke(KeyEvent.VK_ESCAPE);
+                pressKeystroke(VK_ESCAPE);
             } else if (c.endsWith(PROJECT)) {
-                pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_1);
+                pressKeystroke(VK_ALT, VK_1);
             } else if(c.endsWith("symbols")) {
                 ideService.invokeAction("AceJumpAction");
+                ideService.type(VK_SPACE);
                 ideService.type(("" + recognizeNumber()).toCharArray());
             }
+        } else if (c.startsWith(GOTO)) {
+
         } else if (c.startsWith(EXPAND)) {
-            pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_W);
+//            ActionManager instance = ActionManager.getInstance();
+//            AnAction a = instance.getAction("EditorSelectWord");
+//            AnActionEvent event = new AnActionEvent(null, DataManager.getInstance().getDataContext(),
+//                    ActionPlaces.UNKNOWN, a.getTemplatePresentation(), instance, 0);
+//            a.actionPerformed(event);
+            ideService.invokeAction("EditorSelectWord");
         } else if (c.startsWith(SHRINK)) {
-            pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_W);
+            pressKeystroke(VK_CONTROL, VK_SHIFT, VK_W);
         } else if (c.startsWith("press")) {
             if (c.contains("delete")) {
-                pressKeystroke(KeyEvent.VK_DELETE);
-            } else if (c.contains("return")) {
-                pressKeystroke(KeyEvent.VK_ENTER);
+                pressKeystroke(VK_DELETE);
+            } else if (c.contains("return") || c.contains("enter")) {
+                pressKeystroke(VK_ENTER);
             } else if (c.contains(ESCAPE)) {
-                pressKeystroke(KeyEvent.VK_ESCAPE);
+                pressKeystroke(VK_ESCAPE);
             } else if (c.contains(TAB)) {
-                pressKeystroke(KeyEvent.VK_TAB);
+                pressKeystroke(VK_TAB);
             } else if (c.contains(UNDO)) {
-                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_Z);
+                pressKeystroke(VK_CONTROL, VK_Z);
             }
         } else if (c.startsWith("following")) {
             if (c.endsWith("line")) {
-                pressKeystroke(KeyEvent.VK_DOWN);
+                pressKeystroke(VK_DOWN);
             } else if (c.endsWith("page")) {
-                pressKeystroke(KeyEvent.VK_PAGE_DOWN);
+                pressKeystroke(VK_PAGE_DOWN);
             } else if (c.endsWith("method")) {
-                pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_DOWN);
+                pressKeystroke(VK_ALT, VK_DOWN);
+            } else if (c.endsWith("tab")) {
+                pressKeystroke(VK_CONTROL, VK_TAB);
+            } else if (c.endsWith("page")) {
+                pressKeystroke(VK_PAGE_DOWN);
             }
         } else if (c.startsWith("previous")) {
             if (c.endsWith("line")) {
-                pressKeystroke(KeyEvent.VK_UP);
+                pressKeystroke(VK_UP);
             } else if (c.endsWith("page")) {
-                pressKeystroke(KeyEvent.VK_PAGE_UP);
+                pressKeystroke(VK_PAGE_UP);
             } else if (c.endsWith("method")) {
-                pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_UP);
+                pressKeystroke(VK_ALT, VK_UP);
+            } else if (c.endsWith("page")) {
+                pressKeystroke(VK_PAGE_UP);
             }
         } else if (c.startsWith("extract this")) {
             if (c.endsWith("method")) {
-                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_M);
+                pressKeystroke(VK_CONTROL, VK_ALT, VK_M);
             } else if (c.endsWith("parameter")) {
-                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_ALT, KeyEvent.VK_P);
+                pressKeystroke(VK_CONTROL, VK_ALT, VK_P);
             }
         } else if (c.startsWith("inspect code")) {
-            pressKeystroke(KeyEvent.VK_ALT, KeyEvent.VK_SHIFT, KeyEvent.VK_I);
+            pressKeystroke(VK_ALT, VK_SHIFT, VK_I);
         } else if (c.startsWith("speech pause")) {
             pauseSpeech();
         } else if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
@@ -187,16 +205,22 @@ public class ASRControlLoop implements Runnable {
             fireGoogleSearch();
         } else if (c.contains("break point")) {
             if (c.startsWith("toggle")) {
-                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_F8);
+                pressKeystroke(VK_CONTROL, VK_F8);
             } else if (c.startsWith("view")) {
-                pressKeystroke(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_F8);
+                pressKeystroke(VK_CONTROL, VK_SHIFT, VK_F8);
             }
+        } else if(c.startsWith("debug")){
+            pressKeystroke(VK_SHIFT, VK_F9);
         } else if (c.startsWith("step")) {
             if (c.endsWith("over")) {
-                pressKeystroke(KeyEvent.VK_F8);
+                pressKeystroke(VK_F8);
             } else if (c.endsWith("into")) {
-                pressKeystroke(KeyEvent.VK_F7);
+                pressKeystroke(VK_F7);
+            } else if (c.endsWith("return")) {
+                pressKeystroke(VK_SHIFT, VK_F8);
             }
+        } else if (c.startsWith("resume")) {
+            pressKeystroke(VK_F9);
         } else if (c.startsWith("tell me a joke")) {
             tellJoke();
         } else if (c.contains("check")) {
@@ -338,7 +362,7 @@ public class ASRControlLoop implements Runnable {
             try {
                 Clip clip = AudioSystem.getClip();
                 AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                        ASRServiceImpl.class.getResourceAsStream("/com.jetbrains.idear/sounds/beep.wav"));
+                        ASRService.class.getResourceAsStream("/com.jetbrains.idear/sounds/beep.wav"));
                 clip.open(inputStream);
                 clip.start();
             } catch (Exception e) {

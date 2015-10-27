@@ -1,17 +1,13 @@
 package com.jetbrains.idear.actions.recognition;
 
-import com.intellij.codeInsight.TargetElementUtil;
-import com.intellij.find.FindManager;
-import com.intellij.find.findUsages.FindUsagesOptions;
 import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.usages.UsageTarget;
 import com.intellij.usages.UsageView;
 import com.jetbrains.idear.psi.PsiUtil;

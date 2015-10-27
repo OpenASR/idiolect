@@ -2,19 +2,6 @@
 
 grammar dialog;
 
-<digit> = zero  |
-          one   |
-          two   |
-          three |
-          four  |
-          five  |
-          six   |
-          seven |
-          eight |
-          nine  ;
-
-<number> = <digit>+;
-
 <menu_command> =  open <menu_item>;
 
 <menu_item> = settings | recent | terminal;
@@ -23,7 +10,7 @@ grammar dialog;
 
 <activation_command> = (okay | ok) idea;
 
-<goto_command>  = goto [ line <number> ];
+<goto_command>  = goto line <number>;
 
 <editor_command> =  <selection_command>                             |
                     <goto_command>                                  |
@@ -32,7 +19,8 @@ grammar dialog;
                     <next_command>                                  |
                     <where_am_i_command>                            |
                     page [up | down]                                |
-                    inspect code;
+                    inspect code                                    |
+                    <jump_command>;
 
 <where_am_i_command> = where am i;
 
@@ -44,15 +32,11 @@ grammar dialog;
 
 <run_command> = execute;
 
-<speech_command> = speech <speech_action>;
-
-<speech_action> = pause | resume;
-
-<debug_command> = toggle break point | view break points | step over | step into;
+<debug_command> = debug | toggle break point | view break points | step over | step into | step return | resume;
 
 <keyboard_command> = press [return | escape | tab | undo | delete] key;
 
-<next_command> = [following | previous] [line | method | error];
+<next_command> = [following | previous] [line | method | error | tab | page];
 
 <check_not_null> = check not null;
 
@@ -73,10 +57,8 @@ public <command> =  <init_command>          |
                     <menu_command>          |
                     <editor_command>        |
                     <focus_command>         |
-                    <speech_command>        |
                     <run_command>           |
                     <debug_command>         |
                     <joke_command>          |
                     <check_not_null>        |
-                    <keyboard_command>      |
-                    <jump_command>;
+                    <keyboard_command>      ;

@@ -49,8 +49,7 @@ public open class AceJumpAction() : DumbAwareAction() {
         val aceJumper = AceJumper(editor, document)
         val aceCanvas = AceCanvas()
         val searchBox = SearchBox()
-        aceFinder.findAllVisibleSymbols();
-        searchBox.disableSearch();
+
         val textAndOffsetHash = HashMap<String, Int>()
 
         fun showJumpers(textPointPairs: List<Pair<String, Point>>?) {
@@ -86,20 +85,7 @@ public open class AceJumpAction() : DumbAwareAction() {
 
             for (i in 0..total) {
 
-                var str = ""
-
-                val iGroup = i - lenMinusGroups
-                val iModGroup = iGroup % len
-                //                if(iModGroup == 0) print("================\n")
-                val i1 = Math.floor(lenMinusGroups.toDouble() + ((i + groups.toInt()) / len)).toInt() - 1
-                if (i >= lenMinusGroups) {
-                    str += letters.charAt(i1)
-                    str += letters.charAt(iModGroup).toString()
-                } else {
-                    str += letters.charAt(i).toString()
-                }
-                //                print(i.toString() + ": " + str + "     iModGroup:" + iModGroup.toString() + "\n")
-
+                var str = (i + 10).toString()
 
                 val textOffset: Int = results.get(i)
                 val point: RelativePoint? = getPointFromVisualPosition(editor, editor.offsetToVisualPosition(textOffset))
@@ -217,4 +203,3 @@ public open class AceJumpAction() : DumbAwareAction() {
         });
     }
 }
-

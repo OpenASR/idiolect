@@ -4,15 +4,10 @@
     <version>1.0</version>
     <vendor email="breandan.considine@jetbrains.com" url="http://www.jetbrains.com">JetBrains</vendor>
 
-    <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
-    ]]></description>
+    <description>Speech-based user interface for your favorite IDE. Idear listens to voice commands and performs basic actions like navigating the IDE.</description>
 
-    <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
+    <change-notes>
+
     </change-notes>
 
     <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
@@ -29,19 +24,19 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
-        <applicationService serviceInterface="com.jetbrains.idear.asr.ASRService" serviceImplementation="com.jetbrains.idear.asr.ASRServiceImpl">
+        <applicationService serviceInterface="com.jetbrains.idear.asr.ASRService" serviceImplementation="com.jetbrains.idear.asr.ASRService">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.tts.TTSService" serviceImplementation="com.jetbrains.idear.tts.TTSServiceImpl">
+        <applicationService serviceInterface="com.jetbrains.idear.tts.TTSService" serviceImplementation="com.jetbrains.idear.tts.TTSService">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.asr.GrammarService" serviceImplementation="com.jetbrains.idear.asr.GrammarServiceImpl">
+        <applicationService serviceInterface="com.jetbrains.idear.asr.GrammarService" serviceImplementation="com.jetbrains.idear.asr.GrammarService">
         </applicationService>
 
         <applicationService serviceInterface="com.jetbrains.idear.nlp.ParserService" serviceImplementation="com.jetbrains.idear.nlp.NlpParserService">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.ide.IDEService" serviceImplementation="com.jetbrains.idear.ide.IDEServiceImpl">
+        <applicationService serviceInterface="com.jetbrains.idear.ide.IDEService" serviceImplementation="com.jetbrains.idear.ide.IDEService">
         </applicationService>
 
     </extensions>
