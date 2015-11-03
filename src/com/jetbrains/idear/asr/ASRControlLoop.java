@@ -42,6 +42,7 @@ public class ASRControlLoop implements Runnable {
         this.ideService = ServiceManager.getService(IDEService.class);
     }
 
+
     private static final Logger logger = Logger.getLogger(ASRControlLoop.class.getSimpleName());
 
     public static final String OPEN = "open";
@@ -109,6 +110,10 @@ public class ASRControlLoop implements Runnable {
         logger.info("\tTop 3H:      " + result.getNbest(3));
 
         Collection<String> c = result.getNbest(3);
+
+        c.stream()
+                .filter(s -> s.contains("something"));
+
         return result.getHypothesis();
     }
 
@@ -137,7 +142,7 @@ public class ASRControlLoop implements Runnable {
                 pressKeystroke(VK_ESCAPE);
             } else if (c.endsWith(PROJECT)) {
                 pressKeystroke(VK_ALT, VK_1);
-            } else if(c.endsWith("symbols")) {
+            } else if (c.endsWith("symbols")) {
                 ideService.invokeAction("AceJumpAction");
                 ideService.type(VK_SPACE);
                 ideService.type(("" + recognizeNumber()).toCharArray());
@@ -209,7 +214,7 @@ public class ASRControlLoop implements Runnable {
             } else if (c.startsWith("view")) {
                 pressKeystroke(VK_CONTROL, VK_SHIFT, VK_F8);
             }
-        } else if(c.startsWith("debug")){
+        } else if (c.startsWith("debug")) {
             pressKeystroke(VK_SHIFT, VK_F9);
         } else if (c.startsWith("step")) {
             if (c.endsWith("over")) {
@@ -343,9 +348,9 @@ public class ASRControlLoop implements Runnable {
 
     private int recognizeNumber() {
         String result;
-        while(true) {
+        while (true) {
             result = getResultFromRecognizer();
-            if(result.startsWith("jump "))
+            if (result.startsWith("jump "))
                 return WordToNumberConverter.getNumber(result.substring(5));
         }
     }

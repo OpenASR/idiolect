@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="marytts-lang-en-5.2-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/marytts-lang-en-5.2-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

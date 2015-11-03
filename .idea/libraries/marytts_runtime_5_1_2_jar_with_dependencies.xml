@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="marytts-runtime-5.1.2-jar-with-dependencies">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/marytts-runtime-5.1.2-jar-with-dependencies.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
