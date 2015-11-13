@@ -1,0 +1,33 @@
+{
+  parserClass="com.jetbrains.idear.jsgf.JSpeechParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  tokens = [
+      STRING="regexp:\"[^\"]*\"|'[^']*'"
+      NUMBER="regexp:(\+|\-)?\p{Digit}*"
+      KEY="regexp:\p{Alpha}\w*"
+      WHITESPACE="\w*"
+
+      COMMA=","
+      COLON=":"
+      EQUALS="="
+      BRACE1="{"
+      BRACE2="}"
+      PAREN1="("
+      PAREN2=")"
+      BRACKET1="["
+      BRACKET2="]"
+      AT="@"
+      DOLLAR="$"
+      BANG="!"
+
+      SEPARATOR="="
+    ]
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? WHITESPACE SEPARATOR WHITESPACE KEY?) | KEY
