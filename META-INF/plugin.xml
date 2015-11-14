@@ -23,9 +23,11 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.jetbrains.idear.jsgf.JSpeechFileTypeFactory"/>
 
-        <lang.syntaxHighlighterFactory implementationClass="com.jetbrains.idear.jsgf.JSpeechSyntaxHighlighterFactory"/>
-        <lang.parserDefinition language="Simple" implementationClass="com.jetbrains.idear.jsgf.JSpeechParserDefinition"/>
-
+        <lang.syntaxHighlighterFactory language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechSyntaxHighlighterFactory"/>
+        <lang.parserDefinition language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechParserDefinition"/>
+        <colorSettingsPage implementation="com.jetbrains.idear.jsgf.JSpeechColorSettingsPage"/>
+        <annotator language="JSpeech"
+                   implementationClass="com.jetbrains.idear.jsgf.JSpeechAnnotator"/>
         <applicationService serviceInterface="com.jetbrains.idear.asr.ASRService" serviceImplementation="com.jetbrains.idear.asr.ASRService">
         </applicationService>
 

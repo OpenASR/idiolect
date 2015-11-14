@@ -22,10 +22,4 @@ public class JSpeechDeclarationImpl extends ASTWrapperPsiElement implements JSpe
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public PsiElement getString() {
-    return findNotNullChildByType(STRING);
-  }
-
 }

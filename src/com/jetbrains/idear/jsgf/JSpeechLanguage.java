@@ -10,6 +10,6 @@ public class JSpeechLanguage extends Language {
     public static final JSpeechLanguage INSTANCE = new JSpeechLanguage();
 
     private JSpeechLanguage() {
-        super("Simple");
+        super("JSpeech");
     }
 }

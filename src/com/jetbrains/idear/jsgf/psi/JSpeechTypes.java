@@ -39,6 +39,7 @@ public interface JSpeechTypes {
   IElementType OR = new JSpeechTokenType("|");
   IElementType PAREN1 = new JSpeechTokenType("(");
   IElementType PAREN2 = new JSpeechTokenType(")");
+  IElementType PERIOD = new JSpeechTokenType(".");
   IElementType PRIVATE = new JSpeechTokenType("private");
   IElementType PUBLIC = new JSpeechTokenType("public");
   IElementType SEMICOLON = new JSpeechTokenType(";");

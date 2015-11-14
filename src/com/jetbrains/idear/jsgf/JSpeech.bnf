@@ -17,6 +17,7 @@
       FLOAT="regexp:(\+|\-)?\p{Digit}*(\.\p{Digit}+)?"
 
       COMMA=","
+      PERIOD="."
       COLON=":"
       SEMICOLON=";"
       EQUALS="="
@@ -56,7 +57,7 @@ literal ::=
     STRING
 
 declaration ::=
-    'grammar' STRING ';'
+    'grammar' STRING ('.' STRING)*';'
 
 scope ::=
     'private' | 'public'

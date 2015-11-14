@@ -14,6 +14,6 @@ public class JSpeechSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
     @NotNull
     @Override
     public SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile) {
-        return null;
+        return new JSpeechSyntaxHighlighter();
     }
 }

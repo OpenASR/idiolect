@@ -92,7 +92,7 @@ public class JSpeechParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'grammar' STRING ';'
+  // 'grammar' STRING ('.' STRING)*';'
   public static boolean declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "declaration")) return false;
     if (!nextTokenIs(b, GRAMMAR)) return false;
@@ -100,8 +100,32 @@ public class JSpeechParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, GRAMMAR);
     r = r && consumeToken(b, STRING);
+    r = r && declaration_2(b, l + 1);
     r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, m, DECLARATION, r);
+    return r;
+  }
+
+  // ('.' STRING)*
+  private static boolean declaration_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "declaration_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!declaration_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "declaration_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // '.' STRING
+  private static boolean declaration_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "declaration_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PERIOD);
+    r = r && consumeToken(b, STRING);
+    exit_section_(b, m, null, r);
     return r;
   }
 

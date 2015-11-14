@@ -31,6 +31,7 @@ FLOAT=(\+|\-)?[:digit:]*(\.[:digit:]+)?
   {WHITE_SPACE}      { return com.intellij.psi.TokenType.WHITE_SPACE; }
 
   ","                { return COMMA; }
+  "."                { return PERIOD; }
   ":"                { return COLON; }
   ";"                { return SEMICOLON; }
   "="                { return EQUALS; }
