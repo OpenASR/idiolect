@@ -3,14 +3,23 @@
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
+  psiClassPrefix="JSpeech"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.jetbrains.idear.jsgf.psi"
+  psiImplPackage="com.jetbrains.idear.jsgf.psi.impl"
+
+  elementTypeHolderClass="com.jetbrains.idear.jsgf.psi.JSpeechTypes"
+  elementTypeClass="com.jetbrains.idear.jsgf.JSpeechElementType"
+  tokenTypeClass="com.jetbrains.idear.jsgf.JSpeechTokenType"
+
   tokens = [
       STRING="regexp:\"[^\"]*\"|'[^']*'"
       NUMBER="regexp:(\+|\-)?\p{Digit}*"
       KEY="regexp:\p{Alpha}\w*"
-      WHITESPACE="\w*"
 
       COMMA=","
       COLON=":"
+      SEMICOLON=";"
       EQUALS="="
       BRACE1="{"
       BRACE2="}"
@@ -18,6 +27,8 @@
       PAREN2=")"
       BRACKET1="["
       BRACKET2="]"
+      BRACKET3="<"
+      BRACKET4=">"
       AT="@"
       DOLLAR="$"
       BANG="!"
@@ -26,8 +37,10 @@
     ]
 }
 
-simpleFile ::= item_*
+jsgfile ::= definition*
 
-private item_ ::= (property|COMMENT|CRLF)
+private definition ::= (rule|COMMENT|CRLF)
 
-property ::= (KEY? WHITESPACE SEPARATOR WHITESPACE KEY?) | KEY
+rule ::= tag '=' (tag|KEY)+ ';'
+
+tag ::= '<' KEY '>'

@@ -3,7 +3,7 @@ package com.jetbrains.idear.jsgf;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static generated.GeneratedTypes.*;
+import static com.jetbrains.idear.jsgf.psi.JSpeechTypes.*;
 import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
@@ -23,8 +23,11 @@ public class JSpeechParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, null);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == PROPERTY) {
-      r = property(b, 0);
+    if (t == RULE) {
+      r = rule(b, 0);
+    }
+    else if (t == TAG) {
+      r = tag(b, 0);
     }
     else {
       r = parse_root_(t, b, 0);
@@ -33,16 +36,16 @@ public class JSpeechParser implements PsiParser, LightPsiParser {
   }
 
   protected boolean parse_root_(IElementType t, PsiBuilder b, int l) {
-    return simpleFile(b, l + 1);
+    return jsgfile(b, l + 1);
   }
 
   /* ********************************************************** */
-  // property|COMMENT|CRLF
-  static boolean item_(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "item_")) return false;
+  // rule|COMMENT|CRLF
+  static boolean definition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "definition")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = property(b, l + 1);
+    r = rule(b, l + 1);
     if (!r) r = consumeToken(b, COMMENT);
     if (!r) r = consumeToken(b, CRLF);
     exit_section_(b, m, null, r);
@@ -50,55 +53,72 @@ public class JSpeechParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (KEY? WHITESPACE SEPARATOR WHITESPACE KEY?) | KEY
-  public static boolean property(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "property")) return false;
-    if (!nextTokenIs(b, "<property>", KEY, WHITESPACE)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<property>");
-    r = property_0(b, l + 1);
-    if (!r) r = consumeToken(b, KEY);
-    exit_section_(b, l, m, PROPERTY, r, false, null);
-    return r;
-  }
-
-  // KEY? WHITESPACE SEPARATOR WHITESPACE KEY?
-  private static boolean property_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "property_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = property_0_0(b, l + 1);
-    r = r && consumeTokens(b, 0, WHITESPACE, SEPARATOR, WHITESPACE);
-    r = r && property_0_4(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // KEY?
-  private static boolean property_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "property_0_0")) return false;
-    consumeToken(b, KEY);
-    return true;
-  }
-
-  // KEY?
-  private static boolean property_0_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "property_0_4")) return false;
-    consumeToken(b, KEY);
+  // definition*
+  static boolean jsgfile(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "jsgfile")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!definition(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "jsgfile", c)) break;
+      c = current_position_(b);
+    }
     return true;
   }
 
   /* ********************************************************** */
-  // item_*
-  static boolean simpleFile(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "simpleFile")) return false;
+  // tag '=' (tag|KEY)+ ';'
+  public static boolean rule(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "rule")) return false;
+    if (!nextTokenIs(b, BRACKET3)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = tag(b, l + 1);
+    r = r && consumeToken(b, SEPARATOR);
+    r = r && rule_2(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, m, RULE, r);
+    return r;
+  }
+
+  // (tag|KEY)+
+  private static boolean rule_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "rule_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = rule_2_0(b, l + 1);
     int c = current_position_(b);
-    while (true) {
-      if (!item_(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "simpleFile", c)) break;
+    while (r) {
+      if (!rule_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "rule_2", c)) break;
       c = current_position_(b);
     }
-    return true;
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // tag|KEY
+  private static boolean rule_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "rule_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = tag(b, l + 1);
+    if (!r) r = consumeToken(b, KEY);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '<' KEY '>'
+  public static boolean tag(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "tag")) return false;
+    if (!nextTokenIs(b, BRACKET3)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, BRACKET3);
+    r = r && consumeToken(b, KEY);
+    r = r && consumeToken(b, BRACKET4);
+    exit_section_(b, m, TAG, r);
+    return r;
   }
 
 }
