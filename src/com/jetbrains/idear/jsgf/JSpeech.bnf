@@ -1,6 +1,5 @@
 {
   parserClass="com.jetbrains.idear.jsgf.JSpeechParser"
-
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="JSpeech"
@@ -13,9 +12,9 @@
   tokenTypeClass="com.jetbrains.idear.jsgf.JSpeechTokenType"
 
   tokens = [
-      STRING="regexp:\"[^\"]*\"|'[^']*'"
+      STRING="regexp:[A-Za-z_\-]+\w*"
       NUMBER="regexp:(\+|\-)?\p{Digit}*"
-      KEY="regexp:\p{Alpha}\w*"
+      FLOAT="regexp:(\+|\-)?\p{Digit}*(\.\p{Digit}+)?"
 
       COMMA=","
       COLON=":"
@@ -29,18 +28,54 @@
       BRACKET2="]"
       BRACKET3="<"
       BRACKET4=">"
-      AT="@"
-      DOLLAR="$"
       BANG="!"
+      OR="|"
+      SLASH="/"
+      HASH="#"
 
-      SEPARATOR="="
+      PUBLIC="public"
+      PRIVATE="private"
+      GRAMMAR="grammar"
+      VERSION="JSGF V1.0"
     ]
 }
 
-jsgfile ::= definition*
+grammar ::=
+    SelfIdentHeader declaration* ruleDefinition*
 
-private definition ::= (rule|COMMENT|CRLF)
+ruleDefinition  ::=
+    scope? rulename '=' ruleExpansion ';'
 
-rule ::= tag '=' (tag|KEY)+ ';'
+SelfIdentHeader ::=
+    '#JSGF V1.0;'
 
-tag ::= '<' KEY '>'
+rulename ::=
+    '<' STRING '>'
+
+literal ::=
+    STRING
+
+declaration ::=
+    'grammar' STRING ';'
+
+scope ::=
+    'private' | 'public'
+
+ruleExpansion ::=
+    ruleAlternative ( '|' ruleAlternative )*
+
+ruleAlternative ::=
+    Weight? sequenceElement+
+
+Weight ::=
+    '/' FLOAT '/'
+
+sequenceElement ::=
+    subexpansion
+
+subexpansion ::=
+    literal
+    | rulename
+    | '(' ')'
+    | '(' ruleExpansion ')'
+    | '[' ruleExpansion ']'

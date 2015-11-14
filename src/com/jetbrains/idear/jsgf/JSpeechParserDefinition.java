@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class JSpeechParserDefinition implements ParserDefinition{
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(JSpeechTypes.COMMENT);
+    public static final TokenSet COMMENTS = TokenSet.create(new JSpeechElementType("COMMENT"));
 
     public static final IFileElementType FILE = new IFileElementType(Language.<JSpeechLanguage>findInstance(JSpeechLanguage.class));
 
