@@ -17,9 +17,9 @@ import java.util.Map;
 
 public class JSpeechColorSettingsPage implements ColorSettingsPage {
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-            new AttributesDescriptor("Key", JSpeechSyntaxHighlighter.KEY),
+            new AttributesDescriptor("Key", JSpeechSyntaxHighlighter.RULE),
             new AttributesDescriptor("Separator", JSpeechSyntaxHighlighter.SEPARATOR),
-            new AttributesDescriptor("Value", JSpeechSyntaxHighlighter.VALUE),
+            new AttributesDescriptor("Value", JSpeechSyntaxHighlighter.LITERAL),
     };
 
     @Nullable

@@ -1,11 +1,11 @@
 // This is a generated file. Not intended for manual editing.
 package com.jetbrains.idear.jsgf.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface JSpeechRuleDefinition extends PsiElement {
+public interface JSpeechRuleDefinition extends JSpeechNamedElement {
 
   @NotNull
   JSpeechRuleExpansion getRuleExpansion();
@@ -15,5 +15,13 @@ public interface JSpeechRuleDefinition extends PsiElement {
 
   @Nullable
   JSpeechScope getScope();
+
+  String getKey();
+
+  String getName();
+
+  PsiElement setName(String newName);
+
+  PsiElement getNameIdentifier();
 
 }

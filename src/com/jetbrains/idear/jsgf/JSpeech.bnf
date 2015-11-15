@@ -1,5 +1,6 @@
 {
   parserClass="com.jetbrains.idear.jsgf.JSpeechParser"
+  parserUtilClass="com.jetbrains.idear.jsgf.JSpeechParserUtil"
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="JSpeech"
@@ -10,6 +11,8 @@
   elementTypeHolderClass="com.jetbrains.idear.jsgf.psi.JSpeechTypes"
   elementTypeClass="com.jetbrains.idear.jsgf.JSpeechElementType"
   tokenTypeClass="com.jetbrains.idear.jsgf.JSpeechTokenType"
+
+  psiImplUtilClass="com.jetbrains.idear.jsgf.psi.impl.JSpeechImplUtil"
 
   tokens = [
       STRING="regexp:[A-Za-z_\-]+\w*"
@@ -45,7 +48,9 @@ grammar ::=
     SelfIdentHeader declaration* ruleDefinition*
 
 ruleDefinition  ::=
-    scope? rulename '=' ruleExpansion ';'
+    scope? rulename '=' ruleExpansion ';' {mixin="com.jetbrains.idear.jsgf.psi.impl.JSpeechNamedElementImpl"
+                                            implements="com.jetbrains.idear.jsgf.psi.JSpeechNamedElement"
+                                            methods=[getKey getName setName getNameIdentifier]}
 
 SelfIdentHeader ::=
     '#JSGF V1.0;'

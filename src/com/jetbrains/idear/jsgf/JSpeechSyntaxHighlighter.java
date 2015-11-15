@@ -24,19 +24,19 @@ public class JSpeechSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final Map<String, TextAttributesKey> KEYS = new HashMap<>();
 
     public static final TextAttributesKey SEPARATOR = createTextAttributesKey("SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-    public static final TextAttributesKey KEY = createTextAttributesKey("KEY", DefaultLanguageHighlighterColors.KEYWORD);
-    public static final TextAttributesKey VALUE = createTextAttributesKey("VALUE", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey RULE = createTextAttributesKey("RULE", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey LITERAL = createTextAttributesKey("LITERAL", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey COMMENT = createTextAttributesKey("COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
     private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
-    private static final TextAttributesKey[] KEY_KEYS = new TextAttributesKey[]{KEY};
-    private static final TextAttributesKey[] VALUE_KEYS = new TextAttributesKey[]{VALUE};
+    private static final TextAttributesKey[] KEY_KEYS = new TextAttributesKey[]{RULE};
+    private static final TextAttributesKey[] VALUE_KEYS = new TextAttributesKey[]{LITERAL};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
     static {
-        Map<String, TextAttributesKey> highlightKeys = new ContainerUtil.ImmutableMapBuilder<String, TextAttributesKey>()
+        new ContainerUtil.ImmutableMapBuilder<String, TextAttributesKey>()
                 .put("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
                 .put("OPERATION_NAME", DefaultLanguageHighlighterColors.CLASS_NAME)
                 .put("TYPE_REF", DefaultLanguageHighlighterColors.CLASS_REFERENCE)
@@ -50,8 +50,7 @@ public class JSpeechSyntaxHighlighter extends SyntaxHighlighterBase {
                 .put("BRACES", DefaultLanguageHighlighterColors.BRACES)
                 .put("PARENS", DefaultLanguageHighlighterColors.PARENTHESES)
                 .put("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
-                .build();
-        highlightKeys.forEach((s, key) ->
+                .build().forEach((s, key) ->
                 KEYS.put(s, createTextAttributesKey(s, key)));
     }
 

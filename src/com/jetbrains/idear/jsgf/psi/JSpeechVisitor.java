@@ -28,7 +28,7 @@ public class JSpeechVisitor extends PsiElementVisitor {
   }
 
   public void visitRuleDefinition(@NotNull JSpeechRuleDefinition o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitRuleExpansion(@NotNull JSpeechRuleExpansion o) {
@@ -48,6 +48,10 @@ public class JSpeechVisitor extends PsiElementVisitor {
   }
 
   public void visitSubexpansion(@NotNull JSpeechSubexpansion o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNamedElement(@NotNull JSpeechNamedElement o) {
     visitPsiElement(o);
   }
 

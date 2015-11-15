@@ -26,8 +26,10 @@
         <lang.syntaxHighlighterFactory language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechSyntaxHighlighterFactory"/>
         <lang.parserDefinition language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechParserDefinition"/>
         <colorSettingsPage implementation="com.jetbrains.idear.jsgf.JSpeechColorSettingsPage"/>
-        <annotator language="JSpeech"
-                   implementationClass="com.jetbrains.idear.jsgf.JSpeechAnnotator"/>
+        <annotator language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechAnnotator"/>
+
+        <psi.referenceContributor implementation="com.jetbrains.idear.jsgf.JSpeechReferenceContributor"/>
+
         <applicationService serviceInterface="com.jetbrains.idear.asr.ASRService" serviceImplementation="com.jetbrains.idear.asr.ASRService">
         </applicationService>
 
