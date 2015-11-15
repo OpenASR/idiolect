@@ -9,8 +9,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.jetbrains.idear.jsgf.psi.JSpeechRulename;
-import com.jetbrains.idear.jsgf.psi.JSpeechUtil;
+import com.jetbrains.idear.jsgf.psi.JSpeechRuleDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,10 +28,10 @@ public class JSpeechReference extends PsiReferenceBase<PsiElement> implements Ps
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         Project project = myElement.getProject();
-        final List<JSpeechRulename> properties = JSpeechUtil.findProperties(project, key);
+        final List<JSpeechRuleDefinition> properties = JSpeechUtil.findProperties(project, key);
 
         List<ResolveResult> results = new ArrayList<ResolveResult>();
-        for (JSpeechRulename property : properties) {
+        for (JSpeechRuleDefinition property : properties) {
             results.add(new PsiElementResolveResult(property));
         }
         return results.toArray(new ResolveResult[results.size()]);
@@ -49,10 +48,10 @@ public class JSpeechReference extends PsiReferenceBase<PsiElement> implements Ps
     @Override
     public Object[] getVariants() {
         Project project = myElement.getProject();
-        List<JSpeechRulename> properties = JSpeechUtil.findProperties(project);
-        List<LookupElement> variants = new ArrayList<LookupElement>();
-        for (final JSpeechRulename property : properties) {
-            if (property.getString() != null && property.getString().getText().length() > 0) {
+        List<JSpeechRuleDefinition> properties = JSpeechUtil.findProperties(project);
+        List<LookupElement> variants = new ArrayList<>();
+        for (final JSpeechRuleDefinition property : properties) {
+            if (property.getRulename().getString().getText().length() > 0) {
                 variants.add(LookupElementBuilder.create(property).
                         withIcon(JSpeechIcons.FILE).
                         withTypeText(property.getContainingFile().getName())

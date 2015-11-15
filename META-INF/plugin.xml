@@ -22,11 +22,12 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.jetbrains.idear.jsgf.JSpeechFileTypeFactory"/>
-
         <lang.syntaxHighlighterFactory language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechSyntaxHighlighterFactory"/>
         <lang.parserDefinition language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechParserDefinition"/>
         <colorSettingsPage implementation="com.jetbrains.idear.jsgf.JSpeechColorSettingsPage"/>
         <annotator language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechAnnotator"/>
+        <gotoSymbolContributor implementation="com.jetbrains.idear.jsgf.JSpeechChooseByNameContributor"/>
+
 
         <psi.referenceContributor implementation="com.jetbrains.idear.jsgf.JSpeechReferenceContributor"/>
 

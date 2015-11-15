@@ -4,6 +4,7 @@ package com.jetbrains.idear.jsgf.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import com.jetbrains.idear.jsgf.JSpeechNamedElement;
 
 public class JSpeechVisitor extends PsiElementVisitor {
 
@@ -28,7 +29,7 @@ public class JSpeechVisitor extends PsiElementVisitor {
   }
 
   public void visitRuleDefinition(@NotNull JSpeechRuleDefinition o) {
-    visitNamedElement(o);
+    visitPsiElement(o);
   }
 
   public void visitRuleExpansion(@NotNull JSpeechRuleExpansion o) {
@@ -36,7 +37,7 @@ public class JSpeechVisitor extends PsiElementVisitor {
   }
 
   public void visitRulename(@NotNull JSpeechRulename o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitScope(@NotNull JSpeechScope o) {

@@ -1,9 +1,8 @@
-package com.jetbrains.idear.jsgf.psi.impl;
+package com.jetbrains.idear.jsgf;
 
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.jetbrains.idear.jsgf.psi.JSpeechNamedElement;
 import org.jetbrains.annotations.NotNull;
 
 /**

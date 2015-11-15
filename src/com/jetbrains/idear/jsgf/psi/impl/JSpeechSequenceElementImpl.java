@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.jetbrains.idear.jsgf.psi.JSpeechTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jetbrains.idear.jsgf.psi.*;
+import com.jetbrains.idear.jsgf.JSpeechPsiImplUtil;
 
 public class JSpeechSequenceElementImpl extends ASTWrapperPsiElement implements JSpeechSequenceElement {
 

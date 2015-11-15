@@ -1,4 +1,4 @@
-package com.jetbrains.idear.jsgf.psi;
+package com.jetbrains.idear.jsgf;
 
 import com.intellij.psi.PsiNameIdentifierOwner;
 

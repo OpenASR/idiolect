@@ -12,7 +12,7 @@
   elementTypeClass="com.jetbrains.idear.jsgf.JSpeechElementType"
   tokenTypeClass="com.jetbrains.idear.jsgf.JSpeechTokenType"
 
-  psiImplUtilClass="com.jetbrains.idear.jsgf.psi.impl.JSpeechImplUtil"
+  psiImplUtilClass="com.jetbrains.idear.jsgf.JSpeechPsiImplUtil"
 
   tokens = [
       STRING="regexp:[A-Za-z_\-]+\w*"
@@ -47,16 +47,16 @@
 grammar ::=
     SelfIdentHeader declaration* ruleDefinition*
 
-ruleDefinition  ::=
-    scope? rulename '=' ruleExpansion ';' {mixin="com.jetbrains.idear.jsgf.psi.impl.JSpeechNamedElementImpl"
-                                            implements="com.jetbrains.idear.jsgf.psi.JSpeechNamedElement"
-                                            methods=[getKey getName setName getNameIdentifier]}
+ruleDefinition ::=
+    scope? rulename '=' ruleExpansion ';'
 
 SelfIdentHeader ::=
     '#JSGF V1.0;'
 
 rulename ::=
-    '<' STRING '>'
+    '<' STRING '>' {mixin="com.jetbrains.idear.jsgf.JSpeechNamedElementImpl"
+    implements="com.jetbrains.idear.jsgf.JSpeechNamedElement"
+    methods=[getName setName getRule setRule getNameIdentifier getPresentation]}
 
 literal ::=
     STRING
