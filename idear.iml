@@ -26,5 +26,6 @@
     <orderEntry type="library" name="marytts-client-5.2-SNAPSHOT-jar-with-dependencies" level="project" />
     <orderEntry type="library" name="marytts-lang-en-5.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="marytts-runtime-5.2-SNAPSHOT-jar-with-dependencies" level="project" />
+    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
   </component>
 </module>
