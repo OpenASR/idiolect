@@ -1,197 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BuildServerSettings">
+    <option name="LOGIN" value="" />
+    <option name="SERVER_URL" value="http://buildserver" />
+    <option name="PASSWORD" />
+    <option name="REMEMBER_ME" value="true" />
+    <option name="USE_IDEA_PROXY_SETTINGS" value="true" />
+    <option name="INSPECTIONS_BUILD_TYPE_IDS" />
+    <option name="DUPLICATES_BUILD_TYPE_IDS" />
+    <option name="COVERAGE_SETTINGS" />
+    <option name="TEST_STATUS_ENABLED" value="true" />
+    <option name="TEST_STATUS_SHOW_SUCCESSFUL" value="false" />
+    <option name="ARTIFACTS_BUILD_TYPE_IDS" />
+    <option name="PERFORM_COMMIT_IF_SUCCESSFUL" value="true" />
+    <option name="PERFORM_COMMIT_IF_NO_NEW_FAILED_TESTS" value="false" />
+    <option name="REQUEST_CONFIRMATON" value="false" />
+    <option name="PRE_TESTED_COMMIT" value="true" />
+    <option name="PROJECT_STATUS_DIALOG_SPLITTER_DIVIDER_LOCATION" value="500" />
+    <option name="CHANGES_STATUS_DIALOG_SPLITTER_DIVIDER_LOCATION" value="500" />
+    <option name="FILTER_BY_STATUS" value="false" />
+    <option name="FILTER_MARKED_AS_FIXED" value="false" />
+    <option name="SHOW_CLOSE_PROMPT" value="true" />
+    <option name="TOOL_WINDOW_SELECTED_CONTENT_INDEX" value="0" />
+    <option name="FILTER_BY_CURRENT_PROJECT" value="true" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ebc887e-3658-44ca-9231-403933a7c73e" name="Default" comment="Migrate to Gradle, fixes #25&#10;&#10;Plugin now uses the gradle-intellij-plugin to build itself. To launch the plugin, now run `gradlew runIdea`">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/marytts.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew.bat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/settings.gradle" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/idear_jar.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/kannotator.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/KotlinJavaRuntime.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/marytts_client_5_2_SNAPSHOT_jar_with_dependencies.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/marytts_lang_en_5_2_SNAPSHOT.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/marytts_runtime_5_2_SNAPSHOT_jar_with_dependencies.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/IDEAR_increased_heap_size.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/resources/en-parser-chunking.bin" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/com/jetbrains/idear/ActionRecognizerTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/com/jetbrains/idear/NlpParserTest.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/META-INF/java-pronouncer.xml" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/java-pronouncer.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/plugin.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/en-parser-chunking.bin" afterPath="$PROJECT_DIR$/src/main/resources/en-parser-chunking.bin" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/commons-codec-1.6.jar" afterPath="$PROJECT_DIR$/libs/commons-codec-1.6.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/commons-logging-1.1.3.jar" afterPath="$PROJECT_DIR$/libs/commons-logging-1.1.3.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/freemarker-2.3.8.jar" afterPath="$PROJECT_DIR$/libs/freemarker-2.3.8.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpasyncclient-4.0.2.jar" afterPath="$PROJECT_DIR$/libs/httpasyncclient-4.0.2.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpclient-4.3.6.jar" afterPath="$PROJECT_DIR$/libs/httpclient-4.3.6.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpcore-4.3.3.jar" afterPath="$PROJECT_DIR$/libs/httpcore-4.3.3.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpcore-nio-4.3.2.jar" afterPath="$PROJECT_DIR$/libs/httpcore-nio-4.3.2.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpmime-4.3.6.jar" afterPath="$PROJECT_DIR$/libs/httpmime-4.3.6.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/jettison-1.3.7.jar" afterPath="$PROJECT_DIR$/libs/jettison-1.3.7.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/json-20140107.jar" afterPath="$PROJECT_DIR$/libs/json-20140107.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/kotlin-reflect.jar" afterPath="$PROJECT_DIR$/libs/kotlin-reflect.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/kotlin-runtime-sources.jar" afterPath="$PROJECT_DIR$/libs/kotlin-runtime-sources.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/kotlin-runtime.jar" afterPath="$PROJECT_DIR$/libs/kotlin-runtime.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/marytts-client-5.2-SNAPSHOT-jar-with-dependencies.jar" afterPath="$PROJECT_DIR$/libs/marytts-client-5.2-SNAPSHOT-jar-with-dependencies.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/marytts-lang-en-5.2-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/libs/marytts-lang-en-5.2-SNAPSHOT.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/marytts-runtime-5.2-SNAPSHOT-jar-with-dependencies.jar" afterPath="$PROJECT_DIR$/libs/marytts-runtime-5.2-SNAPSHOT-jar-with-dependencies.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/opennlp-tools-1.6.0.jar" afterPath="$PROJECT_DIR$/libs/opennlp-tools-1.6.0.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/sphinx4-core-1.0-20150630.174404-9-sources.jar" afterPath="$PROJECT_DIR$/libs/sphinx4-core-1.0-20150630.174404-9-sources.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/sphinx4-core-1.0-20150630.174404-9.jar" afterPath="$PROJECT_DIR$/libs/sphinx4-core-1.0-20150630.174404-9.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/stax-api-1.0.1.jar" afterPath="$PROJECT_DIR$/libs/stax-api-1.0.1.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/unirest-java-1.4.6.jar" afterPath="$PROJECT_DIR$/libs/unirest-java-1.4.6.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/voice-cmu-slt-hsmm-5.1.2.jar" afterPath="$PROJECT_DIR$/libs/voice-cmu-slt-hsmm-5.1.2.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/AceUtil.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceUtil.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/CodeToTextConverter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/CodeToTextConverter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/GoogleHelper.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/GoogleHelper.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/Idear.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/Idear.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/VoiceAction.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/VoiceAction.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/VoiceRecordControllerAction.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/VoiceRecordControllerAction.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/WordToNumberConverter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/WordToNumberConverter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/ExecuteActionByCommandText.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/ExecuteActionByCommandText.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/ExecuteActionFromPredefinedText.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/ExecuteActionFromPredefinedText.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/ExecuteVoiceCommandAction.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/ExecuteVoiceCommandAction.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/WhereAmIAction.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/WhereAmIAction.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/ActionCallInfo.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/ActionCallInfo.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/ActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/ActionRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/DebugActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/DebugActionRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/ExtractActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/ExtractActionRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/FindUsagesActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/FindUsagesActionRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/InlineActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/InlineActionRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/RenameActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/RenameActionRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/RunActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/RunActionRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/SurroundWithNoNullCheckRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/SurroundWithNoNullCheckRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/TextToActionConverter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/TextToActionConverter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/asr/ASRControlLoop.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/ASRControlLoop.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/asr/ASRService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/ASRService.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/asr/GrammarService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/GrammarService.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/asr/ListeningState.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/ListeningState.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/ide/IDEService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/ide/IDEService.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeech.bnf" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeech.bnf" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechAnnotator.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechAnnotator.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechChooseByNameContributor.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechChooseByNameContributor.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechColorSettingsPage.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechColorSettingsPage.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechElementFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechElementFactory.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechElementType.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechElementType.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechFile.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechFile.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechFileType.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechFileType.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechFileTypeFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechFileTypeFactory.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechIcons.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechIcons.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechLanguage.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechLanguage.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechLexer.flex" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechLexer.flex" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechLexerAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechLexerAdapter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechNamedElement.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechNamedElement.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechNamedElementImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechNamedElementImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechParser.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechParser.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechParserDefinition.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechParserDefinition.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechParserUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechParserUtil.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechPsiImplUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechPsiImplUtil.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechReference.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechReference.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechReferenceContributor.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechReferenceContributor.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechSyntaxHighlighter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechSyntaxHighlighter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechSyntaxHighlighterFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechSyntaxHighlighterFactory.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechTokenType.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechTokenType.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechUtil.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/_JSpeechLexer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/_JSpeechLexer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechDeclaration.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechLiteral.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechLiteral.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechRuleAlternative.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechRuleAlternative.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechRuleDefinition.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechRuleDefinition.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechRuleExpansion.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechRuleExpansion.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechRulename.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechRulename.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechScope.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechScope.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechSelfIdentHeader.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechSelfIdentHeader.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechSequenceElement.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechSequenceElement.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechSubexpansion.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechSubexpansion.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechTypes.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechTypes.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechVisitor.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechVisitor.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechWeight.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechWeight.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechDeclarationImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechDeclarationImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechLiteralImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechLiteralImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleAlternativeImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleAlternativeImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleDefinitionImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleDefinitionImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleExpansionImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleExpansionImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechRulenameImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechRulenameImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechScopeImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechScopeImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechSelfIdentHeaderImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechSelfIdentHeaderImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechSequenceElementImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechSequenceElementImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechSubexpansionImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechSubexpansionImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechWeightImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechWeightImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/nlp/NlpParserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/nlp/NlpParserService.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/nlp/ParserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/nlp/ParserService.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/presentation/Icons.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/presentation/Icons.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/psi/PsiUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/psi/PsiUtil.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/recognizer/AudioInputStreamWithAdjustableGain.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/AudioInputStreamWithAdjustableGain.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/recognizer/CustomLiveSpeechRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomLiveSpeechRecognizer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/recognizer/CustomMicrophone.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/tts/JavaPronouncer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/tts/JavaPronouncer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/tts/TTSService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/tts/TTSService.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/AceFinder.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceFinder.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/AceJumpAction.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumpAction.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/AceJumper.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumper.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/AceKeyUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceKeyUtil.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/AceKeyCommand.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/AceKeyCommand.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ClearResults.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ClearResults.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ExpandResults.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ExpandResults.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ShowEndOfLines.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowEndOfLines.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ShowWhiteSpace.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowWhiteSpace.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/ui/AceCanvas.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/AceCanvas.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/ui/SearchBox.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/SearchBox.kt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/maddyhome/idea/vim/common/CharacterPosition.java" afterPath="$PROJECT_DIR$/src/main/java/com/maddyhome/idea/vim/common/CharacterPosition.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/maddyhome/idea/vim/common/TextRange.java" afterPath="$PROJECT_DIR$/src/main/java/com/maddyhome/idea/vim/common/TextRange.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/maddyhome/idea/vim/helper/EditorHelper.java" afterPath="$PROJECT_DIR$/src/main/java/com/maddyhome/idea/vim/helper/EditorHelper.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/default.config.xml.X" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/default.config.xml.X" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/grammars/command.gram" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/grammars/command.gram" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/jspeech_icon.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/jspeech_icon.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/start.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/start.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/start@2x.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/start@2x.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/start@2x_dark.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/start@2x_dark.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/start_dark.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/start_dark.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/stop.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/stop.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/stop@2x.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/stop@2x.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/stop@2x_dark.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/stop@2x_dark.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/stop_dark.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/stop_dark.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/sounds/beep.wav" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/sounds/beep.wav" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us.lm.dmp" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us.lm.dmp" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/README" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/README" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/feat.params" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/feat.params" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/mdef" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/mdef" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/means" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/means" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/mixture_weights" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/mixture_weights" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/noisedict" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/noisedict" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/sendump" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/sendump" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/transition_matrices" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/transition_matrices" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/variances" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/variances" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/opennlp_tools_1_6_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/opennlp_tools_1_6_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/sphinx4_core_1_0_20150630_174404_9.xml" afterPath="$PROJECT_DIR$/.idea/libraries/sphinx4_core_1_0_20150630_174404_9.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/unirest_java_1_4_6.xml" afterPath="$PROJECT_DIR$/.idea/libraries/unirest_java_1_4_6.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/voice_cmu_slt_hsmm_5_1_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/voice_cmu_slt_hsmm_5_1_2.xml" />
+    <list default="true" id="9ebc887e-3658-44ca-9231-403933a7c73e" name="Default" comment="Update README.md">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/idear.iml" afterPath="$PROJECT_DIR$/idear.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="idear.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
+    <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -240,6 +84,10 @@
                 <option name="myItemId" value="Tasks" />
                 <option name="myItemType" value="com.intellij.openapi.externalSystem.view.TasksNode" />
               </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="other" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.TasksNode$1" />
+              </PATH_ELEMENT>
             </PATH>
           </tree_state>
         </projects_view>
@@ -251,46 +99,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DefaultKeyCommand.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ChangeToTargetMode.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ShowBeginningOfLines.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ShowFirstCharOfLines.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AceCanvas.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/AceCanvas.kt">
           <provider selected="true" editor-type-id="text-editor">
@@ -311,11 +119,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41997853">
-              <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.5172415">
+              <caret line="6" column="97" selection-start-line="6" selection-start-column="97" selection-end-line="6" selection-end-column="97" />
               <folding />
             </state>
           </provider>
@@ -324,9 +145,17 @@
       <file leaf-file-name="CustomMicrophone.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.851851">
+            <state vertical-scroll-proportion="0.0">
               <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#1336#1337#0" expanded="false" />
+                <element signature="e#1364#1365#0" expanded="false" />
+                <element signature="e#1399#1400#0" expanded="false" />
+                <element signature="e#1426#1427#0" expanded="false" />
+                <element signature="e#1941#1942#0" expanded="false" />
+                <element signature="e#1975#1976#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -334,8 +163,38 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.481482">
-              <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+            <state vertical-scroll-proportion="-3.4772727">
+              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CodeToTextConverter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/CodeToTextConverter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Unirest.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/libs/unirest-java-1.4.6.jar!/com/mashape/unirest/http/Unirest.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.7777777">
+              <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GoogleHelper.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/GoogleHelper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.33333334">
+              <caret line="35" column="50" selection-start-line="35" selection-start-column="50" selection-end-line="35" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -883,6 +742,7 @@
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -893,11 +753,12 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
     <option name="x" value="1358" />
     <option name="y" value="-320" />
     <option name="width" value="1936" />
-    <option name="height" value="1092" />
+    <option name="height" value="1096" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -924,7 +785,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -992,19 +852,73 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value=".idea" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Problems" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/libs/voice-cmu-slt-hsmm-5.1.2.jar!/" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="SearchEverywhereHistoryKey" value="custommic&#9;PSI&#9;JAVA://com.jetbrains.idear.recognizer.CustomMicrophone" />
+    <property name="SearchEverywhereHistoryKey" value="unirest&#9;PSI&#9;JAVA://com.mashape.unirest.http.Unirest&#10;custommic&#9;PSI&#9;JAVA://com.jetbrains.idear.recognizer.CustomMicrophone" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="PsiViewer.ProjectComponent">
+    <option name="HIGHLIGHT" value="false" />
+    <option name="FILTER_WHITESPACE" value="false" />
+    <option name="SHOW_PROPERTIES" value="true" />
+    <option name="SPLIT_DIVIDER_POSITION" value="300" />
+    <option name="AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -1026,6 +940,65 @@
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="0" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="SELECTED_CLOUD_DEVICE_CONFIGURATION_ID" value="0" />
+      <option name="SELECTED_CLOUD_DEVICE_PROJECT_ID" value="" />
+      <option name="IS_VALID_CLOUD_MATRIX_SELECTION" value="false" />
+      <option name="INVALID_CLOUD_MATRIX_SELECTION_ERROR" value="" />
+      <option name="IS_VALID_CLOUD_DEVICE_SELECTION" value="false" />
+      <option name="INVALID_CLOUD_DEVICE_SELECTION_ERROR" value="" />
+      <option name="CLOUD_DEVICE_SERIAL_NUMBER" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="0" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="SELECTED_CLOUD_DEVICE_CONFIGURATION_ID" value="0" />
+      <option name="SELECTED_CLOUD_DEVICE_PROJECT_ID" value="" />
+      <option name="IS_VALID_CLOUD_MATRIX_SELECTION" value="false" />
+      <option name="INVALID_CLOUD_MATRIX_SELECTION_ERROR" value="" />
+      <option name="IS_VALID_CLOUD_DEVICE_SELECTION" value="false" />
+      <option name="INVALID_CLOUD_DEVICE_SELECTION_ERROR" value="" />
+      <option name="CLOUD_DEVICE_SERIAL_NUMBER" value="" />
       <method />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -1051,6 +1024,84 @@
       <envs />
       <method />
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="ArquillianTestNG" factoryName="">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="myFilePath" />
+      <option name="GLUE" />
+      <option name="myNameFilter" />
+      <option name="myGeneratedName" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -1065,6 +1116,16 @@
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="depsClasspath" value="false" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -1143,12 +1204,25 @@
       <envs />
       <method />
     </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -1230,40 +1304,62 @@
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="9ebc887e-3658-44ca-9231-403933a7c73e" name="Default" comment="" />
       <created>1447828969209</created>
       <option name="number" value="Default" />
       <updated>1447828969209</updated>
+      <workItem from="1447836722385" duration="708000" />
     </task>
+    <task id="LOCAL-00001" summary="Migrate to Gradle, fixes #25&#10;&#10;Project now uses Gradle and  the gradle-intellij-plugin to build itself. As an added benefit, this also fixes #21. To build and launch the plugin, now you can just run `./gradlew runIdea` from the root directory.">
+      <created>1447833316871</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1447833316871</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="708000" />
+  </component>
   <component name="ToolWindowManager">
-    <frame x="1358" y="-320" width="1936" height="1092" extended-state="0" />
+    <frame x="1358" y="-320" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="PsiViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23357664" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="IvyIDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328934" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16044776" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32889125" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21428572" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Metrics" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="TeamCity" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.328934" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15991472" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1277,6 +1373,12 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Migrate to Gradle, fixes #25&#10;&#10;Project now uses Gradle and  the gradle-intellij-plugin to build itself. As an added benefit, this also fixes #21. To build and launch the plugin, now you can just run `./gradlew runIdea` from the root directory." />
+    <option name="LAST_COMMIT_MESSAGE" value="Migrate to Gradle, fixes #25&#10;&#10;Project now uses Gradle and  the gradle-intellij-plugin to build itself. As an added benefit, this also fixes #21. To build and launch the plugin, now you can just run `./gradlew runIdea` from the root directory." />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
@@ -1285,8 +1387,13 @@
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
+  <component name="com.sixrr.metrics.MetricsReloaded">
+    <option name="selectedProfile" value="" />
+    <option name="autoscroll" value="false" />
+    <option name="showOnlyWarnings" value="false" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowEndOfLines.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1294,11 +1401,97 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowWhiteSpace.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/AceCanvas.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="17" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumpAction.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1336#1337#0" expanded="false" />
+            <element signature="e#1364#1365#0" expanded="false" />
+            <element signature="e#1399#1400#0" expanded="false" />
+            <element signature="e#1426#1427#0" expanded="false" />
+            <element signature="e#1941#1942#0" expanded="false" />
+            <element signature="e#1975#1976#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceUtil.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowEndOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowWhiteSpace.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1384,7 +1577,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-33.346153">
           <caret line="105" column="14" selection-start-line="105" selection-start-column="14" selection-end-line="105" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1392,7 +1584,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1414,7 +1605,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1422,7 +1612,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1430,7 +1619,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.6296296">
           <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1459,7 +1647,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1467,7 +1654,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1529,24 +1715,67 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.851851">
+        <state vertical-scroll-proportion="0.0">
           <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1336#1337#0" expanded="false" />
+            <element signature="e#1364#1365#0" expanded="false" />
+            <element signature="e#1399#1400#0" expanded="false" />
+            <element signature="e#1426#1427#0" expanded="false" />
+            <element signature="e#1941#1942#0" expanded="false" />
+            <element signature="e#1975#1976#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.5172415">
+          <caret line="6" column="97" selection-start-line="6" selection-start-column="97" selection-end-line="6" selection-end-column="97" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.481482">
-          <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+        <state vertical-scroll-proportion="-3.4772727">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/CodeToTextConverter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41997853">
-          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/unirest-java-1.4.6.jar!/com/mashape/unirest/http/Unirest.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.7777777">
+          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/GoogleHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="35" column="50" selection-start-line="35" selection-start-column="50" selection-end-line="35" selection-end-column="50" />
           <folding />
         </state>
       </provider>
@@ -1566,8 +1795,21 @@
           </splitter-proportions>
         </settings>
       </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
+          <last-edited>JetBrains JFlex</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1579,7 +1821,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>IntelliJ IDEA Community Edition IC-143.382.35</last-edited>
+          <last-edited>1.6</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
