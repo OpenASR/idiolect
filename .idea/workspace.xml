@@ -1,0 +1,1619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9ebc887e-3658-44ca-9231-403933a7c73e" name="Default" comment="Migrate to Gradle, fixes #25&#10;&#10;Plugin now uses the gradle-intellij-plugin to build itself. To launch the plugin, now run `gradlew runIdea`">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/marytts.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew.bat" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/settings.gradle" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/artifacts/idear_jar.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/kannotator.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/KotlinJavaRuntime.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/marytts_client_5_2_SNAPSHOT_jar_with_dependencies.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/marytts_lang_en_5_2_SNAPSHOT.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/marytts_runtime_5_2_SNAPSHOT_jar_with_dependencies.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/IDEAR_increased_heap_size.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/resources/en-parser-chunking.bin" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/com/jetbrains/idear/ActionRecognizerTest.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tests/com/jetbrains/idear/NlpParserTest.java" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/META-INF/java-pronouncer.xml" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/java-pronouncer.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/plugin.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/en-parser-chunking.bin" afterPath="$PROJECT_DIR$/src/main/resources/en-parser-chunking.bin" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/commons-codec-1.6.jar" afterPath="$PROJECT_DIR$/libs/commons-codec-1.6.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/commons-logging-1.1.3.jar" afterPath="$PROJECT_DIR$/libs/commons-logging-1.1.3.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/freemarker-2.3.8.jar" afterPath="$PROJECT_DIR$/libs/freemarker-2.3.8.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpasyncclient-4.0.2.jar" afterPath="$PROJECT_DIR$/libs/httpasyncclient-4.0.2.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpclient-4.3.6.jar" afterPath="$PROJECT_DIR$/libs/httpclient-4.3.6.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpcore-4.3.3.jar" afterPath="$PROJECT_DIR$/libs/httpcore-4.3.3.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpcore-nio-4.3.2.jar" afterPath="$PROJECT_DIR$/libs/httpcore-nio-4.3.2.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/httpmime-4.3.6.jar" afterPath="$PROJECT_DIR$/libs/httpmime-4.3.6.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/jettison-1.3.7.jar" afterPath="$PROJECT_DIR$/libs/jettison-1.3.7.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/json-20140107.jar" afterPath="$PROJECT_DIR$/libs/json-20140107.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/kotlin-reflect.jar" afterPath="$PROJECT_DIR$/libs/kotlin-reflect.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/kotlin-runtime-sources.jar" afterPath="$PROJECT_DIR$/libs/kotlin-runtime-sources.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/kotlin-runtime.jar" afterPath="$PROJECT_DIR$/libs/kotlin-runtime.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/marytts-client-5.2-SNAPSHOT-jar-with-dependencies.jar" afterPath="$PROJECT_DIR$/libs/marytts-client-5.2-SNAPSHOT-jar-with-dependencies.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/marytts-lang-en-5.2-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/libs/marytts-lang-en-5.2-SNAPSHOT.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/marytts-runtime-5.2-SNAPSHOT-jar-with-dependencies.jar" afterPath="$PROJECT_DIR$/libs/marytts-runtime-5.2-SNAPSHOT-jar-with-dependencies.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/opennlp-tools-1.6.0.jar" afterPath="$PROJECT_DIR$/libs/opennlp-tools-1.6.0.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/sphinx4-core-1.0-20150630.174404-9-sources.jar" afterPath="$PROJECT_DIR$/libs/sphinx4-core-1.0-20150630.174404-9-sources.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/sphinx4-core-1.0-20150630.174404-9.jar" afterPath="$PROJECT_DIR$/libs/sphinx4-core-1.0-20150630.174404-9.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/stax-api-1.0.1.jar" afterPath="$PROJECT_DIR$/libs/stax-api-1.0.1.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/unirest-java-1.4.6.jar" afterPath="$PROJECT_DIR$/libs/unirest-java-1.4.6.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib/voice-cmu-slt-hsmm-5.1.2.jar" afterPath="$PROJECT_DIR$/libs/voice-cmu-slt-hsmm-5.1.2.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/AceUtil.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceUtil.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/CodeToTextConverter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/CodeToTextConverter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/GoogleHelper.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/GoogleHelper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/Idear.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/Idear.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/VoiceAction.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/VoiceAction.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/VoiceRecordControllerAction.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/VoiceRecordControllerAction.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/WordToNumberConverter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/WordToNumberConverter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/ExecuteActionByCommandText.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/ExecuteActionByCommandText.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/ExecuteActionFromPredefinedText.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/ExecuteActionFromPredefinedText.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/ExecuteVoiceCommandAction.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/ExecuteVoiceCommandAction.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/WhereAmIAction.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/WhereAmIAction.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/ActionCallInfo.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/ActionCallInfo.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/ActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/ActionRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/DebugActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/DebugActionRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/ExtractActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/ExtractActionRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/FindUsagesActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/FindUsagesActionRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/InlineActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/InlineActionRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/RenameActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/RenameActionRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/RunActionRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/RunActionRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/SurroundWithNoNullCheckRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/SurroundWithNoNullCheckRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/actions/recognition/TextToActionConverter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/actions/recognition/TextToActionConverter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/asr/ASRControlLoop.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/ASRControlLoop.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/asr/ASRService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/ASRService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/asr/GrammarService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/GrammarService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/asr/ListeningState.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/ListeningState.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/ide/IDEService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/ide/IDEService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeech.bnf" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeech.bnf" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechAnnotator.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechAnnotator.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechChooseByNameContributor.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechChooseByNameContributor.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechColorSettingsPage.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechColorSettingsPage.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechElementFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechElementFactory.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechElementType.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechElementType.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechFile.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechFile.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechFileType.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechFileType.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechFileTypeFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechFileTypeFactory.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechIcons.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechIcons.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechLanguage.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechLanguage.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechLexer.flex" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechLexer.flex" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechLexerAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechLexerAdapter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechNamedElement.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechNamedElement.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechNamedElementImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechNamedElementImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechParser.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechParser.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechParserDefinition.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechParserDefinition.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechParserUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechParserUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechPsiImplUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechPsiImplUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechReference.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechReference.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechReferenceContributor.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechReferenceContributor.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechSyntaxHighlighter.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechSyntaxHighlighter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechSyntaxHighlighterFactory.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechSyntaxHighlighterFactory.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechTokenType.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechTokenType.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/JSpeechUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/JSpeechUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/_JSpeechLexer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/_JSpeechLexer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechDeclaration.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechDeclaration.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechLiteral.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechLiteral.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechRuleAlternative.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechRuleAlternative.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechRuleDefinition.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechRuleDefinition.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechRuleExpansion.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechRuleExpansion.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechRulename.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechRulename.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechScope.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechScope.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechSelfIdentHeader.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechSelfIdentHeader.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechSequenceElement.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechSequenceElement.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechSubexpansion.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechSubexpansion.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechTypes.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechTypes.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechVisitor.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechVisitor.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/JSpeechWeight.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/JSpeechWeight.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechDeclarationImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechDeclarationImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechLiteralImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechLiteralImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleAlternativeImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleAlternativeImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleDefinitionImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleDefinitionImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleExpansionImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechRuleExpansionImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechRulenameImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechRulenameImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechScopeImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechScopeImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechSelfIdentHeaderImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechSelfIdentHeaderImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechSequenceElementImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechSequenceElementImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechSubexpansionImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechSubexpansionImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/jsgf/psi/impl/JSpeechWeightImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/jsgf/psi/impl/JSpeechWeightImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/nlp/NlpParserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/nlp/NlpParserService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/nlp/ParserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/nlp/ParserService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/presentation/Icons.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/presentation/Icons.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/psi/PsiUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/psi/PsiUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/recognizer/AudioInputStreamWithAdjustableGain.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/AudioInputStreamWithAdjustableGain.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/recognizer/CustomLiveSpeechRecognizer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomLiveSpeechRecognizer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/recognizer/CustomMicrophone.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/tts/JavaPronouncer.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/tts/JavaPronouncer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/jetbrains/idear/tts/TTSService.java" afterPath="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/tts/TTSService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/AceFinder.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceFinder.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/AceJumpAction.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumpAction.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/AceJumper.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumper.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/AceKeyUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceKeyUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/AceKeyCommand.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/AceKeyCommand.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ClearResults.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ClearResults.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ExpandResults.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ExpandResults.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ShowEndOfLines.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowEndOfLines.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/keycommands/ShowWhiteSpace.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowWhiteSpace.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/ui/AceCanvas.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/AceCanvas.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/johnlindquist/acejump/ui/SearchBox.kt" afterPath="$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/SearchBox.kt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/maddyhome/idea/vim/common/CharacterPosition.java" afterPath="$PROJECT_DIR$/src/main/java/com/maddyhome/idea/vim/common/CharacterPosition.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/maddyhome/idea/vim/common/TextRange.java" afterPath="$PROJECT_DIR$/src/main/java/com/maddyhome/idea/vim/common/TextRange.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/maddyhome/idea/vim/helper/EditorHelper.java" afterPath="$PROJECT_DIR$/src/main/java/com/maddyhome/idea/vim/helper/EditorHelper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/default.config.xml.X" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/default.config.xml.X" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/grammars/command.gram" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/grammars/command.gram" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/jspeech_icon.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/jspeech_icon.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/start.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/start.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/start@2x.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/start@2x.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/start@2x_dark.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/start@2x_dark.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/start_dark.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/start_dark.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/stop.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/stop.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/stop@2x.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/stop@2x.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/stop@2x_dark.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/stop@2x_dark.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/icons/stop_dark.png" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/icons/stop_dark.png" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/com.jetbrains.idear/sounds/beep.wav" afterPath="$PROJECT_DIR$/src/main/resources/com.jetbrains.idear/sounds/beep.wav" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us.lm.dmp" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us.lm.dmp" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/README" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/README" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/feat.params" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/feat.params" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/mdef" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/mdef" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/means" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/means" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/mixture_weights" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/mixture_weights" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/noisedict" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/noisedict" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/sendump" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/sendump" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/transition_matrices" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/transition_matrices" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/resources/edu.cmu.sphinx.models.en-us/en-us/variances" afterPath="$PROJECT_DIR$/src/main/resources/edu.cmu.sphinx.models.en-us/en-us/variances" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/opennlp_tools_1_6_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/opennlp_tools_1_6_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/sphinx4_core_1_0_20150630_174404_9.xml" afterPath="$PROJECT_DIR$/.idea/libraries/sphinx4_core_1_0_20150630_174404_9.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/unirest_java_1_4_6.xml" afterPath="$PROJECT_DIR$/.idea/libraries/unirest_java_1_4_6.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/voice_cmu_slt_hsmm_5_1_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/voice_cmu_slt_hsmm_5_1_2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/idear.iml" afterPath="$PROJECT_DIR$/idear.iml" />
+    </list>
+    <ignored path="idear.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/.gradle/" />
+    <ignored path="$PROJECT_DIR$/build/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <PATH>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ExternalProjectsStructure$RootNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="idear" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ProjectNode" />
+              </PATH_ELEMENT>
+            </PATH>
+            <PATH>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ExternalProjectsStructure$RootNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="idear" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ProjectNode" />
+              </PATH_ELEMENT>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="Tasks" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.TasksNode" />
+              </PATH_ELEMENT>
+            </PATH>
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="idear" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="DefaultKeyCommand.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChangeToTargetMode.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ShowBeginningOfLines.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ShowFirstCharOfLines.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AceCanvas.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/AceCanvas.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="75" column="17" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AceJumpAction.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumpAction.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.41997853">
+              <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CustomMicrophone.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.851851">
+              <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-14.481482">
+              <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AceUtil.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceUtil.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="availableProjects">
+      <map>
+        <entry>
+          <key>
+            <ExternalProjectPojo>
+              <option name="name" value="idear" />
+              <option name="path" value="$PROJECT_DIR$" />
+            </ExternalProjectPojo>
+          </key>
+          <value>
+            <list>
+              <ExternalProjectPojo>
+                <option name="name" value="idear" />
+                <option name="path" value="$PROJECT_DIR$" />
+              </ExternalProjectPojo>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="availableTasks">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <list>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles the outputs of this project." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="assemble" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles and tests this project." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="build" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles and tests this project and all projects that depend on it." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="buildDependents" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles and tests this project and all projects it depends on." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="buildNeeded" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Bundles the project as a distribution." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="buildPlugin" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Runs all checks." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="check" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles classes 'main'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="classes" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Deletes the build directory." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="clean" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Compiles Java source 'main:java'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="compileJava" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Compiles the source set 'main'.kotlin." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="compileKotlin" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Compiles Java source 'test:java'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="compileTestJava" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Compiles the source set 'test'.kotlin." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="compileTestKotlin" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays the components produced by root project 'idear'. [incubating]" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="components" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays all dependencies declared in root project 'idear'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="dependencies" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays the insight into a specific dependency in root project 'idear'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="dependencyInsight" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays a help message." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="help" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Initializes a new Gradle build. [incubating]" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="init" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles a jar archive containing the main classes." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="jar" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Generates Javadoc API documentation for the main source code." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="javadoc" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays the configuration model of root project 'idear'. [incubating]" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="model" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Set plugin version, since-build and until-build values in plugin.xml." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="patchPluginXml" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Creates a folder containing the plugins to run Intellij IDEA with." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareSandbox" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Processes JVM resources 'main:resources'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="processResources" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Processes JVM resources 'test:resources'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="processTestResources" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays the sub-projects of root project 'idear'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="projects" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays the properties of root project 'idear'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="properties" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Publish plugin distribution on plugins.jetbrains.com." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="publishPlugin" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Runs Intellij IDEA with installed plugin." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="runIdea" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Displays the tasks runnable from root project 'idear'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="tasks" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Runs the unit tests." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="test" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Assembles classes 'test'." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="testClasses" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Generates Gradle wrapper files. [incubating]" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="wrapper" />
+              </ExternalTaskPojo>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="modificationStamps">
+      <map>
+        <entry key="$PROJECT_DIR$" value="2895660269623" />
+        <entry key="$PROJECT_DIR$/../../idear" value="1447826846416" />
+      </map>
+    </option>
+    <option name="projectBuildClasspath">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <ExternalProjectBuildClasspathPojo>
+              <option name="modulesBuildClasspath">
+                <map>
+                  <entry key="$PROJECT_DIR$">
+                    <value>
+                      <ExternalModuleBuildClasspathPojo>
+                        <option name="entries">
+                          <list>
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/0.1-SNAPSHOT/330b3f31c65464aef246c9b51458d3376cb3550d/kotlin-stdlib-0.1-SNAPSHOT.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/annotations.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/asm-all.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/asm-commons.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/asm.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/asm4-all.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/automaton.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/boot.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/bootstrap.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/cglib-2.2.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/cli-parser-1.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/commons-codec-1.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/commons-httpclient-3.1-patched.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/commons-logging-1.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/commons-net-3.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/coverage-agent.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/coverage-instrumenter.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/coverage-util.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/ecj-4.4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/extensions.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/fluent-hc-4.4.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/forms_rt.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/groovy-all-2.3.9.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/gson-2.3.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/guava-17.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/hamcrest-core-1.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/httpclient-4.4.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/httpcore-4.4.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/httpmime-4.4.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/icons.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/idea.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/idea_rt.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/imgscalr-lib-4.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/isorelax.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/javac2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jaxen-1.1.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jayatana-1.2.4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jcip-annotations.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jdkAnnotations.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jdom.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jgoodies-common-1.2.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jgoodies-forms.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jgoodies-looks-2.4.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jh.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jing.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jna-platform.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jna.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jps-builders.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jps-launcher.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jps-model.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsch-0.1.52.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsch.agentproxy.connector-factory.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsch.agentproxy.core.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsch.agentproxy.pageant.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsch.agentproxy.sshagent.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsch.agentproxy.usocket-jna.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsch.agentproxy.usocket-nc.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsr166e.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jsr173_1.0_api.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/junit-4.12.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/junit.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/jzlib-1.1.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/kotlin-reflect.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/kotlin-runtime.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/log4j.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/markdown4j-2.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/markdownj-core-0.4.2-SNAPSHOT.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/microba.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/miglayout-swing.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/nanoxml-2.2.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/nekohtml-1.9.14.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/netty-all-4.1.0.Beta6.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/openapi.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/optimizedFileManager.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/oromatcher.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/picocontainer.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/protobuf-2.5.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/proxy-vole_20131209.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/pty4j-0.5.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/purejavacomm.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/resolver.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/resources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/resources_en.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/rhino-js-1_7R4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/rngom-20051226-patched.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/sanselan-0.98-snapshot.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/serviceMessages.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/slf4j-api-1.7.10.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/slf4j-log4j12-1.7.10.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/snappy-in-java-0.3.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/swingx-core-1.6.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/trang-core.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/trove4j.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/util.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/velocity.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/winp-1.23.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/xbean.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/xercesImpl.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/xml-apis.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/xmlrpc-2.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/xpp3-1.1.4-min.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/lib/xstream-1.4.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/plugins/coverage/lib/coverage-report-idea.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/plugins/coverage/lib/coverage-report.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/plugins/coverage/lib/coverage.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/plugins/coverage/lib/coverage_rt.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/plugins/coverage/lib/freemarker.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/plugins/coverage/lib/jacocoagent.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.1/a0217d95925df8e423046a885c9d9c3ac6aff8f6/ideaIC-15.0.1/plugins/coverage/lib/jacocoant.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-runtime/0.1-SNAPSHOT/6da4d89e7c8129077d71f85f17e4347b201e1339/kotlin-runtime-0.1-SNAPSHOT.jar" />
+                            <option value="$MODULE_DIR$/libs/commons-codec-1.6.jar" />
+                            <option value="$MODULE_DIR$/libs/commons-logging-1.1.3.jar" />
+                            <option value="$MODULE_DIR$/libs/freemarker-2.3.8.jar" />
+                            <option value="$MODULE_DIR$/libs/httpasyncclient-4.0.2.jar" />
+                            <option value="$MODULE_DIR$/libs/httpclient-4.3.6.jar" />
+                            <option value="$MODULE_DIR$/libs/httpcore-4.3.3.jar" />
+                            <option value="$MODULE_DIR$/libs/httpcore-nio-4.3.2.jar" />
+                            <option value="$MODULE_DIR$/libs/httpmime-4.3.6.jar" />
+                            <option value="$MODULE_DIR$/libs/jettison-1.3.7.jar" />
+                            <option value="$MODULE_DIR$/libs/json-20140107.jar" />
+                            <option value="$MODULE_DIR$/libs/kotlin-reflect.jar" />
+                            <option value="$MODULE_DIR$/libs/kotlin-runtime-sources.jar" />
+                            <option value="$MODULE_DIR$/libs/kotlin-runtime.jar" />
+                            <option value="$MODULE_DIR$/libs/marytts-client-5.2-SNAPSHOT-jar-with-dependencies.jar" />
+                            <option value="$MODULE_DIR$/libs/marytts-lang-en-5.2-SNAPSHOT.jar" />
+                            <option value="$MODULE_DIR$/libs/marytts-runtime-5.2-SNAPSHOT-jar-with-dependencies.jar" />
+                            <option value="$MODULE_DIR$/libs/opennlp-tools-1.6.0.jar" />
+                            <option value="$MODULE_DIR$/libs/sphinx4-core-1.0-20150630.174404-9-sources.jar" />
+                            <option value="$MODULE_DIR$/libs/sphinx4-core-1.0-20150630.174404-9.jar" />
+                            <option value="$MODULE_DIR$/libs/stax-api-1.0.1.jar" />
+                            <option value="$MODULE_DIR$/libs/unirest-java-1.4.6.jar" />
+                            <option value="$MODULE_DIR$/libs/voice-cmu-slt-hsmm-5.1.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/1.0.0-beta-2423/ec1de915241dbb473ea0064acbd569005fdd3726/kotlin-gradle-plugin-1.0.0-beta-2423-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin/1.0.0-beta-2423/f34704b6d20246a8a688c0d94773c95fcada3d70/kotlin-gradle-plugin-1.0.0-beta-2423.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.org.jetbrains/gradle-intellij-plugin/0.0.28/3832ae2cbe80ea6848e684252dfa5f680f870ab2/gradle-intellij-plugin-0.0.28-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.org.jetbrains/gradle-intellij-plugin/0.0.28/a78da0635271b414754e3b12dfd85f58e23dcff6/gradle-intellij-plugin-0.0.28.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.0.0-beta-2423/3c5728229a38ee5710bab158f5fbf1c39a58e889/kotlin-stdlib-1.0.0-beta-2423-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.0.0-beta-2423/505079036188f1e15d0fec2ba173dd52d9b575a3/kotlin-stdlib-1.0.0-beta-2423.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin-core/1.0.0-beta-2423/6f747ca36d767fb3e8b882f623f1cf41ef6a4ab8/kotlin-gradle-plugin-core-1.0.0-beta-2423-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin-core/1.0.0-beta-2423/975616529bc02eec62a4b91b90b8d1057912d031/kotlin-gradle-plugin-core-1.0.0-beta-2423.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin-api/1.0.0-beta-2423/d95ecda5e3eb2d75b8f79aca8e3cc99c847f5899/kotlin-gradle-plugin-api-1.0.0-beta-2423-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-gradle-plugin-api/1.0.0-beta-2423/88b90babea9f530085ba97df725f31ee577ab7bf/kotlin-gradle-plugin-api-1.0.0-beta-2423.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/5991ca87ef1fb5544943d9abc5a9a37583fabe03/annotations-13.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy.modules.http-builder/http-builder/0.7.1/a7396f0103337835621526d95021afc06c65c7b2/http-builder-0.7.1-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy.modules.http-builder/http-builder/0.7.1/a21771ae3da5ce9f5c4d7a60c1e716666aa2acf9/http-builder-0.7.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.1/2aab83661676c842d50995fe934550e3e23b3c6/httpmime-4.5.1-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.5.1/96823b9421ebb9f490dec837d9f96134e864e3a7/httpmime-4.5.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-runtime/1.0.0-beta-2423/d65abc75ef2c641e7317ac1271317ba4c269ff83/kotlin-runtime-1.0.0-beta-2423-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-runtime/1.0.0-beta-2423/593d30030ae8853fa40c793d2b22a1c27c44dc01/kotlin-runtime-1.0.0-beta-2423.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.4/f2d8698c46d1167ff24b06a840a87d91a02db891/commons-io-2.4-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.4/b1b6ea3b7e4aa4f492509a4952029cd8e48019ad/commons-io-2.4.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-lang/commons-lang/2.6/67313d715fbf0ea4fd0bdb69217fb77f807a8ce5/commons-lang-2.6-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-lang/commons-lang/2.6/ce1edb914c94ebc388f086c6827e8bdeec71ac2/commons-lang-2.6.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/1.0.0-beta-2423/92e4f9862980bdd1a4d7f5da8afc6fef8166ef5d/kotlin-compiler-embeddable-1.0.0-beta-2423-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/1.0.0-beta-2423/780f46410ddc0ec562003df3d8863a46b0515e43/kotlin-compiler-embeddable-1.0.0-beta-2423.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.json-lib/json-lib/2.3/f35340c0a0380141f62c72b76c8fb4bfa638d8c1/json-lib-2.3-jdk15.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.nekohtml/nekohtml/1.9.16/2d40ea21fae95418331ddc66efb6744a38bf59a/nekohtml-1.9.16-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.nekohtml/nekohtml/1.9.16/61e35204e5a8fdb864152f84e2e3b33ab56f50ab/nekohtml-1.9.16.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/xml-resolver/xml-resolver/1.2/6b72432ea1c5296783007365bb7c9a6b39dfb730/xml-resolver-1.2-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/xml-resolver/xml-resolver/1.2/3d0f97750b3a03e0971831566067754ba4bfd68c/xml-resolver-1.2.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-beanutils/commons-beanutils/1.8.0/2818502bbb50bbcbd3f57e92a2bfe4d496f37688/commons-beanutils-1.8.0-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-beanutils/commons-beanutils/1.8.0/c651d5103c649c12b20d53731643e5fffceb536/commons-beanutils-1.8.0.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-collections/commons-collections/3.2.1/fa095ef874374e5b2a11f8b06c26a5d68c7cb3a4/commons-collections-3.2.1-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-collections/commons-collections/3.2.1/761ea405b9b37ced573d2df0d1e3a4e0f9edc668/commons-collections-3.2.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.ezmorph/ezmorph/1.0.6/298992280d62b944afd0ae9bfe3329f5487dd434/ezmorph-1.0.6-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.ezmorph/ezmorph/1.0.6/1e55d2a0253ea37745d33062852fd2c90027432/ezmorph-1.0.6.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/xerces/xercesImpl/2.9.1/1136d197e2755bbde296ceee217ec5fe2917477b/xercesImpl-2.9.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.1/c0ecd55724129bbd48850314b4ff8a360d670662/httpclient-4.5.1-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.1/7e3cecc566df91338c6c67883b89ddd05a17db43/httpclient-4.5.1.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.3/b972b5dfd2db7d41d76a6fc5445852522a136e2e/httpcore-4.4.3-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.3/e876a79d561e5c6207b78d347e198c8c4531a5e5/httpcore-4.4.3.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.9/3f15fff45d57656685abfee9e8302bf14580044c/commons-codec-1.9-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.9/9ce04e34240f674bc72680f8b843b1457383161a/commons-codec-1.9.jar" />
+                          </list>
+                        </option>
+                        <option name="path" value="$PROJECT_DIR$" />
+                      </ExternalModuleBuildClasspathPojo>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="name" value="idear" />
+              <option name="projectBuildClasspath">
+                <list>
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/announce" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/antlr" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/base-services" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/base-services-groovy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/build-comparison" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/build-init" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/cli" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/code-quality" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/core" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/dependency-management" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/diagnostics" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/ear" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/ide" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/ide-native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/internal-integ-testing" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/internal-testing" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/ivy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/jacoco" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/javascript" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/jetty" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/language-groovy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/language-java" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/language-jvm" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/language-native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/language-scala" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/launcher" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/maven" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/messaging" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/model-core" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/model-groovy" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/open-api" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/osgi" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/platform-base" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/platform-jvm" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/platform-native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/platform-play" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/plugin-development" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/plugin-use" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/plugins" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/publish" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/reporting" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/resources" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/resources-http" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/resources-s3" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/resources-sftp" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/scala" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/signing" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/sonar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/testing-native" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/tooling-api" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/tooling-api-builders" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/ui" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/src/wrapper" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/ant-1.9.3.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/ant-launcher-1.9.3.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-base-services-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-base-services-groovy-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-cli-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-core-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-docs-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-launcher-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-messaging-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-model-core-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-model-groovy-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-native-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-open-api-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-resources-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-tooling-api-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-ui-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/gradle-wrapper-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/groovy-all-2.3.10.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-announce-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-antlr-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-build-comparison-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-build-init-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-code-quality-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-dependency-management-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-diagnostics-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-ear-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-ide-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-ide-native-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-ivy-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-jacoco-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-javascript-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-jetty-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-language-groovy-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-language-java-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-language-jvm-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-language-native-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-language-scala-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-maven-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-osgi-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-platform-base-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-platform-jvm-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-platform-native-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-platform-play-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-plugin-development-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-plugin-use-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-plugins-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-publish-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-reporting-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-resources-http-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-resources-s3-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-resources-sftp-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-scala-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-signing-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-sonar-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-testing-native-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/gradle-tooling-api-builders-2.5.jar" />
+                  <option value="$USER_HOME$/.gradle/wrapper/dists/gradle-2.5-all/d3xh0kipe7wr2bvnx5sk0hao8/gradle-2.5/lib/plugins/ivy-2.2.0.jar" />
+                  <option value="$PROJECT_DIR$/buildSrc/src/main/java" />
+                  <option value="$PROJECT_DIR$/buildSrc/src/main/groovy" />
+                </list>
+              </option>
+            </ExternalProjectBuildClasspathPojo>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/resources/META-INF/plugin.xml" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1358" />
+    <option name="y" value="-320" />
+    <option name="width" value="1936" />
+    <option name="height" value="1092" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idear" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/libs/voice-cmu-slt-hsmm-5.1.2.jar!/" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="SearchEverywhereHistoryKey" value="custommic&#9;PSI&#9;JAVA://com.jetbrains.idear.recognizer.CustomMicrophone" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\breandan\Desktop\gradle\idear\src\main\resources" />
+      <recent name="C:\Users\breandan\Desktop\gradle\idear\src\main\java\com\johnlindquist\acejump" />
+      <recent name="C:\Users\breandan\Desktop\gradle\idear" />
+      <recent name="C:\Users\breandan\Desktop\gradle\idear\src\main\kotlin" />
+      <recent name="C:\Users\breandan\Desktop\gradle\idear\src\main\resources\META-INF" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\breandan\Desktop\gradle\idear\src\main\java\com\johnlindquist\acejump" />
+      <recent name="C:\Users\breandan\Desktop\gradle\idear\src\main\kotlin\johnlindquist" />
+      <recent name="C:\Users\breandan\Desktop\gradle\idear\src\main\kotlin" />
+      <recent name="C:\Users\breandan\Desktop\gradle\idear\src\main\java" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.runIdea">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JUnitTestDiscovery" factoryName="JUnit Test Discovery" changeList="All">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="JarApplication" factoryName="JAR Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="SCRATCH_FILE_ID" value="0" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="idear" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNGTestDiscovery" factoryName="TestNG Test Discovery" changeList="All">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="false" name="runIdea" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runIdea" />
+          </list>
+        </option>
+        <option name="vmOptions" value="-Xmx800m -Xms256m -XX:MaxPermSize=250m -ea" />
+      </ExternalSystemSettings>
+      <method />
+    </configuration>
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="Gradle.runIdea" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9ebc887e-3658-44ca-9231-403933a7c73e" name="Default" comment="" />
+      <created>1447828969209</created>
+      <option name="number" value="Default" />
+      <updated>1447828969209</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1358" y="-320" width="1936" height="1092" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23357664" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295099" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16044776" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32889125" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32984293" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowEndOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowWhiteSpace.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/AceCanvas.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="17" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumpAction.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceUtil.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/asr/ASRService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="8.222222">
+          <caret line="12" column="10" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-33.346153">
+          <caret line="105" column="14" selection-start-line="105" selection-start-column="14" selection-end-line="105" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/java-pronouncer.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/maddyhome/idea/vim/common/CharacterPosition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.37037">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/maddyhome/idea/vim/common/TextRange.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.5555553">
+          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceFinder.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumper.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceKeyUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.6296296">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ClearResults.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/AceKeyCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ExpandResults.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowEndOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowWhiteSpace.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/DefaultKeyCommand.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ChangeToTargetMode.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowBeginningOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/keycommands/ShowFirstCharOfLines.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/ui/AceCanvas.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="17" selection-start-line="75" selection-start-column="16" selection-end-line="75" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceUtil.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/johnlindquist/acejump/AceJumpAction.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jetbrains/idear/recognizer/CustomMicrophone.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.851851">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.481482">
+          <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41997853">
+          <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>IntelliJ IDEA Community Edition IC-143.382.35</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>idear</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>voice-cmu-slt-hsmm-5.1.2</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

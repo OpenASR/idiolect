@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="marytts-client-5.2-SNAPSHOT-jar-with-dependencies">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/marytts-client-5.2-SNAPSHOT-jar-with-dependencies.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

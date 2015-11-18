@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="idear:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/idear_jar</output-path>
-    <root id="archive" name="idear.jar">
-      <element id="module-output" name="idear" />
-    </root>
-  </artifact>
-</component>

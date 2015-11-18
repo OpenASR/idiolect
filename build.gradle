@@ -1,5 +1,48 @@
-plugins {
-    id "org.jetbrains.intellij" version "0.0.28"
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.0-beta-2423'
+        classpath "gradle.plugin.org.jetbrains:gradle-intellij-plugin:0.0.28"
+    }
 }
 
 apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+intellij {
+    version '15.0.1'
+    plugins 'coverage'
+    pluginName 'idear'
+}
+
+group 'com.jetbrains'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:0.1-SNAPSHOT'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+}
