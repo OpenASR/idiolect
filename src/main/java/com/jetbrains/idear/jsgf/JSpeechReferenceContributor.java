@@ -19,7 +19,7 @@ public class JSpeechReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
-                        String text = (String) literalExpression.getValue();
+                        String text = literalExpression.getText();
                         if (text != null && text.startsWith("simple:")) {
                             return new PsiReference[]{new JSpeechReference(element, new TextRange(8, text.length() + 1))};
                         }
