@@ -12,6 +12,7 @@
  .idea/shelf
  .idea/tasks.xml
  .idea/dictionaries
+ .idea/libraries/
 
 # Sensitive or high-churn files:
 # .idea/dataSources.ids
