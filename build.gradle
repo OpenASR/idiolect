@@ -25,10 +25,15 @@ intellij {
     version '15.0.1'
     plugins 'coverage'
     pluginName 'idear'
+
+    publish {
+        pluginId '7910'
+        apply from: "gradle.properties"
+    }
 }
 
 group 'com.jetbrains'
-version '0.0.1-SNAPSHOT'
+version '1.2'
 
 repositories {
     mavenCentral()

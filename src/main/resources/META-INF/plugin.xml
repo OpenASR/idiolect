@@ -4,7 +4,7 @@
     <version>1.2</version>
     <vendor email="breandan.considine@jetbrains.com" url="http://www.jetbrains.com">JetBrains</vendor>
 
-    <description><![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands and assists with simple actions like debugging, navigation, and refactoring. For a complete list of commands, please see the <a href="https://github.com/breandan/idear/blob/master/src/resources/com.jetbrains.idear/grammars/command.gram">command grammar</a>.]]></description>
+    <description><![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands and assists with simple actions like debugging, navigation, and refactoring. For a complete list of commands, please see the <a href="https://github.com/breandan/idear/blob/master/src/main/resources/com.jetbrains.idear/grammars/command.gram">command grammar</a>.]]></description>
     <change-notes><![CDATA[Introduces debugging and AceJump navigation.]]>
     </change-notes>
 
