@@ -1,30 +1,24 @@
 package com.johnlindquist.acejump.ui
 
-import java.awt.Color
-import java.awt.Graphics
-import java.awt.Graphics2D
-import java.awt.Point
+import java.awt.*
 import javax.swing.JComponent
-import java.awt.RenderingHints
-import java.awt.AlphaComposite
-import java.awt.Font
 
 
-public class AceCanvas: JComponent() {
+class AceCanvas: JComponent() {
     var jumpInfos: List<Pair<String, Point>>? = null
-        public set
+        set
     var colorPair = Pair<Color?, Color?>(Color.BLACK, Color.WHITE)
-        public set
+        set
     var lineSpacing:Float = 0.toFloat()
-        public set
+        set
     var lineHeight:Int = 0
-        public set
+        set
 
 
     inner class FontBasedMeasurements() {
         var font = getFont()!!
         val fontWidth = getFontMetrics(font).stringWidth("w")
-        val fontHeight = font.getSize()
+        val fontHeight = font.size
 
         val rectMarginWidth = fontWidth / 2
         val doubleRectMarginWidth = rectMarginWidth * 2
@@ -36,8 +30,8 @@ public class AceCanvas: JComponent() {
         val hOffset = fontHeight - fontSpacing
     }
 
-    public override fun paint(p0: Graphics) {
-        super<JComponent>.paint(p0)
+    override fun paint(p0: Graphics) {
+        super.paint(p0)
 
         if(jumpInfos == null)
             return
@@ -45,7 +39,7 @@ public class AceCanvas: JComponent() {
         val fbm = FontBasedMeasurements()
 
 
-        for (jumpInfo in jumpInfos?.iterator()){
+        for (jumpInfo: Pair<String, Point> in jumpInfos.orEmpty()){
 
 
             val text = jumpInfo.first
@@ -59,7 +53,7 @@ public class AceCanvas: JComponent() {
 
 
             //a slight border for "pop" against the background
-            g2d.setColor(defaultBackground)
+            g2d.color = defaultBackground
 
             if(text.length == 2){
                 g2d.drawRect(originalPoint.x - fbm.rectMarginWidth - 1, originalPoint.y - fbm.rectHOffset.toInt() - 1, fbm.rectWidth + fbm.fontWidth + 1, lineHeight.toInt() + 1)
@@ -68,7 +62,7 @@ public class AceCanvas: JComponent() {
             }
 
             //the background rectangle
-            g2d.setColor(defaultForeground)
+            g2d.color = defaultForeground
 
             if(text.length == 2){
                 g2d.fillRect(originalPoint.x - fbm.rectMarginWidth, originalPoint.y - fbm.rectHOffset.toInt(), fbm.rectWidth + fbm.fontWidth, lineHeight.toInt())
@@ -79,17 +73,17 @@ public class AceCanvas: JComponent() {
 
 
             //just a touch of alpha
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85.toFloat()))
+            g2d.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.85.toFloat())
 
             //the foreground text
-            g2d.setFont(fbm.font)
-            g2d.setColor(defaultBackground)
+            g2d.font = fbm.font
+            g2d.color = defaultBackground
             g2d.drawString(text.toUpperCase(), originalPoint.x, originalPoint.y + fbm.fontHeight)
 
         }
     }
 
-    public fun clear() {
+    fun clear() {
         jumpInfos = null
         repaint()
     }

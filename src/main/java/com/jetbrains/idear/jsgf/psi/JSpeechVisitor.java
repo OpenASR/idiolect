@@ -1,10 +1,10 @@
 // This is a generated file. Not intended for manual editing.
 package com.jetbrains.idear.jsgf.psi;
 
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.jetbrains.idear.jsgf.JSpeechNamedElement;
+import org.jetbrains.annotations.NotNull;
 
 public class JSpeechVisitor extends PsiElementVisitor {
 

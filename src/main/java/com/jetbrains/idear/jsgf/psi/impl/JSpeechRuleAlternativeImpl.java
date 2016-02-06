@@ -1,16 +1,18 @@
 // This is a generated file. Not intended for manual editing.
 package com.jetbrains.idear.jsgf.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static com.jetbrains.idear.jsgf.psi.JSpeechTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.jetbrains.idear.jsgf.psi.*;
-import com.jetbrains.idear.jsgf.JSpeechPsiImplUtil;
+import com.jetbrains.idear.jsgf.psi.JSpeechRuleAlternative;
+import com.jetbrains.idear.jsgf.psi.JSpeechSequenceElement;
+import com.jetbrains.idear.jsgf.psi.JSpeechVisitor;
+import com.jetbrains.idear.jsgf.psi.JSpeechWeight;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class JSpeechRuleAlternativeImpl extends ASTWrapperPsiElement implements JSpeechRuleAlternative {
 

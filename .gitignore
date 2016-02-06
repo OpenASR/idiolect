@@ -12,7 +12,7 @@
  .idea/shelf
  .idea/tasks.xml
  .idea/dictionaries
- .idea/libraries/Gradle*.xml
+ .idea/libraries/
 
 # Sensitive or high-churn files:
 # .idea/dataSources.ids
@@ -36,7 +36,6 @@ idear.zip
 ### Gradle template
 .gradle
 build/
-gradle.properties
 
 # Ignore Gradle GUI config
 gradle-app.setting

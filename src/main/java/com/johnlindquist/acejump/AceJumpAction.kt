@@ -18,7 +18,6 @@ import com.intellij.ui.popup.AbstractPopup
 import com.johnlindquist.acejump.keycommands.*
 import com.johnlindquist.acejump.ui.AceCanvas
 import com.johnlindquist.acejump.ui.SearchBox
-import java.awt.Color
 import java.awt.Dimension
 import java.awt.Font
 import java.awt.Point
@@ -29,22 +28,21 @@ import java.util.*
 import javax.swing.JComponent
 import javax.swing.JRootPane
 import javax.swing.SwingUtilities
-import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-public open class AceJumpAction() : DumbAwareAction() {
+open class AceJumpAction() : DumbAwareAction() {
 
-    override public fun update(e: AnActionEvent?) {
-        e?.getPresentation()?.setEnabled((e?.getData(CommonDataKeys.EDITOR)) != null)
+    override fun update(e: AnActionEvent?) {
+        e?.presentation?.isEnabled = (e?.getData(CommonDataKeys.EDITOR)) != null
     }
-    override public fun actionPerformed(p0: AnActionEvent?) {
+    override fun actionPerformed(p0: AnActionEvent?) {
         val actionEvent = p0
         val project = actionEvent?.getData(CommonDataKeys.PROJECT) as Project
         val editor = actionEvent?.getData(CommonDataKeys.EDITOR) as EditorImpl
         val virtualFile = actionEvent?.getData(CommonDataKeys.VIRTUAL_FILE) as VirtualFile
-        val document = editor.getDocument() as DocumentImpl
-        val scheme = EditorColorsManager.getInstance()?.getGlobalScheme()
-        val font = Font(scheme?.getEditorFontName(), Font.BOLD, scheme?.getEditorFontSize()!!)
+        val document = editor.document as DocumentImpl
+        val scheme = EditorColorsManager.getInstance()?.globalScheme
+        val font = Font(scheme?.editorFontName, Font.BOLD, scheme?.editorFontSize!!)
         val aceFinder = AceFinder(project, document, editor, virtualFile)
         val aceJumper = AceJumper(editor, document)
         val aceCanvas = AceCanvas()
@@ -57,7 +55,7 @@ public open class AceJumpAction() : DumbAwareAction() {
             aceCanvas.repaint()
         }
         fun exit() {
-            val contentComponent: JComponent? = editor.getContentComponent()
+            val contentComponent: JComponent? = editor.contentComponent
             contentComponent?.remove(aceCanvas)
             contentComponent?.repaint()
             textAndOffsetHash.clear()
@@ -73,7 +71,7 @@ public open class AceJumpAction() : DumbAwareAction() {
 
             if (results.size == 0) return //todo: hack, in case random keystrokes make it through
             textAndOffsetHash.clear()
-            val textPointPairs: MutableList<Pair<String, Point>> = ArrayList<Pair<String, Point>>()
+            val textPointPairs: MutableList<Pair<String, Point>> = ArrayList()
             val total = results.size - 1
 
             val letters = aceFinder.getAllowedCharacters()!!
@@ -87,9 +85,9 @@ public open class AceJumpAction() : DumbAwareAction() {
 
                 var str = (i + 10).toString()
 
-                val textOffset: Int = results.get(i)
+                val textOffset: Int = results[i]
                 val point: RelativePoint? = getPointFromVisualPosition(editor, editor.offsetToVisualPosition(textOffset))
-                textPointPairs.add(Pair<String, Point>(str, point?.getOriginalPoint() as Point))
+                textPointPairs.add(Pair(str, point?.originalPoint as Point))
                 textAndOffsetHash.put(str, textOffset)
 
                 if (str == "zz") {
@@ -101,22 +99,18 @@ public open class AceJumpAction() : DumbAwareAction() {
 
 
         fun addAceCanvas() {
-            val contentComponent: JComponent? = editor.getContentComponent()
+            val contentComponent: JComponent? = editor.contentComponent
             contentComponent?.add(aceCanvas)
-            val viewport = editor.getScrollPane().getViewport()!!
-            aceCanvas.setBounds(0, 0, viewport.getWidth() + 1000, viewport.getHeight() + 1000)
-            val rootPane: JRootPane? = editor.getComponent().getRootPane()!!
-            val locationOnScreen: Point? = SwingUtilities.convertPoint(aceCanvas, (aceCanvas.getLocation()), rootPane)
+            val viewport = editor.scrollPane.viewport!!
+            aceCanvas.setBounds(0, 0, viewport.width + 1000, viewport.height + 1000)
+            val rootPane: JRootPane? = editor.component.rootPane!!
+            val locationOnScreen: Point? = SwingUtilities.convertPoint(aceCanvas, (aceCanvas.location), rootPane)
             aceCanvas.setLocation(-locationOnScreen!!.x, -locationOnScreen.y)
         }
 
         fun configureSearchBox() {
             fun setupSearchBoxKeys() {
-                val showJumpObserver: ChangeListener = object : ChangeListener {
-                    public override fun stateChanged(e: ChangeEvent) {
-                        setupJumpLocations(aceFinder.results as MutableList<Int>)
-                    }
-                }
+                val showJumpObserver: ChangeListener = ChangeListener { setupJumpLocations(aceFinder.results as MutableList<Int>) }
                 val releasedHome: AceKeyCommand = ShowBeginningOfLines(searchBox, aceFinder)
                 val releasedEnd: AceKeyCommand = ShowEndOfLines(searchBox, aceFinder)
                 releasedHome.addListener(showJumpObserver)
@@ -149,7 +143,7 @@ public open class AceJumpAction() : DumbAwareAction() {
             }
 
             setupSearchBoxKeys()
-            searchBox.setFont(font)
+            searchBox.font = font
             val popupBuilder: ComponentPopupBuilder? = JBPopupFactory.getInstance()?.createComponentPopupBuilder(searchBox, searchBox)
             popupBuilder?.setCancelKeyEnabled(true)
             val popup = (popupBuilder?.createPopup() as AbstractPopup?)
@@ -158,24 +152,21 @@ public open class AceJumpAction() : DumbAwareAction() {
 
             val width = searchBox.getFontMetrics(font).stringWidth("w")
             var dimension: Dimension? = null
-            if (width != null) {
-                dimension = Dimension(width * 2, (editor.getLineHeight()))
+                dimension = Dimension(width * 2, (editor.lineHeight))
                 if (SystemInfo.isMac) {
-                    dimension?.setSize(dimension!!.width * 2, dimension!!.height * 2)
+                    dimension.setSize(dimension.width * 2, dimension.height * 2)
                 }
 
-            }
 
-
-            popup?.setSize(dimension as Dimension)
+            popup?.size = dimension as Dimension
             searchBox.popupContainer = popup
-            searchBox.setSize(dimension as Dimension)
-            searchBox.setFocusable(true)
+            searchBox.size = dimension as Dimension
+            searchBox.isFocusable = true
             searchBox.addFocusListener(object : FocusListener {
-                public override fun focusGained(p0: FocusEvent) {
+                override fun focusGained(p0: FocusEvent) {
                     addAceCanvas()
                 }
-                public override fun focusLost(p0: FocusEvent) {
+                override fun focusLost(p0: FocusEvent) {
                     exit()
                 }
             })
@@ -185,21 +176,18 @@ public open class AceJumpAction() : DumbAwareAction() {
         configureSearchBox()
 
         fun configureAceCanvas() {
-            aceCanvas.setFont(font)
-            aceCanvas.lineHeight = editor.getLineHeight()
-            aceCanvas.lineSpacing = scheme?.getLineSpacing()!!
-            aceCanvas.colorPair = Pair<Color?, Color?>(scheme?.getDefaultBackground(), scheme?.getDefaultForeground())
+            aceCanvas.font = font
+            aceCanvas.lineHeight = editor.lineHeight
+            aceCanvas.lineSpacing = scheme?.lineSpacing!!
+            aceCanvas.colorPair = Pair(scheme?.defaultBackground, scheme?.defaultForeground)
         }
 
         configureAceCanvas()
 
 
-        ApplicationManager.getApplication()?.invokeLater(object:Runnable {
-            public override fun run() {
-                val manager = IdeFocusManager.getInstance(project)
-                manager?.requestFocus(searchBox, false)
-
-            }
+        ApplicationManager.getApplication()?.invokeLater({
+            val manager = IdeFocusManager.getInstance(project)
+            manager?.requestFocus(searchBox, false)
         });
     }
 }

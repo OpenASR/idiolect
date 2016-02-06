@@ -7,14 +7,12 @@ import java.awt.event.KeyEvent
 import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 
-public class ExpandResults(val searchBox: SearchBox, val aceFinder: AceFinder, aceJumper: AceJumper): AceKeyCommand() {
+class ExpandResults(val searchBox: SearchBox, val aceFinder: AceFinder, aceJumper: AceJumper): AceKeyCommand() {
     override fun execute(keyEvent: KeyEvent) {
-        if(searchBox.getText()?.length() == 0){
-            aceFinder.addResultsReadyListener(object:ChangeListener{
-                public override fun stateChanged(p0: ChangeEvent) {
-                    eventDispatcher?.getMulticaster()?.stateChanged(p0);
-//                    eventDispatcher?.getMulticaster()?.stateChanged(ChangeEvent(toString()));
-                }
+        if(searchBox.text?.length == 0){
+            aceFinder.addResultsReadyListener(ChangeListener { p0 ->
+                eventDispatcher?.getMulticaster()?.stateChanged(p0);
+                //                    eventDispatcher?.getMulticaster()?.stateChanged(ChangeEvent(toString()));
             });
 
             aceFinder.getEndOffset = true
@@ -25,14 +23,14 @@ public class ExpandResults(val searchBox: SearchBox, val aceFinder: AceFinder, a
             return
         }
 
-        if(keyEvent.isShiftDown()){
+        if(keyEvent.isShiftDown){
             aceFinder.contractResults()
         }
         else{
             aceFinder.expandResults()
         }
 
-        eventDispatcher?.getMulticaster()?.stateChanged(ChangeEvent(toString()));
+        eventDispatcher?.multicaster?.stateChanged(ChangeEvent(toString()));
     }
 
 }

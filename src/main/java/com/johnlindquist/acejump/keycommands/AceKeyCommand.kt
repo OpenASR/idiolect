@@ -5,7 +5,8 @@ import java.awt.event.KeyEvent
 import javax.swing.event.ChangeListener
 
 abstract class AceKeyCommand {
-    open var eventDispatcher:EventDispatcher<ChangeListener>? = EventDispatcher.create(javaClass<ChangeListener>())
+
+    open var eventDispatcher: EventDispatcher<ChangeListener>? = EventDispatcher.create(ChangeListener::class.java)
 
     abstract fun execute(keyEvent:KeyEvent)
 

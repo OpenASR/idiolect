@@ -7,8 +7,6 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
-import com.jetbrains.idear.jsgf.JSpeechFile;
-import com.jetbrains.idear.jsgf.JSpeechFileType;
 import com.jetbrains.idear.jsgf.psi.JSpeechRuleDefinition;
 
 import java.util.ArrayList;

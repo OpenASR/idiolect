@@ -5,6 +5,7 @@ package com.jetbrains.idear.jsgf;
  */
 
 import com.intellij.openapi.util.IconLoader;
+
 import javax.swing.*;
 
 public class JSpeechIcons {

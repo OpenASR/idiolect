@@ -1,16 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package com.jetbrains.idear.jsgf.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static com.jetbrains.idear.jsgf.psi.JSpeechTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.jetbrains.idear.jsgf.psi.*;
-import com.jetbrains.idear.jsgf.JSpeechPsiImplUtil;
+import com.jetbrains.idear.jsgf.psi.JSpeechLiteral;
+import com.jetbrains.idear.jsgf.psi.JSpeechVisitor;
+import org.jetbrains.annotations.NotNull;
+
+import static com.jetbrains.idear.jsgf.psi.JSpeechTypes.STRING;
 
 public class JSpeechLiteralImpl extends ASTWrapperPsiElement implements JSpeechLiteral {
 

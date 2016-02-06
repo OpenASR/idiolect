@@ -22,13 +22,13 @@ class ExtractActionRecognizer : ActionRecognizer {
         val index = data.second
 
         val newName = StringBuilder()
-        val newNameStartIndex = if (index + 1 < words.size() && words[index + 1] == "to")
+        val newNameStartIndex = if (index + 1 < words.size && words[index + 1] == "to")
             index + 2
         else
             index + 1
 
         var first = true
-        for (i in newNameStartIndex..words.size() - 1) {
+        for (i in newNameStartIndex..words.size - 1) {
             val word = if (first) words[i] else words[i].capitalize()
             newName.append(word)
             first = false

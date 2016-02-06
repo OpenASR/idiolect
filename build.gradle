@@ -1,4 +1,6 @@
 buildscript {
+    ext.kotlin_version = '1.0.0-rc-1036'
+
     repositories {
         mavenCentral()
         maven {
@@ -6,12 +8,16 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.0-beta-2423'
-        classpath 'gradle.plugin.org.jetbrains:gradle-intellij-plugin:0.0.28'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
+plugins {
+    id "org.jetbrains.intellij" version "0.0.39"
+}
+
 apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'kotlin'
 apply plugin: 'java'
 
 compileJava {
@@ -22,7 +28,7 @@ compileJava {
 apply plugin: 'kotlin'
 
 intellij {
-    version '15.0.1'
+    version 'LATEST-EAP-SNAPSHOT'
     plugins 'coverage'
     pluginName 'idear'
 
@@ -46,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:0.1-SNAPSHOT'
+//    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT'
     compile 'org.apache.opennlp:opennlp-tools:1.6.0'
     compile 'com.mashape.unirest:unirest-java:1.4.7'
@@ -56,4 +62,10 @@ dependencies {
     compile 'org.codehaus.jettison:jettison:1.3.7'
 
     testCompile 'junit:junit:4.12'
+    testCompile 'org.apache.opennlp:opennlp-tools:1.6.0'
+
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
 }
