@@ -1,11 +1,22 @@
 <idea-plugin version="2">
     <id>com.jetbrains.idear</id>
     <name>idear</name>
-    <version>1.2</version>
+    <version>1.2.1</version>
     <vendor email="breandan.considine@jetbrains.com" url="http://www.jetbrains.com">JetBrains</vendor>
 
     <description><![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands and assists with simple actions like debugging, navigation, and refactoring. For a complete list of commands, please see the <a href="https://github.com/breandan/idear/blob/master/src/main/resources/com.jetbrains.idear/grammars/command.gram">command grammar</a>.]]></description>
-    <change-notes><![CDATA[Introduces debugging and AceJump navigation.]]>
+    <change-notes>
+        <![CDATA[
+        <html>
+        <dl>
+            <dt>1.2.1</dt>
+            <dd>Add a dedicated Kotlin runtime to dependencies.</dd>
+            <dt>1.2</dt>
+            <dd>Introduces debugging and AceJump navigation.</dd>
+        </dl>
+        </html>
+        ]]>
+        <![CDATA[]]>
     </change-notes>
 
     <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
@@ -96,8 +107,7 @@
                 class="com.johnlindquist.acejump.AceJumpAction"
                 text="Ace Jump"
                 description="Search and navigate to result">
-            <keyboard-shortcut keymap="$default"
-                               first-keystroke="ctrl SEMICOLON"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl SEMICOLON"/>
             <keyboard-shortcut keymap="Mac OS X" first-keystroke="ctrl SEMICOLON"/>
             <keyboard-shortcut keymap="Mac OS X 10.5+" first-keystroke="ctrl SEMICOLON"/>
         </action>
