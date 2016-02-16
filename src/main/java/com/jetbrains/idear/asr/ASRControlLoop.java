@@ -157,7 +157,7 @@ public class ASRControlLoop implements Runnable {
 //            a.actionPerformed(event);
             ideService.invokeAction("EditorSelectWord");
         } else if (c.startsWith(SHRINK)) {
-            pressKeystroke(VK_CONTROL, VK_SHIFT, VK_W);
+            ideService.invokeAction("EditorUnSelectWord");
         } else if (c.startsWith("press")) {
             if (c.contains("delete")) {
                 pressKeystroke(VK_DELETE);
@@ -168,7 +168,7 @@ public class ASRControlLoop implements Runnable {
             } else if (c.contains(TAB)) {
                 pressKeystroke(VK_TAB);
             } else if (c.contains(UNDO)) {
-                pressKeystroke(VK_CONTROL, VK_Z);
+                ideService.invokeAction("$Undo");
             }
         } else if (c.startsWith("following")) {
             if (c.endsWith("line")) {
@@ -178,9 +178,9 @@ public class ASRControlLoop implements Runnable {
             } else if (c.endsWith("method")) {
                 pressKeystroke(VK_ALT, VK_DOWN);
             } else if (c.endsWith("tab")) {
-                pressKeystroke(VK_CONTROL, VK_TAB);
+                ideService.invokeAction("Diff.FocusOppositePane");
             } else if (c.endsWith("page")) {
-                pressKeystroke(VK_PAGE_DOWN);
+                ideService.invokeAction("Diff.FocusOppositePaneAndScroll");
             }
         } else if (c.startsWith("previous")) {
             if (c.endsWith("line")) {
@@ -194,9 +194,9 @@ public class ASRControlLoop implements Runnable {
             }
         } else if (c.startsWith("extract this")) {
             if (c.endsWith("method")) {
-                pressKeystroke(VK_CONTROL, VK_ALT, VK_M);
+                ideService.invokeAction("ExtractMethod");
             } else if (c.endsWith("parameter")) {
-                pressKeystroke(VK_CONTROL, VK_ALT, VK_P);
+                ideService.invokeAction("IntroduceParameter");
             }
         } else if (c.startsWith("inspect code")) {
             pressKeystroke(VK_ALT, VK_SHIFT, VK_I);
@@ -210,12 +210,12 @@ public class ASRControlLoop implements Runnable {
             fireGoogleSearch();
         } else if (c.contains("break point")) {
             if (c.startsWith("toggle")) {
-                pressKeystroke(VK_CONTROL, VK_F8);
+                ideService.invokeAction("ToggleLineBreakpoint");
             } else if (c.startsWith("view")) {
-                pressKeystroke(VK_CONTROL, VK_SHIFT, VK_F8);
+                ideService.invokeAction("ViewBreakpoints");
             }
         } else if (c.startsWith("debug")) {
-            pressKeystroke(VK_SHIFT, VK_F9);
+            ideService.invokeAction("Debug");
         } else if (c.startsWith("step")) {
             if (c.endsWith("over")) {
                 pressKeystroke(VK_F8);

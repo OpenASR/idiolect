@@ -28,7 +28,6 @@ class AceFinder(val project: Project, val document: DocumentImpl, val editor: Ed
 
     val eventDispatcher: EventDispatcher<ChangeListener>? = EventDispatcher.create(ChangeListener::class.java)
 
-
     val findManager = FindManager.getInstance(project)!!
     val findModel: FindModel = createFindModel(findManager)
 

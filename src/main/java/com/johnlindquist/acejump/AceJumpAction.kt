@@ -78,7 +78,7 @@ open class AceJumpAction() : DumbAwareAction() {
             var len = letters.length
             var groups = Math.floor(total.toDouble() / len)
             //            print("groups: " + groups.toString())
-            val lenMinusGroups = len - groups.toInt()
+//            val lenMinusGroups = len - groups.toInt()
             //            print("last letter: " + letters.charAt(lenMinusGroups).toString() + "\n")
 
             for (i in 0..total) {
