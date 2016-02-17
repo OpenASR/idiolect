@@ -50,16 +50,10 @@ public class IDEService {
 
     public AsyncResult<DataContext> invokeAction(String action, Function<DataContext, AnActionEvent> actionFactory) {
         return DataManager.getInstance().getDataContextFromFocus().doWhenDone(
-                (Consumer<DataContext>) dataContext -> {
-                    try {
-                        EventQueue.invokeAndWait(() -> {
-                            AnAction anAction = ActionManager.getInstance().getAction(action);
-                            anAction.actionPerformed(actionFactory.apply(dataContext));
-                        });
-                    } catch (InterruptedException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
+                (Consumer<DataContext>) dataContext -> EventQueue.invokeLater(() -> {
+                    AnAction anAction = ActionManager.getInstance().getAction(action);
+                    anAction.actionPerformed(actionFactory.apply(dataContext));
+                })
         );
     }
 
