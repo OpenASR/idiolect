@@ -5,3 +5,5 @@ Clone this repository and open in IntelliJ IDEA. To launch, run the gradle task 
 Recognition works with most popular microphones (preferably 16kHz, 16-bit). For best results, minimize background noise.
 
 Please note using the search engine functionality does not work on Windows machines at this time.
+
+For background information, check out [this presentation](https://speakerdeck.com/breandan/speech-recognition-in-java-1).
