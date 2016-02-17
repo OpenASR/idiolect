@@ -38,45 +38,46 @@ public class ASRControlLoop implements Runnable {
     public ASRControlLoop(CustomLiveSpeechRecognizer recognizer) {
         // Start-up recognition facilities
         this.recognizer = recognizer;
-
         this.ideService = ServiceManager.getService(IDEService.class);
     }
 
 
     private static final Logger logger = Logger.getLogger(ASRControlLoop.class.getSimpleName());
 
-    public static final String OPEN = "open";
-    public static final String SETTINGS = "settings";
-    public static final String RECENT = "recent";
-    public static final String TERMINAL = "terminal";
-    public static final String FOCUS = "focus";
-    public static final String EDITOR = "editor";
-    public static final String PROJECT = "project";
-    public static final String SELECTION = "selection";
-    public static final String EXPAND = "grow";
-    public static final String SHRINK = "shrink";
-    public static final String PRESS = "press";
-    public static final String DELETE = "delete";
-    public static final String DEBUG = "debug";
-    public static final String ENTER = "enter";
-    public static final String ESCAPE = "escape";
-    public static final String TAB = "tab";
-    public static final String UNDO = "undo";
-    public static final String NEXT = "next";
-    public static final String LINE = "line";
-    public static final String PAGE = "page";
-    public static final String METHOD = "method";
-    public static final String PREVIOUS = "previous";
-    public static final String INSPECT_CODE = "inspect code";
-    public static final String OKAY_GOOGLE = "okay google";
-    public static final String OK_GOOGLE = "ok google";
-    public static final String OKAY_IDEA = "okay idea";
-    public static final String OK_IDEA = "ok idea";
-    public static final String HI_IDEA = "hi idea";
-    public static final String WHERE_AM_I = "where am i";
-    public static final String NAVIGATE = "navigate";
-    public static final String EXECUTE = "execute";
-    public static final String GOTO = "goto line";
+    private static final String OPEN = "open";
+    private static final String SETTINGS = "settings";
+    private static final String RECENT = "recent";
+    private static final String TERMINAL = "terminal";
+    private static final String FOCUS = "focus";
+    private static final String EDITOR = "editor";
+    private static final String PROJECT = "project";
+    private static final String SELECTION = "selection";
+    private static final String EXPAND = "grow";
+    private static final String SHRINK = "shrink";
+    private static final String PRESS = "press";
+    private static final String DELETE = "delete";
+    private static final String DEBUG = "debug";
+    private static final String ENTER = "enter";
+    private static final String ESCAPE = "escape";
+    private static final String TAB = "tab";
+    private static final String UNDO = "undo";
+    private static final String NEXT = "next";
+    private static final String LINE = "line";
+    private static final String PAGE = "page";
+    private static final String METHOD = "method";
+    private static final String PREVIOUS = "previous";
+    private static final String INSPECT_CODE = "inspect code";
+    private static final String OKAY_GOOGLE = "okay google";
+    private static final String OK_GOOGLE = "ok google";
+    private static final String OKAY_IDEA = "okay idea";
+    private static final String OK_IDEA = "ok idea";
+    private static final String HI_IDEA = "hi idea";
+    private static final String WHERE_AM_I = "where am i";
+    private static final String NAVIGATE = "navigate";
+    private static final String EXECUTE = "execute";
+    private static final String GOTO = "goto line";
+    private static final String SHOW_USAGES = "show usages";
+
 
     @Override
     public void run() {
@@ -128,7 +129,7 @@ public class ASRControlLoop implements Runnable {
             } else if (c.endsWith(RECENT)) {
                 ideService.invokeAction(IdeActions.ACTION_RECENT_FILES);
             } else if (c.endsWith(TERMINAL)) {
-                pressKeystroke(VK_ALT, VK_F12);
+                ideService.invokeAction("ActivateTerminalToolWindow");
             }
         } else if (c.startsWith(NAVIGATE)) {
             ideService.invokeAction("GotoDeclaration");
@@ -141,14 +142,20 @@ public class ASRControlLoop implements Runnable {
             if (c.endsWith(EDITOR)) {
                 pressKeystroke(VK_ESCAPE);
             } else if (c.endsWith(PROJECT)) {
-                pressKeystroke(VK_ALT, VK_1);
+                ideService.invokeAction("ActivateProjectToolWindow");
             } else if (c.endsWith("symbols")) {
-                ideService.invokeAction("AceJumpAction");
-                ideService.type(VK_SPACE);
-                ideService.type(("" + recognizeNumber()).toCharArray());
+                ideService.invokeAction("AceJumpAction").doWhenDone((Consumer<DataContext>) dataContext -> {
+                    ideService.type(VK_SPACE);
+                    ideService.type(("" + recognizeNumber()).toCharArray());
+                });
             }
         } else if (c.startsWith(GOTO)) {
-
+            if (c.startsWith("goto line")) {
+                ideService.invokeAction("GotoLine").doWhenDone((Consumer<DataContext>) dataContext -> {
+                    ideService.type(("" + WordToNumberConverter.getNumber(c.substring(10))).toCharArray());
+                    ideService.type(VK_ENTER);
+                });
+            }
         } else if (c.startsWith(EXPAND)) {
 //            ActionManager instance = ActionManager.getInstance();
 //            AnAction a = instance.getAction("EditorSelectWord");
@@ -172,25 +179,27 @@ public class ASRControlLoop implements Runnable {
             }
         } else if (c.startsWith("following")) {
             if (c.endsWith("line")) {
-                pressKeystroke(VK_DOWN);
+                ideService.invokeAction("EditorDown");
             } else if (c.endsWith("page")) {
-                pressKeystroke(VK_PAGE_DOWN);
+                ideService.invokeAction("EditorPageDown");
             } else if (c.endsWith("method")) {
-                pressKeystroke(VK_ALT, VK_DOWN);
+                ideService.invokeAction("MethodDown");
             } else if (c.endsWith("tab")) {
                 ideService.invokeAction("Diff.FocusOppositePane");
             } else if (c.endsWith("page")) {
-                ideService.invokeAction("Diff.FocusOppositePaneAndScroll");
+                ideService.invokeAction("EditorPageDown");
             }
         } else if (c.startsWith("previous")) {
             if (c.endsWith("line")) {
-                pressKeystroke(VK_UP);
+                ideService.invokeAction("EditorUp");
             } else if (c.endsWith("page")) {
-                pressKeystroke(VK_PAGE_UP);
+                ideService.invokeAction("EditorPageUp");
             } else if (c.endsWith("method")) {
-                pressKeystroke(VK_ALT, VK_UP);
+                ideService.invokeAction("MethodUp");
+            } else if (c.endsWith("tab")) {
+                ideService.invokeAction("Diff.FocusOppositePaneAndScroll");
             } else if (c.endsWith("page")) {
-                pressKeystroke(VK_PAGE_UP);
+                ideService.invokeAction("EditorPageUp");
             }
         } else if (c.startsWith("extract this")) {
             if (c.endsWith("method")) {
@@ -199,10 +208,12 @@ public class ASRControlLoop implements Runnable {
                 ideService.invokeAction("IntroduceParameter");
             }
         } else if (c.startsWith("inspect code")) {
-            pressKeystroke(VK_ALT, VK_SHIFT, VK_I);
+            ideService.invokeAction("CodeInspection.OnEditor");
         } else if (c.startsWith("speech pause")) {
             pauseSpeech();
-        } else if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
+        } else if(c.equals(SHOW_USAGES)) {
+            ideService.invokeAction("ShowUsages");
+        } if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
             beep();
             fireVoiceCommand();
         } else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
@@ -218,14 +229,14 @@ public class ASRControlLoop implements Runnable {
             ideService.invokeAction("Debug");
         } else if (c.startsWith("step")) {
             if (c.endsWith("over")) {
-                pressKeystroke(VK_F8);
+                ideService.invokeAction("StepOver");
             } else if (c.endsWith("into")) {
-                pressKeystroke(VK_F7);
+                ideService.invokeAction("StepInto");
             } else if (c.endsWith("return")) {
-                pressKeystroke(VK_SHIFT, VK_F8);
+                ideService.invokeAction("StepOut");
             }
         } else if (c.startsWith("resume")) {
-            pressKeystroke(VK_F9);
+            ideService.invokeAction("Resume");
         } else if (c.startsWith("tell me a joke")) {
             tellJoke();
         } else if (c.contains("check")) {
@@ -308,7 +319,6 @@ public class ASRControlLoop implements Runnable {
                             0
                     )
             );
-
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
         }

@@ -20,6 +20,7 @@ grammar dialog;
                     <where_am_i_command>                            |
                     page [up | down]                                |
                     inspect code                                    |
+                    show usages                                     |
                     <jump_command>;
 
 <where_am_i_command> = where am i;

@@ -23,6 +23,9 @@ class DefaultKeyCommand(val searchBox: SearchBox, val aceFinder: AceFinder, val 
                 //                    eventDispatcher?.getMulticaster()?.stateChanged(ChangeEvent(toString()))
             })
 
+            if(searchBox.text == null) {
+                searchBox.text = " ";
+            }
             aceFinder.findText(searchBox.text!!, false)
             searchBox.disableSearch()
         } else {

@@ -2,9 +2,11 @@ package com.jetbrains.idear.ide;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.util.Consumer;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
@@ -32,8 +34,8 @@ public class IDEService {
 
     }
 
-    public void invokeAction(final String action) {
-        invokeAction(
+    public AsyncResult<DataContext> invokeAction(final String action) {
+        return invokeAction(
                 action,
                 dataContext ->
                         new AnActionEvent(null,
@@ -46,12 +48,18 @@ public class IDEService {
         );
     }
 
-    public void invokeAction(String action, Function<DataContext, AnActionEvent> actionFactory) {
-        DataManager.getInstance().getDataContextFromFocus().doWhenDone(
-                (Consumer<DataContext>) dataContext -> EventQueue.invokeLater(() -> {
-                    AnAction anAction = ActionManager.getInstance().getAction(action);
-                    anAction.actionPerformed(actionFactory.apply(dataContext));
-                })
+    public AsyncResult<DataContext> invokeAction(String action, Function<DataContext, AnActionEvent> actionFactory) {
+        return DataManager.getInstance().getDataContextFromFocus().doWhenDone(
+                (Consumer<DataContext>) dataContext -> {
+                    try {
+                        EventQueue.invokeAndWait(() -> {
+                            AnAction anAction = ActionManager.getInstance().getAction(action);
+                            anAction.actionPerformed(actionFactory.apply(dataContext));
+                        });
+                    } catch (InterruptedException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
         );
     }
 
