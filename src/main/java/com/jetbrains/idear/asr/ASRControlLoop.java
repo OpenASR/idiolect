@@ -17,12 +17,18 @@ import com.jetbrains.idear.recognizer.CustomMicrophone;
 import com.jetbrains.idear.tts.TTSService;
 import edu.cmu.sphinx.api.SpeechResult;
 
+import com.intellij.openapi.application.ApplicationInfo;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -246,6 +252,14 @@ public class ASRControlLoop implements Runnable {
                         .getDataContextFromFocus()
                         .doWhenDone((Consumer<DataContext>) dataContext -> run(nullCheckRecognizer, c, dataContext));
             }
+        } else if(c.contains("tell me about yourself")) {
+            ApplicationInfo ai = ApplicationInfo.getInstance();
+
+            Calendar cal = ai.getBuildDate();
+            SimpleDateFormat df = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
+
+
+            say("My name is " + ai.getVersionName() + ", I was built on " + df.format(cal.getTime()) + ", I am running version " + ai.getApiVersion() + " of the IntelliJ Platform, and I am registered to " + ai.getCompanyName());
         }
     }
 
@@ -293,7 +307,7 @@ public class ASRControlLoop implements Runnable {
 
         ServiceManager
                 .getService(TTSService.class)
-                .say("Did I stutter? It is me, Jah java va va, va, va. Open up already!");
+                .say("It is me, Jah java va va, va, va. Open up already!");
     }
 
     private static final long COMMAND_DURATION = 3500;
@@ -369,7 +383,7 @@ public class ASRControlLoop implements Runnable {
 
     public synchronized void say(String something) {
         ServiceManager.getService(TTSService.class)
-                .say(something);
+                .say(splitCamelCase(something));
     }
 
     public static synchronized void beep() {
@@ -391,5 +405,16 @@ public class ASRControlLoop implements Runnable {
             t.join();
         } catch (InterruptedException ignored) {
         }
+    }
+
+    static String splitCamelCase(String s) {
+        return s.replaceAll(
+                String.format("%s|%s|%s",
+                        "(?<=[A-Z])(?=[A-Z][a-z])",
+                        "(?<=[^A-Z])(?=[A-Z])",
+                        "(?<=[A-Za-z])(?=[^A-Za-z])"
+                ),
+                " "
+        );
     }
 }

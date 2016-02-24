@@ -2,6 +2,8 @@
 
 grammar dialog;
 
+<about_command> = tell me about yourself;
+
 <menu_command> =  open <menu_item>;
 
 <menu_item> = settings | recent | terminal;
@@ -62,4 +64,5 @@ public <command> =  <init_command>          |
                     <debug_command>         |
                     <joke_command>          |
                     <check_not_null>        |
-                    <keyboard_command>      ;
+                    <keyboard_command>      |
+                    <about_command>;

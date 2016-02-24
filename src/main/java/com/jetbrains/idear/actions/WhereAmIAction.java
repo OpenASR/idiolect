@@ -28,7 +28,7 @@ public class WhereAmIAction extends AnAction {
 
         while (null != (element = element.getParent())) {
             if (element instanceof PsiMethod) {
-                path.append(" in method ")
+                path.append(" inside method ")
                     .append(((PsiMethod)element).getName());
             } else if (element instanceof PsiClass) {
                 path.append(" in class ")
