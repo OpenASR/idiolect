@@ -39,5 +39,4 @@ public class WhereAmIAction extends AnAction {
         ServiceManager  .getService(TTSService.class)
                         .say("You are" + path.toString());
     }
-
 }

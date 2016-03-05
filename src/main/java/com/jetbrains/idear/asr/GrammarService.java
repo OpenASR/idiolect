@@ -6,17 +6,15 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Disposer;
-import com.jetbrains.idear.tts.TTSService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
  * Created by breandan on 7/10/2015.
  */
 public class GrammarService implements Disposable {
-    private static final Logger logger = LoggerFactory.getLogger(TTSService.class);
+    private static final Logger logger = Logger.getInstance(GrammarService.class);
 
     @Override
     public void dispose() {
@@ -31,7 +29,7 @@ public class GrammarService implements Disposable {
             public void beforeActionPerformed(AnAction anAction, DataContext dataContext, AnActionEvent anActionEvent) {
                 String actionId = actionManager.getId(anAction);
 
-                if (actionId == "someaction") {
+                if ("someaction".equals(actionId)) {
                     logger.info("Swapping in grammar for action: " + anAction.toString());
                     //swap in a context dependent grammar
                 }

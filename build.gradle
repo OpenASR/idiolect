@@ -54,7 +54,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-runtime:$kotlin_version"
     compile 'edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT'
-    compile 'org.apache.opennlp:opennlp-tools:1.6.0'
     compile 'com.mashape.unirest:unirest-java:1.4.7'
     compile 'de.dfki.mary:marytts-runtime:5.2-SNAPSHOT'
     compile 'de.dfki.mary:marytts-lang-en:5.2-SNAPSHOT'
