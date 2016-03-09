@@ -74,6 +74,11 @@ public class GoogleHelper {
 
     private static List<Pair<String, Double>> parseGSAPIResponse(String r) throws JSONException {
         List<Pair<String, Double>> res = new ArrayList<>();
+        logger.log(Level.INFO, r);
+        if (r.length() < 13) {
+            logger.log(Level.WARNING, "No result!");
+            return res;
+        }
 
         JSONObject o = new JSONObject(r.substring(13));
         JSONArray results = o.getJSONArray("result");

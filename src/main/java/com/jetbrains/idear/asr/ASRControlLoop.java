@@ -3,6 +3,7 @@ package com.jetbrains.idear.asr;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
+import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.Pair;
@@ -16,8 +17,7 @@ import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer;
 import com.jetbrains.idear.recognizer.CustomMicrophone;
 import com.jetbrains.idear.tts.TTSService;
 import edu.cmu.sphinx.api.SpeechResult;
-
-import com.intellij.openapi.application.ApplicationInfo;
+import org.jetbrains.annotations.Nullable;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -25,13 +25,12 @@ import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.jetbrains.idear.GoogleHelper.getBestTextForUtterance;
 import static java.awt.event.KeyEvent.*;
 
 /**
@@ -152,8 +151,13 @@ public class ASRControlLoop implements Runnable {
             } else if (c.endsWith("symbols")) {
                 ideService.invokeAction("AceJumpAction").doWhenDone((Consumer<DataContext>) dataContext -> {
                     ideService.type(VK_SPACE);
-                    ideService.type(("" + recognizeNumber()).toCharArray());
                 });
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ideService.type(("" + recognizeNumber()).toCharArray());
             }
         } else if (c.startsWith(GOTO)) {
             if (c.startsWith("goto line")) {
@@ -223,7 +227,6 @@ public class ASRControlLoop implements Runnable {
             beep();
             fireVoiceCommand();
         } else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
-            beep();
             fireGoogleSearch();
         } else if (c.contains("break point")) {
             if (c.startsWith("toggle")) {
@@ -258,9 +261,26 @@ public class ASRControlLoop implements Runnable {
             Calendar cal = ai.getBuildDate();
             SimpleDateFormat df = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
 
-
             say("My name is " + ai.getVersionName() + ", I was built on " + df.format(cal.getTime()) + ", I am running version " + ai.getApiVersion() + " of the IntelliJ Platform, and I am registered to " + ai.getCompanyName());
+        } else if(c.contains("add new class")) {
+            ideService.invokeAction("NewElement");
+            pressKeystroke(VK_ENTER);
+            String className = getWebSpeechResult().first;
+            if(className != null) {
+                String camelCase = convertToCamelCase(className);
+                logger.log(Level.INFO, "Class name: "+ camelCase);
+                ideService.type(camelCase);
+                pressKeystroke(VK_ENTER);
+            }
+        } else if(c.contains("print line")) {
+            ideService.type("sout");
+            pressKeystroke(VK_TAB);
         }
+    }
+
+    private String convertToCamelCase(String s) {
+        String noSpaces = s.replaceAll("([\\W_]+)([a-zA-Z0-9])", "$2".toUpperCase());
+        return noSpaces.substring(0, 1).toUpperCase() + noSpaces.substring(1);
     }
 
     private void pressKeystroke(final int... keys) {
@@ -314,7 +334,7 @@ public class ASRControlLoop implements Runnable {
 
     private void fireVoiceCommand() {
         try {
-            Pair<String, Double> commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(COMMAND_DURATION));
+            Pair<String, Double> commandTuple = getBestTextForUtterance(CustomMicrophone.recordFromMic(COMMAND_DURATION));
 
             if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                 return;
@@ -343,21 +363,31 @@ public class ASRControlLoop implements Runnable {
 
     private void fireGoogleSearch() {
 
-        try {
-            Pair<String, Double> searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION));
-
-            if (searchQueryTuple == null || searchQueryTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
-                return;
+            Pair<String, Double> searchQueryTuple = getWebSpeechResult();
+            if (searchQueryTuple == null) return;
 
             ServiceManager
                     .getService(TTSService.class)
                     .say("I think you said " + searchQueryTuple.first + ", searching Google now");
 
             GoogleHelper.searchGoogle(searchQueryTuple.first);
+    }
 
+    @Nullable
+    private Pair<String, Double> getWebSpeechResult() {
+        Pair<String, Double> searchQueryTuple = null;
+        beep();
+        try {
+                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION));
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
         }
+
+        if (searchQueryTuple == null || searchQueryTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
+            return null;
+
+        beep();
+        return searchQueryTuple;
     }
 
     private void pauseSpeech() {
@@ -372,10 +402,14 @@ public class ASRControlLoop implements Runnable {
 
     private int recognizeNumber() {
         String result;
+        logger.info("Recognizing number...");
         while (true) {
             result = getResultFromRecognizer();
-            if (result.startsWith("jump "))
-                return WordToNumberConverter.getNumber(result.substring(5));
+            if (result.startsWith("jump ")) {
+                int number = WordToNumberConverter.getNumber(result.substring(5));
+                logger.info("Recognized number: " + number);
+                return number;
+            }
         }
     }
 

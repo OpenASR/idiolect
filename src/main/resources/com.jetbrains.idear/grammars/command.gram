@@ -39,7 +39,7 @@ grammar dialog;
 
 <keyboard_command> = press [return | escape | tab | undo | delete] key;
 
-<next_command> = [following | previous] [line | method | error | tab | page];
+<next_command> = [following | previous] [line | method | error | tab | page | word];
 
 <check_not_null> = check not null;
 
@@ -48,6 +48,11 @@ grammar dialog;
 <navigate_command> = navigate;
 
 <jump_command> = jump <number>;
+
+<search_command> = okay google;
+
+<code_command> = add new class | public static void main | print line | new string;
+
 
 <number> = <hundreds> | <tens> | <teens> | <ones>;
 <hundreds> = <ones> hundred [<tens> | <teens> | <ones>];
@@ -65,4 +70,6 @@ public <command> =  <init_command>          |
                     <joke_command>          |
                     <check_not_null>        |
                     <keyboard_command>      |
-                    <about_command>;
+                    <about_command>         |
+                    <search_command>        |
+                    <code_command>;

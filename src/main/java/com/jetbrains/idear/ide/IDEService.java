@@ -6,7 +6,6 @@ import com.intellij.openapi.util.AsyncResult;
 import com.intellij.util.Consumer;
 
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
@@ -73,6 +72,14 @@ public class IDEService {
         }
 
         for (int key : keys) {
+            robot.keyRelease(key);
+        }
+    }
+
+    public void type(final String string) {
+        char[] charArray = string.toCharArray();
+        for (char key: charArray) {
+            robot.keyPress(key);
             robot.keyRelease(key);
         }
     }
