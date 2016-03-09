@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.application.ApplicationInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
 import com.jetbrains.idear.GoogleHelper;
@@ -149,15 +150,23 @@ public class ASRControlLoop implements Runnable {
             } else if (c.endsWith(PROJECT)) {
                 ideService.invokeAction("ActivateProjectToolWindow");
             } else if (c.endsWith("symbols")) {
-                ideService.invokeAction("AceJumpAction").doWhenDone((Consumer<DataContext>) dataContext -> {
-                    ideService.type(VK_SPACE);
-                });
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                AsyncResult ar = ideService.invokeAction("AceJumpAction");
+
+                while(!ar.isProcessed()) {
+                    //Spin lock
+                    logger.info("Not done...");
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        logger.warning(e.toString());
+                    }
                 }
-                ideService.type(("" + recognizeNumber()).toCharArray());
+                logger.info("Done!");
+
+                ideService.type(" ");
+                int jumpMarker = recognizeJumpMarker();
+                ideService.type("" + jumpMarker);
+                logger.info("Typed: " + jumpMarker);
             }
         } else if (c.startsWith(GOTO)) {
             if (c.startsWith("goto line")) {
@@ -186,7 +195,12 @@ public class ASRControlLoop implements Runnable {
                 pressKeystroke(VK_TAB);
             } else if (c.contains(UNDO)) {
                 ideService.invokeAction("$Undo");
+            } else if(c.contains("shift")) {
+                ideService.pressShift();
             }
+        } else if(c.startsWith("release")) {
+            if(c.contains("shift"))
+                ideService.releaseShift();
         } else if (c.startsWith("following")) {
             if (c.endsWith("line")) {
                 ideService.invokeAction("EditorDown");
@@ -400,7 +414,7 @@ public class ASRControlLoop implements Runnable {
         }
     }
 
-    private int recognizeNumber() {
+    private int recognizeJumpMarker() {
         String result;
         logger.info("Recognizing number...");
         while (true) {
@@ -441,7 +455,7 @@ public class ASRControlLoop implements Runnable {
         }
     }
 
-    static String splitCamelCase(String s) {
+    private static String splitCamelCase(String s) {
         return s.replaceAll(
                 String.format("%s|%s|%s",
                         "(?<=[A-Z])(?=[A-Z][a-z])",

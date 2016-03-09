@@ -15,11 +15,11 @@ import java.util.logging.Logger;
 public class IDEService {
     private static final Logger logger = Logger.getLogger(IDEService.class.getSimpleName());
 
-    private Robot robot;
+    private Keyboard keyboard;
 
     public IDEService() {
         try {
-            robot = new Robot();
+            keyboard = new Keyboard();
         } catch (AWTException e) {
             e.printStackTrace();
         }
@@ -57,30 +57,22 @@ public class IDEService {
     }
 
     public void type(final int... keys) {
-        for (int key : keys) {
-            robot.keyPress(key);
-        }
+        keyboard.type(keys);
+    }
 
-        for (int key : keys) {
-            robot.keyRelease(key);
-        }
+    public void pressShift() {
+        keyboard.pressShift();
+    }
+
+    public void releaseShift() {
+        keyboard.releaseShift();
     }
 
     public void type(final char... keys) {
-        for (int key : keys) {
-            robot.keyPress(key);
-        }
-
-        for (int key : keys) {
-            robot.keyRelease(key);
-        }
+        keyboard.type(keys);
     }
 
     public void type(final String string) {
-        char[] charArray = string.toCharArray();
-        for (char key: charArray) {
-            robot.keyPress(key);
-            robot.keyRelease(key);
-        }
+        keyboard.type(string);
     }
 }

@@ -37,7 +37,7 @@ grammar dialog;
 
 <debug_command> = debug | toggle break point | view break points | step over | step into | step return | resume;
 
-<keyboard_command> = press [return | escape | tab | undo | delete] key;
+<keyboard_command> = (press [return | escape | tab | undo | delete | shift] key ) | (release shift);
 
 <next_command> = [following | previous] [line | method | error | tab | page | word];
 
