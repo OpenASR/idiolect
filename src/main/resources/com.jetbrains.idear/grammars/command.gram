@@ -67,6 +67,8 @@ grammar dialog;
 
 <text_command> = enter text | enter camel case;
 
+<find_command> = find in file | find in project;
+
 public <command> =  <init_command>          |
                     <activation_command>    |
                     <menu_command>          |
@@ -81,4 +83,5 @@ public <command> =  <init_command>          |
                     <search_command>        |
                     <code_command>          |
                     <speech_command>        |
-                    <text_command>;
+                    <text_command>          |
+                    <find_command>;

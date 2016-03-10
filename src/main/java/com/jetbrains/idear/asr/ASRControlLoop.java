@@ -321,6 +321,12 @@ public class ASRControlLoop implements Runnable {
             } else if (c.startsWith("end")) {
                 ideService.type(VK_META, VK_RIGHT);
             }
+        } else if (c.startsWith("find in")) {
+            if(c.endsWith("file")) {
+                ideService.invokeAction("Find");
+            } else if(c.endsWith("project")) {
+                ideService.invokeAction("FindInPath");
+            }
         }
     }
 
