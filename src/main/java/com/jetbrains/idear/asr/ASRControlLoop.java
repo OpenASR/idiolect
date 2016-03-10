@@ -30,6 +30,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.jetbrains.idear.GoogleHelper.getBestTextForUtterance;
 import static java.awt.event.KeyEvent.*;
@@ -152,7 +154,7 @@ public class ASRControlLoop implements Runnable {
             } else if (c.endsWith("symbols")) {
                 AsyncResult ar = ideService.invokeAction("AceJumpAction");
 
-                while(!ar.isProcessed()) {
+                while (!ar.isProcessed()) {
                     //Spin lock
                     logger.info("Not done...");
                     try {
@@ -195,11 +197,11 @@ public class ASRControlLoop implements Runnable {
                 pressKeystroke(VK_TAB);
             } else if (c.contains(UNDO)) {
                 ideService.invokeAction("$Undo");
-            } else if(c.contains("shift")) {
+            } else if (c.contains("shift")) {
                 ideService.pressShift();
             }
-        } else if(c.startsWith("release")) {
-            if(c.contains("shift"))
+        } else if (c.startsWith("release")) {
+            if (c.contains("shift"))
                 ideService.releaseShift();
         } else if (c.startsWith("following")) {
             if (c.endsWith("line")) {
@@ -212,6 +214,8 @@ public class ASRControlLoop implements Runnable {
                 ideService.invokeAction("Diff.FocusOppositePane");
             } else if (c.endsWith("page")) {
                 ideService.invokeAction("EditorPageDown");
+            } else if (c.endsWith("word")) {
+                ideService.type(VK_ALT, VK_RIGHT);
             }
         } else if (c.startsWith("previous")) {
             if (c.endsWith("line")) {
@@ -235,9 +239,10 @@ public class ASRControlLoop implements Runnable {
             ideService.invokeAction("CodeInspection.OnEditor");
         } else if (c.startsWith("speech pause")) {
             pauseSpeech();
-        } else if(c.equals(SHOW_USAGES)) {
+        } else if (c.equals(SHOW_USAGES)) {
             ideService.invokeAction("ShowUsages");
-        } if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
+        }
+        if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
             beep();
             fireVoiceCommand();
         } else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
@@ -249,7 +254,8 @@ public class ASRControlLoop implements Runnable {
                 ideService.invokeAction("ViewBreakpoints");
             }
         } else if (c.startsWith("debug")) {
-            ideService.invokeAction("Debug");
+//            ideService.invokeAction("Debug");
+            ideService.type(VK_CONTROL, VK_SHIFT, VK_F9);
         } else if (c.startsWith("step")) {
             if (c.endsWith("over")) {
                 ideService.invokeAction("StepOver");
@@ -269,32 +275,67 @@ public class ASRControlLoop implements Runnable {
                         .getDataContextFromFocus()
                         .doWhenDone((Consumer<DataContext>) dataContext -> run(nullCheckRecognizer, c, dataContext));
             }
-        } else if(c.contains("tell me about yourself")) {
+        } else if (c.contains("tell me about yourself")) {
             ApplicationInfo ai = ApplicationInfo.getInstance();
 
             Calendar cal = ai.getBuildDate();
             SimpleDateFormat df = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
 
             say("My name is " + ai.getVersionName() + ", I was built on " + df.format(cal.getTime()) + ", I am running version " + ai.getApiVersion() + " of the IntelliJ Platform, and I am registered to " + ai.getCompanyName());
-        } else if(c.contains("add new class")) {
+        } else if (c.contains("add new class")) {
             ideService.invokeAction("NewElement");
             pressKeystroke(VK_ENTER);
-            String className = getWebSpeechResult().first;
-            if(className != null) {
-                String camelCase = convertToCamelCase(className);
-                logger.log(Level.INFO, "Class name: "+ camelCase);
+            Pair<String, Double> className = getWebSpeechResult();
+            if (className != null) {
+                String camelCase = convertToCamelCase(className.first);
+                logger.log(Level.INFO, "Class name: " + camelCase);
+                camelCase = camelCase.substring(0, 1).toUpperCase() + camelCase.substring(1);
                 ideService.type(camelCase);
                 pressKeystroke(VK_ENTER);
             }
-        } else if(c.contains("print line")) {
+        } else if (c.contains("print line")) {
             ideService.type("sout");
             pressKeystroke(VK_TAB);
+        } else if (c.contains("new string")) {
+            Pair<String, Double> result = getWebSpeechResult();
+            if (result != null) {
+                ideService.type(VK_SHIFT, VK_QUOTE);
+                ideService.type(result.first);
+                ideService.type(VK_SHIFT, VK_QUOTE);
+            }
+        } else if (c.contains("enter ")) {
+            Pair<String, Double> result = getWebSpeechResult();
+            if (result != null) {
+                if (c.endsWith("text")) {
+                    ideService.type(result.first);
+                } else if (c.endsWith("camel case")) {
+                    ideService.type(convertToCamelCase(result.first));
+                }
+            }
+        } else if (c.contains("public static void main")) {
+            ideService.type("psvm");
+            pressKeystroke(VK_TAB);
+        } else if (c.endsWith("of line")) {
+            if (c.startsWith("beginning")) {
+                ideService.type(VK_META, VK_LEFT);
+            } else if (c.startsWith("end")) {
+                ideService.type(VK_META, VK_RIGHT);
+            }
         }
     }
 
     private String convertToCamelCase(String s) {
-        String noSpaces = s.replaceAll("([\\W_]+)([a-zA-Z0-9])", "$2".toUpperCase());
-        return noSpaces.substring(0, 1).toUpperCase() + noSpaces.substring(1);
+        Matcher m = Pattern.compile("([\\s]+)([A-Za-z0-9])").matcher(s);
+        StringBuilder sb = new StringBuilder();
+        int last = 0;
+        while (m.find()) {
+            sb.append(s.substring(last, m.start()));
+            sb.append(m.group(2).toUpperCase());
+            last = m.end();
+        }
+        sb.append(s.substring(last));
+
+        return sb.toString();
     }
 
     private void pressKeystroke(final int... keys) {
@@ -377,14 +418,14 @@ public class ASRControlLoop implements Runnable {
 
     private void fireGoogleSearch() {
 
-            Pair<String, Double> searchQueryTuple = getWebSpeechResult();
-            if (searchQueryTuple == null) return;
+        Pair<String, Double> searchQueryTuple = getWebSpeechResult();
+        if (searchQueryTuple == null) return;
 
-            ServiceManager
-                    .getService(TTSService.class)
-                    .say("I think you said " + searchQueryTuple.first + ", searching Google now");
+        ServiceManager
+                .getService(TTSService.class)
+                .say("I think you said " + searchQueryTuple.first + ", searching Google now");
 
-            GoogleHelper.searchGoogle(searchQueryTuple.first);
+        GoogleHelper.searchGoogle(searchQueryTuple.first);
     }
 
     @Nullable
@@ -392,7 +433,7 @@ public class ASRControlLoop implements Runnable {
         Pair<String, Double> searchQueryTuple = null;
         beep();
         try {
-                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION));
+            searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION));
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e);
         }
@@ -405,10 +446,12 @@ public class ASRControlLoop implements Runnable {
     }
 
     private void pauseSpeech() {
+        beep();
         String result;
         while (ListeningState.isActive()) {
             result = getResultFromRecognizer();
             if (result.equals("speech resume")) {
+                beep();
                 break;
             }
         }

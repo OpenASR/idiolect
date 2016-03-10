@@ -61,8 +61,6 @@ dependencies {
     compile 'org.codehaus.jettison:jettison:1.3.7'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.apache.opennlp:opennlp-tools:1.6.0'
-
 }
 
 sourceSets {
