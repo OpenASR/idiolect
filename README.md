@@ -6,4 +6,4 @@ Recognition works with most popular microphones (preferably 16kHz, 16-bit). For 
 
 Please note using the search engine functionality does not work on Windows machines at this time.
 
-For background information, check out [this presentation](https://speakerdeck.com/breandan/speech-recognition-in-java-1).
+For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
