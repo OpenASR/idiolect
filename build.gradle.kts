@@ -24,6 +24,7 @@ apply {
 configure<IntelliJPluginExtension> {
   pluginName = "AceJump"
   updateSinceUntilBuild = false
+//  plugins = arrayOf("com.johnlindquist.acejump")
 }
 
 group = "com.jetbrains"

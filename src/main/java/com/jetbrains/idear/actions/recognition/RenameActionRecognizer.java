@@ -1,7 +1,6 @@
 package com.jetbrains.idear.actions.recognition;
 
 import com.intellij.openapi.actionSystem.DataContext;
-import freemarker.template.utility.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class RenameActionRecognizer implements ActionRecognizer {
@@ -27,7 +26,7 @@ public class RenameActionRecognizer implements ActionRecognizer {
         StringBuilder newName = new StringBuilder();
         boolean first = true;
         for (int i = renameIndex + 2; i < words.length; i++) {
-            String word = first ? words[i] : StringUtil.capitalize(words[i]);
+            String word = first ? words[i] : words[i].toUpperCase();
             newName.append(word);
             first = false;
         }
