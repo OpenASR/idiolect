@@ -1,33 +1,40 @@
-package com.jetbrains.idear
+package com.jetbrains.idear.actions
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionManager
+import com.intellij.openapi.editor.actionSystem.TypedAction
 import com.jetbrains.idear.actions.recognition.ActionCallInfo
 import com.jetbrains.idear.actions.recognition.TextToActionConverter
 
-class VoiceAction : AnAction() {
+abstract class ExecuteActionByCommandText : AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val dataContext = e.dataContext
-        val editor = CommonDataKeys.EDITOR.getData(dataContext)
+        val editor = CommonDataKeys.EDITOR.getData(dataContext)!!
+
+        //        String text = "idea extract to field";
+        //        String text = "idea extract to variable name";
+        //        String text = "idea inline";
+
+        val text = "surround with not null check"
 
         val provider = TextToActionConverter(e.dataContext)
-        val callInfo = provider.extractAction(e.getData(KEY)!!)
-        invoke(editor!!, callInfo)
+        val info = provider.extractAction(text)
+        invoke(editor, info)
     }
 
-    private operator fun invoke(editor: Editor, info: ActionCallInfo) {
+    protected operator fun invoke(editor: Editor, info: ActionCallInfo) {
         val action = ActionManager.getInstance().getAction(info.actionId)
-
         val type = info.typeAfter
         val isHitTabAfter = info.hitTabAfter
 
         val manager = DataManager.getInstance()
         if (manager != null) {
             val context = manager.getDataContext(editor.contentComponent)
-            action.actionPerformed(AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0))
+
+            action.actionPerformed(buildActionEvent(info, action, context))
 
             if (type != null) {
                 typeText(editor, type, context)
@@ -61,8 +68,10 @@ class VoiceAction : AnAction() {
         }
     }
 
-    companion object {
-
-        /* package */ private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
+    private fun buildActionEvent(info: ActionCallInfo, action: AnAction, context: DataContext): AnActionEvent {
+        return if (info.getActionEvent() != null)
+            info.getActionEvent()
+        else
+            AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0)
     }
 }

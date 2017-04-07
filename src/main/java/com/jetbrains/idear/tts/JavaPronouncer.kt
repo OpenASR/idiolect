@@ -2,9 +2,7 @@ package com.jetbrains.idear.tts
 
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.lang.java.JavaLanguage
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.SelectionModel
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
@@ -41,7 +39,7 @@ class JavaPronouncer : IntentionAction {
 
         val converter = CodeToTextConverter(psiFile, range, caretOffset)
 
-        val service = ServiceManager.getService(TTSService::class.java)
+        val service = TTSService
         service.say(converter.toText())
     }
 

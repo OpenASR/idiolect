@@ -6,21 +6,15 @@ import marytts.exceptions.MaryConfigurationException
 import marytts.exceptions.SynthesisException
 import marytts.modules.synthesis.Voice
 import marytts.util.data.audio.AudioPlayer
-
-import javax.sound.sampled.AudioInputStream
-import java.util.Locale
-import java.util.Scanner
+import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
 /**
  * Created by breandan on 7/9/2015.
  */
-class TTSService {
-    companion object {
-        val logger = Logger.getLogger(TTSService::class.java.simpleName)
-    }
-
+object TTSService {
+    val logger = Logger.getLogger(TTSService::class.java.simpleName)
     private var voice: Voice? = null
     var maryTTS: MaryInterface? = null
 
@@ -62,11 +56,14 @@ class TTSService {
 
     }
 
+    fun dispose() {
+
+    }
+
 }
 
 fun main(args: Array<String>) {
-
-    val ttService = TTSService()
+    val ttService = TTSService
     val scan = Scanner(System.`in`)
 
     while (true) {

@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.*
 import com.intellij.util.Consumer
 import java.awt.EventQueue
 
-class IDEService {
+object IDEService {
     val defaultActionFactory = { dataContext: DataContext ->
         AnActionEvent(null, dataContext, ActionPlaces.UNKNOWN, Presentation(), ActionManager.getInstance(), 0)
     }
@@ -17,7 +17,6 @@ class IDEService {
                 } } as Consumer<DataContext>)
 
     fun type(vararg keys: Int) {
-        invokeAction("test")
         Keyboard.type(*keys)
     }
 

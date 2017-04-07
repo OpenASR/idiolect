@@ -1,6 +1,6 @@
 package com.jetbrains.idear.ide
 
-import java.awt.*
+import java.awt.Robot
 import java.awt.event.KeyEvent.*
 
 object Keyboard {

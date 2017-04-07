@@ -1,6 +1,5 @@
 package com.jetbrains.idear
 
-import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.components.ApplicationComponent
 import com.intellij.openapi.components.ServiceManager
@@ -25,8 +24,6 @@ class Idear : ApplicationComponent {
         try {
             val classLoader = plugin.pluginClassLoader
             Thread.currentThread().contextClassLoader = classLoader
-            //nasty hack to load TTSService with appropriate constructor
-            val service = ServiceManager.getService(TTSService::class.java)
         } finally {
             Thread.currentThread().contextClassLoader = current
         }
@@ -34,7 +31,7 @@ class Idear : ApplicationComponent {
 
     override fun disposeComponent() {
         ServiceManager.getService(ASRService::class.java).dispose()
-        ServiceManager.getService(TTSService::class.java).dispose()
+        TTSService.dispose()
     }
 
     override fun getComponentName(): String {

@@ -1,9 +1,9 @@
 package com.jetbrains.idear.recognizer
 
-import javax.sound.sampled.*
 import java.io.File
 import java.io.IOException
 import java.util.logging.Logger
+import javax.sound.sampled.*
 
 class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigEndian: Boolean) {
     private val line: TargetDataLine
