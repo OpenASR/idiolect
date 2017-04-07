@@ -9,9 +9,6 @@ public abstract class ParserService {
     public void init() {
     }
 
-    public void dispose() {
-    }
-
     @Nullable
     public abstract Parse parseSentence(String sentence);
 

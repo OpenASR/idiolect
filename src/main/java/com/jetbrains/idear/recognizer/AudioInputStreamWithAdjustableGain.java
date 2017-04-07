@@ -1,14 +1,11 @@
 package com.jetbrains.idear.recognizer;
 
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.TargetDataLine;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Logger;
 
 public class AudioInputStreamWithAdjustableGain extends AudioInputStream {
-
     private static final double DEFAULT_MASTER_GAIN = 1.0;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
 
@@ -17,14 +14,7 @@ public class AudioInputStreamWithAdjustableGain extends AudioInputStream {
 
     private static final Logger logger = Logger.getLogger(AudioInputStreamWithAdjustableGain.class.getSimpleName());
 
-    public AudioInputStreamWithAdjustableGain(InputStream stream, AudioFormat format, long length) {
-        super(stream, format, length);
-
-        masterGain = DEFAULT_MASTER_GAIN;
-        noiseLevel = DEFAULT_NOISE_LEVEL;
-    }
-
-    public AudioInputStreamWithAdjustableGain(TargetDataLine line) {
+    AudioInputStreamWithAdjustableGain(TargetDataLine line) {
         super(line);
 
         masterGain = DEFAULT_MASTER_GAIN;

@@ -19,12 +19,13 @@ plugins {
 apply {
   plugin("org.jetbrains.intellij")
   plugin("kotlin")
+  plugin("idea")
 }
 
 configure<IntelliJPluginExtension> {
-  pluginName = "AceJump"
+  pluginName = "idear"
   updateSinceUntilBuild = false
-//  plugins = arrayOf("com.johnlindquist.acejump")
+  setPlugins("com.johnlindquist.acejump")
 }
 
 group = "com.jetbrains"

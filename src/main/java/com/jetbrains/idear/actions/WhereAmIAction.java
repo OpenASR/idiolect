@@ -22,7 +22,7 @@ public class WhereAmIAction extends AnAction {
         final Editor editor     = CommonDataKeys.EDITOR.getData(dataContext);
         final Project project   = CommonDataKeys.PROJECT.getData(dataContext);
 
-        PsiElement element = PsiUtil.findElementUnderCaret(editor, project);
+        PsiElement element = PsiUtil.INSTANCE.findElementUnderCaret(editor, project);
 
         StringBuilder path = new StringBuilder();
 

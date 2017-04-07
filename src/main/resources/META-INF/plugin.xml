@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>com.jetbrains.idear</id>
     <name>idear</name>
     <version>1.2.1</version>

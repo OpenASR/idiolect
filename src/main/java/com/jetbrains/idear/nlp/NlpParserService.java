@@ -25,9 +25,6 @@ public class NlpParserService extends ParserService {
         this.path = testPath;
     }
 
-    public NlpParserService() {
-    }
-
     @Nullable
     public Parse parseSentence(String sentence) {
         if (parser == null) {

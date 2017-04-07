@@ -5,7 +5,6 @@ import com.intellij.openapi.util.Pair
 import com.intellij.util.containers.ContainerUtil
 
 class ExtractActionRecognizer : ActionRecognizer {
-
     private val actions = ContainerUtil.newHashSet("extract")
 
     override fun isMatching(sentence: String): Boolean {
@@ -34,7 +33,7 @@ class ExtractActionRecognizer : ActionRecognizer {
             first = false
         }
 
-        if (newName.length > 0) {
+        if (newName.isNotEmpty()) {
             info.typeAfter = newName.toString()
             info.hitTabAfter = true
         }

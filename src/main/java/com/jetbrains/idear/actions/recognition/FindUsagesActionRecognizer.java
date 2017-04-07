@@ -31,38 +31,38 @@ public class FindUsagesActionRecognizer implements ActionRecognizer {
         ActionCallInfo aci = new ActionCallInfo("FindUsages");
 
         // Ok, that's lame
-        List<String>    words       = Arrays.asList(sentence.split("\\W+"));
-        HashSet<String> wordsSet    = new HashSet<>(words);
+        List<String> words = Arrays.asList(sentence.split("\\W+"));
+        HashSet<String> wordsSet = new HashSet<>(words);
 
-        final Editor editor     = CommonDataKeys.EDITOR.getData(dataContext);
-        final Project project   = CommonDataKeys.PROJECT.getData(dataContext);
+        final Editor editor = CommonDataKeys.EDITOR.getData(dataContext);
+        final Project project = CommonDataKeys.PROJECT.getData(dataContext);
 
         if (editor == null || project == null)
             return aci;
 
-        final PsiElement    e       = PsiUtil.findElementUnderCaret(editor, project);
-        final PsiClass      klass   = PsiUtil.findContainingClass(e);
+        final PsiElement e = PsiUtil.INSTANCE.findElementUnderCaret(editor, project);
+        final PsiClass klass = PsiUtil.INSTANCE.findContainingClass(e);
 
         if (klass == null)
             return aci;
 
         PsiElement[] targets = null;
 
-        String targetName   = null;
-        String subject      = null;
+        String targetName = null;
+        String subject = null;
 
         if (wordsSet.contains("field")) {
-            subject     = "field";
-            targetName  = extractNameOf("field", words);
+            subject = "field";
+            targetName = extractNameOf("field", words);
 
             if (targetName.isEmpty())
                 return aci;
 
-            targets = new PsiElement[] { klass.findFieldByName(targetName, /*checkBases*/ true) };
+            targets = new PsiElement[]{klass.findFieldByName(targetName, /*checkBases*/ true)};
 
         } else if (wordsSet.contains("method")) {
-            subject     = "method";
-            targetName  = extractNameOf("method", words);
+            subject = "method";
+            targetName = extractNameOf("method", words);
 
             if (targetName.isEmpty())
                 return aci;
@@ -75,26 +75,19 @@ public class FindUsagesActionRecognizer implements ActionRecognizer {
 
         // TODO(kudinkin): need to cure this pain someday
 
-        aci.setActionEvent(
-            new AnActionEvent(
-                null,
+        aci.setActionEvent(new AnActionEvent(null,
                 SimpleDataContext.getSimpleContext(UsageView.USAGE_TARGETS_KEY.getName(), prepare(targets[0]), dataContext),
-                ActionPlaces.UNKNOWN,
-                new Presentation(),
-                ActionManager.getInstance(),
-                0
-                )
+                ActionPlaces.UNKNOWN, new Presentation(), ActionManager.getInstance(), 0)
         );
 
         // TODO(kudinkin): move it to appropriate place
-        ServiceManager  .getService(TTSService.class)
-                        .say("Looking for usages of the " + subject + " " + targetName);
+        ServiceManager.getService(TTSService.class).say("Looking for usages of the " + subject + " " + targetName);
 
         return aci;
     }
 
     private static UsageTarget[] prepare(PsiElement target) {
-        return new UsageTarget[] { new PsiElement2UsageTargetAdapter(target) };
+        return new UsageTarget[]{new PsiElement2UsageTargetAdapter(target)};
     }
 
     private static String extractNameOf(String pivot, List<String> sentence) {

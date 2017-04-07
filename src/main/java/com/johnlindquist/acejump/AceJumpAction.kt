@@ -36,11 +36,10 @@ open class AceJumpAction() : DumbAwareAction() {
     override fun update(e: AnActionEvent?) {
         e?.presentation?.isEnabled = (e?.getData(CommonDataKeys.EDITOR)) != null
     }
-    override fun actionPerformed(p0: AnActionEvent?) {
-        val actionEvent = p0
+    override fun actionPerformed(actionEvent: AnActionEvent?) {
         val project = actionEvent?.getData(CommonDataKeys.PROJECT) as Project
-        val editor = actionEvent?.getData(CommonDataKeys.EDITOR) as EditorImpl
-        val virtualFile = actionEvent?.getData(CommonDataKeys.VIRTUAL_FILE) as VirtualFile
+        val editor = actionEvent.getData(CommonDataKeys.EDITOR) as EditorImpl
+        val virtualFile = actionEvent.getData(CommonDataKeys.VIRTUAL_FILE) as VirtualFile
         val document = editor.document as DocumentImpl
         val scheme = EditorColorsManager.getInstance()?.globalScheme
         val font = Font(scheme?.editorFontName, Font.BOLD, scheme?.editorFontSize!!)
@@ -179,8 +178,8 @@ open class AceJumpAction() : DumbAwareAction() {
         fun configureAceCanvas() {
             aceCanvas.font = font
             aceCanvas.lineHeight = editor.lineHeight
-            aceCanvas.lineSpacing = scheme?.lineSpacing!!
-            aceCanvas.colorPair = Pair(scheme?.defaultBackground, scheme?.defaultForeground)
+            aceCanvas.lineSpacing = scheme.lineSpacing
+            aceCanvas.colorPair = Pair(scheme.defaultBackground, scheme.defaultForeground)
         }
 
         configureAceCanvas()
