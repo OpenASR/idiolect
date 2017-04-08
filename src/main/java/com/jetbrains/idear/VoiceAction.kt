@@ -14,7 +14,7 @@ class VoiceAction : AnAction() {
         val editor = CommonDataKeys.EDITOR.getData(dataContext)
 
         val provider = TextToActionConverter(e.dataContext)
-        val callInfo = provider.extractAction(e.getData(KEY)!!)
+        val callInfo = provider.extractAction(e.getData(KEY)!!)!!
         invoke(editor!!, callInfo)
     }
 
@@ -62,7 +62,6 @@ class VoiceAction : AnAction() {
     }
 
     companion object {
-
         /* package */ private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
     }
 }

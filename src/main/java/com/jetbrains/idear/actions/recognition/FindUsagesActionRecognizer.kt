@@ -72,7 +72,7 @@ class FindUsagesActionRecognizer : ActionRecognizer {
                 ActionPlaces.UNKNOWN, Presentation(), ActionManager.getInstance(), 0)
 
         // TODO(kudinkin): move it to appropriate place
-        ServiceManager.getService(TTSService::class.java).say("Looking for usages of the $subject $targetName")
+        TTSService.say("Looking for usages of the $subject $targetName")
 
         return aci
     }

@@ -25,7 +25,7 @@ apply {
 configure<IntelliJPluginExtension> {
   pluginName = "idear"
   updateSinceUntilBuild = false
-  setPlugins("com.johnlindquist.acejump")
+//  setPlugins("com.johnlindquist.acejump")
 }
 
 group = "com.jetbrains"

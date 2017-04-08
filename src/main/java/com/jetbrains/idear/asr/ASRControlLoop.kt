@@ -14,9 +14,11 @@ import com.jetbrains.idear.WordToNumberConverter
 import com.jetbrains.idear.actions.ExecuteVoiceCommandAction
 import com.jetbrains.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
 import com.jetbrains.idear.ide.IDEService
+import com.jetbrains.idear.ide.IDEService.invokeAction
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer
 import com.jetbrains.idear.recognizer.CustomMicrophone
 import com.jetbrains.idear.tts.TTSService
+import com.jetbrains.idear.tts.TTSService.say
 import java.awt.EventQueue
 import java.awt.event.KeyEvent.*
 import java.io.IOException
@@ -36,7 +38,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
                 if (result == HI_IDEA) {
                     // Greet invoker
                     say("Hi")
-                    IDEService.invokeAction("Idear.Start")
+                    invokeAction("Idear.Start")
                 }
             } else if (ListeningState.isActive) {
                 logger.log(Level.INFO, "Recognized: " + result)
@@ -68,26 +70,26 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             say("Hi, again!")
         } else if (c.startsWith(OPEN)) {
             if (c.endsWith(SETTINGS)) {
-                IDEService.invokeAction(IdeActions.ACTION_SHOW_SETTINGS)
+                invokeAction(IdeActions.ACTION_SHOW_SETTINGS)
             } else if (c.endsWith(RECENT)) {
-                IDEService.invokeAction(IdeActions.ACTION_RECENT_FILES)
+                invokeAction(IdeActions.ACTION_RECENT_FILES)
             } else if (c.endsWith(TERMINAL)) {
-                IDEService.invokeAction("ActivateTerminalToolWindow")
+                invokeAction("ActivateTerminalToolWindow")
             }
         } else if (c.startsWith(NAVIGATE)) {
-            IDEService.invokeAction("GotoDeclaration")
+            invokeAction("GotoDeclaration")
         } else if (c.startsWith(EXECUTE)) {
-            IDEService.invokeAction("Run")
+            invokeAction("Run")
         } else if (c == WHERE_AM_I) {
             // TODO(kudinkin): extract to action
-            IDEService.invokeAction("Idear.WhereAmI")
+            invokeAction("Idear.WhereAmI")
         } else if (c.startsWith("focus")) {
             if (c.endsWith(EDITOR)) {
                 pressKeystroke(VK_ESCAPE)
             } else if (c.endsWith(PROJECT)) {
-                IDEService.invokeAction("ActivateProjectToolWindow")
+                invokeAction("ActivateProjectToolWindow")
             } else if (c.endsWith("symbols")) {
-                val ar = IDEService.invokeAction("AceJumpAction")
+                val ar = invokeAction("AceJumpAction")
 
                 while (!ar.isProcessed) {
                     //Spin lock
@@ -97,7 +99,6 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
                     } catch (e: InterruptedException) {
                         logger.warning(e.toString())
                     }
-
                 }
                 logger.info("Done!")
 
@@ -108,7 +109,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             }
         } else if (c.startsWith(GOTO)) {
             if (c.startsWith("goto line")) {
-                IDEService.invokeAction("GotoLine").doWhenDone({ dataContext: DataContext ->
+                invokeAction("GotoLine").doWhenDone({
                     IDEService.type(*("" + WordToNumberConverter.getNumber(c.substring(10))).toCharArray())
                     IDEService.type(VK_ENTER)
                 } as Consumer<DataContext>)
@@ -119,9 +120,9 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             //            AnActionEvent event = new AnActionEvent(null, DataManager.getInstance().getDataContext(),
             //                    ActionPlaces.UNKNOWN, a.getTemplatePresentation(), instance, 0);
             //            a.actionPerformed(event);
-            IDEService.invokeAction("EditorSelectWord")
+            invokeAction("EditorSelectWord")
         } else if (c.startsWith(SHRINK)) {
-            IDEService.invokeAction("EditorUnSelectWord")
+            invokeAction("EditorUnSelectWord")
         } else if (c.startsWith("press")) {
             if (c.contains("delete")) {
                 pressKeystroke(VK_DELETE)
@@ -132,7 +133,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             } else if (c.contains(TAB)) {
                 pressKeystroke(VK_TAB)
             } else if (c.contains(UNDO)) {
-                IDEService.invokeAction("\$Undo")
+                invokeAction("\$Undo")
             } else if (c.contains("shift")) {
                 IDEService.pressShift()
             }
@@ -141,42 +142,42 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
                 IDEService.releaseShift()
         } else if (c.startsWith("following")) {
             if (c.endsWith("line")) {
-                IDEService.invokeAction("EditorDown")
+                invokeAction("EditorDown")
             } else if (c.endsWith("page")) {
-                IDEService.invokeAction("EditorPageDown")
+                invokeAction("EditorPageDown")
             } else if (c.endsWith("method")) {
-                IDEService.invokeAction("MethodDown")
+                invokeAction("MethodDown")
             } else if (c.endsWith("tab")) {
-                IDEService.invokeAction("Diff.FocusOppositePane")
+                invokeAction("Diff.FocusOppositePane")
             } else if (c.endsWith("page")) {
-                IDEService.invokeAction("EditorPageDown")
+                invokeAction("EditorPageDown")
             } else if (c.endsWith("word")) {
                 IDEService.type(VK_ALT, VK_RIGHT)
             }
         } else if (c.startsWith("previous")) {
             if (c.endsWith("line")) {
-                IDEService.invokeAction("EditorUp")
+                invokeAction("EditorUp")
             } else if (c.endsWith("page")) {
-                IDEService.invokeAction("EditorPageUp")
+                invokeAction("EditorPageUp")
             } else if (c.endsWith("method")) {
-                IDEService.invokeAction("MethodUp")
+                invokeAction("MethodUp")
             } else if (c.endsWith("tab")) {
-                IDEService.invokeAction("Diff.FocusOppositePaneAndScroll")
+                invokeAction("Diff.FocusOppositePaneAndScroll")
             } else if (c.endsWith("page")) {
-                IDEService.invokeAction("EditorPageUp")
+                invokeAction("EditorPageUp")
             }
         } else if (c.startsWith("extract this")) {
             if (c.endsWith("method")) {
-                IDEService.invokeAction("ExtractMethod")
+                invokeAction("ExtractMethod")
             } else if (c.endsWith("parameter")) {
-                IDEService.invokeAction("IntroduceParameter")
+                invokeAction("IntroduceParameter")
             }
         } else if (c.startsWith("inspect code")) {
-            IDEService.invokeAction("CodeInspection.OnEditor")
+            invokeAction("CodeInspection.OnEditor")
         } else if (c.startsWith("speech pause")) {
             pauseSpeech()
         } else if (c == SHOW_USAGES) {
-            IDEService.invokeAction("ShowUsages")
+            invokeAction("ShowUsages")
         }
         if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
             beep()
@@ -185,23 +186,23 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             fireGoogleSearch()
         } else if (c.contains("break point")) {
             if (c.startsWith("toggle")) {
-                IDEService.invokeAction("ToggleLineBreakpoint")
+                invokeAction("ToggleLineBreakpoint")
             } else if (c.startsWith("view")) {
-                IDEService.invokeAction("ViewBreakpoints")
+                invokeAction("ViewBreakpoints")
             }
         } else if (c.startsWith("debug")) {
             //            IDEService.invokeAction("Debug");
             IDEService.type(VK_CONTROL, VK_SHIFT, VK_F9)
         } else if (c.startsWith("step")) {
             if (c.endsWith("over")) {
-                IDEService.invokeAction("StepOver")
+                invokeAction("StepOver")
             } else if (c.endsWith("into")) {
-                IDEService.invokeAction("StepInto")
+                invokeAction("StepInto")
             } else if (c.endsWith("return")) {
-                IDEService.invokeAction("StepOut")
+                invokeAction("StepOut")
             }
         } else if (c.startsWith("resume")) {
-            IDEService.invokeAction("Resume")
+            invokeAction("Resume")
         } else if (c.startsWith("tell me a joke")) {
             tellJoke()
         } else if (c.contains("check")) {
@@ -219,7 +220,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
 
             say("My name is " + ai.versionName + ", I was built on " + df.format(cal.time) + ", I am running version " + ai.apiVersion + " of the IntelliJ Platform, and I am registered to " + ai.companyName)
         } else if (c.contains("add new class")) {
-            IDEService.invokeAction("NewElement")
+            invokeAction("NewElement")
             pressKeystroke(VK_ENTER)
             val className = webSpeechResult
             if (className != null) {
@@ -259,9 +260,9 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             }
         } else if (c.startsWith("find in")) {
             if (c.endsWith("file")) {
-                IDEService.invokeAction("Find")
+                invokeAction("Find")
             } else if (c.endsWith("project")) {
-                IDEService.invokeAction("FindInPath")
+                invokeAction("FindInPath")
             }
         }
     }
@@ -289,14 +290,14 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
     }
 
     private fun tellJoke() {
-        TTSService.say("knock, knock, knock, knock, knock")
+        say("knock, knock, knock, knock, knock")
 
         var result: String? = null
         while ("who is there" != result) {
             result = resultFromRecognizer
         }
 
-        TTSService.say("Hang on, I will be right back")
+        say("Hang on, I will be right back")
 
         try {
             Thread.sleep(3000)
@@ -304,13 +305,13 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             e.printStackTrace()
         }
 
-        TTSService.say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va")
+        say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va")
 
         while (!result!!.contains("wait who") && !result.contains("who are you")) {
             result = resultFromRecognizer
         }
 
-        TTSService.say("It is me, Jah java va va, va, va. Open up already!")
+        say("It is me, Jah java va va, va, va. Open up already!")
     }
 
     private fun fireVoiceCommand() {
@@ -323,7 +324,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             // Notify of successful proceed
             beep()
 
-            IDEService.invokeAction(
+            invokeAction(
                     "Idear.VoiceAction"
             ) { dataContext ->
                 AnActionEvent(null,
@@ -341,12 +342,8 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
     }
 
     private fun fireGoogleSearch() {
-
         val searchQueryTuple = webSpeechResult ?: return
-
-        ServiceManager
-                .getService(TTSService::class.java)
-                .say("I think you said " + searchQueryTuple.first + ", searching Google now")
+        say("I think you said " + searchQueryTuple.first + ", searching Google now")
 
         GoogleHelper.searchGoogle(searchQueryTuple.first)
     }
@@ -391,13 +388,6 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
                 return number
             }
         }
-    }
-
-    // Helpers
-
-    @Synchronized fun say(something: String) {
-        TTSService
-                .say(splitCamelCase(something))
     }
 
     companion object {

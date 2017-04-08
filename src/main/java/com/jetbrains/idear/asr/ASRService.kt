@@ -8,10 +8,8 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class ASRService {
-
-    private var speechThread: Thread? = null
-
-    private var recognizer: CustomLiveSpeechRecognizer? = null
+    private lateinit var speechThread: Thread
+    private lateinit var recognizer: CustomLiveSpeechRecognizer
 
     fun init() {
         val configuration = Configuration()
@@ -19,20 +17,18 @@ class ASRService {
         configuration.dictionaryPath = DICTIONARY_PATH
         configuration.grammarPath = GRAMMAR_PATH
         configuration.useGrammar = true
-
         configuration.grammarName = "command"
 
         try {
             recognizer = CustomLiveSpeechRecognizer(configuration)
             //            recognizer.setMasterGain(MASTER_GAIN);
-            speechThread = Thread(ASRControlLoop(recognizer!!), "ASR Thread")
-            recognizer!!.startRecognition(true)
+            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
+            recognizer.startRecognition(true)
             // Fire up control-loop
-            speechThread!!.start()
+            speechThread.start()
         } catch (e: IOException) {
             logger.log(Level.SEVERE, "Couldn't initialize speech recognizer:", e)
         }
-
     }
 
     fun activate(): Boolean {
@@ -56,7 +52,7 @@ class ASRService {
     }
 
     private fun terminate() {
-        recognizer!!.stopRecognition()
+        recognizer.stopRecognition()
     }
 
     companion object {
