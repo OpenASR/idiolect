@@ -16,6 +16,7 @@ class ExecuteActionFromPredefinedText : ExecuteActionByCommandText() {
 
         val provider = TextToActionConverter(e.dataContext)
         val info = provider.extractAction(text)
-        invoke(editor, info)
+        if (null != info)
+            invoke(editor, info)
     }
 }

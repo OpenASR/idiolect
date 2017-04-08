@@ -21,18 +21,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GoogleHelper {
-
     private static Logger logger = Logger.getLogger(GoogleHelper.class.getSimpleName());
-
 //    private static final String API_KEY = "AIzaSyB0DS1X9_qkZw2keZWw9p9EwUb9cV2bYsw";
     private static final String URL_PRE = "https://www.google.com/speech-api/v2/recognize";
     private static final String URL_SEARCH = "https://www.google.com/search?q=";
-
     private static final String API_KEY = "AIzaSyDhaglUIfPFvtYqKKpmhLQfkeiBBzgT2XE";
 
     private static List<Pair<String, Double>> getRecognizedTextForUtteranceInternal(File utterance) {
         try {
-
             HttpResponse<JsonNode> jsonResponse = Unirest.post(URL_PRE)
                     .header("accept", "application/json")
                     .queryString("output", "json")
@@ -45,7 +41,6 @@ public class GoogleHelper {
             // This is a ass-hack, due to the fact, that GSAPI responds
             // chunking-ly with two JSON objects instead of single one
             return parseGSAPIResponse(slurp(jsonResponse.getRawBody()));
-
         } catch (IOException | UnirestException | JSONException e) {
             logger.log(Level.SEVERE, "Panic! Failed process response of GSAPI!",e);
         }
@@ -108,8 +103,7 @@ public class GoogleHelper {
     public static void searchGoogle(String s) {
         try {
             Desktop.getDesktop().browse(java.net.URI.create(URL_SEARCH + URLEncoder.encode(s, "UTF-8")));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -22,7 +22,8 @@ abstract class ExecuteActionByCommandText : AnAction() {
 
         val provider = TextToActionConverter(e.dataContext)
         val info = provider.extractAction(text)
-        invoke(editor, info)
+        if (null != info)
+            invoke(editor, info)
     }
 
     protected operator fun invoke(editor: Editor, info: ActionCallInfo) {
@@ -69,8 +70,8 @@ abstract class ExecuteActionByCommandText : AnAction() {
     }
 
     private fun buildActionEvent(info: ActionCallInfo, action: AnAction, context: DataContext): AnActionEvent {
-        return if (info.getActionEvent() != null)
-            info.getActionEvent()
+        return if (info.actionEvent != null)
+            info.actionEvent as AnActionEvent
         else
             AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0)
     }

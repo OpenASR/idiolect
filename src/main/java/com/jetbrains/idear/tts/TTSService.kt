@@ -35,7 +35,6 @@ object TTSService {
         } catch (e: MaryConfigurationException) {
             e.printStackTrace()
         }
-
     }
 
     fun say(text: String?) {
@@ -53,7 +52,6 @@ object TTSService {
         } catch (e: InterruptedException) {
             logger.log(Level.SEVERE, String.format("Sorry! Could not pronounce '%s'", text), e)
         }
-
     }
 
     fun dispose() {
