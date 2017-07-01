@@ -51,9 +51,7 @@ class ASRService {
         terminate()
     }
 
-    private fun terminate() {
-        recognizer.stopRecognition()
-    }
+    private fun terminate() = recognizer.stopRecognition()
 
     companion object {
         val MASTER_GAIN = 0.85

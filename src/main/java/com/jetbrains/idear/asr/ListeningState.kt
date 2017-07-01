@@ -16,13 +16,9 @@ object ListeningState {
         TERMINATED
     }
 
-    private fun setStatus(s: Status): Status {
-        return status.getAndSet(s)
-    }
+    private fun setStatus(s: Status) = status.getAndSet(s)
 
-    fun getStatus(): Status {
-        return status.get()
-    }
+    fun getStatus() = status.get()
 
     val isTerminated: Boolean
         get() = getStatus() == TERMINATED
@@ -33,11 +29,7 @@ object ListeningState {
     val isActive: Boolean
         get() = getStatus() == ACTIVE
 
-    fun standBy(): Boolean {
-        return STANDBY == setStatus(STANDBY)
-    }
+    fun standBy() = STANDBY == setStatus(STANDBY)
 
-    fun activate(): Boolean {
-        return ACTIVE == setStatus(ACTIVE)
-    }
+    fun activate() = ACTIVE == setStatus(ACTIVE)
 }
