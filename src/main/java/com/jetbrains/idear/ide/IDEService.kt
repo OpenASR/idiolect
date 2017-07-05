@@ -11,10 +11,10 @@ object IDEService {
     }
 
     fun invokeAction(action: String, actionFactory: (DataContext) -> AnActionEvent = defaultActionFactory) =
-            DataManager.getInstance().dataContextFromFocus.doWhenDone({ dataContext: DataContext ->
+            DataManager.getInstance().dataContextFromFocus.doWhenDone(Consumer<DataContext> { dataContext: DataContext ->
                 EventQueue.invokeLater {
                     ActionManager.getInstance().getAction(action).actionPerformed(actionFactory.invoke(dataContext))
-                } } as Consumer<DataContext>)
+                } })
 
     fun type(vararg keys: Int) {
         Keyboard.type(*keys)
