@@ -4,7 +4,9 @@ import com.intellij.openapi.options.SearchableConfigurable
 import javax.swing.JComponent
 
 
-// TODO: http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
+/**
+ * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
+ */
 class IdearConfigurable : SearchableConfigurable {
     private val settings: IdearSettingsProvider by lazy { IdearSettingsProvider.getInstance() }
     private var initialState: IdearSettingsProvider.State? = null
