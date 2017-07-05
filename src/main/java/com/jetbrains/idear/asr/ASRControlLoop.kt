@@ -5,7 +5,6 @@ import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.util.Pair
 import com.intellij.util.Consumer
 import com.jetbrains.idear.GoogleHelper
@@ -17,7 +16,6 @@ import com.jetbrains.idear.ide.IDEService
 import com.jetbrains.idear.ide.IDEService.invokeAction
 import com.jetbrains.idear.recognizer.CustomLiveSpeechRecognizer
 import com.jetbrains.idear.recognizer.CustomMicrophone
-import com.jetbrains.idear.tts.TTSService
 import com.jetbrains.idear.tts.TTSService.say
 import java.awt.EventQueue
 import java.awt.event.KeyEvent.*
