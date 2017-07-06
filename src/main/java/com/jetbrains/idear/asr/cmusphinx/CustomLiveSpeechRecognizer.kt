@@ -1,5 +1,6 @@
-package com.jetbrains.idear.recognizer
+package com.jetbrains.idear.asr.cmusphinx
 
+import com.jetbrains.idear.recognizer.CustomMicrophone
 import edu.cmu.sphinx.api.AbstractSpeechRecognizer
 import edu.cmu.sphinx.api.Configuration
 import edu.cmu.sphinx.decoder.ResultListener
@@ -34,21 +35,16 @@ constructor(configuration: Configuration) : AbstractSpeechRecognizer(configurati
 
     /**
      * Starts recognition process.
-
-     * @param clear clear cached microphone data
-     * *
      * @see CustomLiveSpeechRecognizer.stopRecognition
      */
-    fun startRecognition(clear: Boolean) {
+    fun startRecognition() {
         recognizer.allocate()
         microphone.startRecording()
     }
 
     /**
      * Stops recognition process.
-
      * Recognition process is paused until the next call to startRecognition.
-
      * @see CustomLiveSpeechRecognizer.startRecognition
      */
     fun stopRecognition() {
