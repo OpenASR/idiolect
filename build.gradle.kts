@@ -14,7 +14,7 @@ intellij {
   updateSinceUntilBuild = false
 }
 
-group = "com.jetbrains"
+group = "org.openasr"
 version = "1.3"
 
 repositories {

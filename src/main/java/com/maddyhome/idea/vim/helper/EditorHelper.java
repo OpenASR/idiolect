@@ -21,13 +21,10 @@ package com.maddyhome.idea.vim.helper;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.*;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.*;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.maddyhome.idea.vim.common.CharacterPosition;
-import com.maddyhome.idea.vim.common.TextRange;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.maddyhome.idea.vim.common.*;
+import org.jetbrains.annotations.*;
 
 import java.awt.*;
 import java.nio.CharBuffer;
