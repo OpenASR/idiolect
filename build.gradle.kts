@@ -28,6 +28,8 @@ dependencies {
   compile("edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT")
   compile("com.mashape.unirest:unirest-java:1.4.7")
   compile("org.codehaus.jettison:jettison:1.3.7")
-  compile("de.dfki.mary","voice-cmu-slt-hsmm", "5.2")
+  compile("de.dfki.mary:voice-cmu-slt-hsmm:5.2")
+  compile("com.amazonaws:aws-java-sdk-polly:1.11.77")
+  compile("com.googlecode.soundlibs:jlayer:1.0.1-1")
   testCompile("junit:junit:4.12")
 }
