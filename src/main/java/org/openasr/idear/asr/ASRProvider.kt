@@ -1,4 +1,4 @@
-package com.jetbrains.idear.asr
+package org.openasr.idear.asr
 
 interface ASRProvider {
     fun startRecognition()
