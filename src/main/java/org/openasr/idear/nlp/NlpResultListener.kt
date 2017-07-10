@@ -2,7 +2,9 @@ package org.openasr.idear.nlp
 
 // TODO: these methods will take parameters
 interface NlpResultListener {
-    fun onFulfilled()
+
+    fun onFulfilled(intentName: String, params: Map<String, String>)
     fun onFailure()
-    fun onIncomplete()
+//    fun onIncomplete()
+    fun onMessage()
 }
