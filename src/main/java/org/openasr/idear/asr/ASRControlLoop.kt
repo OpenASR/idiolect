@@ -7,13 +7,13 @@ import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.Pair
 import com.intellij.util.Consumer
+import org.openasr.idear.GoogleHelper
 import org.openasr.idear.GoogleHelper.getBestTextForUtterance
 import org.openasr.idear.WordToNumberConverter
 import org.openasr.idear.actions.ExecuteVoiceCommandAction
 import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
 import org.openasr.idear.ide.IDEService
 import org.openasr.idear.ide.IDEService.invokeAction
-import org.openasr.idear.recognizer.CustomLiveSpeechRecognizer
 import org.openasr.idear.recognizer.CustomMicrophone
 import org.openasr.idear.tts.TTSService.say
 import java.awt.EventQueue
@@ -25,11 +25,11 @@ import java.util.logging.Logger
 import java.util.regex.Pattern
 import javax.sound.sampled.AudioSystem
 
-class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runnable {
+class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
     override fun run() {
         while (!ListeningState.isTerminated) {
             // This blocks on a recognition result
-            val result = resultFromRecognizer
+            val result = asrProvider.waitForUtterance()
 
             if (ListeningState.isInit) {
                 if (result == HI_IDEA) {
@@ -45,23 +45,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
         }
     }
 
-    private val resultFromRecognizer: String
-        get() {
-            val result = recognizer.result
-
-            println("Recognized: ")
-            println("\tTop H:       " + result.result + " / " + result.result.bestToken + " / " + result.result.bestPronunciationResult)
-            println("\tTop 3H:      " + result.getNbest(3))
-
-            logger.info("Recognized:    ")
-            logger.info("\tTop H:       " + result.result + " / " + result.result.bestToken + " / " + result.result.bestPronunciationResult)
-            logger.info("\tTop 3H:      " + result.getNbest(3))
-
-            return result.hypothesis
-        }
-
     private fun applyAction(c: String) {
-
         if (c == HI_IDEA) {
             // Greet some more
             say("Hi, again!")
@@ -291,7 +275,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
 
         var result: String? = null
         while ("who is there" != result) {
-            result = resultFromRecognizer
+            result = asrProvider.waitForUtterance()
         }
 
         say("Hang on, I will be right back")
@@ -305,7 +289,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
         say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va")
 
         while (!result!!.contains("wait who") && !result.contains("who are you")) {
-            result = resultFromRecognizer
+            result = asrProvider.waitForUtterance()
         }
 
         say("It is me, Jah java va va, va, va. Open up already!")
@@ -342,7 +326,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
         val searchQueryTuple = webSpeechResult ?: return
         say("I think you said " + searchQueryTuple.first + ", searching Google now")
 
-        org.openasr.idear.GoogleHelper.searchGoogle(searchQueryTuple.first)
+        GoogleHelper.searchGoogle(searchQueryTuple.first)
     }
 
     private /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */ val webSpeechResult: Pair<String, Double>?
@@ -350,7 +334,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
             var searchQueryTuple: Pair<String, Double>? = null
             beep()
             try {
-                searchQueryTuple = org.openasr.idear.GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION))
+                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION))
             } catch (e: IOException) {
                 logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e)
             }
@@ -366,7 +350,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
         beep()
         var result: String
         while (ListeningState.isActive) {
-            result = resultFromRecognizer
+            result = asrProvider.waitForUtterance()
             if (result == "speech resume") {
                 beep()
                 break
@@ -378,7 +362,7 @@ class ASRControlLoop(private val recognizer: CustomLiveSpeechRecognizer) : Runna
         var result: String
         logger.info("Recognizing number...")
         while (true) {
-            result = resultFromRecognizer
+            result = asrProvider.waitForUtterance()
             if (result.startsWith("jump ")) {
                 val number = WordToNumberConverter.getNumber(result.substring(5))
                 logger.info("Recognized number: " + number)

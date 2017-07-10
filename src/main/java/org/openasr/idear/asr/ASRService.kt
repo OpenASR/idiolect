@@ -1,28 +1,21 @@
 package org.openasr.idear.asr
 
-import edu.cmu.sphinx.api.Configuration
-import org.openasr.idear.recognizer.CustomLiveSpeechRecognizer
+import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
 import java.io.IOException
 import java.util.logging.Level
 import java.util.logging.Logger
 
 class ASRService {
     private lateinit var speechThread: Thread
-    private lateinit var recognizer: CustomLiveSpeechRecognizer
+    private lateinit var recognizer: ASRProvider
 
-    fun init() {
-        val configuration = Configuration()
-        configuration.acousticModelPath = ACOUSTIC_MODEL
-        configuration.dictionaryPath = DICTIONARY_PATH
-        configuration.grammarPath = GRAMMAR_PATH
-        configuration.useGrammar = true
-        configuration.grammarName = "command"
-
+    init {
         try {
-            recognizer = CustomLiveSpeechRecognizer(configuration)
-            //            recognizer.setMasterGain(MASTER_GAIN);
+            recognizer = CMUSphinxASR()
+//            recognizer = LexASR()
+
             speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
-            recognizer.startRecognition(true)
+            recognizer.startRecognition()
             // Fire up control-loop
             speechThread.start()
         } catch (e: IOException) {
@@ -31,17 +24,14 @@ class ASRService {
     }
 
     fun activate(): Boolean {
-        //        if (getStatus() == Status.INIT) {
-        //            // Cold start prune cache
-        //            recognizer.startRecognition(true);
-        //        }
-
         return ListeningState.activate()
     }
 
     fun deactivate(): Boolean {
         return ListeningState.standBy()
     }
+
+    fun terminate() = recognizer.stopRecognition()
 
     fun dispose() {
         // Deactivate in the first place, therefore actually
@@ -50,23 +40,12 @@ class ASRService {
         terminate()
     }
 
-    private fun terminate() = recognizer.stopRecognition()
-
     companion object {
-        val MASTER_GAIN = 0.85
-        val CONFIDENCE_LEVEL_THRESHOLD = 0.5
-
-        private val ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us"
-        private val DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict"
-        private val GRAMMAR_PATH = "resource:/org.openasr.idear/grammars"
-
         private val logger = Logger.getLogger(ASRService::class.java.simpleName)
     }
 }
 
 // This is for testing purposes solely
 fun main(args: Array<String>) {
-    val asrService = ASRService()
-    asrService.init()
-    ListeningState.activate()
+    ASRService().activate()
 }

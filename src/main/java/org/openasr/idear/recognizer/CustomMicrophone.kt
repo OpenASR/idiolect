@@ -24,7 +24,6 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
     val stream: AudioInputStream
 
     init {
-
         val format = AudioFormat(sampleRate, sampleSize, 1, signed, bigEndian)
 
         try {
@@ -38,13 +37,11 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
                 logger.warning("Microphone: MASTER_GAIN NOT supported")
 
             //masterGainControl = findMGControl(line);
-
         } catch (e: LineUnavailableException) {
             throw IllegalStateException(e)
         }
 
-        stream = org.openasr.idear.recognizer.AudioInputStreamWithAdjustableGain(
-            line)
+        stream = AudioInputStreamWithAdjustableGain(line)
     }
 
 

@@ -10,6 +10,9 @@ object IDEService {
         AnActionEvent(null, dataContext, ActionPlaces.UNKNOWN, Presentation(), ActionManager.getInstance(), 0)
     }
 
+    /**
+     * @param action - see [com.intellij.openapi.actionSystem.IdeActions]
+     */
     fun invokeAction(action: String, actionFactory: (DataContext) -> AnActionEvent = defaultActionFactory) =
             DataManager.getInstance().dataContextFromFocus.doWhenDone(Consumer<DataContext> { dataContext: DataContext ->
                 EventQueue.invokeLater {
