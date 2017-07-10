@@ -1,6 +1,6 @@
-package com.jetbrains.idear.asr.cmusphinx
+package org.openasr.idear.asr.cmusphinx
 
-import com.jetbrains.idear.recognizer.CustomMicrophone
+import org.openasr.idear.recognizer.CustomMicrophone
 import edu.cmu.sphinx.api.AbstractSpeechRecognizer
 import edu.cmu.sphinx.api.Configuration
 import edu.cmu.sphinx.decoder.ResultListener

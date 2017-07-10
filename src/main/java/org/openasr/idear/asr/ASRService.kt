@@ -9,7 +9,7 @@ class ASRService {
     private lateinit var speechThread: Thread
     private lateinit var recognizer: ASRProvider
 
-    init {
+    fun init() {
         try {
             recognizer = CMUSphinxASR()
 //            recognizer = LexASR()
@@ -47,5 +47,7 @@ class ASRService {
 
 // This is for testing purposes solely
 fun main(args: Array<String>) {
-    ASRService().activate()
+    val asr = ASRService()
+    asr.init()
+    asr.activate()
 }

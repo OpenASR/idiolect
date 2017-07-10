@@ -14,7 +14,6 @@ class RecognitionSettingsForm {
 
   var recognitionService: RecognitionServiceId
     get() = if (recAWSLex.isSelected) AWS_LEX
-    else if (recApiAi.isSelected) API_AI_STT
     else CMU_SPHINX
     set(value) = when (value) {
       AWS_LEX -> recAWSLex.isSelected = true
