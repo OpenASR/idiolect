@@ -31,6 +31,8 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
             // This blocks on a recognition result
             val result = asrProvider.waitForUtterance()
 
+            //TODO: nlpService.processUtterance(result, getContext())
+
             if (ListeningState.isInit) {
                 if (result == HI_IDEA) {
                     // Greet invoker
@@ -45,6 +47,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
         }
     }
 
+    // TODO: replace with nlp.NlpResultListener
     private fun applyAction(c: String) {
         if (c == HI_IDEA) {
             // Greet some more

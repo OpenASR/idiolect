@@ -2,9 +2,12 @@ package org.openasr.idear.nlp.lex
 
 import com.amazonaws.services.lexruntime.AmazonLexRuntime
 import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
+import com.amazonaws.services.lexruntime.model.DialogState
 import com.amazonaws.services.lexruntime.model.PostTextRequest
+import org.openasr.idear.nlp.NlpResultListener
+import org.openasr.idear.nlp.NlpProvider
 
-class LexNlp {
+class LexNlp(val listener: NlpResultListener): NlpProvider {
     private lateinit var lex: AmazonLexRuntime;
 //    private lateinit var lexAsync: AmazonLexRuntimeAsync
     private lateinit var userId: String
@@ -46,7 +49,7 @@ class LexNlp {
      *         Lambda fulfilment function returned <code>DelegateDialogAction</code> to Amazon Lex without changing any
      *         slot values.
      */
-    fun processUtterance(utterance: String, sessionAttributes: Map<String, String>? = null) {
+    override fun processUtterance(utterance: String, sessionAttributes: Map<String, String>?) {
         val request = PostTextRequest()
                 .withBotName("idear")
                 .withBotAlias("PROD")
@@ -80,11 +83,21 @@ class LexNlp {
         response.sessionAttributes
 
 
-        //
+        when (response.dialogState) {
+            DialogState.Fulfilled.name, DialogState.ReadyForFulfillment.name -> listener.onFulfilled()
+            DialogState.Failed.name -> listener.onFailure()
+            else -> listener.onIncomplete()
+        }
     }
 }
 
+/*
 fun main(args: Array<String>) {
+    val listener = NlpResultListener() {
+        override fun onFulfilled() {
+
+        }
+    }
     val lex = LexNlp()
     lex.processUtterance("create a new class")
-}
+}*/
