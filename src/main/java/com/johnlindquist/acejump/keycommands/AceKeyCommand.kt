@@ -11,7 +11,7 @@ abstract class AceKeyCommand {
     abstract fun execute(keyEvent:KeyEvent)
 
     fun addListener(changeListener:ChangeListener){
-        eventDispatcher?.addListener(changeListener);
+        eventDispatcher?.addListener(changeListener)
     }
 
 }

@@ -22,8 +22,8 @@ class SearchBox: JTextField() {
 
 
     override fun requestFocus() {
-        transferHandler = null;
-        super.requestFocus()
+        transferHandler = null
+      super.requestFocus()
     }
     override fun paintBorder(p0: Graphics?) {
     }
@@ -80,11 +80,11 @@ class SearchBox: JTextField() {
     }
 
     fun addPreProcessReleaseKey(key: Int, keyCommand: AceKeyCommand) {
-        preProcessKeyReleasedMap.put(key, keyCommand);
+        preProcessKeyReleasedMap.put(key, keyCommand)
     }
 
     fun addPreProcessPressedKey(key: Int, keyCommand: AceKeyCommand) {
-        preProcessKeyPressedMap.put(key, keyCommand);
+        preProcessKeyPressedMap.put(key, keyCommand)
     }
 
 }

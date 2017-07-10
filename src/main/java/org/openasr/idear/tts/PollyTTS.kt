@@ -1,26 +1,20 @@
-package com.jetbrains.idear.tts
+package org.openasr.idear.tts
 
 import com.amazonaws.ClientConfiguration
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 import com.amazonaws.regions.Region
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.polly.AmazonPollyClient
-import com.amazonaws.services.polly.model.*
-import java.io.BufferedInputStream
-import java.util.*
-//import javazoom.jl.player.advanced.AdvancedPlayer
-import java.io.IOException
-import java.io.InputStream
-import javax.sound.sampled.*
-import javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED
-import javax.sound.sampled.SourceDataLine
-import javax.sound.sampled.AudioInputStream
+import com.amazonaws.services.polly.model.DescribeVoicesRequest
+import com.amazonaws.services.polly.model.OutputFormat
+import com.amazonaws.services.polly.model.SynthesizeSpeechRequest
+import com.amazonaws.services.polly.model.Voice
+import javazoom.jl.player.advanced.AdvancedPlayer
 import javazoom.jl.player.advanced.PlaybackEvent
 import javazoom.jl.player.advanced.PlaybackListener
-import javazoom.jl.player.advanced.AdvancedPlayer
-
-
-
+import java.io.IOException
+import java.io.InputStream
+import java.util.*
 
 /**
  * Either:

@@ -148,7 +148,7 @@ open class AceJumpAction() : DumbAwareAction() {
             popupBuilder?.setCancelKeyEnabled(true)
             val popup = (popupBuilder?.createPopup() as AbstractPopup?)
             popup?.show(guessBestLocation(editor))
-            popup?.setRequestFocus(true);
+            popup?.setRequestFocus(true)
 
             val width = searchBox.getFontMetrics(font).stringWidth("w")
             var dimension: Dimension? = null
@@ -188,6 +188,6 @@ open class AceJumpAction() : DumbAwareAction() {
         ApplicationManager.getApplication()?.invokeLater({
             val manager = IdeFocusManager.getInstance(project)
             manager?.requestFocus(searchBox, false)
-        });
+        })
     }
 }
