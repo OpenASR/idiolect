@@ -1,0 +1,8 @@
+{
+  "description": "Simple commands which map to an `pressKeystroke()` call",
+  "sampleUtterances": [
+    "press {KeyStroke}",
+    "{KeyStroke}",
+    "release {KeyStroke}"
+  ]
+}

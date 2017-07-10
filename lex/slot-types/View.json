@@ -1,0 +1,9 @@
+{
+  "description": "Names of views",
+  "enumerationValues": [
+    {"value": "settings"},
+    {"value": "recent files"},
+    {"value": "terminal"}
+
+  ]
+}

@@ -60,7 +60,7 @@ class LexNlp {
         // Close      - Fulfilled or Failed   (ReadyForFulfillment?)
         // Incomplete - ElicitIntent, ConfirmIntent, ElicitSlot
         response.dialogState
-        // ApplyInspection | ApplyFile/Code/LiveTemplate | ApplyAction | ExecuteUserScript
+        // ApplyInspection | ApplyFile/Code/LiveTemplate | InvokeAction | ExecuteUserScript
         //
         response.intentName
         response.message

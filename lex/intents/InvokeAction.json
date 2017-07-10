@@ -1,0 +1,13 @@
+{
+  "description": "Simple commands which map to an `invokeAction()` call",
+  "sampleUtterances": [
+    "show {View}",
+    "open {View}",
+    "{View} menu",
+    "navigate             TODO: how does this work?",
+    "execute              TODO: how does this work?",
+    "expand",
+    "expand selection",
+    "shrink"
+  ]
+}

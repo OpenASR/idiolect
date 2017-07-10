@@ -1,0 +1,8 @@
+{
+  "description": "used by Focus intent",
+  "enumerationValues": [
+    {"value": "editor"},
+    {"value": "project"},
+    {"value": "symbols"}
+  ]
+}

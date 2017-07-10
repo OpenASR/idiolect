@@ -1,0 +1,6 @@
+{
+  "description": "Lex might need to respond with ElicitSlot to gather more info - or just fulfil locally...",
+  "sampleUtterances": [
+    "where am i"
+  ]
+}
