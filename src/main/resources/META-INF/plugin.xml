@@ -41,7 +41,6 @@
         <annotator language="JSpeech" implementationClass="org.openasr.idear.jsgf.JSpeechAnnotator"/>
         <gotoSymbolContributor implementation="org.openasr.idear.jsgf.JSpeechChooseByNameContributor"/>
 
-
         <psi.referenceContributor implementation="org.openasr.idear.jsgf.JSpeechReferenceContributor"/>
 
         <applicationService serviceInterface="org.openasr.idear.asr.ASRService" serviceImplementation="org.openasr.idear.asr.ASRService">
@@ -59,8 +58,12 @@
         <applicationService serviceInterface="org.openasr.idear.ide.IDEService" serviceImplementation="org.openasr.idear.ide.IDEService">
         </applicationService>
 
+        <applicationService serviceInterface="org.openasr.idear.settings.IdearSettingsProvider" serviceImplementation="org.openasr.idear.settings.IdearSettingsProvider"/>
+        <applicationConfigurable groupId="tools"
+                                 displayName="Recognition"
+                                 id="preferences.IdearConfigurable"
+                                 instance="org.openasr.idear.settings.IdearConfigurable"/>
     </extensions>
-
 
     <extensions defaultExtensionNs="org.openasr.idear">
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
@@ -72,13 +75,10 @@
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
     </extensions>
 
-
     <application-components>
-
         <component>
             <implementation-class>org.openasr.idear.Idear</implementation-class>
         </component>
-
     </application-components>
 
     <project-components>
