@@ -18,12 +18,12 @@ import javax.swing.event.ChangeListener
 
 class AceFinder(val project: Project, val document: DocumentImpl, val editor: EditorImpl, val virtualFile: VirtualFile) {
     companion object AceFinder {
-        val ALLOWED_CHARACTERS = "1234567890";
-        val END_OF_LINE = "\\n";
-        val BEGINNING_OF_LINE = "^.|\\n(?<!.\\n)";
-        val CODE_INDENTS = "^\\s*\\S";
-        val WHITE_SPACE = "\\s+\\S(?<!^\\s*\\S)";
-        val DEFAULT = CODE_INDENTS + "|" + END_OF_LINE;
+        val ALLOWED_CHARACTERS = "1234567890"
+      val END_OF_LINE = "\\n"
+      val BEGINNING_OF_LINE = "^.|\\n(?<!.\\n)"
+      val CODE_INDENTS = "^\\s*\\S"
+      val WHITE_SPACE = "\\s+\\S(?<!^\\s*\\S)"
+      val DEFAULT = CODE_INDENTS + "|" + END_OF_LINE
     }
 
     val eventDispatcher: EventDispatcher<ChangeListener>? = EventDispatcher.create(ChangeListener::class.java)
@@ -74,8 +74,8 @@ class AceFinder(val project: Project, val document: DocumentImpl, val editor: Ed
         psiFile!!.accept(object : PsiRecursiveElementWalkingVisitor() {
             override fun visitElement(element: PsiElement?) {
                 if(element?.node?.elementType?.toString().equals("IDENTIFIER")) {
-                    val offset = element?.node?.textRange?.startOffset!!;
-                    if(offset in startOffset..endOffset) {
+                    val offset = element?.node?.textRange?.startOffset!!
+                  if(offset in startOffset..endOffset) {
                         offsets.add(element?.node?.textRange?.startOffset!!)
                     }
                 }
@@ -83,9 +83,9 @@ class AceFinder(val project: Project, val document: DocumentImpl, val editor: Ed
                     element?.acceptChildren(this)
                 }
             }
-        });
+        })
 
-        return offsets
+      return offsets
     }
 
     fun findText(text: String, isRegEx: Boolean) {
@@ -128,11 +128,11 @@ class AceFinder(val project: Project, val document: DocumentImpl, val editor: Ed
                 }
             })
 
-            startResult = 0;
-            endResult = allowedCount;
+            startResult = 0
+          endResult = allowedCount
 
-            eventDispatcher?.multicaster?.stateChanged(ChangeEvent("AceFinder"));
-        });
+          eventDispatcher?.multicaster?.stateChanged(ChangeEvent("AceFinder"))
+        })
     }
 
     fun expandResults() {
@@ -155,8 +155,8 @@ class AceFinder(val project: Project, val document: DocumentImpl, val editor: Ed
     private fun checkFolded(offset: Int): Int {
         val foldingModelImpl = editor.foldingModel
 
-        var offsetResult: Int = offset;
-        for (foldRegion in foldingModelImpl.fetchCollapsedAt(offset).orEmpty()) {
+        var offsetResult: Int = offset
+      for (foldRegion in foldingModelImpl.fetchCollapsedAt(offset).orEmpty()) {
             offsetResult = foldRegion.endOffset + 1
         }
 

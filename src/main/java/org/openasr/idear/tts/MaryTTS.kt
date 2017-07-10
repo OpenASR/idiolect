@@ -1,4 +1,4 @@
-package com.jetbrains.idear.tts
+package org.openasr.idear.tts
 
 import marytts.LocalMaryInterface
 import marytts.MaryInterface

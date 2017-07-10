@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent
 
 class ClearResults(val searchBox: SearchBox, val aceCanvas: AceCanvas): AceKeyCommand() {
     override fun execute(keyEvent: KeyEvent) {
-        searchBox.text = "";
-        aceCanvas.clear()
+        searchBox.text = ""
+      aceCanvas.clear()
     }
 }

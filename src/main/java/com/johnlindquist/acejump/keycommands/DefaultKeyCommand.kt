@@ -24,7 +24,7 @@ class DefaultKeyCommand(val searchBox: SearchBox, val aceFinder: AceFinder, val 
             })
 
             if(searchBox.text == null) {
-                searchBox.text = " ";
+                searchBox.text = " "
             }
             aceFinder.findText(searchBox.text!!, false)
             searchBox.disableSearch()
@@ -40,8 +40,8 @@ class DefaultKeyCommand(val searchBox: SearchBox, val aceFinder: AceFinder, val 
             val offset = textAndOffsetHash[char]
 
             if (offset != null) {
-                searchBox.popupContainer?.cancel();
-                if (keyEvent.isShiftDown && !keyEvent.isMetaDown) {
+                searchBox.popupContainer?.cancel()
+              if (keyEvent.isShiftDown && !keyEvent.isMetaDown) {
                     aceJumper.setSelectionFromCaretToOffset(offset)
                     aceJumper.moveCaret(offset)
                 } else {
