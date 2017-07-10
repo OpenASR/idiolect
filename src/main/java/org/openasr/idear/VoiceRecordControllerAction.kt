@@ -1,10 +1,10 @@
-package com.jetbrains.idear
+package org.openasr.idear
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.ServiceManager
-import com.jetbrains.idear.asr.ASRService
-import com.jetbrains.idear.presentation.Icons
+import org.openasr.idear.asr.ASRService
+import org.openasr.idear.presentation.Icons
 
 class VoiceRecordControllerAction : AnAction() {
     @Volatile private var isRecording = false

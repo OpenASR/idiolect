@@ -11,11 +11,11 @@ class ExpandResults(val searchBox: SearchBox, val aceFinder: AceFinder, aceJumpe
     override fun execute(keyEvent: KeyEvent) {
         if(searchBox.text?.length == 0){
             aceFinder.addResultsReadyListener(ChangeListener { p0 ->
-                eventDispatcher?.getMulticaster()?.stateChanged(p0);
-                //                    eventDispatcher?.getMulticaster()?.stateChanged(ChangeEvent(toString()));
-            });
+                eventDispatcher?.getMulticaster()?.stateChanged(p0)
+              //                    eventDispatcher?.getMulticaster()?.stateChanged(ChangeEvent(toString()));
+            })
 
-            aceFinder.getEndOffset = true
+          aceFinder.getEndOffset = true
             aceFinder.findText(AceFinder.CODE_INDENTS, true)
 
             searchBox.forceSpaceChar()
@@ -30,7 +30,7 @@ class ExpandResults(val searchBox: SearchBox, val aceFinder: AceFinder, aceJumpe
             aceFinder.expandResults()
         }
 
-        eventDispatcher?.multicaster?.stateChanged(ChangeEvent(toString()));
+        eventDispatcher?.multicaster?.stateChanged(ChangeEvent(toString()))
     }
 
 }

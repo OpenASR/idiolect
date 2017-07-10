@@ -1,4 +1,4 @@
-package com.jetbrains.idear.asr
+package org.openasr.idear.asr
 
 import com.jetbrains.idear.asr.cmusphinx.CMUSphinxASR
 import java.io.IOException

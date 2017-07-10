@@ -1,17 +1,14 @@
 // This is a generated file. Not intended for manual editing.
-package com.jetbrains.idear.jsgf.psi.impl;
+package org.openasr.idear.jsgf.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.jetbrains.idear.jsgf.psi.JSpeechLiteral;
-import com.jetbrains.idear.jsgf.psi.JSpeechVisitor;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
+import org.openasr.idear.jsgf.psi.*;
 
-import static com.jetbrains.idear.jsgf.psi.JSpeechTypes.STRING;
-
-public class JSpeechLiteralImpl extends ASTWrapperPsiElement implements JSpeechLiteral {
+public class JSpeechLiteralImpl extends ASTWrapperPsiElement implements
+    JSpeechLiteral {
 
   public JSpeechLiteralImpl(ASTNode node) {
     super(node);
@@ -25,7 +22,7 @@ public class JSpeechLiteralImpl extends ASTWrapperPsiElement implements JSpeechL
   @Override
   @NotNull
   public PsiElement getString() {
-    return findNotNullChildByType(STRING);
+    return findNotNullChildByType(JSpeechTypes.STRING);
   }
 
 }

@@ -1,13 +1,11 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
-import com.intellij.navigation.ChooseByNameContributor;
-import com.intellij.navigation.NavigationItem;
+import com.intellij.navigation.*;
 import com.intellij.openapi.project.Project;
-import com.jetbrains.idear.jsgf.psi.JSpeechRuleDefinition;
 import org.jetbrains.annotations.NotNull;
+import org.openasr.idear.jsgf.psi.JSpeechRuleDefinition;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by breandan on 11/15/2015.

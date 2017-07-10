@@ -1,4 +1,4 @@
-package com.jetbrains.idear.asr
+package org.openasr.idear.asr
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.*
@@ -7,15 +7,15 @@ import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.Pair
 import com.intellij.util.Consumer
-import com.jetbrains.idear.GoogleHelper
-import com.jetbrains.idear.GoogleHelper.getBestTextForUtterance
-import com.jetbrains.idear.WordToNumberConverter
-import com.jetbrains.idear.actions.ExecuteVoiceCommandAction
-import com.jetbrains.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
-import com.jetbrains.idear.ide.IDEService
-import com.jetbrains.idear.ide.IDEService.invokeAction
-import com.jetbrains.idear.recognizer.CustomMicrophone
-import com.jetbrains.idear.tts.TTSService.say
+import org.openasr.idear.GoogleHelper
+import org.openasr.idear.GoogleHelper.getBestTextForUtterance
+import org.openasr.idear.WordToNumberConverter
+import org.openasr.idear.actions.ExecuteVoiceCommandAction
+import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
+import org.openasr.idear.ide.IDEService
+import org.openasr.idear.ide.IDEService.invokeAction
+import org.openasr.idear.recognizer.CustomMicrophone
+import org.openasr.idear.tts.TTSService.say
 import java.awt.EventQueue
 import java.awt.event.KeyEvent.*
 import java.io.IOException
@@ -417,7 +417,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
                 try {
                     val clip = AudioSystem.getClip()
                     val inputStream = AudioSystem.getAudioInputStream(
-                            ASRService::class.java.getResourceAsStream("/com.jetbrains.idear/sounds/beep.wav"))
+                            ASRService::class.java.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
                     clip.open(inputStream)
                     clip.start()
                 } catch (e: Exception) {

@@ -1,12 +1,11 @@
 // This is a generated file. Not intended for manual editing.
-package com.jetbrains.idear.jsgf.psi;
+package org.openasr.idear.jsgf.psi;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
-import com.jetbrains.idear.jsgf.JSpeechElementType;
-import com.jetbrains.idear.jsgf.JSpeechTokenType;
-import com.jetbrains.idear.jsgf.psi.impl.*;
+import org.openasr.idear.jsgf.*;
+import org.openasr.idear.jsgf.psi.impl.*;
 
 public interface JSpeechTypes {
 

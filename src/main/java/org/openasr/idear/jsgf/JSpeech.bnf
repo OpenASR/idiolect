@@ -1,18 +1,18 @@
 {
-  parserClass="com.jetbrains.idear.jsgf.JSpeechParser"
-  parserUtilClass="com.jetbrains.idear.jsgf.JSpeechParserUtil"
+  parserClass="org.openasr.idear.jsgf.JSpeechParser"
+  parserUtilClass="org.openasr.idear.jsgf.JSpeechParserUtil"
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="JSpeech"
   psiImplClassSuffix="Impl"
-  psiPackage="com.jetbrains.idear.jsgf.psi"
-  psiImplPackage="com.jetbrains.idear.jsgf.psi.impl"
+  psiPackage="org.openasr.idear.jsgf.psi"
+  psiImplPackage="org.openasr.idear.jsgf.psi.impl"
 
-  elementTypeHolderClass="com.jetbrains.idear.jsgf.psi.JSpeechTypes"
-  elementTypeClass="com.jetbrains.idear.jsgf.JSpeechElementType"
-  tokenTypeClass="com.jetbrains.idear.jsgf.JSpeechTokenType"
+  elementTypeHolderClass="org.openasr.idear.jsgf.psi.JSpeechTypes"
+  elementTypeClass="org.openasr.idear.jsgf.JSpeechElementType"
+  tokenTypeClass="org.openasr.idear.jsgf.JSpeechTokenType"
 
-  psiImplUtilClass="com.jetbrains.idear.jsgf.JSpeechPsiImplUtil"
+  psiImplUtilClass="org.openasr.idear.jsgf.JSpeechPsiImplUtil"
 
   tokens = [
       STRING="regexp:[A-Za-z_\-]+\w*"
@@ -54,8 +54,8 @@ SelfIdentHeader ::=
     '#JSGF V1.0;'
 
 rulename ::=
-    '<' STRING '>' {mixin="com.jetbrains.idear.jsgf.JSpeechNamedElementImpl"
-    implements="com.jetbrains.idear.jsgf.JSpeechNamedElement"
+    '<' STRING '>' {mixin="org.openasr.idear.jsgf.JSpeechNamedElementImpl"
+    implements="org.openasr.idear.jsgf.JSpeechNamedElement"
     methods=[getName setName getRule setRule getNameIdentifier getPresentation]}
 
 literal ::=

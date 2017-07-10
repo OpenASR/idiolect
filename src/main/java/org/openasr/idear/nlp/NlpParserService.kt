@@ -1,6 +1,5 @@
-package com.jetbrains.idear.nlp
+package org.openasr.idear.nlp
 
-import com.intellij.ide.plugins.IdeaPluginDescriptor
 import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.extensions.PluginId
 import opennlp.tools.cmdline.parser.ParserTool
@@ -9,7 +8,6 @@ import opennlp.tools.parser.Parser
 import opennlp.tools.parser.ParserFactory
 import opennlp.tools.parser.ParserModel
 import org.jetbrains.annotations.TestOnly
-
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -26,7 +24,7 @@ constructor(private val path: String?) : ParserService() {
                 return FileInputStream(path)
             }
 
-            val id = PluginId.getId("com.jetbrains.idear")
+            val id = PluginId.getId("org.openasr.idear")
             val plugin = PluginManager.getPlugin(id)!!
 
             val classLoader = plugin.pluginClassLoader

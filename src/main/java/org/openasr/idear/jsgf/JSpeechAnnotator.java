@@ -1,13 +1,10 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
-import com.intellij.lang.annotation.AnnotationHolder;
-import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.annotation.*;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.psi.PsiElement;
-import com.jetbrains.idear.jsgf.psi.JSpeechLiteral;
-import com.jetbrains.idear.jsgf.psi.JSpeechRulename;
-import com.jetbrains.idear.jsgf.psi.JSpeechScope;
 import org.jetbrains.annotations.NotNull;
+import org.openasr.idear.jsgf.psi.*;
 
 /**
  * Created by breandan on 11/14/2015.

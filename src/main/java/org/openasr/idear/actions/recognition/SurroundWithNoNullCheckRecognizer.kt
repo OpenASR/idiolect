@@ -1,4 +1,4 @@
-package com.jetbrains.idear.actions.recognition
+package org.openasr.idear.actions.recognition
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.ShowIntentionsPass
@@ -6,13 +6,9 @@ import com.intellij.ide.DataManager
 import com.intellij.ide.actions.ApplyIntentionAction
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Computable
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiFile
-
-import java.util.ArrayList
+import java.util.*
 
 class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
 

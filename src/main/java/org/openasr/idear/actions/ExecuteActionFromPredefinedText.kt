@@ -1,8 +1,8 @@
-package com.jetbrains.idear.actions
+package org.openasr.idear.actions
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.jetbrains.idear.actions.recognition.TextToActionConverter
+import org.openasr.idear.actions.recognition.TextToActionConverter
 
 class ExecuteActionFromPredefinedText : ExecuteActionByCommandText() {
 

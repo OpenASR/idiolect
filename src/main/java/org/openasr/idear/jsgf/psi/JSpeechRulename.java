@@ -1,9 +1,9 @@
 // This is a generated file. Not intended for manual editing.
-package com.jetbrains.idear.jsgf.psi;
+package org.openasr.idear.jsgf.psi;
 
 import com.intellij.psi.PsiElement;
-import com.jetbrains.idear.jsgf.JSpeechNamedElement;
 import org.jetbrains.annotations.NotNull;
+import org.openasr.idear.jsgf.JSpeechNamedElement;
 
 public interface JSpeechRulename extends JSpeechNamedElement {
 

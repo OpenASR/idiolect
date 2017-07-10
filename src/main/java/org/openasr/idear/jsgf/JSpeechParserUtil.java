@@ -1,4 +1,4 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 

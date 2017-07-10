@@ -1,7 +1,6 @@
-package com.jetbrains.idear.recognizer;
+package org.openasr.idear.recognizer;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 

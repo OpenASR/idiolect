@@ -1,12 +1,10 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
-import com.jetbrains.idear.jsgf.psi.JSpeechRuleDefinition;
-import com.jetbrains.idear.jsgf.psi.JSpeechRulename;
-import com.jetbrains.idear.jsgf.psi.JSpeechTypes;
 import org.jetbrains.annotations.Nullable;
+import org.openasr.idear.jsgf.psi.*;
 
 import javax.swing.*;
 
@@ -22,7 +20,8 @@ public class JSpeechPsiImplUtil {
         ASTNode keyNode = element.getNode().findChildByType(JSpeechTypes.RULENAME);
         if (keyNode != null) {
 
-            JSpeechRulename property = JSpeechElementFactory.createProperty(element.getProject(), newName);
+            JSpeechRulename
+                property = JSpeechElementFactory.createProperty(element.getProject(), newName);
             ASTNode newKeyNode = property.getFirstChild().getNode();
             element.getNode().replaceChild(keyNode, newKeyNode);
         }

@@ -1,4 +1,4 @@
-package com.jetbrains.idear
+package org.openasr.idear
 
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project

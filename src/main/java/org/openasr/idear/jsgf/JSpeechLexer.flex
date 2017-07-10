@@ -1,7 +1,7 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 import com.intellij.lexer.*;
 import com.intellij.psi.tree.IElementType;
-import static com.jetbrains.idear.jsgf.psi.JSpeechTypes.*;
+import static org.openasr.idear.jsgf.psi.JSpeechTypes.*;
 
 %%
 

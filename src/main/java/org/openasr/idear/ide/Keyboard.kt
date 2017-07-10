@@ -1,4 +1,4 @@
-package com.jetbrains.idear.ide
+package org.openasr.idear.ide
 
 import java.awt.Robot
 import java.awt.event.KeyEvent.*

@@ -1,12 +1,11 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 /**
  * Created by breandan on 11/13/2015.
  */
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
 
 import javax.swing.*;
 

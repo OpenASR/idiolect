@@ -1,4 +1,4 @@
-package com.jetbrains.idear.asr
+package org.openasr.idear.asr
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionManager

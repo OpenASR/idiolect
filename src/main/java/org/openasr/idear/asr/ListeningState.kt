@@ -1,6 +1,6 @@
-package com.jetbrains.idear.asr
+package org.openasr.idear.asr
 
-import com.jetbrains.idear.asr.ListeningState.Status.*
+import org.openasr.idear.asr.ListeningState.Status.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**

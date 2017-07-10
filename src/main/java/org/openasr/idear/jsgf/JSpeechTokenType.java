@@ -1,8 +1,7 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
 public class JSpeechTokenType extends IElementType {
 

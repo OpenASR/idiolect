@@ -1,13 +1,11 @@
-package com.jetbrains.idear;
+package org.openasr.idear;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
-import com.jetbrains.idear.actions.recognition.ActionCallInfo;
-import com.jetbrains.idear.actions.recognition.ExtractActionRecognizer;
 import org.junit.Test;
+import org.openasr.idear.actions.recognition.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ActionRecognizerTest {
 

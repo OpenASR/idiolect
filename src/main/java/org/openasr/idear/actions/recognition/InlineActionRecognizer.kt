@@ -1,4 +1,4 @@
-package com.jetbrains.idear.actions.recognition
+package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
 

@@ -1,14 +1,12 @@
-package com.jetbrains.idear;
+package org.openasr.idear;
 
-import com.jetbrains.idear.nlp.NlpParserService;
 import opennlp.tools.parser.Parse;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.openasr.idear.nlp.NlpParserService;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class NlpParserTest {
     private static NlpParserService myParser;

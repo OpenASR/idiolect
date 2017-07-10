@@ -1,4 +1,4 @@
-package com.jetbrains.idear.psi
+package org.openasr.idear.psi
 
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project

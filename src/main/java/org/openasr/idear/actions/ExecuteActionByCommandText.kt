@@ -1,12 +1,11 @@
-package com.jetbrains.idear.actions
+package org.openasr.idear.actions
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionManager
-import com.intellij.openapi.editor.actionSystem.TypedAction
-import com.jetbrains.idear.actions.recognition.ActionCallInfo
-import com.jetbrains.idear.actions.recognition.TextToActionConverter
+import org.openasr.idear.actions.recognition.ActionCallInfo
+import org.openasr.idear.actions.recognition.TextToActionConverter
 
 abstract class ExecuteActionByCommandText : AnAction() {
 

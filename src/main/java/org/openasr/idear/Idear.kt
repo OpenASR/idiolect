@@ -1,12 +1,12 @@
-package com.jetbrains.idear
+package org.openasr.idear
 
 import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.components.ApplicationComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.extensions.PluginId
-import com.jetbrains.idear.asr.ASRService
-import com.jetbrains.idear.asr.GrammarService
-import com.jetbrains.idear.tts.TTSService
+import org.openasr.idear.asr.ASRService
+import org.openasr.idear.asr.GrammarService
+import org.openasr.idear.tts.TTSService
 
 class Idear : ApplicationComponent {
 
@@ -17,7 +17,7 @@ class Idear : ApplicationComponent {
     }
 
     private fun initTTSService() {
-        val id = PluginId.getId("com.jetbrains.idear")
+        val id = PluginId.getId("org.openasr.idear")
         val plugin = PluginManager.getPlugin(id)!!
 
         val current = Thread.currentThread().contextClassLoader

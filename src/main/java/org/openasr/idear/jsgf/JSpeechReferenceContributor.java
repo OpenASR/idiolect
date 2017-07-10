@@ -1,4 +1,4 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 /**
  * Created by breandan on 11/15/2015.

@@ -1,24 +1,23 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 /**
  * Created by breandan on 11/13/2015.
  */
 
 import com.intellij.lexer.Lexer;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.editor.HighlighterColors;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
-import com.jetbrains.idear.jsgf.psi.JSpeechTypes;
 import org.jetbrains.annotations.NotNull;
+import org.openasr.idear.jsgf.psi.JSpeechTypes;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
+import static com.intellij.openapi.editor.colors.TextAttributesKey
+    .createTextAttributesKey;
 
 public class JSpeechSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final Map<String, TextAttributesKey> KEYS = new HashMap<>();

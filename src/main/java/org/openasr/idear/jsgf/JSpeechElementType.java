@@ -1,12 +1,11 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 /**
  * Created by breandan on 11/13/2015.
  */
 
 import com.intellij.psi.tree.IElementType;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
 public class JSpeechElementType extends IElementType {
     public JSpeechElementType(@NotNull @NonNls String debugName) {

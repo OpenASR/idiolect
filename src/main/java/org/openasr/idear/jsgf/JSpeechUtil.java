@@ -1,18 +1,14 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
-import com.jetbrains.idear.jsgf.psi.JSpeechRuleDefinition;
+import org.openasr.idear.jsgf.psi.JSpeechRuleDefinition;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by breandan on 11/15/2015.

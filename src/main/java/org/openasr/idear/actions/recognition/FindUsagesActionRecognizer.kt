@@ -1,20 +1,14 @@
-package com.jetbrains.idear.actions.recognition
+package org.openasr.idear.actions.recognition
 
 import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext
-import com.intellij.openapi.components.ServiceManager
-import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.usages.UsageTarget
 import com.intellij.usages.UsageView
-import com.jetbrains.idear.psi.PsiUtil
-import com.jetbrains.idear.tts.TTSService
-
-import java.util.Arrays
-import java.util.HashSet
+import org.openasr.idear.psi.PsiUtil
+import org.openasr.idear.tts.TTSService
+import java.util.*
 
 //runs only selected configuration
 class FindUsagesActionRecognizer : ActionRecognizer {

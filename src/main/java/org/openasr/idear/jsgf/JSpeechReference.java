@@ -1,20 +1,17 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 /**
  * Created by breandan on 11/15/2015.
  */
 
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.lookup.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.jetbrains.idear.jsgf.psi.JSpeechRuleDefinition;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
+import org.openasr.idear.jsgf.psi.JSpeechRuleDefinition;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class JSpeechReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private String key;

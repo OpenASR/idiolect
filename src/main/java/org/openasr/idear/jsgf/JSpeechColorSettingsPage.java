@@ -1,4 +1,4 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 /**
  * Created by breandan on 11/13/2015.
@@ -6,11 +6,8 @@ package com.jetbrains.idear.jsgf;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import com.intellij.openapi.options.colors.AttributesDescriptor;
-import com.intellij.openapi.options.colors.ColorDescriptor;
-import com.intellij.openapi.options.colors.ColorSettingsPage;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.options.colors.*;
+import org.jetbrains.annotations.*;
 
 import javax.swing.*;
 import java.util.Map;

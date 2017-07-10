@@ -1,4 +1,4 @@
-package com.jetbrains.idear
+package org.openasr.idear
 
 /**
  * Created by breandan on 10/25/2015.

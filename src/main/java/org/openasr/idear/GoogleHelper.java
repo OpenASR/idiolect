@@ -1,24 +1,18 @@
-package com.jetbrains.idear;
+package org.openasr.idear;
 
 import com.intellij.openapi.util.Pair;
-import com.jetbrains.idear.recognizer.CustomMicrophone;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.*;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.codehaus.jettison.json.*;
+import org.openasr.idear.recognizer.CustomMicrophone;
 
 import java.awt.*;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class GoogleHelper {
     private static Logger logger = Logger.getLogger(GoogleHelper.class.getSimpleName());

@@ -1,10 +1,10 @@
 <idea-plugin>
-    <id>com.jetbrains.idear</id>
+    <id>org.openasr.idear</id>
     <name>idear</name>
     <version>1.2.1</version>
     <vendor email="breandan.considine@jetbrains.com" url="http://www.jetbrains.com">JetBrains</vendor>
 
-    <description><![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands and assists with simple actions like debugging, navigation, and refactoring. For a complete list of commands, please see the <a href="https://github.com/breandan/idear/blob/master/src/main/resources/com.jetbrains.idear/grammars/command.gram">command grammar</a>.]]></description>
+    <description><![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands and assists with simple actions like debugging, navigation, and refactoring. For a complete list of commands, please see the <a href="https://github.com/breandan/idear/blob/master/src/main/resources/org.openasr.idear/grammars/command.gram">command grammar</a>.]]></description>
     <change-notes>
         <![CDATA[
         <html>
@@ -30,55 +30,55 @@
     <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
 
     <extensionPoints>
-        <extensionPoint name="actionRecognizer" interface="com.jetbrains.idear.actions.recognition.ActionRecognizer"/>
+        <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileTypeFactory implementation="com.jetbrains.idear.jsgf.JSpeechFileTypeFactory"/>
-        <lang.syntaxHighlighterFactory language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechSyntaxHighlighterFactory"/>
-        <lang.parserDefinition language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechParserDefinition"/>
-        <colorSettingsPage implementation="com.jetbrains.idear.jsgf.JSpeechColorSettingsPage"/>
-        <annotator language="JSpeech" implementationClass="com.jetbrains.idear.jsgf.JSpeechAnnotator"/>
-        <gotoSymbolContributor implementation="com.jetbrains.idear.jsgf.JSpeechChooseByNameContributor"/>
+        <fileTypeFactory implementation="org.openasr.idear.jsgf.JSpeechFileTypeFactory"/>
+        <lang.syntaxHighlighterFactory language="JSpeech" implementationClass="org.openasr.idear.jsgf.JSpeechSyntaxHighlighterFactory"/>
+        <lang.parserDefinition language="JSpeech" implementationClass="org.openasr.idear.jsgf.JSpeechParserDefinition"/>
+        <colorSettingsPage implementation="org.openasr.idear.jsgf.JSpeechColorSettingsPage"/>
+        <annotator language="JSpeech" implementationClass="org.openasr.idear.jsgf.JSpeechAnnotator"/>
+        <gotoSymbolContributor implementation="org.openasr.idear.jsgf.JSpeechChooseByNameContributor"/>
 
+        <psi.referenceContributor implementation="org.openasr.idear.jsgf.JSpeechReferenceContributor"/>
 
-        <psi.referenceContributor implementation="com.jetbrains.idear.jsgf.JSpeechReferenceContributor"/>
-
-        <applicationService serviceInterface="com.jetbrains.idear.asr.ASRService" serviceImplementation="com.jetbrains.idear.asr.ASRService">
+        <applicationService serviceInterface="org.openasr.idear.asr.ASRService" serviceImplementation="org.openasr.idear.asr.ASRService">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.tts.TTSService" serviceImplementation="com.jetbrains.idear.tts.TTSService">
+        <applicationService serviceInterface="org.openasr.idear.tts.TTSService" serviceImplementation="org.openasr.idear.tts.TTSService">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.asr.GrammarService" serviceImplementation="com.jetbrains.idear.asr.GrammarService">
+        <applicationService serviceInterface="org.openasr.idear.asr.GrammarService" serviceImplementation="org.openasr.idear.asr.GrammarService">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.nlp.ParserService" serviceImplementation="com.jetbrains.idear.nlp.NlpParserService">
+        <applicationService serviceInterface="org.openasr.idear.nlp.ParserService" serviceImplementation="org.openasr.idear.nlp.NlpParserService">
         </applicationService>
 
-        <applicationService serviceInterface="com.jetbrains.idear.ide.IDEService" serviceImplementation="com.jetbrains.idear.ide.IDEService">
+        <applicationService serviceInterface="org.openasr.idear.ide.IDEService" serviceImplementation="org.openasr.idear.ide.IDEService">
         </applicationService>
 
+        <applicationService serviceInterface="org.openasr.idear.settings.IdearSettingsProvider" serviceImplementation="org.openasr.idear.settings.IdearSettingsProvider"/>
+        <applicationConfigurable groupId="tools"
+                                 displayName="Recognition"
+                                 id="preferences.IdearConfigurable"
+                                 instance="org.openasr.idear.settings.IdearConfigurable"/>
     </extensions>
 
-
-    <extensions defaultExtensionNs="com.jetbrains.idear">
-        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.ExtractActionRecognizer"/>
-        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.InlineActionRecognizer"/>
-        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.RunActionRecognizer"/>
-        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.DebugActionRecognizer"/>
-        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.FindUsagesActionRecognizer"/>
-        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.RenameActionRecognizer"/>
-        <actionRecognizer implementation="com.jetbrains.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
+    <extensions defaultExtensionNs="org.openasr.idear">
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.InlineActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RunActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.DebugActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
     </extensions>
-
 
     <application-components>
-
         <component>
-            <implementation-class>com.jetbrains.idear.Idear</implementation-class>
+            <implementation-class>org.openasr.idear.Idear</implementation-class>
         </component>
-
     </application-components>
 
     <project-components>
@@ -86,24 +86,24 @@
     </project-components>
 
     <actions>
-        <action id="Idear.Start" class="com.jetbrains.idear.VoiceRecordControllerAction" text="Voice control"
-                description="Start" icon="/com.jetbrains.idear/icons/start.png">
+        <action id="Idear.Start" class="org.openasr.idear.VoiceRecordControllerAction" text="Voice control"
+                description="Start" icon="/org.openasr.idear/icons/start.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 
         <action id="Idear.SpeechStuff"
                 text="Invoke by speech"
-                class="com.jetbrains.idear.actions.ExecuteActionFromPredefinedText"/>
+                class="org.openasr.idear.actions.ExecuteActionFromPredefinedText"/>
 
         <action id="Idear.VoiceAction"
                 text="Invoke by voice-command"
-                class="com.jetbrains.idear.actions.ExecuteVoiceCommandAction"/>
+                class="org.openasr.idear.actions.ExecuteVoiceCommandAction"/>
 
         <!-- Home-grown actions -->
 
         <action id="Idear.WhereAmI"
                 text="Name the place you are"
-                class="com.jetbrains.idear.actions.WhereAmIAction"/>
+                class="org.openasr.idear.actions.WhereAmIAction"/>
 
         <action id="AceJumpAction"
                 class="com.johnlindquist.acejump.AceJumpAction"

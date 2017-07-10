@@ -1,8 +1,8 @@
-package com.jetbrains.idear.jsgf;
+package org.openasr.idear.jsgf;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFileFactory;
-import com.jetbrains.idear.jsgf.psi.JSpeechRulename;
+import org.openasr.idear.jsgf.psi.JSpeechRulename;
 
 /**
  * Created by breandan on 11/15/2015.

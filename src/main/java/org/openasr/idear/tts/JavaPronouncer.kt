@@ -1,4 +1,4 @@
-package com.jetbrains.idear.tts
+package org.openasr.idear.tts
 
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.lang.java.JavaLanguage
@@ -7,7 +7,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
 import com.intellij.util.IncorrectOperationException
-import com.jetbrains.idear.CodeToTextConverter
 import org.jetbrains.annotations.Nls
 
 class JavaPronouncer : IntentionAction {
@@ -37,7 +36,9 @@ class JavaPronouncer : IntentionAction {
         }
         val caretOffset = editor.caretModel.offset
 
-        val converter = CodeToTextConverter(psiFile, range, caretOffset)
+        val converter = org.openasr.idear.CodeToTextConverter(psiFile,
+            range,
+            caretOffset)
 
         val service = TTSService
         service.say(converter.toText())

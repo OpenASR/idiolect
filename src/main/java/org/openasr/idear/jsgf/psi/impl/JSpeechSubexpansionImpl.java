@@ -1,14 +1,14 @@
 // This is a generated file. Not intended for manual editing.
-package com.jetbrains.idear.jsgf.psi.impl;
+package org.openasr.idear.jsgf.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.jetbrains.idear.jsgf.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.*;
+import org.openasr.idear.jsgf.psi.*;
 
-public class JSpeechSubexpansionImpl extends ASTWrapperPsiElement implements JSpeechSubexpansion {
+public class JSpeechSubexpansionImpl extends ASTWrapperPsiElement implements
+    JSpeechSubexpansion {
 
   public JSpeechSubexpansionImpl(ASTNode node) {
     super(node);

@@ -1,6 +1,6 @@
-package com.jetbrains.idear.asr.cmusphinx
+package org.openasr.idear.asr.cmusphinx
 
-import com.jetbrains.idear.asr.ASRProvider
+import org.openasr.idear.asr.ASRProvider
 import edu.cmu.sphinx.api.Configuration
 import java.io.IOException
 import java.util.logging.Level
@@ -48,7 +48,7 @@ class CMUSphinxASR : ASRProvider {
 
         private val ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us"
         private val DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict"
-        private val GRAMMAR_PATH = "resource:/com.jetbrains.idear/grammars"
+        private val GRAMMAR_PATH = "resource:/org.openasr.idear/grammars"
 
         private val logger = Logger.getLogger(CMUSphinxASR::class.java.simpleName)
     }
