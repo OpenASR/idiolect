@@ -13,6 +13,8 @@ class ASRService {
         try {
             recognizer = CMUSphinxASR()
 //            recognizer = LexASR()
+            // TODO: LexVoiceASR(nlpResultListener) : ASRProvider, NlpProvider
+            // TODO: recogniser.withNlpService( LexTextNlp(nlpResultListener): NlpProvider )
 
             speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
             recognizer.startRecognition()
