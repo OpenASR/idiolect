@@ -1,6 +1,6 @@
 package org.openasr.idear.asr
 
-import com.jetbrains.idear.asr.cmusphinx.CMUSphinxASR
+import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
 import java.io.IOException
 import java.util.logging.Level
 import java.util.logging.Logger
