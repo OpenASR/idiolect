@@ -83,11 +83,20 @@ class LexNlp(val listener: NlpResultListener): NlpProvider {
         response.sessionAttributes
 
 
-        when (response.dialogState) {
+        if (response.dialogState == DialogState.Fulfilled.name) {
+//            listener.onFulfilled(response.intentName, response.responseCard.genericAttachments[0].buttons.map { it.text, it.value })
+        } else {
+            for (card in response.responseCard.genericAttachments) {
+                listener.onMessage()
+            }
+        }
+
+
+        /*when (response.dialogState) {
             DialogState.Fulfilled.name, DialogState.ReadyForFulfillment.name -> listener.onFulfilled()
             DialogState.Failed.name -> listener.onFailure()
             else -> listener.onIncomplete()
-        }
+        }*/
     }
 }
 
