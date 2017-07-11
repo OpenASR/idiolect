@@ -27,7 +27,6 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
         val format = AudioFormat(sampleRate, sampleSize, 1, signed, bigEndian)
 
         try {
-
             line = AudioSystem.getTargetDataLine(format)
             line.open()
 
