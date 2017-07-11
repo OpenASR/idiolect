@@ -12,6 +12,7 @@ plugins {
 intellij {
   pluginName = "idear"
   updateSinceUntilBuild = false
+  setPlugins("acejump:3.3.4")
 }
 
 group = "org.openasr"
@@ -29,7 +30,8 @@ dependencies {
   compile("com.mashape.unirest:unirest-java:1.4.7")
   compile("org.codehaus.jettison:jettison:1.3.7")
   compile("de.dfki.mary:voice-cmu-slt-hsmm:5.2")
-  compile("com.amazonaws:aws-java-sdk-polly:1.11.77")
+  compile("com.amazonaws:aws-java-sdk-lex:1.11.96")
+  compile("com.amazonaws:aws-java-sdk-polly:1.11.96")
   compile("com.googlecode.soundlibs:jlayer:1.0.1-1")
   testCompile("junit:junit:4.12")
 }

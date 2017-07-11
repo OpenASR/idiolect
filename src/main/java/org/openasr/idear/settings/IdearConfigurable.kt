@@ -5,7 +5,6 @@ import org.openasr.idear.settings.IdearSettingsProvider.Companion.instance
 import org.openasr.idear.settings.IdearSettingsProvider.State
 import javax.swing.JComponent
 
-
 /**
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
  */
@@ -24,7 +23,7 @@ class IdearConfigurable : SearchableConfigurable {
         state.recognitionService = gui.recognitionService
     }
 
-    override fun createComponent(): JComponent? {
+    override fun createComponent(): JComponent {
         gui = RecognitionSettingsForm()
         initialState = settings.state
         reset()
