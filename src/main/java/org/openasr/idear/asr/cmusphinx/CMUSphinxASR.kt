@@ -1,10 +1,9 @@
 package org.openasr.idear.asr.cmusphinx
 
-import org.openasr.idear.asr.ASRProvider
+import com.intellij.openapi.diagnostic.Logger
 import edu.cmu.sphinx.api.Configuration
+import org.openasr.idear.asr.ASRProvider
 import java.io.IOException
-import java.util.logging.Level
-import java.util.logging.Logger
 
 class CMUSphinxASR : ASRProvider {
     private lateinit var recognizer: CustomLiveSpeechRecognizer
@@ -20,7 +19,7 @@ class CMUSphinxASR : ASRProvider {
         try {
             recognizer = CustomLiveSpeechRecognizer(configuration)
         } catch (e: IOException) {
-            logger.log(Level.SEVERE, "Couldn't initialize speech recognizer:", e)
+            logger.error("Couldn't initialize speech recognizer", e)
         }
     }
 
@@ -50,6 +49,6 @@ class CMUSphinxASR : ASRProvider {
         private val DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict"
         private val GRAMMAR_PATH = "resource:/org.openasr.idear/grammars"
 
-        private val logger = Logger.getLogger(CMUSphinxASR::class.java.simpleName)
+        private val logger = Logger.getInstance(CMUSphinxASR::class.java)
     }
 }

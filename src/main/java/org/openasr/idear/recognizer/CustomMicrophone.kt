@@ -1,11 +1,14 @@
 package org.openasr.idear.recognizer
 
+import com.intellij.openapi.diagnostic.Logger
 import java.io.File
 import java.io.IOException
-import java.util.logging.Logger
 import javax.sound.sampled.*
 
-class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigEndian: Boolean) {
+class CustomMicrophone(sampleRate: Float,
+                       sampleSize: Int,
+                       signed: Boolean,
+                       bigEndian: Boolean) {
     private val line: TargetDataLine
     //    /* package */ void setMasterGain(double mg) {
     //        double pmg = inputStream.setMasterGain(mg);
@@ -34,7 +37,7 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
             if (line.isControlSupported(FloatControl.Type.MASTER_GAIN))
                 logger.info("Microphone: MASTER_GAIN supported")
             else
-                logger.warning("Microphone: MASTER_GAIN NOT supported")
+                logger.warn("Microphone: MASTER_GAIN NOT supported")
 
             //masterGainControl = findMGControl(line);
         } catch (e: LineUnavailableException) {
@@ -54,7 +57,7 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
     }
 
     companion object {
-        private val logger = Logger.getLogger(CustomMicrophone::class.java.simpleName)
+        private val logger = Logger.getInstance(CustomMicrophone::class.java)
 
         private val DURATION = 4500
         private val TEMP_FILE = "/tmp/X.wav"

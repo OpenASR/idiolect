@@ -1,12 +1,11 @@
 package org.openasr.idear.asr.cmusphinx
 
-import org.openasr.idear.recognizer.CustomMicrophone
 import edu.cmu.sphinx.api.AbstractSpeechRecognizer
 import edu.cmu.sphinx.api.Configuration
 import edu.cmu.sphinx.decoder.ResultListener
 import edu.cmu.sphinx.frontend.endpoint.SpeechClassifier
 import edu.cmu.sphinx.frontend.util.StreamDataSource
-
+import org.openasr.idear.recognizer.CustomMicrophone
 import java.io.IOException
 
 /**

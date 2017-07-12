@@ -6,7 +6,9 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 
-class CodeToTextConverter(private val myFile: PsiFile, private val myRange: TextRange?, private val myCaretOffset: Int) {
+class CodeToTextConverter(private val myFile: PsiFile,
+                          private val myRange: TextRange?,
+                          private val myCaretOffset: Int) {
     private val myProject: Project
     private val myDocument: Document?
 

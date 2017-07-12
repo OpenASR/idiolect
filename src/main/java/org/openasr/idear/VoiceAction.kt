@@ -8,67 +8,67 @@ import org.openasr.idear.actions.recognition.ActionCallInfo
 import org.openasr.idear.actions.recognition.TextToActionConverter
 
 object VoiceAction : AnAction() {
-  private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
+    private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
 
-  override fun actionPerformed(e: AnActionEvent) {
-    val dataContext = e.dataContext
-    val editor = CommonDataKeys.EDITOR.getData(dataContext)
+    override fun actionPerformed(e: AnActionEvent) {
+        val dataContext = e.dataContext
+        val editor = CommonDataKeys.EDITOR.getData(dataContext)
 
-    val provider = TextToActionConverter(e.dataContext)
-    val callInfo = provider.extractAction(e.getData(KEY)!!)!!
-    invoke(editor!!, callInfo)
-  }
-
-  private operator fun invoke(editor: Editor, info: ActionCallInfo) {
-    val action = ActionManager.getInstance().getAction(info.actionId)
-
-    val type = info.typeAfter
-    val isHitTabAfter = info.hitTabAfter
-
-    val manager = DataManager.getInstance()
-    if (manager != null) {
-      val context = manager.getDataContext(editor.contentComponent)
-      action.actionPerformed(AnActionEvent(null,
-          context,
-          "",
-          action.templatePresentation,
-          ActionManager.getInstance(),
-          0))
-
-      if (type != null) {
-        typeText(editor, type, context)
-      }
-
-      if (isHitTabAfter) {
-        hitTab(context)
-      }
+        val provider = TextToActionConverter(e.dataContext)
+        val callInfo = provider.extractAction(e.getData(KEY)!!)!!
+        invoke(editor!!, callInfo)
     }
-  }
 
-  private fun hitTab(context: DataContext) {
-    val action = ActionManager.getInstance().getAction("NextTemplateVariable")
-    action.actionPerformed(AnActionEvent(null,
-        context,
-        "",
-        action.templatePresentation,
-        ActionManager.getInstance(),
-        0))
-  }
+    private operator fun invoke(editor: Editor, info: ActionCallInfo) {
+        val action = ActionManager.getInstance().getAction(info.actionId)
 
-  private fun typeText(editor: Editor, type: String, context: DataContext) {
-    val typing = EditorActionManager.getInstance().typedAction
-    for (c in type.toCharArray()) {
-      typing.actionPerformed(editor, c, context)
+        val type = info.typeAfter
+        val isHitTabAfter = info.hitTabAfter
+
+        val manager = DataManager.getInstance()
+        if (manager != null) {
+            val context = manager.getDataContext(editor.contentComponent)
+            action.actionPerformed(AnActionEvent(null,
+                context,
+                "",
+                action.templatePresentation,
+                ActionManager.getInstance(),
+                0))
+
+            if (type != null) {
+                typeText(editor, type, context)
+            }
+
+            if (isHitTabAfter) {
+                hitTab(context)
+            }
+        }
     }
-  }
 
-  override fun update(event: AnActionEvent?) {
-    val dataContext = event!!.dataContext
-    val editor = CommonDataKeys.EDITOR.getData(dataContext)
-
-    if (editor != null) {
-      val presentation = event.presentation
-      presentation.isEnabled = true
+    private fun hitTab(context: DataContext) {
+        val action = ActionManager.getInstance().getAction("NextTemplateVariable")
+        action.actionPerformed(AnActionEvent(null,
+            context,
+            "",
+            action.templatePresentation,
+            ActionManager.getInstance(),
+            0))
     }
-  }
+
+    private fun typeText(editor: Editor, type: String, context: DataContext) {
+        val typing = EditorActionManager.getInstance().typedAction
+        for (c in type.toCharArray()) {
+            typing.actionPerformed(editor, c, context)
+        }
+    }
+
+    override fun update(event: AnActionEvent?) {
+        val dataContext = event!!.dataContext
+        val editor = CommonDataKeys.EDITOR.getData(dataContext)
+
+        if (editor != null) {
+            val presentation = event.presentation
+            presentation.isEnabled = true
+        }
+    }
 }

@@ -5,12 +5,12 @@ import com.intellij.openapi.extensions.ExtensionPointName
 
 
 class TextToActionConverter(private val dataContext: DataContext) {
-  internal var EP_NAME = ExtensionPointName<ActionRecognizer>("org.openasr.idear.actionRecognizer")
+    internal var EP_NAME = ExtensionPointName<ActionRecognizer>("org.openasr.idear.actionRecognizer")
 
-  fun extractAction(sentence: String) =
-      EP_NAME.extensions
-          .firstOrNull { it.isMatching(sentence) }
-          ?.getActionInfo(sentence, dataContext)
+    fun extractAction(sentence: String) =
+        EP_NAME.extensions
+            .firstOrNull { it.isMatching(sentence) }
+            ?.getActionInfo(sentence, dataContext)
 }
 
 

@@ -11,8 +11,8 @@ import org.openasr.idear.tts.TTSService
 class Idear : ApplicationComponent {
 
     override fun initComponent() {
-        ServiceManager.getService(ASRService::class.java).init()
-        ServiceManager.getService(GrammarService::class.java).init()
+        ASRService.init()
+        GrammarService.init()
         initTTSService()
     }
 

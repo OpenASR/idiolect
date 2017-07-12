@@ -123,7 +123,9 @@ object Keyboard {
         keys.forEach { robot.keyRelease(it.toInt()) }
     }
 
-    private fun doType(vararg keyCodes: Int) = doType(keyCodes, 0, keyCodes.size)
+    private fun doType(vararg keyCodes: Int) = doType(keyCodes,
+        0,
+        keyCodes.size)
 
     private fun doType(keyCodes: IntArray, offset: Int, length: Int) {
         if (length == 0) {

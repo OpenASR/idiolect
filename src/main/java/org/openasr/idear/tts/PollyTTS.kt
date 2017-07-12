@@ -33,7 +33,8 @@ class PollyTTS : TTSProvider {
 //    private var player: AdvancedPlayer? = null
 
     init {
-        polly = AmazonPollyClient(DefaultAWSCredentialsProviderChain(), ClientConfiguration())
+        polly = AmazonPollyClient(DefaultAWSCredentialsProviderChain(),
+            ClientConfiguration())
         polly!!.setRegion(Region.getRegion(Regions.US_EAST_1))
 
         // Create describe voices request.
@@ -58,8 +59,9 @@ class PollyTTS : TTSProvider {
 
     @Throws(IOException::class)
     private fun synthesize(text: String, format: OutputFormat): InputStream? {
-        val synthReq = SynthesizeSpeechRequest().withText(text).withVoiceId(voice?.getId())
-                .withOutputFormat(format)
+        val synthReq = SynthesizeSpeechRequest().withText(text).withVoiceId(
+            voice?.getId())
+            .withOutputFormat(format)
         val synthRes = polly?.synthesizeSpeech(synthReq)
 
         return synthRes?.audioStream
@@ -68,7 +70,7 @@ class PollyTTS : TTSProvider {
     private fun playAudio(inputStream: InputStream) {
         //create an MP3 player
         val player = AdvancedPlayer(inputStream,
-                javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice())
+            javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice())
 
         player.playBackListener = object : PlaybackListener() {
             override fun playbackStarted(evt: PlaybackEvent?) {

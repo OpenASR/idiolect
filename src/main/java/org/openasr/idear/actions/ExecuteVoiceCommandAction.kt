@@ -3,10 +3,10 @@ package org.openasr.idear.actions
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.DataKey
+import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.actions.recognition.TextToActionConverter
-import java.util.logging.Logger
 
-class ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
+object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val dataContext = e.dataContext
@@ -21,8 +21,6 @@ class ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
         }
     }
 
-    companion object {
-        private val logger = Logger.getLogger(ExecuteVoiceCommandAction::class.java.simpleName)
-        val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
-    }
+    private val logger = Logger.getInstance(ExecuteVoiceCommandAction::class.java)
+    val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
 }
