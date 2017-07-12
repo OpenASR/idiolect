@@ -66,7 +66,7 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
 
                     val mean = bruteForceAutocorrelation(window, correllation)
 
-
+                    // TODO: JARVIS' MicrophoneAnalyzer implements the algorithms mentiond here - https://github.com/lkuza2/java-speech-ap
                     // https://www.researchgate.net/publication/255667085_A_simple_but_efficient_real-time_voice_activity_detection_algorithm
                     //  - Ignore silence run less than 10 successive frames.
                     //  - Ignore speech run less than 5 successive frames.
