@@ -8,13 +8,13 @@ import marytts.modules.synthesis.Voice
 import marytts.util.data.audio.AudioPlayer
 import java.util.*
 import java.util.logging.Level
-import java.util.logging.Logger
+import java.util.logging.Logger.getLogger
 
 /**
  * Created by breandan on 7/9/2015.
  */
 class MaryTTS : TTSProvider {
-    val logger = Logger.getLogger(MaryTTS::class.java.simpleName)
+    val logger = getLogger("MaryTTS")
     private var voice: Voice? = null
     var maryTTS: MaryInterface? = null
 
