@@ -1,18 +1,22 @@
+/*
+Moved to https://github.com/lkuza2/java-speech-api/pull/99
+
 package org.openasr.idear.recognizer.vad
 
 import edu.cmu.sphinx.frontend.DataProcessingException
 import edu.cmu.sphinx.frontend.util.DataUtil
 import org.openasr.idear.recognizer.CustomMicrophone
 import java.io.DataInputStream
-import java.io.InputStream
 import java.util.logging.Logger
 import javax.sound.sampled.AudioInputStream
 import javax.sound.sampled.AudioSystem
-import org.apache.commons.lang3.Conversion.byteArrayToShort
 import java.io.IOException
 
-
+*/
 /**
+ * Adapted from
+ * https://github.com/amaurycrickx/recognito/blob/master/recognito/src/main/java/com/bitsinharmony/recognito/vad/AutocorrellatedVoiceActivityDetector.java
+ *
  * A voice activity detector attempts to detect presence or abscence of voice in the signal.
  * <p>
  * The technique used here is a simple (but efficient) one based on a characteristic of (white) noise :
@@ -27,7 +31,7 @@ import java.io.IOException
  *
  * TODO: incorporate https://www.researchgate.net/publication/255667085_A_simple_but_efficient_real-time_voice_activity_detection_algorithm
  * @author Amaury Crickx
- */
+ *//*
 class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
     private val WINDOW_MILLIS = 1
     private val FADE_MILLIS = 2
@@ -35,9 +39,13 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
     private val MIN_VOICE_MILLIS = 200
     private val MAX_VOICE_MILLIS = 60_000
 
-    /** the noise threshold used to determine if a given section is silence or not */
+    */
+/** the noise threshold used to determine if a given section is silence or not *//*
+
     var threshold = 0.0001
 
+    private var bytesPerValue: Int = 0
+    private var totalValuesRead: Int = 0
     private var fadeInFactors: DoubleArray? = null
     private var fadeOutFactors: DoubleArray? = null
 
@@ -52,7 +60,7 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
 
         val windowSize = WINDOW_MILLIS * oneMilliInSamples
         val correllation = DoubleArray(windowSize)
-        val window = DoubleArray(windowSize)
+        var window: DoubleArray // = DoubleArray(windowSize)
         var position: Int
         var activityStart: Int
         var data = DataInputStream(inStream)
@@ -61,7 +69,7 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         val thread = Thread({
             try {
                 while (true) {
-                    read
+                    window = readFrame(inStream)
 
 
                     val mean = bruteForceAutocorrelation(window, correllation)
@@ -87,6 +95,7 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         return thread
     }
 
+    // https://github.com/tilo/cmusphinx-1/blob/master/sphinx4/src/sphinx4/edu/cmu/sphinx/frontend/util/AudioFileDataSource.java
     fun readFrame(dataStream: AudioInputStream): DoubleArray {
         // read one frame's worth of bytes
         val bigEndian = dataStream.format.isBigEndian
@@ -103,7 +112,7 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
                 }
             } while (read != -1 && totalRead < bytesToRead)
             if (totalRead <= 0) {
-                closeDataStream()
+//                closeDataStream()
                 return null
             }
             // shrink incomplete frames
@@ -116,7 +125,7 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
                 val shrinkedBuffer = ByteArray(totalRead)
                 System.arraycopy(samplesBuffer, 0, shrinkedBuffer, 0, totalRead)
                 samplesBuffer = shrinkedBuffer
-                closeDataStream()
+//                closeDataStream()
             }
         } catch (ioe: IOException) {
             throw DataProcessingException("Error reading data", ioe)
@@ -133,12 +142,14 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         return doubleData
     }
 
-    /**
+    */
+/**
      * Removes silence out of the given voice sample
      * @param voiceSample the voice sample
      * *
      * @return a new voice sample with silence removed
-     */
+     *//*
+
     fun removeSilence(voiceSample: DoubleArray, sampleRate: Int = 16_000): DoubleArray {
         val oneMilliInSamples = sampleRate / 1000
 
@@ -198,12 +209,14 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         }
     }
 
-    /**
+    */
+/**
      * Gets the minimum voice activity length that will be considered by the remove silence method
      * @param sampleRate the sample rate
      * *
      * @return the length
-     */
+     *//*
+
     fun getMinimumVoiceActivityLength(sampleRate: Int): Int {
         return MIN_VOICE_MILLIS * sampleRate / 1000
     }
@@ -212,7 +225,8 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         return MAX_VOICE_MILLIS * sampleRate / 1000
     }
 
-    /**
+    */
+/**
      * Applies a linear fade in / out to the given portion of audio (removes unwanted cracks)
      * @param voiceSample the voice sample
      * *
@@ -221,7 +235,8 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
      * @param startIndex fade in start point
      * *
      * @param endIndex fade out end point
-     */
+     *//*
+
     private fun applyFadeInFadeOut(voiceSample: DoubleArray, fadeLength: Int, startIndex: Int, endIndex: Int) {
         val fadeOutStart = endIndex - fadeLength
         for (j in 0..fadeLength - 1) {
@@ -230,14 +245,16 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         }
     }
 
-    /**
+    */
+/**
      * Merges small active areas
      * @param result the voice activity result
      * *
      * @param minActivityLength the minimum length to apply
      * *
      * @return a count of silent elements
-     */
+     *//*
+
     private fun mergeSmallActiveAreas(result: BooleanArray, minActivityLength: Int): Int {
         var active: Boolean
         var increment: Int
@@ -262,12 +279,14 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         return silenceCounter
     }
 
-    /**
+    */
+/**
      * Merges small silent areas
      * @param result the voice activity result
      * *
      * @param minSilenceLength the minimum silence length to apply
-     */
+     *//*
+
     private fun mergeSmallSilentAreas(result: BooleanArray, minSilenceLength: Int) {
         var active: Boolean
         var increment: Int
@@ -286,10 +305,12 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         }
     }
 
-    /**
+    */
+/**
      * Initialize the fade in/ fade out factors properties
      * @param fadeLength
-     */
+     *//*
+
     private fun initFadeFactors(fadeLength: Int) {
         val fadeInFactors = DoubleArray(fadeLength)
         val fadeOutFactors = DoubleArray(fadeLength)
@@ -303,14 +324,16 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         this.fadeOutFactors = fadeOutFactors
     }
 
-    /**
+    */
+/**
      * Applies autocorrelation in O² operations. Keep arrays very short !
      * @param voiceSample the voice sample buffer
      * *
      * @param correllation the correlation buffer
      * *
      * @return the mean correlation value
-     */
+     *//*
+
     private fun bruteForceAutocorrelation(voiceSample: DoubleArray, correllation: DoubleArray): Double {
         correllation.fill(0.0)
         val n = voiceSample.size
@@ -327,3 +350,4 @@ class AutocorrellatedVoiceActivityDetector { //(val sampleRate: Int = 16_000) {
         private val logger = Logger.getLogger(CustomMicrophone::class.java.simpleName)
     }
 }
+*/
