@@ -21,7 +21,10 @@ class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
     private var nlpListener: NlpResultListener = LoggingNlpResultListener()
 
     constructor(botName: String = "idear", botAlias: String = "PROD") {
-        var lexRuntime = AmazonLexRuntimeClientBuilder.defaultClient()
+        var lexRuntime = AmazonLexRuntimeClientBuilder
+                            .standard()
+                            .withRegion("us-east-1")
+                            .build()
         lex = JarvisLex(lexRuntime, "idear", "PROD", "anonymous")
     }
 
@@ -39,6 +42,7 @@ class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
 
         val result = lex.getRecognizedDataForStream(audioInputStream).result
         logger.log(Level.FINE, "Recognition result", result)
+System.out.println("Result:" + result);
 
         when (result.dialogState) {
             DialogState.Fulfilled.name -> {
@@ -57,7 +61,7 @@ class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
                 nlpListener.onFulfilled(result.intentName, slots)
             }
             else -> {
-                nlpListener.onFailure()
+                nlpListener.onFailure(result.message)
             }
         }
     }

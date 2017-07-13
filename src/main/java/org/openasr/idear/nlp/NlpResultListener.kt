@@ -4,7 +4,7 @@ package org.openasr.idear.nlp
 interface NlpResultListener {
 
     fun onFulfilled(intentName: String, params: Map<String, out String>?)
-    fun onFailure()
+    fun onFailure(message: String)
 //    fun onIncomplete()
     fun onMessage()
 }

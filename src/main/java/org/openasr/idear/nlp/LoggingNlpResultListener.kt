@@ -8,8 +8,8 @@ class LoggingNlpResultListener : NlpResultListener {
         logger.log(Level.INFO, "Fulfilled: ", intentName)
     }
 
-    override fun onFailure() {
-        logger.log(Level.WARNING, "Failure: ")
+    override fun onFailure(message: String) {
+        logger.log(Level.WARNING, "Failure: " + message);
     }
 
     override fun onMessage() {

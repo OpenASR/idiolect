@@ -1,6 +1,6 @@
 package org.openasr.idear.asr
 
-import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
+import org.openasr.idear.recognizer.awslex.LexRecognizer
 import java.io.IOException
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -11,15 +11,19 @@ class ASRService {
 
     fun init() {
         try {
-            recognizer = CMUSphinxASR()
-//            recognizer = LexASR()
+            val lex = LexRecognizer()
+            lex.startRecognition()
             // TODO: LexVoiceASR(nlpResultListener) : ASRProvider, NlpProvider
             // TODO: recogniser.withNlpService( LexTextNlp(nlpResultListener): NlpProvider )
 
-            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
-            recognizer.startRecognition()
-            // Fire up control-loop
-            speechThread.start()
+
+//            recognizer = CMUSphinxASR()
+//
+//
+//            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
+//            recognizer.startRecognition()
+//            // Fire up control-loop
+//            speechThread.start()
         } catch (e: IOException) {
             logger.log(Level.SEVERE, "Couldn't initialize speech recognizer:", e)
         }
