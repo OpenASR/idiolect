@@ -1,6 +1,6 @@
 package org.openasr.idear.recognizer
 
-interface SpeechRecogniser {
+interface SpeechRecognizer {
     /**
      * Starts recognition process.
      */
