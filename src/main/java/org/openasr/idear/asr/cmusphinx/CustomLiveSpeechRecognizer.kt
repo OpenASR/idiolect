@@ -38,6 +38,10 @@ constructor(configuration: Configuration) : AbstractSpeechRecognizer(configurati
      * @see CustomLiveSpeechRecognizer.stopRecognition
      */
     fun startRecognition() {
+        println("Recording to file....")
+        CustomMicrophone.recordFromMic(10000)
+        println("FIle is ready now")
+
         recognizer.allocate()
         microphone.startRecording()
     }

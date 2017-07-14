@@ -3,6 +3,8 @@ package org.openasr.idear.recognizer.awslex
 import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
 import com.amazonaws.services.lexruntime.model.DialogState
 import com.darkprograms.speech.microphone.MicrophoneAnalyzer
+import com.darkprograms.speech.recognizer.vad.RecordingListener
+import com.darkprograms.speech.recognizer.vad.SimpleVAD
 import com.darkprograms.speech.recognizer.vad.VoiceActivityDetector
 import com.darkprograms.speech.recognizer.vad.VoiceActivityListener
 import org.json.JSONObject
@@ -16,7 +18,7 @@ import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
 
 class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
     private val mic = MicrophoneAnalyzer(16_000F)
-    private val vad = VoiceActivityDetector()
+    private val vad: VoiceActivityDetector = SimpleVAD()
     private val lex: JarvisLex
     private var nlpListener: NlpResultListener = LoggingNlpResultListener()
 
@@ -34,15 +36,18 @@ class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
         nlpListener = listener
     }
 
-    override fun startRecognition() = vad.detectVoiceActivity(mic, this)
+    override fun startRecognition() {
+//        vad.detectVoiceActivity(mic, this)
+        vad.detectVoiceActivity(mic, RecordingListener()) //.withNextListener(this))
+    }
     override fun stopRecognition() = mic.close()
 
     override fun onVoiceActivity(audioInputStream: AudioInputStream) {
-        logger.log(Level.FINE, "processing speech....", audioInputStream.frameLength)
+//        logger.log(Level.FINE, "processing speech....", audioInputStream.frameLength)
 
         val result = lex.getRecognizedDataForStream(audioInputStream).result
-        logger.log(Level.FINE, "Recognition result", result)
-System.out.println("Result:" + result);
+//        logger.log(Level.FINE, "Recognition result", result)
+println("Lex recognized: " + result.inputTranscript)
 
         when (result.dialogState) {
             DialogState.Fulfilled.name -> {
