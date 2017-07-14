@@ -12,17 +12,17 @@ class ASRService {
 
     fun init() {
         try {
-//            val lex = LexRecognizer()
-//            lex.startRecognition()
+            val lex = LexRecognizer()
+            lex.startRecognition()
             // TODO: LexVoiceASR(nlpResultListener) : ASRProvider, NlpProvider
             // TODO: recogniser.withNlpService( LexTextNlp(nlpResultListener): NlpProvider )
 
 
-            recognizer = CMUSphinxASR()
-            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
-            recognizer.startRecognition()
-            // Fire up control-loop
-            speechThread.start()
+//            recognizer = CMUSphinxASR()
+//            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
+//            recognizer.startRecognition()
+//            // Fire up control-loop
+//            speechThread.start()
         } catch (e: IOException) {
             logger.log(Level.SEVERE, "Couldn't initialize speech recognizer:", e)
         }
