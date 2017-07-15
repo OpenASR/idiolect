@@ -4,7 +4,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 class LoggingNlpResultListener : NlpResultListener {
-    override fun onFulfilled(intentName: String, slots: Map<String, out String>?) {
+    override fun onFulfilled(intentName: String, params: Map<String, out String>?) {
         logger.log(Level.INFO, "Fulfilled: ", intentName)
     }
 

@@ -4,12 +4,12 @@ import com.amazonaws.services.lexruntime.AmazonLexRuntime
 import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
 import com.amazonaws.services.lexruntime.model.DialogState
 import com.amazonaws.services.lexruntime.model.PostTextRequest
-import org.openasr.idear.nlp.NlpResultListener
 import org.openasr.idear.nlp.NlpProvider
+import org.openasr.idear.nlp.NlpResultListener
 
-class LexNlp(val listener: NlpResultListener): NlpProvider {
+class LexNlp(val listener: NlpResultListener) : NlpProvider {
     private lateinit var lex: AmazonLexRuntime;
-//    private lateinit var lexAsync: AmazonLexRuntimeAsync
+    //    private lateinit var lexAsync: AmazonLexRuntimeAsync
     private lateinit var userId: String
 
     init {
@@ -20,7 +20,7 @@ class LexNlp(val listener: NlpResultListener): NlpProvider {
 //                .withClientConfiguration()
 //                .withCredentials()
 //                .withRegion()
-                .build()
+            .build()
     }
 
     /**
@@ -49,13 +49,14 @@ class LexNlp(val listener: NlpResultListener): NlpProvider {
      *         Lambda fulfilment function returned <code>DelegateDialogAction</code> to Amazon Lex without changing any
      *         slot values.
      */
-    override fun processUtterance(utterance: String, sessionAttributes: Map<String, String>?) {
+    override fun processUtterance(utterance: String,
+                                  sessionAttributes: Map<String, String>?) {
         val request = PostTextRequest()
-                .withBotName("idear")
-                .withBotAlias("PROD")
-                .withInputText(utterance)
-                .withUserId(userId)
-                .withSessionAttributes(sessionAttributes)
+            .withBotName("idear")
+            .withBotAlias("PROD")
+            .withInputText(utterance)
+            .withUserId(userId)
+            .withSessionAttributes(sessionAttributes)
 
         val response = lex.postText(request)
         println(response)

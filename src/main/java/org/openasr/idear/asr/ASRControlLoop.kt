@@ -1,27 +1,26 @@
 package org.openasr.idear.asr
 
 import com.intellij.ide.DataManager
-import com.intellij.openapi.actionSystem.*
-import com.intellij.openapi.actionSystem.impl.SimpleDataContext
+import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.actionSystem.IdeActions.ACTION_RECENT_FILES
+import com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_SETTINGS
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Pair
 import com.intellij.util.Consumer
 import org.openasr.idear.GoogleHelper
 import org.openasr.idear.GoogleHelper.getBestTextForUtterance
 import org.openasr.idear.WordToNumberConverter
-import org.openasr.idear.actions.ExecuteVoiceCommandAction
 import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
 import org.openasr.idear.ide.IDEService
 import org.openasr.idear.ide.IDEService.invokeAction
-import org.openasr.idear.recognizer.CustomMicrophone
+import org.openasr.idear.recognizer.CustomMicrophone.Companion.recordFromMic
 import org.openasr.idear.tts.TTSService.say
 import java.awt.EventQueue
 import java.awt.event.KeyEvent.*
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.logging.Level
-import java.util.logging.Logger
 import java.util.regex.Pattern
 import javax.sound.sampled.AudioSystem
 
@@ -40,7 +39,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
                     invokeAction("Idear.Start")
                 }
             } else if (ListeningState.isActive) {
-                logger.log(Level.INFO, "Recognized: " + result)
+                logger.info("Recognized: $result")
 
                 applyAction(result)
             }
@@ -48,32 +47,215 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
     }
 
     // TODO: replace with nlp.NlpResultListener
-    private fun applyAction(c: String) {
-        if (c == HI_IDEA) {
-            // Greet some more
-            say("Hi, again!")
-        } else if (c.startsWith(OPEN)) {
-            if (c.endsWith(SETTINGS)) {
-                invokeAction(IdeActions.ACTION_SHOW_SETTINGS)
-            } else if (c.endsWith(RECENT)) {
-                invokeAction(IdeActions.ACTION_RECENT_FILES)
-            } else if (c.endsWith(TERMINAL)) {
-                invokeAction("ActivateTerminalToolWindow")
+    private fun applyAction(c: String): Any =
+        when {
+            c == HI_IDEA -> say("Hi, again!")
+            c.startsWith(OPEN) -> routineOpen(c)
+            c.startsWith(NAVIGATE) -> invokeAction("GotoDeclaration")
+            c.startsWith(EXECUTE) -> invokeAction("Run")
+            c == WHERE_AM_I -> invokeAction("Idear.WhereAmI")
+            c.startsWith(FOCUS) -> routineFocus(c)
+            c.startsWith(GOTO) -> routineGoto(c)
+            c.startsWith(EXPAND) -> invokeAction("EditorSelectWord")
+            c.startsWith(SHRINK) -> invokeAction("EditorUnSelectWord")
+            c.startsWith(PRESS) -> routinePress(c)
+            c.startsWith("release") -> routineRelelaseKey(c)
+            c.startsWith("following") -> routineFollowing(c)
+            c.startsWith("extract this") -> routineExtract(c)
+            c.startsWith("inspect code") -> invokeAction("CodeInspection.OnEditor")
+            c.startsWith("speech pause") -> pauseSpeech()
+            c == SHOW_USAGES -> invokeAction("ShowUsages")
+            c.startsWith(OK_IDEA) -> routineOkIdea()
+            c.startsWith(OKAY_GOOGLE) -> fireGoogleSearch()
+            c.contains("break point") -> routineHandleBreakpoint(c)
+            c.startsWith(DEBUG) -> IDEService.type(VK_CONTROL, VK_SHIFT, VK_F9)
+            c.startsWith("step") -> routineStep(c)
+            c.startsWith("resume") -> invokeAction("Resume")
+            c.startsWith("tell me a joke") -> tellJoke()
+            c.contains("check") -> routineCheck(c)
+            c.contains("tell me about yourself") -> routineAbout()
+            c.contains("add new class") -> routineAddNewClass()
+            c.contains("print line") -> routinePrintln()
+            c.contains("new string") -> routineNewString()
+            c.contains("enter ") -> routineEnter(c)
+            c.contains("public static void main") -> routinePsvm()
+            c.endsWith("of line") -> routineOfLine(c)
+            c.startsWith("find in") -> routineFind(c)
+            else -> {
             }
-        } else if (c.startsWith(NAVIGATE)) {
-            invokeAction("GotoDeclaration")
-        } else if (c.startsWith(EXECUTE)) {
-            invokeAction("Run")
-        } else if (c == WHERE_AM_I) {
-            // TODO(kudinkin): extract to action
-            invokeAction("Idear.WhereAmI")
-        } else if (c.startsWith("focus")) {
-            if (c.endsWith(EDITOR)) {
-                pressKeystroke(VK_ESCAPE)
-            } else if (c.endsWith(PROJECT)) {
-                invokeAction("ActivateProjectToolWindow")
-            } else if (c.endsWith("symbols")) {
-                val ar = invokeAction("AceJumpAction")
+        }
+
+    private fun routineRelelaseKey(c: String) {
+        if (c.contains("shift")) IDEService.releaseShift()
+    }
+
+    private fun routineFind(c: String) {
+        if (c.endsWith("file")) {
+            invokeAction("Find")
+        } else if (c.endsWith("project")) {
+            invokeAction("FindInPath")
+        }
+    }
+
+    private fun routineOfLine(c: String) {
+        if (c.startsWith("beginning")) {
+            IDEService.type(VK_META, VK_LEFT)
+        } else if (c.startsWith("end")) {
+            IDEService.type(VK_META, VK_RIGHT)
+        }
+    }
+
+    private fun routinePsvm() {
+        IDEService.type("psvm")
+        pressKeystroke(VK_TAB)
+    }
+
+    private fun routineEnter(c: String) {
+        val result = webSpeechResult
+        if (result != null) {
+            if (c.endsWith("text")) {
+                IDEService.type(result.first)
+            } else if (c.endsWith("camel case")) {
+                IDEService.type(convertToCamelCase(result.first))
+            }
+        }
+    }
+
+    private fun routineNewString() {
+        val result = webSpeechResult
+        if (result != null) {
+            IDEService.type(VK_SHIFT, VK_QUOTE)
+            IDEService.type(result.first)
+            IDEService.type(VK_SHIFT, VK_QUOTE)
+        }
+    }
+
+    private fun routinePrintln() {
+        IDEService.type("sout")
+        pressKeystroke(VK_TAB)
+    }
+
+    private fun routineAddNewClass() {
+        invokeAction("NewElement")
+        pressKeystroke(VK_ENTER)
+        val className = webSpeechResult
+        if (className != null) {
+            var camelCase = convertToCamelCase(className.first)
+            logger.info("Class name: $camelCase")
+            camelCase = camelCase.substring(0,
+                1).toUpperCase() + camelCase.substring(1)
+            IDEService.type(camelCase)
+            pressKeystroke(VK_ENTER)
+        }
+    }
+
+    private fun routineAbout() {
+        val ai = ApplicationInfo.getInstance()
+
+        val cal = ai.buildDate
+        val df = SimpleDateFormat("EEEE, MMMM dd, yyyy")
+
+        say("My name is " + ai.versionName + ", I was built on " + df.format(cal.time) + ", I am running version " + ai.apiVersion + " of the IntelliJ Platform, and I am registered to " + ai.companyName)
+    }
+
+    private fun routineCheck(c: String) {
+        val nullCheckRecognizer = SurroundWithNoNullCheckRecognizer()
+        if (nullCheckRecognizer.isMatching(c)) {
+            DataManager.getInstance()
+                .dataContextFromFocus
+                .doWhenDone({ dataContext: DataContext ->
+                    run(nullCheckRecognizer,
+                        c,
+                        dataContext)
+                } as Consumer<DataContext>)
+        }
+    }
+
+    private fun routineStep(c: String) {
+        if (c.endsWith("over")) {
+            invokeAction("StepOver")
+        } else if (c.endsWith("into")) {
+            invokeAction("StepInto")
+        } else if (c.endsWith("return")) {
+            invokeAction("StepOut")
+        }
+    }
+
+    private fun routineHandleBreakpoint(c: String) {
+        if (c.startsWith("toggle")) {
+            invokeAction("ToggleLineBreakpoint")
+        } else if (c.startsWith("view")) {
+            invokeAction("ViewBreakpoints")
+        }
+    }
+
+    private fun routineOkIdea() {
+        beep()
+        fireVoiceCommand()
+    }
+
+    private fun routineExtract(c: String) {
+        if (c.endsWith("method")) {
+            invokeAction("ExtractMethod")
+        } else if (c.endsWith("parameter")) {
+            invokeAction("IntroduceParameter")
+        }
+    }
+
+    private fun routineFollowing(c: String) {
+        if (c.endsWith(LINE)) {
+            invokeAction("EditorDown")
+        } else if (c.endsWith(PAGE)) {
+            invokeAction("EditorPageDown")
+        } else if (c.endsWith(METHOD)) {
+            invokeAction("MethodDown")
+        } else if (c.endsWith("tab")) {
+            invokeAction("Diff.FocusOppositePane")
+        } else if (c.endsWith("page")) {
+            invokeAction("EditorPageDown")
+        } else if (c.endsWith("word")) {
+            IDEService.type(VK_ALT, VK_RIGHT)
+        }
+    }
+
+    private fun routinePress(c: String) {
+        if (c.contains(DELETE)) {
+            pressKeystroke(VK_DELETE)
+        } else if (c.contains("return") || c.contains("enter")) {
+            pressKeystroke(VK_ENTER)
+        } else if (c.contains(ESCAPE)) {
+            pressKeystroke(VK_ESCAPE)
+        } else if (c.contains(TAB)) {
+            pressKeystroke(VK_TAB)
+        } else if (c.contains(UNDO)) {
+            invokeAction("\$Undo")
+        } else if (c.contains("shift")) {
+            IDEService.pressShift()
+        }
+    }
+
+    private fun routineGoto(c: String) {
+        invokeAction("GotoLine").doWhenDone({
+            IDEService.type(*("" + WordToNumberConverter.getNumber(c.substring(
+                10))).toCharArray())
+            IDEService.type(VK_ENTER)
+        })
+    }
+
+    private fun routineOpen(c: String) {
+        when {
+            c.endsWith(SETTINGS) -> invokeAction(ACTION_SHOW_SETTINGS)
+            c.endsWith(RECENT) -> invokeAction(ACTION_RECENT_FILES)
+            c.endsWith(TERMINAL) -> invokeAction("ActivateTerminalToolWindow")
+        }
+    }
+
+    private fun routineFocus(c: String) {
+        when {
+            c.endsWith(EDITOR) -> pressKeystroke(VK_ESCAPE)
+            c.endsWith(PROJECT) -> invokeAction("ActivateProjectToolWindow")
+            c.endsWith("symbols") -> {
+                val ar = invokeAction("AceAction")
 
                 while (!ar.isProcessed) {
                     //Spin lock
@@ -81,7 +263,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
                     try {
                         Thread.sleep(250)
                     } catch (e: InterruptedException) {
-                        logger.warning(e.toString())
+                        logger.warn(e)
                     }
                 }
                 logger.info("Done!")
@@ -90,163 +272,6 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
                 val jumpMarker = recognizeJumpMarker()
                 IDEService.type("" + jumpMarker)
                 logger.info("Typed: " + jumpMarker)
-            }
-        } else if (c.startsWith(GOTO)) {
-            if (c.startsWith("goto line")) {
-                invokeAction("GotoLine").doWhenDone({
-                    IDEService.type(*("" + WordToNumberConverter.getNumber(c.substring(10))).toCharArray())
-                    IDEService.type(VK_ENTER)
-                } as Consumer<DataContext>)
-            }
-        } else if (c.startsWith(EXPAND)) {
-            //            ActionManager instance = ActionManager.getInstance();
-            //            AnAction a = instance.getAction("EditorSelectWord");
-            //            AnActionEvent event = new AnActionEvent(null, DataManager.getInstance().getDataContext(),
-            //                    ActionPlaces.UNKNOWN, a.getTemplatePresentation(), instance, 0);
-            //            a.actionPerformed(event);
-            invokeAction("EditorSelectWord")
-        } else if (c.startsWith(SHRINK)) {
-            invokeAction("EditorUnSelectWord")
-        } else if (c.startsWith("press")) {
-            if (c.contains("delete")) {
-                pressKeystroke(VK_DELETE)
-            } else if (c.contains("return") || c.contains("enter")) {
-                pressKeystroke(VK_ENTER)
-            } else if (c.contains(ESCAPE)) {
-                pressKeystroke(VK_ESCAPE)
-            } else if (c.contains(TAB)) {
-                pressKeystroke(VK_TAB)
-            } else if (c.contains(UNDO)) {
-                invokeAction("\$Undo")
-            } else if (c.contains("shift")) {
-                IDEService.pressShift()
-            }
-        } else if (c.startsWith("release")) {
-            if (c.contains("shift"))
-                IDEService.releaseShift()
-        } else if (c.startsWith("following")) {
-            if (c.endsWith("line")) {
-                invokeAction("EditorDown")
-            } else if (c.endsWith("page")) {
-                invokeAction("EditorPageDown")
-            } else if (c.endsWith("method")) {
-                invokeAction("MethodDown")
-            } else if (c.endsWith("tab")) {
-                invokeAction("Diff.FocusOppositePane")
-            } else if (c.endsWith("page")) {
-                invokeAction("EditorPageDown")
-            } else if (c.endsWith("word")) {
-                IDEService.type(VK_ALT, VK_RIGHT)
-            }
-        } else if (c.startsWith("previous")) {
-            if (c.endsWith("line")) {
-                invokeAction("EditorUp")
-            } else if (c.endsWith("page")) {
-                invokeAction("EditorPageUp")
-            } else if (c.endsWith("method")) {
-                invokeAction("MethodUp")
-            } else if (c.endsWith("tab")) {
-                invokeAction("Diff.FocusOppositePaneAndScroll")
-            } else if (c.endsWith("page")) {
-                invokeAction("EditorPageUp")
-            }
-        } else if (c.startsWith("extract this")) {
-            if (c.endsWith("method")) {
-                invokeAction("ExtractMethod")
-            } else if (c.endsWith("parameter")) {
-                invokeAction("IntroduceParameter")
-            }
-        } else if (c.startsWith("inspect code")) {
-            invokeAction("CodeInspection.OnEditor")
-        } else if (c.startsWith("speech pause")) {
-            pauseSpeech()
-        } else if (c == SHOW_USAGES) {
-            invokeAction("ShowUsages")
-        }
-        if (c.startsWith(OK_IDEA) || c.startsWith(OKAY_IDEA)) {
-            beep()
-            fireVoiceCommand()
-        } else if (c.startsWith(OKAY_GOOGLE) || c.startsWith(OK_GOOGLE)) {
-            fireGoogleSearch()
-        } else if (c.contains("break point")) {
-            if (c.startsWith("toggle")) {
-                invokeAction("ToggleLineBreakpoint")
-            } else if (c.startsWith("view")) {
-                invokeAction("ViewBreakpoints")
-            }
-        } else if (c.startsWith("debug")) {
-            //            IDEService.invokeAction("Debug");
-            IDEService.type(VK_CONTROL, VK_SHIFT, VK_F9)
-        } else if (c.startsWith("step")) {
-            if (c.endsWith("over")) {
-                invokeAction("StepOver")
-            } else if (c.endsWith("into")) {
-                invokeAction("StepInto")
-            } else if (c.endsWith("return")) {
-                invokeAction("StepOut")
-            }
-        } else if (c.startsWith("resume")) {
-            invokeAction("Resume")
-        } else if (c.startsWith("tell me a joke")) {
-            tellJoke()
-        } else if (c.contains("check")) {
-            val nullCheckRecognizer = SurroundWithNoNullCheckRecognizer()
-            if (nullCheckRecognizer.isMatching(c)) {
-                DataManager.getInstance()
-                        .dataContextFromFocus
-                        .doWhenDone({ dataContext: DataContext -> run(nullCheckRecognizer, c, dataContext) } as Consumer<DataContext>)
-            }
-        } else if (c.contains("tell me about yourself")) {
-            val ai = ApplicationInfo.getInstance()
-
-            val cal = ai.buildDate
-            val df = SimpleDateFormat("EEEE, MMMM dd, yyyy")
-
-            say("My name is " + ai.versionName + ", I was built on " + df.format(cal.time) + ", I am running version " + ai.apiVersion + " of the IntelliJ Platform, and I am registered to " + ai.companyName)
-        } else if (c.contains("add new class")) {
-            invokeAction("NewElement")
-            pressKeystroke(VK_ENTER)
-            val className = webSpeechResult
-            if (className != null) {
-                var camelCase = convertToCamelCase(className.first)
-                logger.log(Level.INFO, "Class name: " + camelCase)
-                camelCase = camelCase.substring(0, 1).toUpperCase() + camelCase.substring(1)
-                IDEService.type(camelCase)
-                pressKeystroke(VK_ENTER)
-            }
-        } else if (c.contains("print line")) {
-            IDEService.type("sout")
-            pressKeystroke(VK_TAB)
-        } else if (c.contains("new string")) {
-            val result = webSpeechResult
-            if (result != null) {
-                IDEService.type(VK_SHIFT, VK_QUOTE)
-                IDEService.type(result.first)
-                IDEService.type(VK_SHIFT, VK_QUOTE)
-            }
-        } else if (c.contains("enter ")) {
-            val result = webSpeechResult
-            if (result != null) {
-                if (c.endsWith("text")) {
-                    IDEService.type(result.first)
-                } else if (c.endsWith("camel case")) {
-                    IDEService.type(convertToCamelCase(result.first))
-                }
-            }
-        } else if (c.contains("public static void main")) {
-            IDEService.type("psvm")
-            pressKeystroke(VK_TAB)
-        } else if (c.endsWith("of line")) {
-            if (c.startsWith("beginning")) {
-                IDEService.type(VK_META, VK_LEFT)
-            } else if (c.startsWith("end")) {
-                IDEService.type(VK_META, VK_RIGHT)
-            }
-        } else if (c.startsWith("find in")) {
-            if (c.endsWith("file")) {
-                invokeAction("Find")
-            } else if (c.endsWith("project")) {
-                invokeAction("FindInPath")
             }
         }
     }
@@ -269,8 +294,15 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
         IDEService.type(*keys)
     }
 
-    private fun run(rec: SurroundWithNoNullCheckRecognizer, c: String, dataContext: DataContext) {
-        EventQueue.invokeLater { ApplicationManager.getApplication().runWriteAction { rec.getActionInfo(c, dataContext) } }
+    private fun run(rec: SurroundWithNoNullCheckRecognizer,
+                    c: String,
+                    dataContext: DataContext) {
+        EventQueue.invokeLater {
+            ApplicationManager.getApplication().runWriteAction {
+                rec.getActionInfo(c,
+                    dataContext)
+            }
+        }
     }
 
     private fun tellJoke() {
@@ -300,7 +332,8 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
 
     private fun fireVoiceCommand() {
         try {
-            val commandTuple = getBestTextForUtterance(CustomMicrophone.recordFromMic(COMMAND_DURATION))
+            val commandTuple = getBestTextForUtterance(recordFromMic(
+                COMMAND_DURATION))
 
             if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
                 return
@@ -308,21 +341,10 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
             // Notify of successful proceed
             beep()
 
-            invokeAction(
-                    "Idear.VoiceAction"
-            ) { dataContext ->
-                AnActionEvent(null,
-                        SimpleDataContext.getSimpleContext(ExecuteVoiceCommandAction.KEY.name, commandTuple.first, dataContext),
-                        ActionPlaces.UNKNOWN,
-                        Presentation(),
-                        ActionManager.getInstance(),
-                        0
-                )
-            }
+            invokeAction("Idear.VoiceAction")
         } catch (e: IOException) {
-            logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e)
+            logger.error("Panic! Failed to dump WAV", e)
         }
-
     }
 
     private fun fireGoogleSearch() {
@@ -332,14 +354,15 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
         GoogleHelper.searchGoogle(searchQueryTuple.first)
     }
 
-    private /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */ val webSpeechResult: Pair<String, Double>?
+    private val webSpeechResult: Pair<String, Double>?
         get() {
             var searchQueryTuple: Pair<String, Double>? = null
             beep()
             try {
-                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION))
+                searchQueryTuple = getBestTextForUtterance(recordFromMic(
+                    GOOGLE_QUERY_DURATION))
             } catch (e: IOException) {
-                logger.log(Level.SEVERE, "Panic! Failed to dump WAV", e)
+                logger.error("Panic! Failed to dump WAV", e)
             }
 
             if (searchQueryTuple == null || searchQueryTuple.first.isEmpty())
@@ -375,7 +398,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
     }
 
     companion object {
-        private val logger = Logger.getLogger(ASRControlLoop::class.java.simpleName)
+        private val logger = Logger.getInstance(ASRControlLoop::class.java)
 
         private val OPEN = "open"
         private val SETTINGS = "settings"
@@ -420,7 +443,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
                 try {
                     val clip = AudioSystem.getClip()
                     val inputStream = AudioSystem.getAudioInputStream(
-                            ASRService::class.java.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
+                        ASRService::class.java.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
                     clip.open(inputStream)
                     clip.start()
                 } catch (e: Exception) {
@@ -438,9 +461,9 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
 
         private fun splitCamelCase(s: String): String {
             return s.replace(String.format("%s|%s|%s",
-                    "(?<=[A-Z])(?=[A-Z][a-z])",
-                    "(?<=[^A-Z])(?=[A-Z])",
-                    "(?<=[A-Za-z])(?=[^A-Za-z])"
+                "(?<=[A-Z])(?=[A-Z][a-z])",
+                "(?<=[^A-Z])(?=[A-Z])",
+                "(?<=[A-Za-z])(?=[^A-Za-z])"
             ).toRegex(), " ")
         }
     }

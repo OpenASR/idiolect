@@ -13,9 +13,7 @@ import java.util.*
 //runs only selected configuration
 class FindUsagesActionRecognizer : ActionRecognizer {
 
-    override fun isMatching(sentence: String): Boolean {
-        return sentence.contains("find") /* && (sentence.contains("usages") || sentence.contains("usage")) */
-    }
+    override fun isMatching(sentence: String) = sentence.contains("find")
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo {
         val aci = ActionCallInfo("FindUsages")
@@ -55,9 +53,6 @@ class FindUsagesActionRecognizer : ActionRecognizer {
 
             targets = arrayOf<PsiElement>(*klass.findMethodsByName(targetName, /*checkBases*/ true))
         }
-
-        if (targets == null)
-            return aci
 
         // TODO(kudinkin): need to cure this pain someday
 

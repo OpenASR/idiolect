@@ -5,6 +5,6 @@ interface NlpResultListener {
 
     fun onFulfilled(intentName: String, params: Map<String, out String>?)
     fun onFailure(message: String)
-//    fun onIncomplete()
+    //    fun onIncomplete()
     fun onMessage()
 }

@@ -1,12 +1,11 @@
 package org.openasr.idear.asr
 
+import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
 import org.openasr.idear.recognizer.awslex.LexRecognizer
 import java.io.IOException
-import java.util.logging.Level
-import java.util.logging.Logger
 
-class ASRService {
+object ASRService {
     private lateinit var speechThread: Thread
     private lateinit var recognizer: ASRProvider
 
@@ -18,19 +17,17 @@ class ASRService {
             // TODO: recogniser.withNlpService( LexTextNlp(nlpResultListener): NlpProvider )
 
 
-//            recognizer = CMUSphinxASR()
-//            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
-//            recognizer.startRecognition()
-//            // Fire up control-loop
-//            speechThread.start()
+            recognizer = CMUSphinxASR()
+            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
+            recognizer.startRecognition()
+            // Fire up control-loop
+            speechThread.start()
         } catch (e: IOException) {
-            logger.log(Level.SEVERE, "Couldn't initialize speech recognizer:", e)
+            logger.error( "Couldn't initialize speech recognizer!", e)
         }
     }
 
-    fun activate(): Boolean {
-        return ListeningState.activate()
-    }
+    fun activate(): Boolean = ListeningState.activate()
 
     fun deactivate(): Boolean {
         return ListeningState.standBy()
@@ -45,14 +42,11 @@ class ASRService {
         terminate()
     }
 
-    companion object {
-        private val logger = Logger.getLogger(ASRService::class.java.simpleName)
-    }
+    private val logger = Logger.getInstance(ASRService::class.java)
 }
 
 // This is for testing purposes solely
 fun main(args: Array<String>) {
-    val asr = ASRService()
-    asr.init()
+    val asr = ASRService
     asr.activate()
 }

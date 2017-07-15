@@ -1,10 +1,8 @@
 package org.openasr.idear.tts
 
-import com.amazonaws.ClientConfiguration
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
-import com.amazonaws.regions.Region
 import com.amazonaws.regions.Regions
-import com.amazonaws.services.polly.AmazonPollyClient
+import com.amazonaws.services.polly.AmazonPolly
+import com.amazonaws.services.polly.AmazonPollyClientBuilder
 import com.amazonaws.services.polly.model.DescribeVoicesRequest
 import com.amazonaws.services.polly.model.OutputFormat
 import com.amazonaws.services.polly.model.SynthesizeSpeechRequest
@@ -28,21 +26,8 @@ import java.util.*
  * @see http://docs.aws.amazon.com/polly/latest/dg/examples-java.html
  */
 class PollyTTS : TTSProvider {
-    private var polly: AmazonPollyClient? = null
-    private var voice: Voice? = null
-//    private var player: AdvancedPlayer? = null
-
-    init {
-        polly = AmazonPollyClient(DefaultAWSCredentialsProviderChain(), ClientConfiguration())
-        polly!!.setRegion(Region.getRegion(Regions.US_EAST_1))
-
-        // Create describe voices request.
-        val describeVoicesRequest = DescribeVoicesRequest()
-
-        // Synchronously ask Amazon Polly to describe available TTS voices.
-        val describeVoicesResult = polly!!.describeVoices(describeVoicesRequest)
-        voice = describeVoicesResult.voices[0]
-    }
+    val polly: AmazonPolly = AmazonPollyClientBuilder.standard().apply { region = Regions.US_EAST_1.name }.build()
+    private var voice: Voice = polly.describeVoices(DescribeVoicesRequest()).voices[0]
 
     override fun say(text: String?) {
         text?.let {
@@ -53,14 +38,12 @@ class PollyTTS : TTSProvider {
         }
     }
 
-    override fun dispose() {
-    }
+    override fun dispose() { }
 
     @Throws(IOException::class)
     private fun synthesize(text: String, format: OutputFormat): InputStream? {
-        val synthReq = SynthesizeSpeechRequest().withText(text).withVoiceId(voice?.getId())
-                .withOutputFormat(format)
-        val synthRes = polly?.synthesizeSpeech(synthReq)
+        val synthReq = SynthesizeSpeechRequest().withText(text).withVoiceId(voice.id).withOutputFormat(format)
+        val synthRes = polly.synthesizeSpeech(synthReq)
 
         return synthRes?.audioStream
     }

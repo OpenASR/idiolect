@@ -36,18 +36,6 @@
   </extensionPoints>
 
   <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="org.openasr.idear.jsgf.JSpeechFileTypeFactory"/>
-    <lang.syntaxHighlighterFactory language="JSpeech" implementationClass="org.openasr.idear.jsgf.JSpeechSyntaxHighlighterFactory"/>
-    <lang.parserDefinition language="JSpeech" implementationClass="org.openasr.idear.jsgf.JSpeechParserDefinition"/>
-    <colorSettingsPage implementation="org.openasr.idear.jsgf.JSpeechColorSettingsPage"/>
-    <annotator language="JSpeech" implementationClass="org.openasr.idear.jsgf.JSpeechAnnotator"/>
-    <gotoSymbolContributor implementation="org.openasr.idear.jsgf.JSpeechChooseByNameContributor"/>
-    <psi.referenceContributor implementation="org.openasr.idear.jsgf.JSpeechReferenceContributor"/>
-    <applicationService serviceInterface="org.openasr.idear.asr.ASRService" serviceImplementation="org.openasr.idear.asr.ASRService"/>
-    <applicationService serviceInterface="org.openasr.idear.tts.TTSService" serviceImplementation="org.openasr.idear.tts.TTSService"/>
-    <applicationService serviceInterface="org.openasr.idear.asr.GrammarService" serviceImplementation="org.openasr.idear.asr.GrammarService"/>
-    <applicationService serviceInterface="org.openasr.idear.ide.IDEService" serviceImplementation="org.openasr.idear.ide.IDEService"/>
-    <applicationService serviceInterface="org.openasr.idear.settings.IdearSettingsProvider" serviceImplementation="org.openasr.idear.settings.IdearSettingsProvider"/>
     <applicationConfigurable groupId="tools" displayName="Recognition" id="preferences.IdearConfigurable" instance="org.openasr.idear.settings.IdearConfigurable"/>
   </extensions>
 

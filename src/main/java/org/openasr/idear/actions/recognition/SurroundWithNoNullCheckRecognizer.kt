@@ -16,7 +16,8 @@ class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
         return sentence.contains("check") && sentence.contains("not")
     }
 
-    override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
+    override fun getActionInfo(sentence: String,
+                               dataContext: DataContext): ActionCallInfo? {
         val editor = CommonDataKeys.EDITOR.getData(dataContext)
         val project = CommonDataKeys.PROJECT.getData(dataContext)
 

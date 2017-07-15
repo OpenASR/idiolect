@@ -1,41 +1,49 @@
 package org.openasr.idear.settings
 
-import com.intellij.openapi.options.SearchableConfigurable
-import org.openasr.idear.settings.IdearSettingsProvider.Companion.instance
-import org.openasr.idear.settings.IdearSettingsProvider.State
-import javax.swing.JComponent
+import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
+import com.intellij.openapi.options.Configurable
+import org.openasr.idear.settings.IdearConfigurable.Settings
+import org.openasr.idear.settings.RecognitionServiceId.CMU_SPHINX
+import org.openasr.idear.settings.TtsServiceId.MARY
 
 /**
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
  */
-class IdearConfigurable : SearchableConfigurable {
-    private val settings: IdearSettingsProvider by lazy { instance }
-    private lateinit var initialState: State
+
+@State(name = "IdearSettingsProvider",
+    storages = arrayOf(Storage("recognition.xml")))
+object IdearConfigurable : Configurable, PersistentStateComponent<Settings> {
+    override fun getState() = settings
+    override fun loadState(state: Settings) {
+        this.settings = state
+    }
+
+    private var settings = Settings()
     private lateinit var gui: RecognitionSettingsForm
 
-    override fun getId() = "preferences.IdearConfigurable"
+    data class Settings(
+        var recognitionService: RecognitionServiceId = CMU_SPHINX,
+        var ttsService: TtsServiceId = MARY
+    )
 
     override fun getDisplayName() = "Recognition"
 
-    override fun apply() {
-        val state = settings.state
-        state.ttsService = gui.ttsService
-        state.recognitionService = gui.recognitionService
-    }
-
-    override fun createComponent(): JComponent {
-        gui = RecognitionSettingsForm()
-        initialState = settings.state
-        reset()
-        return gui.rootPanel
-    }
-
     override fun isModified() =
-        gui.recognitionService != initialState.recognitionService ||
-               gui.ttsService != initialState.ttsService
+        gui.recognitionService != settings.recognitionService ||
+            gui.ttsService != settings.ttsService
+
+    override fun createComponent() =
+        RecognitionSettingsForm().apply { gui = this }.rootPanel
+
+    override fun apply() {
+        settings.ttsService = gui.ttsService
+        settings.recognitionService = gui.recognitionService
+    }
 
     override fun reset() {
-        gui.recognitionService = initialState.recognitionService
-        gui.ttsService = initialState.ttsService
+        gui.recognitionService = settings.recognitionService
+        gui.ttsService = settings.ttsService
     }
 }
