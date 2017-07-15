@@ -1,8 +1,11 @@
 package org.openasr.idear.asr
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
 import org.openasr.idear.recognizer.awslex.LexRecognizer
+import org.openasr.idear.settings.IdearConfigurable
+import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
 object ASRService {
@@ -11,15 +14,14 @@ object ASRService {
 
     fun init() {
         try {
-            val lex = LexRecognizer()
-            lex.startRecognition()
+            val config = ServiceManager.getService(IdearConfiguration::class.java)
+            recognizer = config.getASRProvider()
+            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
+            recognizer.startRecognition()
+
             // TODO: LexVoiceASR(nlpResultListener) : ASRProvider, NlpProvider
             // TODO: recogniser.withNlpService( LexTextNlp(nlpResultListener): NlpProvider )
 
-
-            recognizer = CMUSphinxASR()
-            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
-            recognizer.startRecognition()
             // Fire up control-loop
             speechThread.start()
         } catch (e: IOException) {

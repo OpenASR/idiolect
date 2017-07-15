@@ -8,9 +8,11 @@ import com.darkprograms.speech.recognizer.vad.SimpleVAD
 import com.darkprograms.speech.recognizer.vad.VoiceActivityDetector
 import com.darkprograms.speech.recognizer.vad.VoiceActivityListener
 import org.json.JSONObject
+import org.openasr.idear.asr.ASRProvider
 import org.openasr.idear.nlp.LoggingNlpResultListener
 import org.openasr.idear.nlp.NlpResultListener
 import org.openasr.idear.recognizer.SpeechRecognizer
+import java.util.concurrent.ArrayBlockingQueue
 import java.util.logging.Level
 import java.util.logging.Logger
 import javax.sound.sampled.AudioInputStream
@@ -19,11 +21,14 @@ import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
 /**
  * [AWS Lex](http://docs.aws.amazon.com/lex/latest/dg/what-is.html) can process speech and return recognised text,
  * but can also do further NLP processing and convert the text into actions with parameters.
+ *
+ * @see LexASR which implements #waitForUtterance() instead of posting to NlpResultListener
  */
-class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
+// TODO: should LexRecognizer and LexASR be swapped around?
+open class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
     private val mic = MicrophoneAnalyzer(16_000F)
     private val vad: VoiceActivityDetector = SimpleVAD()
-    private val lex: JarvisLex
+    protected val lex: JarvisLex
     private var nlpListener: NlpResultListener = LoggingNlpResultListener()
 
     constructor(botName: String = "idear", botAlias: String = "PROD") {

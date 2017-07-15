@@ -91,7 +91,7 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
                 listener.onMessage()
             }
         }
-        
+
         /*when (response.dialogState) {
             DialogState.Fulfilled.name, DialogState.ReadyForFulfillment.name -> listener.onFulfilled()
             DialogState.Failed.name -> listener.onFailure()

@@ -1,15 +1,19 @@
 package org.openasr.idear.asr
 
-interface ASRProvider {
+import org.openasr.idear.recognizer.SpeechRecognizer
+
+// TODO: delete SpeechRecogniser or refactor
+interface ASRProvider : SpeechRecognizer {
     /**
      * Starts recognition process.
      */
-    fun startRecognition()
+    override fun startRecognition()
+
     /**
      * Stops recognition process.
      * Recognition process is paused until the next call to startRecognition.
      */
-    fun stopRecognition()
+    override fun stopRecognition()
 
     /** Blocks until a we recognise something from the user. Called from [ASRControlLoop.run] */
     fun waitForUtterance(): String
