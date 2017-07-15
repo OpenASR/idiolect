@@ -9,11 +9,7 @@ object IDEService {
      */
     fun invokeAction(actionId: String) =
         with(ActionManager.getInstance()) {
-            tryToExecute(getAction(actionId),
-                ActionCommand.getInputEvent(actionId),
-                null,
-                null,
-                true)
+            tryToExecute(getAction(actionId), ActionCommand.getInputEvent(actionId), null, null, true)
         }
 
     fun type(vararg keys: Int) = Keyboard.type(*keys)
