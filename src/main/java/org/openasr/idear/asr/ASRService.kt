@@ -17,19 +17,17 @@ object ASRService {
             // TODO: recogniser.withNlpService( LexTextNlp(nlpResultListener): NlpProvider )
 
 
-//            recognizer = CMUSphinxASR()
-//            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
-//            recognizer.startRecognition()
-//            // Fire up control-loop
-//            speechThread.start()
+            recognizer = CMUSphinxASR()
+            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
+            recognizer.startRecognition()
+            // Fire up control-loop
+            speechThread.start()
         } catch (e: IOException) {
             logger.error( "Couldn't initialize speech recognizer!", e)
         }
     }
 
-    fun activate(): Boolean {
-        return ListeningState.activate()
-    }
+    fun activate(): Boolean = ListeningState.activate()
 
     fun deactivate(): Boolean {
         return ListeningState.standBy()
@@ -50,6 +48,5 @@ object ASRService {
 // This is for testing purposes solely
 fun main(args: Array<String>) {
     val asr = ASRService
-    asr.init()
     asr.activate()
 }

@@ -255,7 +255,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
             c.endsWith(EDITOR) -> pressKeystroke(VK_ESCAPE)
             c.endsWith(PROJECT) -> invokeAction("ActivateProjectToolWindow")
             c.endsWith("symbols") -> {
-                val ar = invokeAction("AceJumpAction")
+                val ar = invokeAction("AceAction")
 
                 while (!ar.isProcessed) {
                     //Spin lock
