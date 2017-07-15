@@ -78,6 +78,11 @@ open class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
 //                map
                 }
 
+                // TODO: Intent "Navigate" Lex sends back a response with sessionAttribute:
+                //    {"invokeAction": "GotoDeclaration"}
+                // ...but it won't let us send back an empty `message` in Content
+                // - need to ignore or add an extra sesssionAttribute indicating verbosity
+
                 val sessionAttributes = if (result.sessionAttributes == null) {
                     null
                 } else {

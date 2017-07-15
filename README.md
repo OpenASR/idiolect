@@ -20,8 +20,13 @@ provide a method `waitForUtterance()` which blocks until the speech to text serv
 ### NLP - Text to Action
 
 If Lex _does_ manage to resolve and fulfill (to the point where it delegates to client-side fulfillment) an intent by 
-invoking a Lamba function then [`LexASR`](https://github.com/OpenASR/idear/blob/master/src/main/java/org/openasr/idear/asr/awslex/LexRecogniser.kt)
+invoking a Lamba function then [`LexRecognizer`](https://github.com/OpenASR/idear/blob/master/src/main/java/org/openasr/idear/asr/awslex/LexRecogniser.kt)
 notifies a `NlpResultListener` that the the request has been fulfilled or failed etc.
+
+[`NlpProvider`](https://github.com/OpenASR/idear/blob/master/src/main/java/org/openasr/idear/nlp/NlpProvider.kt)
+defines a method `processUtterance()` which takes a string utterance and context. 
+[`LexNlp`](https://github.com/OpenASR/idear/blob/master/src/main/java/org/openasr/idear/nlp/lex/LexNlp.kt)
+implements `NlpProvider` and notifies the `NlpResultListener`. 
 
 ## Text-to-Speech
 
