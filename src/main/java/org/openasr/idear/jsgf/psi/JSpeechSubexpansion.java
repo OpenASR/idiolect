@@ -6,13 +6,13 @@ import org.jetbrains.annotations.Nullable;
 
 public interface JSpeechSubexpansion extends PsiElement {
 
-  @Nullable
-  JSpeechLiteral getLiteral();
+    @Nullable
+    JSpeechLiteral getLiteral();
 
-  @Nullable
-  JSpeechRuleExpansion getRuleExpansion();
+    @Nullable
+    JSpeechRuleExpansion getRuleExpansion();
 
-  @Nullable
-  JSpeechRulename getRulename();
+    @Nullable
+    JSpeechRulename getRulename();
 
 }

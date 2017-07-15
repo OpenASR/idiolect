@@ -13,19 +13,21 @@ import java.util.List;
 public class JSpeechRuleExpansionImpl extends ASTWrapperPsiElement implements
     JSpeechRuleExpansion {
 
-  public JSpeechRuleExpansionImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechRuleExpansionImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitRuleExpansion(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitRuleExpansion(this);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public List<JSpeechRuleAlternative> getRuleAlternativeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, JSpeechRuleAlternative.class);
-  }
+    @Override
+    @NotNull
+    public List<JSpeechRuleAlternative> getRuleAlternativeList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this,
+                                                   JSpeechRuleAlternative.class);
+    }
 
 }

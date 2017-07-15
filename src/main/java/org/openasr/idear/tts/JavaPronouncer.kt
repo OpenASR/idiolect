@@ -21,7 +21,9 @@ class JavaPronouncer : IntentionAction {
         return "Pronounce"
     }
 
-    override fun isAvailable(project: Project, editor: Editor, psiFile: PsiFile): Boolean {
+    override fun isAvailable(project: Project,
+                             editor: Editor,
+                             psiFile: PsiFile): Boolean {
         val selectionModel = editor.selectionModel
         return psiFile.language === JavaLanguage.INSTANCE && selectionModel.hasSelection()
     }

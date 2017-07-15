@@ -9,5 +9,6 @@ import com.intellij.openapi.util.IconLoader;
 import javax.swing.*;
 
 public class JSpeechIcons {
-    public static final Icon FILE = IconLoader.getIcon("/org.openasr.idear/icons/jspeech_icon.png");
+    public static final Icon FILE =
+        IconLoader.getIcon("/org.openasr.idear/icons/jspeech_icon.png");
 }

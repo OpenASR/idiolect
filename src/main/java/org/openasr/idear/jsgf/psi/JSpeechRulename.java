@@ -7,7 +7,7 @@ import org.openasr.idear.jsgf.JSpeechNamedElement;
 
 public interface JSpeechRulename extends JSpeechNamedElement {
 
-  @NotNull
-  PsiElement getString();
+    @NotNull
+    PsiElement getString();
 
 }

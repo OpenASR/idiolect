@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface JSpeechRuleAlternative extends PsiElement {
 
-  @Nullable
-  JSpeechWeight getWeight();
+    @Nullable
+    JSpeechWeight getWeight();
 
-  @NotNull
-  List<JSpeechSequenceElement> getSequenceElementList();
+    @NotNull
+    List<JSpeechSequenceElement> getSequenceElementList();
 
 }

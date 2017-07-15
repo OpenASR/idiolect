@@ -1,17 +1,17 @@
 package org.openasr.idear.recognizer;
 
+import com.intellij.openapi.diagnostic.Logger;
+
 import javax.sound.sampled.*;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class AudioInputStreamWithAdjustableGain extends AudioInputStream {
     private static final double DEFAULT_MASTER_GAIN = 1.0;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
-
+    private static final Logger logger =
+        Logger.getInstance(AudioInputStreamWithAdjustableGain.class);
     private double masterGain;
     private double noiseLevel;
-
-    private static final Logger logger = Logger.getLogger(AudioInputStreamWithAdjustableGain.class.getSimpleName());
 
     AudioInputStreamWithAdjustableGain(TargetDataLine line) {
         super(line);
@@ -82,6 +82,8 @@ public class AudioInputStreamWithAdjustableGain extends AudioInputStream {
     }
 
     private byte cut(byte b) {
-        return b < Byte.MAX_VALUE * noiseLevel && b > Byte.MIN_VALUE * noiseLevel ? 0 : b;
+        return
+            b < Byte.MAX_VALUE * noiseLevel && b > Byte.MIN_VALUE * noiseLevel ?
+                0 : b;
     }
 }

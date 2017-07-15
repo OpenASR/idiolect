@@ -13,19 +13,23 @@ import org.openasr.idear.jsgf.psi.JSpeechRuleDefinition;
 
 import java.util.*;
 
-public class JSpeechReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class JSpeechReference extends PsiReferenceBase<PsiElement> implements
+    PsiPolyVariantReference {
     private String key;
 
     public JSpeechReference(@NotNull PsiElement element, TextRange textRange) {
         super(element, textRange);
-        key = element.getText().substring(textRange.getStartOffset(), textRange.getEndOffset());
+        key = element.getText()
+                     .substring(textRange.getStartOffset(),
+                                textRange.getEndOffset());
     }
 
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         Project project = myElement.getProject();
-        final List<JSpeechRuleDefinition> properties = JSpeechUtil.findProperties(project, key);
+        final List<JSpeechRuleDefinition> properties =
+            JSpeechUtil.findProperties(project, key);
 
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (JSpeechRuleDefinition property : properties) {
@@ -38,20 +42,23 @@ public class JSpeechReference extends PsiReferenceBase<PsiElement> implements Ps
     @Override
     public PsiElement resolve() {
         ResolveResult[] resolveResults = multiResolve(false);
-        return resolveResults.length == 1 ? resolveResults[0].getElement() : null;
+        return resolveResults.length == 1 ? resolveResults[0].getElement() :
+            null;
     }
 
     @NotNull
     @Override
     public Object[] getVariants() {
         Project project = myElement.getProject();
-        List<JSpeechRuleDefinition> properties = JSpeechUtil.findProperties(project);
+        List<JSpeechRuleDefinition> properties =
+            JSpeechUtil.findProperties(project);
         List<LookupElement> variants = new ArrayList<>();
         for (final JSpeechRuleDefinition property : properties) {
             if (property.getRulename().getString().getText().length() > 0) {
                 variants.add(LookupElementBuilder.create(property).
-                        withIcon(JSpeechIcons.FILE).
-                        withTypeText(property.getContainingFile().getName())
+                    withIcon(JSpeechIcons.FILE).
+                                                     withTypeText(property.getContainingFile()
+                                                                          .getName())
                 );
             }
         }

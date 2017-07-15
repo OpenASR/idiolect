@@ -10,31 +10,32 @@ import org.openasr.idear.jsgf.psi.*;
 public class JSpeechRuleDefinitionImpl extends ASTWrapperPsiElement implements
     JSpeechRuleDefinition {
 
-  public JSpeechRuleDefinitionImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechRuleDefinitionImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitRuleDefinition(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitRuleDefinition(this);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public JSpeechRuleExpansion getRuleExpansion() {
-    return findNotNullChildByClass(JSpeechRuleExpansion.class);
-  }
+    @Override
+    @NotNull
+    public JSpeechRuleExpansion getRuleExpansion() {
+        return findNotNullChildByClass(JSpeechRuleExpansion.class);
+    }
 
-  @Override
-  @NotNull
-  public JSpeechRulename getRulename() {
-    return findNotNullChildByClass(JSpeechRulename.class);
-  }
+    @Override
+    @NotNull
+    public JSpeechRulename getRulename() {
+        return findNotNullChildByClass(JSpeechRulename.class);
+    }
 
-  @Override
-  @Nullable
-  public JSpeechScope getScope() {
-    return findChildByClass(JSpeechScope.class);
-  }
+    @Override
+    @Nullable
+    public JSpeechScope getScope() {
+        return findChildByClass(JSpeechScope.class);
+    }
 
 }

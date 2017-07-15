@@ -16,23 +16,31 @@ public class JSpeechPsiImplUtil {
         return getRule(element);
     }
 
-    public static PsiElement setName(JSpeechRuleDefinition element, String newName) {
-        ASTNode keyNode = element.getNode().findChildByType(JSpeechTypes.RULENAME);
+    public static PsiElement setName(JSpeechRuleDefinition element,
+                                     String newName) {
+        ASTNode keyNode =
+            element.getNode().findChildByType(JSpeechTypes.RULENAME);
         if (keyNode != null) {
 
             JSpeechRulename
-                property = JSpeechElementFactory.createProperty(element.getProject(), newName);
+                property =
+                JSpeechElementFactory.createProperty(element.getProject(),
+                                                     newName);
             ASTNode newKeyNode = property.getFirstChild().getNode();
             element.getNode().replaceChild(keyNode, newKeyNode);
         }
         return element;
     }
 
-    public static PsiElement setRule(JSpeechRuleDefinition element, String newName) {
-        ASTNode keyNode = element.getNode().findChildByType(JSpeechTypes.RULENAME);
+    public static PsiElement setRule(JSpeechRuleDefinition element,
+                                     String newName) {
+        ASTNode keyNode =
+            element.getNode().findChildByType(JSpeechTypes.RULENAME);
         if (keyNode != null) {
 
-            JSpeechRulename property = JSpeechElementFactory.createProperty(element.getProject(), newName);
+            JSpeechRulename property = JSpeechElementFactory.createProperty(
+                element.getProject(),
+                newName);
             ASTNode newKeyNode = property.getFirstChild().getNode();
             element.getNode().replaceChild(keyNode, newKeyNode);
         }
@@ -40,7 +48,8 @@ public class JSpeechPsiImplUtil {
     }
 
     public static String getRule(JSpeechRuleDefinition element) {
-        ASTNode keyNode = element.getNode().findChildByType(JSpeechTypes.RULENAME);
+        ASTNode keyNode =
+            element.getNode().findChildByType(JSpeechTypes.RULENAME);
         if (keyNode != null) {
             return keyNode.getText();
         } else {
@@ -49,7 +58,8 @@ public class JSpeechPsiImplUtil {
     }
 
     public static PsiElement getNameIdentifier(JSpeechRuleDefinition element) {
-        ASTNode keyNode = element.getNode().findChildByType(JSpeechTypes.RULENAME);
+        ASTNode keyNode =
+            element.getNode().findChildByType(JSpeechTypes.RULENAME);
         if (keyNode != null) {
             return keyNode.getPsi();
         } else {
@@ -57,7 +67,9 @@ public class JSpeechPsiImplUtil {
         }
     }
 
-    public static ItemPresentation getPresentation(final JSpeechRuleDefinition element) {
+    public static ItemPresentation getPresentation(final
+                                                   JSpeechRuleDefinition
+                                                       element) {
         return new ItemPresentation() {
             @Nullable
             @Override

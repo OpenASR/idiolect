@@ -13,25 +13,27 @@ import java.util.List;
 public class JSpeechRuleAlternativeImpl extends ASTWrapperPsiElement implements
     JSpeechRuleAlternative {
 
-  public JSpeechRuleAlternativeImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechRuleAlternativeImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitRuleAlternative(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitRuleAlternative(this);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @Nullable
-  public JSpeechWeight getWeight() {
-    return findChildByClass(JSpeechWeight.class);
-  }
+    @Override
+    @Nullable
+    public JSpeechWeight getWeight() {
+        return findChildByClass(JSpeechWeight.class);
+    }
 
-  @Override
-  @NotNull
-  public List<JSpeechSequenceElement> getSequenceElementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, JSpeechSequenceElement.class);
-  }
+    @Override
+    @NotNull
+    public List<JSpeechSequenceElement> getSequenceElementList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this,
+                                                   JSpeechSequenceElement.class);
+    }
 
 }

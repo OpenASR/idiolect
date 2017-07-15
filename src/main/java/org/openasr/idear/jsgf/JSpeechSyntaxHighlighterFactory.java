@@ -11,7 +11,9 @@ import org.jetbrains.annotations.*;
 public class JSpeechSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
     @NotNull
     @Override
-    public SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile) {
+    public SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project,
+                                                  @Nullable VirtualFile
+                                                      virtualFile) {
         return new JSpeechSyntaxHighlighter();
     }
 }

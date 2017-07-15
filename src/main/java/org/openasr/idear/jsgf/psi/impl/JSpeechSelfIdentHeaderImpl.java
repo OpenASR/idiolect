@@ -10,13 +10,14 @@ import org.openasr.idear.jsgf.psi.*;
 public class JSpeechSelfIdentHeaderImpl extends ASTWrapperPsiElement implements
     JSpeechSelfIdentHeader {
 
-  public JSpeechSelfIdentHeaderImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechSelfIdentHeaderImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitSelfIdentHeader(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitSelfIdentHeader(this);
+        else super.accept(visitor);
+    }
 
 }

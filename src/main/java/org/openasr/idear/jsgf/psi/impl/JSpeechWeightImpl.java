@@ -10,19 +10,20 @@ import org.openasr.idear.jsgf.psi.*;
 public class JSpeechWeightImpl extends ASTWrapperPsiElement implements
     JSpeechWeight {
 
-  public JSpeechWeightImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechWeightImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitWeight(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitWeight(this);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public PsiElement getFloat() {
-    return findNotNullChildByType(JSpeechTypes.FLOAT);
-  }
+    @Override
+    @NotNull
+    public PsiElement getFloat() {
+        return findNotNullChildByType(JSpeechTypes.FLOAT);
+    }
 
 }

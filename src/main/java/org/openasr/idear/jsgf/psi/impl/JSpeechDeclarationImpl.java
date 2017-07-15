@@ -7,15 +7,17 @@ import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.openasr.idear.jsgf.psi.*;
 
-public class JSpeechDeclarationImpl extends ASTWrapperPsiElement implements JSpeechDeclaration {
+public class JSpeechDeclarationImpl extends ASTWrapperPsiElement implements
+    JSpeechDeclaration {
 
-  public JSpeechDeclarationImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechDeclarationImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitDeclaration(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitDeclaration(this);
+        else super.accept(visitor);
+    }
 
 }

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface JSpeechSequenceElement extends PsiElement {
 
-  @NotNull
-  JSpeechSubexpansion getSubexpansion();
+    @NotNull
+    JSpeechSubexpansion getSubexpansion();
 
 }

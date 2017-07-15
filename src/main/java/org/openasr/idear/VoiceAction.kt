@@ -7,7 +7,8 @@ import com.intellij.openapi.editor.actionSystem.EditorActionManager
 import org.openasr.idear.actions.recognition.ActionCallInfo
 import org.openasr.idear.actions.recognition.TextToActionConverter
 
-class VoiceAction : AnAction() {
+object VoiceAction : AnAction() {
+    private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
 
     override fun actionPerformed(e: AnActionEvent) {
         val dataContext = e.dataContext
@@ -27,7 +28,12 @@ class VoiceAction : AnAction() {
         val manager = DataManager.getInstance()
         if (manager != null) {
             val context = manager.getDataContext(editor.contentComponent)
-            action.actionPerformed(AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0))
+            action.actionPerformed(AnActionEvent(null,
+                context,
+                "",
+                action.templatePresentation,
+                ActionManager.getInstance(),
+                0))
 
             if (type != null) {
                 typeText(editor, type, context)
@@ -41,7 +47,12 @@ class VoiceAction : AnAction() {
 
     private fun hitTab(context: DataContext) {
         val action = ActionManager.getInstance().getAction("NextTemplateVariable")
-        action.actionPerformed(AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0))
+        action.actionPerformed(AnActionEvent(null,
+            context,
+            "",
+            action.templatePresentation,
+            ActionManager.getInstance(),
+            0))
     }
 
     private fun typeText(editor: Editor, type: String, context: DataContext) {
@@ -59,9 +70,5 @@ class VoiceAction : AnAction() {
             val presentation = event.presentation
             presentation.isEnabled = true
         }
-    }
-
-    companion object {
-        /* package */ private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
     }
 }

@@ -15,10 +15,12 @@ public class JSpeechChooseByNameContributor implements ChooseByNameContributor {
     @NotNull
     @Override
     public String[] getNames(Project project, boolean includeNonProjectItems) {
-        List<JSpeechRuleDefinition> properties = JSpeechUtil.findProperties(project);
+        List<JSpeechRuleDefinition> properties =
+            JSpeechUtil.findProperties(project);
         List<String> names = new ArrayList<String>(properties.size());
         for (JSpeechRuleDefinition property : properties) {
-            if (property.getRulename().getName() != null && property.getRulename().getName().length() > 0) {
+            if (property.getRulename().getName() != null &&
+                property.getRulename().getName().length() > 0) {
                 names.add(property.getRulename().getName());
             }
         }
@@ -27,8 +29,12 @@ public class JSpeechChooseByNameContributor implements ChooseByNameContributor {
 
     @NotNull
     @Override
-    public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
-        List<JSpeechRuleDefinition> properties = JSpeechUtil.findProperties(project, name);
+    public NavigationItem[] getItemsByName(String name,
+                                           String pattern,
+                                           Project project,
+                                           boolean includeNonProjectItems) {
+        List<JSpeechRuleDefinition> properties =
+            JSpeechUtil.findProperties(project, name);
         return properties.toArray(new NavigationItem[properties.size()]);
     }
 }

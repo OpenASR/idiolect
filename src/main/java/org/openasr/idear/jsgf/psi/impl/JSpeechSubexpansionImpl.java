@@ -10,31 +10,32 @@ import org.openasr.idear.jsgf.psi.*;
 public class JSpeechSubexpansionImpl extends ASTWrapperPsiElement implements
     JSpeechSubexpansion {
 
-  public JSpeechSubexpansionImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechSubexpansionImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitSubexpansion(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitSubexpansion(this);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @Nullable
-  public JSpeechLiteral getLiteral() {
-    return findChildByClass(JSpeechLiteral.class);
-  }
+    @Override
+    @Nullable
+    public JSpeechLiteral getLiteral() {
+        return findChildByClass(JSpeechLiteral.class);
+    }
 
-  @Override
-  @Nullable
-  public JSpeechRuleExpansion getRuleExpansion() {
-    return findChildByClass(JSpeechRuleExpansion.class);
-  }
+    @Override
+    @Nullable
+    public JSpeechRuleExpansion getRuleExpansion() {
+        return findChildByClass(JSpeechRuleExpansion.class);
+    }
 
-  @Override
-  @Nullable
-  public JSpeechRulename getRulename() {
-    return findChildByClass(JSpeechRulename.class);
-  }
+    @Override
+    @Nullable
+    public JSpeechRulename getRulename() {
+        return findChildByClass(JSpeechRulename.class);
+    }
 
 }

@@ -3,6 +3,7 @@ package org.openasr.idear.jsgf;
 /**
  * Created by breandan on 11/13/2015.
  */
+
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;

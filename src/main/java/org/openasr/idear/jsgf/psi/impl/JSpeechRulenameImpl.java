@@ -11,29 +11,31 @@ import org.openasr.idear.jsgf.psi.*;
 public class JSpeechRulenameImpl extends JSpeechNamedElementImpl implements
     JSpeechRulename {
 
-  public JSpeechRulenameImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechRulenameImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitRulename(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitRulename(this);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public PsiElement getString() {
-    return findNotNullChildByType(JSpeechTypes.STRING);
-  }
+    @Override
+    @NotNull
+    public PsiElement getString() {
+        return findNotNullChildByType(JSpeechTypes.STRING);
+    }
 
-  @Nullable
-  @Override
-  public PsiElement getNameIdentifier() {
-    return null;
-  }
+    @Nullable
+    @Override
+    public PsiElement getNameIdentifier() {
+        return null;
+    }
 
-  @Override
-  public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
-    return null;
-  }
+    @Override
+    public PsiElement setName(@NonNls @NotNull String name) throws
+        IncorrectOperationException {
+        return null;
+    }
 }

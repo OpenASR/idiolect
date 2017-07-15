@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface JSpeechRuleExpansion extends PsiElement {
 
-  @NotNull
-  List<JSpeechRuleAlternative> getRuleAlternativeList();
+    @NotNull
+    List<JSpeechRuleAlternative> getRuleAlternativeList();
 
 }

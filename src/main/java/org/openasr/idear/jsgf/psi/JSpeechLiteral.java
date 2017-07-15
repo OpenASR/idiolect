@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface JSpeechLiteral extends PsiElement {
 
-  @NotNull
-  PsiElement getString();
+    @NotNull
+    PsiElement getString();
 
 }

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface JSpeechWeight extends PsiElement {
 
-  @NotNull
-  PsiElement getFloat();
+    @NotNull
+    PsiElement getFloat();
 
 }

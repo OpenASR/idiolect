@@ -10,7 +10,9 @@ import org.jetbrains.annotations.NotNull;
  */
 
 
-public abstract class JSpeechNamedElementImpl extends ASTWrapperPsiElement implements JSpeechNamedElement {
+public abstract class JSpeechNamedElementImpl extends ASTWrapperPsiElement
+    implements
+    JSpeechNamedElement {
     public JSpeechNamedElementImpl(@NotNull ASTNode node) {
         super(node);
     }

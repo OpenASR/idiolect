@@ -11,7 +11,8 @@ import org.openasr.idear.jsgf.psi.*;
  */
 public class JSpeechAnnotator implements Annotator {
     @Override
-    public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
+    public void annotate(@NotNull PsiElement element,
+                         @NotNull AnnotationHolder holder) {
         PsiElement parent = element.getParent();
         String keyString = null;
 
@@ -24,7 +25,8 @@ public class JSpeechAnnotator implements Annotator {
         }
 
         if (keyString != null) {
-            TextAttributesKey key = JSpeechSyntaxHighlighter.KEYS.get(keyString);
+            TextAttributesKey key =
+                JSpeechSyntaxHighlighter.KEYS.get(keyString);
             assert key != null : keyString;
             holder.createInfoAnnotation(element, null).setTextAttributes(key);
         }

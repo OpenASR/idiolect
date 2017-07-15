@@ -17,6 +17,6 @@ public class JSpeechElementFactory {
     public static JSpeechFile createFile(Project project, String text) {
         String name = "dummy.simple";
         return (JSpeechFile) PsiFileFactory.getInstance(project).
-                createFileFromText(name, JSpeechFileType.INSTANCE, text);
+            createFileFromText(name, JSpeechFileType.INSTANCE, text);
     }
 }

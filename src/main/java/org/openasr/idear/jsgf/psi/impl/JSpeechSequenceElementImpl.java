@@ -7,21 +7,23 @@ import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.openasr.idear.jsgf.psi.*;
 
-public class JSpeechSequenceElementImpl extends ASTWrapperPsiElement implements JSpeechSequenceElement {
+public class JSpeechSequenceElementImpl extends ASTWrapperPsiElement implements
+    JSpeechSequenceElement {
 
-  public JSpeechSequenceElementImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechSequenceElementImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitSequenceElement(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitSequenceElement(this);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public JSpeechSubexpansion getSubexpansion() {
-    return findNotNullChildByClass(JSpeechSubexpansion.class);
-  }
+    @Override
+    @NotNull
+    public JSpeechSubexpansion getSubexpansion() {
+        return findNotNullChildByClass(JSpeechSubexpansion.class);
+    }
 
 }

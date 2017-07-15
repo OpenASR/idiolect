@@ -12,11 +12,15 @@ import com.intellij.psi.tree.*;
 import org.jetbrains.annotations.NotNull;
 import org.openasr.idear.jsgf.psi.JSpeechTypes;
 
-public class JSpeechParserDefinition implements ParserDefinition{
-    public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(new JSpeechElementType("COMMENT"));
+public class JSpeechParserDefinition implements ParserDefinition {
+    public static final TokenSet WHITE_SPACES =
+        TokenSet.create(TokenType.WHITE_SPACE);
+    public static final TokenSet COMMENTS =
+        TokenSet.create(new JSpeechElementType("COMMENT"));
 
-    public static final IFileElementType FILE = new IFileElementType(Language.<JSpeechLanguage>findInstance(JSpeechLanguage.class));
+    public static final IFileElementType FILE =
+        new IFileElementType(Language.<JSpeechLanguage>findInstance(
+            JSpeechLanguage.class));
 
     @NotNull
     @Override
@@ -53,7 +57,8 @@ public class JSpeechParserDefinition implements ParserDefinition{
         return new JSpeechFile(viewProvider);
     }
 
-    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
+    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left,
+                                                             ASTNode right) {
         return SpaceRequirements.MAY;
     }
 

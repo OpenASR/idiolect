@@ -1,21 +1,26 @@
 package org.openasr.idear;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
-import com.mashape.unirest.http.*;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import org.codehaus.jettison.json.*;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.openasr.idear.recognizer.CustomMicrophone;
 
 import java.awt.*;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.logging.*;
 
 public class GoogleHelper {
-    private static Logger logger = Logger.getLogger(GoogleHelper.class.getSimpleName());
+    private static Logger logger = Logger.getInstance(GoogleHelper.class);
 //    private static final String API_KEY = "AIzaSyB0DS1X9_qkZw2keZWw9p9EwUb9cV2bYsw";
     private static final String URL_PRE = "https://www.google.com/speech-api/v2/recognize";
     private static final String URL_SEARCH = "https://www.google.com/search?q=";
@@ -36,7 +41,7 @@ public class GoogleHelper {
             // chunking-ly with two JSON objects instead of single one
             return parseGSAPIResponse(slurp(jsonResponse.getRawBody()));
         } catch (IOException | UnirestException | JSONException e) {
-            logger.log(Level.SEVERE, "Panic! Failed process response of GSAPI!",e);
+            logger.error("Panic! Failed process response of GSAPI!",e);
         }
 
         return Collections.emptyList();
@@ -45,7 +50,7 @@ public class GoogleHelper {
     private static Pair<String, Double> getBestTextForUtteranceInternal(File file) {
         Pair<String, Double> best = null;
         for (Pair<String, Double> p : getRecognizedTextForUtteranceInternal(file)) {
-            if (best == null || p.second != null && best.second == null || p.second != null && best.second != null && p.second > best.second) {
+            if (best == null || p.second != null && best.second == null || p.second != null && p.second > best.second) {
                 best = p;
             }
         }
@@ -61,11 +66,13 @@ public class GoogleHelper {
         return getBestTextForUtteranceInternal(file);
     }
 
-    private static List<Pair<String, Double>> parseGSAPIResponse(String r) throws JSONException {
+    private static List<Pair<String, Double>> parseGSAPIResponse(String r)
+        throws
+        JSONException {
         List<Pair<String, Double>> res = new ArrayList<>();
-        logger.log(Level.INFO, r);
+        logger.info(r);
         if (r.length() < 30) {
-            logger.log(Level.WARNING, "No result!");
+            logger.warn("No result!");
             return res;
         }
 

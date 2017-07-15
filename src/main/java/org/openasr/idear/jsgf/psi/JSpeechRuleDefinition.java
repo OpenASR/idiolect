@@ -6,13 +6,13 @@ import org.jetbrains.annotations.*;
 
 public interface JSpeechRuleDefinition extends PsiElement {
 
-  @NotNull
-  JSpeechRuleExpansion getRuleExpansion();
+    @NotNull
+    JSpeechRuleExpansion getRuleExpansion();
 
-  @NotNull
-  JSpeechRulename getRulename();
+    @NotNull
+    JSpeechRulename getRulename();
 
-  @Nullable
-  JSpeechScope getScope();
+    @Nullable
+    JSpeechScope getScope();
 
 }

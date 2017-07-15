@@ -22,35 +22,49 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey
 public class JSpeechSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final Map<String, TextAttributesKey> KEYS = new HashMap<>();
 
-    public static final TextAttributesKey SEPARATOR = createTextAttributesKey("SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-    public static final TextAttributesKey RULE = createTextAttributesKey("RULE", DefaultLanguageHighlighterColors.KEYWORD);
-    public static final TextAttributesKey LITERAL = createTextAttributesKey("LITERAL", DefaultLanguageHighlighterColors.STRING);
-    public static final TextAttributesKey COMMENT = createTextAttributesKey("COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-    public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
+    public static final TextAttributesKey SEPARATOR = createTextAttributesKey(
+        "SEPARATOR",
+        DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    public static final TextAttributesKey RULE = createTextAttributesKey("RULE",
+                                                                         DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey LITERAL = createTextAttributesKey(
+        "LITERAL",
+        DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey COMMENT = createTextAttributesKey(
+        "COMMENT",
+        DefaultLanguageHighlighterColors.LINE_COMMENT);
+    public static final TextAttributesKey BAD_CHARACTER =
+        createTextAttributesKey("BAD_CHARACTER",
+                                HighlighterColors.BAD_CHARACTER);
 
-    private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
-    private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
-    private static final TextAttributesKey[] KEY_KEYS = new TextAttributesKey[]{RULE};
-    private static final TextAttributesKey[] VALUE_KEYS = new TextAttributesKey[]{LITERAL};
-    private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
+    private static final TextAttributesKey[] BAD_CHAR_KEYS =
+        new TextAttributesKey[]{BAD_CHARACTER};
+    private static final TextAttributesKey[] SEPARATOR_KEYS =
+        new TextAttributesKey[]{SEPARATOR};
+    private static final TextAttributesKey[] KEY_KEYS =
+        new TextAttributesKey[]{RULE};
+    private static final TextAttributesKey[] VALUE_KEYS =
+        new TextAttributesKey[]{LITERAL};
+    private static final TextAttributesKey[] EMPTY_KEYS =
+        new TextAttributesKey[0];
 
     static {
         new ContainerUtil.ImmutableMapBuilder<String, TextAttributesKey>()
-                .put("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
-                .put("OPERATION_NAME", DefaultLanguageHighlighterColors.CLASS_NAME)
-                .put("TYPE_REF", DefaultLanguageHighlighterColors.CLASS_REFERENCE)
-                .put("FIELD_NAME", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
-                .put("ARGUMENT_NAME", DefaultLanguageHighlighterColors.PARAMETER)
-                .put("VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
-                .put("REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE)
-                .put("DIRECTIVE", DefaultLanguageHighlighterColors.METADATA)
-                .put("NUMBER", DefaultLanguageHighlighterColors.NUMBER)
-                .put("STRING", DefaultLanguageHighlighterColors.STRING)
-                .put("BRACES", DefaultLanguageHighlighterColors.BRACES)
-                .put("PARENS", DefaultLanguageHighlighterColors.PARENTHESES)
-                .put("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
-                .build().forEach((s, key) ->
-                KEYS.put(s, createTextAttributesKey(s, key)));
+            .put("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
+            .put("OPERATION_NAME", DefaultLanguageHighlighterColors.CLASS_NAME)
+            .put("TYPE_REF", DefaultLanguageHighlighterColors.CLASS_REFERENCE)
+            .put("FIELD_NAME", DefaultLanguageHighlighterColors.INSTANCE_FIELD)
+            .put("ARGUMENT_NAME", DefaultLanguageHighlighterColors.PARAMETER)
+            .put("VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
+            .put("REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE)
+            .put("DIRECTIVE", DefaultLanguageHighlighterColors.METADATA)
+            .put("NUMBER", DefaultLanguageHighlighterColors.NUMBER)
+            .put("STRING", DefaultLanguageHighlighterColors.STRING)
+            .put("BRACES", DefaultLanguageHighlighterColors.BRACES)
+            .put("PARENS", DefaultLanguageHighlighterColors.PARENTHESES)
+            .put("BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
+            .build().forEach((s, key) ->
+                                 KEYS.put(s, createTextAttributesKey(s, key)));
     }
 
 

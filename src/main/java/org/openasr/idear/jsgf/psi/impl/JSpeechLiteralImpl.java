@@ -10,19 +10,20 @@ import org.openasr.idear.jsgf.psi.*;
 public class JSpeechLiteralImpl extends ASTWrapperPsiElement implements
     JSpeechLiteral {
 
-  public JSpeechLiteralImpl(ASTNode node) {
-    super(node);
-  }
+    public JSpeechLiteralImpl(ASTNode node) {
+        super(node);
+    }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JSpeechVisitor) ((JSpeechVisitor)visitor).visitLiteral(this);
-    else super.accept(visitor);
-  }
+    public void accept(@NotNull PsiElementVisitor visitor) {
+        if (visitor instanceof JSpeechVisitor)
+            ((JSpeechVisitor) visitor).visitLiteral(this);
+        else super.accept(visitor);
+    }
 
-  @Override
-  @NotNull
-  public PsiElement getString() {
-    return findNotNullChildByType(JSpeechTypes.STRING);
-  }
+    @Override
+    @NotNull
+    public PsiElement getString() {
+        return findNotNullChildByType(JSpeechTypes.STRING);
+    }
 
 }

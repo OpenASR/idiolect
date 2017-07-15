@@ -14,14 +14,24 @@ import java.util.*;
  * Created by breandan on 11/15/2015.
  */
 public class JSpeechUtil {
-    public static List<JSpeechRuleDefinition> findProperties(Project project, String key) {
+    public static List<JSpeechRuleDefinition> findProperties(Project project,
+                                                             String key) {
         List<JSpeechRuleDefinition> result = null;
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, JSpeechFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance()
+                                                             .getContainingFiles(
+                                                                 FileTypeIndex.NAME,
+                                                                 JSpeechFileType.INSTANCE,
+                                                                 GlobalSearchScope
+                                                                     .allScope(
+                                                                         project));
         for (VirtualFile virtualFile : virtualFiles) {
-            JSpeechFile simpleFile = (JSpeechFile) PsiManager.getInstance(project).findFile(virtualFile);
+            JSpeechFile simpleFile =
+                (JSpeechFile) PsiManager.getInstance(project)
+                                        .findFile(virtualFile);
             if (simpleFile != null) {
-                JSpeechRuleDefinition[] properties = PsiTreeUtil.getChildrenOfType(simpleFile, JSpeechRuleDefinition.class);
+                JSpeechRuleDefinition[] properties =
+                    PsiTreeUtil.getChildrenOfType(simpleFile,
+                                                  JSpeechRuleDefinition.class);
                 if (properties != null) {
                     for (JSpeechRuleDefinition property : properties) {
                         if (key.equals(property.getText())) {
@@ -34,17 +44,27 @@ public class JSpeechUtil {
                 }
             }
         }
-        return result != null ? result : Collections.<JSpeechRuleDefinition>emptyList();
+        return result != null ? result :
+            Collections.<JSpeechRuleDefinition>emptyList();
     }
 
     public static List<JSpeechRuleDefinition> findProperties(Project project) {
         List<JSpeechRuleDefinition> result = new ArrayList<>();
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, JSpeechFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance()
+                                                             .getContainingFiles(
+                                                                 FileTypeIndex.NAME,
+                                                                 JSpeechFileType.INSTANCE,
+                                                                 GlobalSearchScope
+                                                                     .allScope(
+                                                                         project));
         for (VirtualFile virtualFile : virtualFiles) {
-            JSpeechFile simpleFile = (JSpeechFile) PsiManager.getInstance(project).findFile(virtualFile);
+            JSpeechFile simpleFile =
+                (JSpeechFile) PsiManager.getInstance(project)
+                                        .findFile(virtualFile);
             if (simpleFile != null) {
-                JSpeechRuleDefinition[] properties = PsiTreeUtil.getChildrenOfType(simpleFile, JSpeechRuleDefinition.class);
+                JSpeechRuleDefinition[] properties =
+                    PsiTreeUtil.getChildrenOfType(simpleFile,
+                                                  JSpeechRuleDefinition.class);
                 if (properties != null) {
                     Collections.addAll(result, properties);
                 }

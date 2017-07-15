@@ -1,5 +1,6 @@
 package org.openasr.idear.tts
 
+import com.intellij.openapi.diagnostic.Logger
 import marytts.LocalMaryInterface
 import marytts.MaryInterface
 import marytts.exceptions.MaryConfigurationException
@@ -7,14 +8,12 @@ import marytts.exceptions.SynthesisException
 import marytts.modules.synthesis.Voice
 import marytts.util.data.audio.AudioPlayer
 import java.util.*
-import java.util.logging.Level
-import java.util.logging.Logger
 
 /**
  * Created by breandan on 7/9/2015.
  */
 class MaryTTS : TTSProvider {
-    val logger = Logger.getLogger(MaryTTS::class.java.simpleName)
+    val logger = Logger.getInstance(MaryTTS::class.java)
     private var voice: Voice? = null
     var maryTTS: MaryInterface? = null
 
@@ -38,9 +37,7 @@ class MaryTTS : TTSProvider {
     }
 
     override fun say(text: String?) {
-        if (text == null || text.isEmpty()) {
-            return
-        }
+        if (text == null || text.isEmpty()) return
 
         try {
             val audio = maryTTS!!.generateAudio(text)
@@ -48,9 +45,9 @@ class MaryTTS : TTSProvider {
             player.start()
             player.join()
         } catch (e: SynthesisException) {
-            logger.log(Level.SEVERE, String.format("Sorry! Could not pronounce '%s'", text), e)
+            logger.error("Sorry! Could not pronounce $text", e)
         } catch (e: InterruptedException) {
-            logger.log(Level.SEVERE, String.format("Sorry! Could not pronounce '%s'", text), e)
+            logger.error("Sorry! Could not pronounce $text", e)
         }
     }
 

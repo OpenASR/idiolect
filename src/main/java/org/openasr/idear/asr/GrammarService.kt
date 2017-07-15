@@ -9,10 +9,8 @@ import com.intellij.openapi.actionSystem.ex.AnActionListener
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Disposer
 
-class GrammarService : Disposable {
-    companion object {
-        private val logger = Logger.getInstance(GrammarService::class.java)
-    }
+object GrammarService : Disposable {
+    private val logger = Logger.getInstance(GrammarService::class.java)
 
     override fun dispose() {
         Disposer.dispose(this)
@@ -22,7 +20,9 @@ class GrammarService : Disposable {
         val actionManager = ActionManager.getInstance()
 
         actionManager.addAnActionListener(object : AnActionListener {
-            override fun beforeActionPerformed(anAction: AnAction, dataContext: DataContext, anActionEvent: AnActionEvent) {
+            override fun beforeActionPerformed(anAction: AnAction,
+                                               dataContext: DataContext,
+                                               anActionEvent: AnActionEvent) {
                 val actionId = actionManager.getId(anAction)
 
                 if ("someaction" == actionId) {
@@ -31,12 +31,15 @@ class GrammarService : Disposable {
                 }
             }
 
-            override fun afterActionPerformed(anAction: AnAction?, dataContext: DataContext?, anActionEvent: AnActionEvent?) {
+            override fun afterActionPerformed(anAction: AnAction?,
+                                              dataContext: DataContext?,
+                                              anActionEvent: AnActionEvent?) {
 
                 //swap out a context dependent grammar
             }
 
-            override fun beforeEditorTyping(c: Char, dataContext: DataContext?) {
+            override fun beforeEditorTyping(c: Char,
+                                            dataContext: DataContext?) {
 
             }
         })
