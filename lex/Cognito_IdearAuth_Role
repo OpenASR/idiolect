@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "mobileanalytics:PutEvents",
+        "cognito-sync:*",
+        "cognito-identity:*",
+        "polly:SynthesizeSpeech",
+        "lex:PostText",
+        "lex:PostContent"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}

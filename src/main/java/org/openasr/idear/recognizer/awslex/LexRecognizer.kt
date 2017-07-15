@@ -11,10 +11,15 @@ import org.json.JSONObject
 import org.openasr.idear.nlp.LoggingNlpResultListener
 import org.openasr.idear.nlp.NlpResultListener
 import org.openasr.idear.recognizer.SpeechRecognizer
+import java.util.logging.Level
 import java.util.logging.Logger
 import javax.sound.sampled.AudioInputStream
 import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
 
+/**
+ * [AWS Lex](http://docs.aws.amazon.com/lex/latest/dg/what-is.html) can process speech and return recognised text,
+ * but can also do further NLP processing and convert the text into actions with parameters.
+ */
 class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
     private val mic = MicrophoneAnalyzer(16_000F)
     private val vad: VoiceActivityDetector = SimpleVAD()
@@ -24,9 +29,10 @@ class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
     constructor(botName: String = "idear", botAlias: String = "PROD") {
         var lexRuntime = AmazonLexRuntimeClientBuilder
                             .standard()
-                            .withRegion("us-east-1")
+                            .withRegion(AwsUtils.REGION)
+                            .withCredentials(AwsUtils.credentialsProvider)
                             .build()
-        lex = JarvisLex(lexRuntime, "idear", "PROD", "anonymous")
+        lex = JarvisLex(lexRuntime, botName, botAlias, "anonymous")
     }
 
     fun setUserId(userId: String) = lex.setUserId(userId)
@@ -35,18 +41,23 @@ class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
         nlpListener = listener
     }
 
+    /** This starts a new JARVIS VAD thread which calls onVoiceActivity() with results */
     override fun startRecognition() {
-//        vad.detectVoiceActivity(mic, this)
-        vad.detectVoiceActivity(mic, RecordingListener()) //.withNextListener(this))
+        vad.detectVoiceActivity(mic, this)
+//        // debug versions
+//        // just record utterances to /tmp
+//        vad.detectVoiceActivity(mic, RecordingListener())
+//        // record to /tmp, but also call onVoiceActivity() below
+//        vad.detectVoiceActivity(mic, RecordingListener().withNextListener(this))
     }
     override fun stopRecognition() = mic.close()
 
     override fun onVoiceActivity(audioInputStream: AudioInputStream) {
-//        logger.log(Level.FINE, "processing speech....", audioInputStream.frameLength)
+        logger.log(Level.FINE, "processing speech...", audioInputStream.frameLength)
 
         val result = lex.getRecognizedDataForStream(audioInputStream).result
-//        logger.log(Level.FINE, "Recognition result", result)
-println("Lex recognized: " + result.inputTranscript)
+        logger.log(Level.FINE, "Recognition result", result)
+//        println("Lex recognized: " + result.inputTranscript)
 
         when (result.dialogState) {
             DialogState.Fulfilled.name -> {

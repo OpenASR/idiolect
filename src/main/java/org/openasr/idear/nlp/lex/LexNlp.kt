@@ -6,6 +6,7 @@ import com.amazonaws.services.lexruntime.model.DialogState
 import com.amazonaws.services.lexruntime.model.PostTextRequest
 import org.openasr.idear.nlp.NlpProvider
 import org.openasr.idear.nlp.NlpResultListener
+import org.openasr.idear.recognizer.awslex.AwsUtils
 
 class LexNlp(val listener: NlpResultListener) : NlpProvider {
     private lateinit var lex: AmazonLexRuntime;
@@ -14,13 +15,12 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
 
     init {
         // TODO: get userId from Cognito
-        userId = "TODO"
+        userId = "anonymous"
 //        lexAsync = AmazonLexRuntimeAsyncClientBuilder.standard().build()
         lex = AmazonLexRuntimeClientBuilder.standard()
-//                .withClientConfiguration()
-//                .withCredentials()
-//                .withRegion()
-            .build()
+                .withCredentials(AwsUtils.credentialsProvider)
+                .withRegion(AwsUtils.REGION)
+                .build()
     }
 
     /**
@@ -91,8 +91,7 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
                 listener.onMessage()
             }
         }
-
-
+        
         /*when (response.dialogState) {
             DialogState.Fulfilled.name, DialogState.ReadyForFulfillment.name -> listener.onFulfilled()
             DialogState.Failed.name -> listener.onFailure()
