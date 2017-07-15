@@ -98,15 +98,19 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
             else -> listener.onIncomplete()
         }*/
     }
-}
 
-/*
-fun main(args: Array<String>) {
-    val listener = NlpResultListener() {
-        override fun onFulfilled() {
-
+    /*companion object {
+        /** PostTextResult and PostContent differ slightly:
+          *  - PostTextResult has ressponseCard (and Maps for context and sesssionAttributes)
+          *  - PostContentResult has inputTranscript and audioStream
+          */
+        fun dispatchNlpResult(nlpListener: NlpResultListener,
+                              intentName: String,
+                              slots: Map<String, String>,
+                              sessionAttributes: Map<String, String>,
+                              message: String,
+                              dialogState: String,
+                              slotToElicit: String) {
         }
-    }
-    val lex = LexNlp()
-    lex.processUtterance("create a new class")
-}*/
+    }*/
+}

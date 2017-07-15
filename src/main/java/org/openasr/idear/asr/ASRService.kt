@@ -2,9 +2,6 @@ package org.openasr.idear.asr
 
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
-import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
-import org.openasr.idear.recognizer.awslex.LexRecognizer
-import org.openasr.idear.settings.IdearConfigurable
 import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 

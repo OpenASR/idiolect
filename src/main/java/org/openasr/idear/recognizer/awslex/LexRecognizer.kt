@@ -78,11 +78,27 @@ open class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
 //                map
                 }
 
+                val sessionAttributes = if (result.sessionAttributes == null) {
+                    null
+                } else {
+                    JSONObject(result.sessionAttributes).toMap() as Map<String, out String>
+                }
+
+//                result.message
+
                 nlpListener.onFulfilled(result.intentName, slots)
             }
             else -> {
                 nlpListener.onFailure(result.message)
             }
+        }
+    }
+
+    private fun stringToMap(json: String?): MutableMap<String, Any>? {
+        if (json == null) {
+            return null
+        } else {
+            return JSONObject(json).toMap()
         }
     }
 

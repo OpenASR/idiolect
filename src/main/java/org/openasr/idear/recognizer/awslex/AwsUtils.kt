@@ -7,11 +7,9 @@ import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentityClientBuilder
 import com.amazonaws.services.cognitoidentity.model.Credentials
 import com.amazonaws.services.cognitoidentity.model.GetCredentialsForIdentityRequest
 import com.amazonaws.services.cognitoidentity.model.GetIdRequest
-import java.util.logging.Logger
 
 class AwsUtils {
     companion object {
-        private val logger = Logger.getLogger(AwsUtils::class.java.simpleName)
         val ACCOUNT_ID = "317105675130"
         val REGION = "us-east-1"
         val ID_POOL_ID = "us-east-1:212de8d8-ca7e-4c5e-9628-382c17a50cbc"
