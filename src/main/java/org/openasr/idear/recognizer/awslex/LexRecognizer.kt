@@ -11,7 +11,6 @@ import org.json.JSONObject
 import org.openasr.idear.nlp.LoggingNlpResultListener
 import org.openasr.idear.nlp.NlpResultListener
 import org.openasr.idear.recognizer.SpeechRecognizer
-import java.util.logging.Level
 import java.util.logging.Logger
 import javax.sound.sampled.AudioInputStream
 import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
@@ -51,10 +50,10 @@ println("Lex recognized: " + result.inputTranscript)
 
         when (result.dialogState) {
             DialogState.Fulfilled.name -> {
-                val slots: Map<String, out String>? = if (result.slots == null) {
+                val slots: Map<String, String>? = if (result.slots == null) {
                     null
                 } else {
-                    JSONObject(result.slots).toMap() as Map<String, String>
+                    JSONObject(result.slots).toMap() as Map<String, out String>
 //                val json = JSONObject(result.slots)
 //                val map = HashMap<String, String>(json.length())
 //                for (key in json.keys()) {
