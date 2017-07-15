@@ -1,30 +1,17 @@
 package org.openasr.idear.settings
 
-import org.openasr.idear.settings.RecognitionServiceId.AWS_LEX
-import org.openasr.idear.settings.RecognitionServiceId.CMU_SPHINX
-import org.openasr.idear.settings.TtsServiceId.AWS_POLLY
-import org.openasr.idear.settings.TtsServiceId.MARY
+import com.intellij.openapi.ui.ComboBox
 import javax.swing.JPanel
-import javax.swing.JRadioButton
 
 class RecognitionSettingsForm {
-    lateinit var recCMUSphinx: JRadioButton
-    lateinit var recAWSLex: JRadioButton
-    lateinit var ttsMary: JRadioButton
-    lateinit var ttsAWSPolly: JRadioButton
+    val ttsProviderCombo = ComboBox(TTSServiceId.values())
+    val asrProviderCombo = ComboBox(ASRServiceId.values())
     lateinit var rootPanel: JPanel
 
-    var recognitionService: RecognitionServiceId
-        get() = if (recAWSLex.isSelected) AWS_LEX else CMU_SPHINX
-        set(value) = when (value) {
-            AWS_LEX -> recAWSLex.isSelected = true
-            CMU_SPHINX -> recCMUSphinx.isSelected = true
-        }
-
-    var ttsService: TtsServiceId
-        get() = if (ttsAWSPolly.isSelected) AWS_POLLY else MARY
-        set(value) = when (value) {
-            AWS_POLLY -> ttsAWSPolly.isSelected = true
-            MARY -> ttsMary.isSelected = true
-        }
+    var asrService: ASRServiceId
+        get() = ASRServiceId.valueOf(asrProviderCombo.selectedItem.toString())
+        set(value) { asrProviderCombo.selectedItem = value}
+    var ttsService: TTSServiceId
+        get() = TTSServiceId.valueOf(ttsProviderCombo.selectedItem.toString())
+        set(value) { ttsProviderCombo.selectedItem = value }
 }

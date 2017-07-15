@@ -1,7 +1,6 @@
 package org.openasr.idear.settings
 
-enum class TtsServiceId(val label: String) {
+enum class TTSServiceId(val label: String) {
     MARY("mary"),
     AWS_POLLY("awsPolly")
 }
-

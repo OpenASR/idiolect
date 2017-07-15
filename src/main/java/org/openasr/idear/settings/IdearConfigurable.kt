@@ -4,9 +4,9 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.options.Configurable
+import org.openasr.idear.settings.ASRServiceId.CMU_SPHINX
 import org.openasr.idear.settings.IdearConfigurable.Settings
-import org.openasr.idear.settings.RecognitionServiceId.CMU_SPHINX
-import org.openasr.idear.settings.TtsServiceId.MARY
+import org.openasr.idear.settings.TTSServiceId.MARY
 
 /**
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
@@ -24,14 +24,14 @@ object IdearConfigurable : Configurable, PersistentStateComponent<Settings> {
     private lateinit var gui: RecognitionSettingsForm
 
     data class Settings(
-        var recognitionService: RecognitionServiceId = CMU_SPHINX,
-        var ttsService: TtsServiceId = MARY
+            var asrService: ASRServiceId = CMU_SPHINX,
+            var ttsService: TTSServiceId = MARY
     )
 
     override fun getDisplayName() = "Recognition"
 
     override fun isModified() =
-        gui.recognitionService != settings.recognitionService ||
+        gui.asrService != settings.asrService ||
             gui.ttsService != settings.ttsService
 
     override fun createComponent() =
@@ -39,11 +39,11 @@ object IdearConfigurable : Configurable, PersistentStateComponent<Settings> {
 
     override fun apply() {
         settings.ttsService = gui.ttsService
-        settings.recognitionService = gui.recognitionService
+        settings.asrService = gui.asrService
     }
 
     override fun reset() {
-        gui.recognitionService = settings.recognitionService
+        gui.asrService = settings.asrService
         gui.ttsService = settings.ttsService
     }
 }
