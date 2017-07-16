@@ -14,23 +14,23 @@ import java.util.*
  */
 class MaryTTS : TTSProvider {
     val logger = Logger.getInstance(MaryTTS::class.java)
-    private var voice: Voice? = null
-    var maryTTS: MaryInterface? = null
+    private lateinit var voice: Voice
+    private lateinit var maryTTS: MaryInterface
 
     init {
         try {
             maryTTS = LocalMaryInterface()
             val systemLocale = Locale.getDefault()
-            if (maryTTS!!.availableLocales.contains(systemLocale)) {
+            if (maryTTS.availableLocales.contains(systemLocale)) {
                 voice = Voice.getDefaultVoice(systemLocale)
             }
 
             if (voice == null) {
-                voice = Voice.getVoice(maryTTS!!.availableVoices.iterator().next())
+                voice = Voice.getVoice(maryTTS.availableVoices.iterator().next())
             }
 
-            maryTTS!!.locale = voice!!.locale
-            maryTTS!!.voice = voice!!.name
+            maryTTS.locale = voice.locale
+            maryTTS.voice = voice.name
         } catch (e: MaryConfigurationException) {
             e.printStackTrace()
         }

@@ -2,7 +2,6 @@ package org.openasr.idear
 
 import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.components.ApplicationComponent
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.extensions.PluginId
 import org.openasr.idear.asr.ASRService
 import org.openasr.idear.asr.GrammarService
@@ -30,7 +29,7 @@ class Idear : ApplicationComponent {
     }
 
     override fun disposeComponent() {
-        ServiceManager.getService(ASRService::class.java).dispose()
+        ASRService.dispose()
         TTSService.dispose()
     }
 

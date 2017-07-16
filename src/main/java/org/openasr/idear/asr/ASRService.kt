@@ -1,6 +1,5 @@
 package org.openasr.idear.asr
 
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
@@ -11,8 +10,7 @@ object ASRService {
 
     fun init() {
         try {
-            val config = ServiceManager.getService(IdearConfiguration::class.java)
-            recognizer = config.getASRProvider()
+            recognizer = IdearConfiguration.getASRProvider()
             speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
             recognizer.startRecognition()
 
@@ -28,11 +26,9 @@ object ASRService {
 
     fun activate(): Boolean = ListeningState.activate()
 
-    fun deactivate(): Boolean {
-        return ListeningState.standBy()
-    }
+    fun deactivate(): Boolean = ListeningState.standBy()
 
-    fun terminate() = recognizer.stopRecognition()
+    private fun terminate() = recognizer.stopRecognition()
 
     fun dispose() {
         // Deactivate in the first place, therefore actually
@@ -46,6 +42,5 @@ object ASRService {
 
 // This is for testing purposes solely
 fun main(args: Array<String>) {
-    val asr = ASRService
-    asr.activate()
+    ASRService.activate()
 }

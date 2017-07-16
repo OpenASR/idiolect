@@ -1,6 +1,5 @@
 package org.openasr.idear.tts
 
-import com.amazonaws.regions.Regions
 import com.amazonaws.services.polly.AmazonPolly
 import com.amazonaws.services.polly.AmazonPollyClientBuilder
 import com.amazonaws.services.polly.model.DescribeVoicesRequest
@@ -26,6 +25,7 @@ import java.util.*
  *
  * @see http://docs.aws.amazon.com/polly/latest/dg/examples-java.html
  */
+
 class PollyTTS : TTSProvider {
     val polly: AmazonPolly = AmazonPollyClientBuilder.standard().apply {
         region = AwsUtils.REGION
