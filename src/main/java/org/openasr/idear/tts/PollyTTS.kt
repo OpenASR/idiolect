@@ -10,6 +10,7 @@ import com.amazonaws.services.polly.model.Voice
 import javazoom.jl.player.advanced.AdvancedPlayer
 import javazoom.jl.player.advanced.PlaybackEvent
 import javazoom.jl.player.advanced.PlaybackListener
+import org.openasr.idear.recognizer.awslex.AwsUtils
 import java.io.IOException
 import java.io.InputStream
 import java.util.*
@@ -26,7 +27,10 @@ import java.util.*
  * @see http://docs.aws.amazon.com/polly/latest/dg/examples-java.html
  */
 class PollyTTS : TTSProvider {
-    val polly: AmazonPolly = AmazonPollyClientBuilder.standard().apply { region = Regions.US_EAST_1.name }.build()
+    val polly: AmazonPolly = AmazonPollyClientBuilder.standard().apply {
+        region = AwsUtils.REGION
+        credentials = AwsUtils.credentialsProvider
+    }.build()
     private var voice: Voice = polly.describeVoices(DescribeVoicesRequest()).voices[0]
 
     override fun say(text: String?) {

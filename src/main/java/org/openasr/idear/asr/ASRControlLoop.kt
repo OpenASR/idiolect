@@ -59,7 +59,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
             c.startsWith(EXPAND) -> invokeAction("EditorSelectWord")
             c.startsWith(SHRINK) -> invokeAction("EditorUnSelectWord")
             c.startsWith(PRESS) -> routinePress(c)
-            c.startsWith("release") -> routineRelelaseKey(c)
+            c.startsWith("release") -> routineReleaseKey(c)
             c.startsWith("following") -> routineFollowing(c)
             c.startsWith("extract this") -> routineExtract(c)
             c.startsWith("inspect code") -> invokeAction("CodeInspection.OnEditor")
@@ -85,7 +85,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider) : Runnable {
             }
         }
 
-    private fun routineRelelaseKey(c: String) {
+    private fun routineReleaseKey(c: String) {
         if (c.contains("shift")) IDEService.releaseShift()
     }
 

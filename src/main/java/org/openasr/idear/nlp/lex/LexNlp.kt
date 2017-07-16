@@ -6,6 +6,7 @@ import com.amazonaws.services.lexruntime.model.DialogState
 import com.amazonaws.services.lexruntime.model.PostTextRequest
 import org.openasr.idear.nlp.NlpProvider
 import org.openasr.idear.nlp.NlpResultListener
+import org.openasr.idear.recognizer.awslex.AwsUtils
 
 class LexNlp(val listener: NlpResultListener) : NlpProvider {
     private lateinit var lex: AmazonLexRuntime;
@@ -14,13 +15,12 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
 
     init {
         // TODO: get userId from Cognito
-        userId = "TODO"
+        userId = "anonymous"
 //        lexAsync = AmazonLexRuntimeAsyncClientBuilder.standard().build()
         lex = AmazonLexRuntimeClientBuilder.standard()
-//                .withClientConfiguration()
-//                .withCredentials()
-//                .withRegion()
-            .build()
+                .withCredentials(AwsUtils.credentialsProvider)
+                .withRegion(AwsUtils.REGION)
+                .build()
     }
 
     /**
@@ -92,22 +92,25 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
             }
         }
 
-
         /*when (response.dialogState) {
             DialogState.Fulfilled.name, DialogState.ReadyForFulfillment.name -> listener.onFulfilled()
             DialogState.Failed.name -> listener.onFailure()
             else -> listener.onIncomplete()
         }*/
     }
-}
 
-/*
-fun main(args: Array<String>) {
-    val listener = NlpResultListener() {
-        override fun onFulfilled() {
-
+    /*companion object {
+        /** PostTextResult and PostContent differ slightly:
+          *  - PostTextResult has ressponseCard (and Maps for context and sesssionAttributes)
+          *  - PostContentResult has inputTranscript and audioStream
+          */
+        fun dispatchNlpResult(nlpListener: NlpResultListener,
+                              intentName: String,
+                              slots: Map<String, String>,
+                              sessionAttributes: Map<String, String>,
+                              message: String,
+                              dialogState: String,
+                              slotToElicit: String) {
         }
-    }
-    val lex = LexNlp()
-    lex.processUtterance("create a new class")
-}*/
+    }*/
+}
