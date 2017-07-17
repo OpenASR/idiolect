@@ -6,7 +6,7 @@ import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 
 
 class LoggingNlpResultListener : NlpResultListener {
-    override fun onFulfilled(intentName: String, params: Map<String, out String>?) {
+    override fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?) {
         logger.log(Level.INFO, "Fulfilled: ", intentName)
     }
 

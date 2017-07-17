@@ -8,9 +8,9 @@ import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 
 class IntellijNlpResultListener(var verbosity: Verbosity = Verbosity.INFO) : NlpResultListener {
 
-    override fun onFulfilled(intentName: String, params: MutableMap<String, out String>?) {
-        if (params != null) {
-            for((key, value) in params) {
+    override fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?) {
+        if (sessionAttributes != null) {
+            for((key, value) in sessionAttributes) {
 //                var remove = true
                 when (key) {
                     "invokeAction" -> IDEService.invokeAction(value)
