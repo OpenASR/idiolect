@@ -17,6 +17,23 @@ object ASRService {
         }
     }
 
+    fun setASRSystem(asrSystem: ASRSystem) {
+        val status = ListeningState.getStatus()
+        var terminated = false
+
+        if (this.asrSystem != asrSystem) {
+            if (this.asrSystem != null) {
+                terminate()
+                terminated = true
+            }
+        }
+
+        this.asrSystem = asrSystem
+        if (terminated && status == ListeningState.Status.ACTIVE) {
+            asrSystem.start()
+        }
+    }
+
     fun waitForUtterance() = asrSystem.waitForUtterance()
 
     fun activate(): Boolean = ListeningState.activate()

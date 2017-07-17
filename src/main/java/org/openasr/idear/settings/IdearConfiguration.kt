@@ -5,6 +5,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.options.Configurable
 import org.openasr.idear.asr.ASRControlLoop
+import org.openasr.idear.asr.ASRService
 import org.openasr.idear.asr.ASRSystem
 import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
@@ -80,8 +81,12 @@ object IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigur
     override fun createComponent() = RecognitionSettingsForm().apply { gui = this }.rootPanel
 
     override fun apply() {
-        settings.ttsService = gui.ttsService
-        settings.asrService = gui.asrService
+        val changed = (settings.ttsService != gui.ttsService || settings.asrService != gui.asrService)
+        if (changed) {
+            settings.ttsService = gui.ttsService
+            settings.asrService = gui.asrService
+            ASRService.setASRSystem(getASRSystem())
+        }
     }
 
     override fun reset() {
