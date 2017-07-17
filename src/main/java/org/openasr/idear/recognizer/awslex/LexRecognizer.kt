@@ -9,6 +9,8 @@ import com.darkprograms.speech.recognizer.vad.VoiceActivityDetector
 import com.darkprograms.speech.recognizer.vad.VoiceActivityListener
 import org.json.JSONObject
 import org.openasr.idear.asr.ASRProvider
+import org.openasr.idear.asr.ASRSystem
+import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.nlp.LoggingNlpResultListener
 import org.openasr.idear.nlp.NlpResultListener
 import org.openasr.idear.recognizer.SpeechRecognizer
@@ -25,13 +27,13 @@ import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
  * @see LexASR which implements #waitForUtterance() instead of posting to NlpResultListener
  */
 // TODO: should LexRecognizer and LexASR be swapped around?
-open class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
+open class LexRecognizer(val botName: String = "idear", val botAlias: String = "PROD") : SpeechRecognizer, VoiceActivityListener, ASRSystem {
     private val mic = MicrophoneAnalyzer(16_000F)
     private val vad: VoiceActivityDetector = SimpleVAD()
     protected val lex: JarvisLex
     private var nlpListener: NlpResultListener = LoggingNlpResultListener()
 
-    constructor(botName: String = "idear", botAlias: String = "PROD") {
+    init {
         var lexRuntime = AmazonLexRuntimeClientBuilder
                             .standard()
                             .withRegion(AwsUtils.REGION)
@@ -44,6 +46,24 @@ open class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
 
     fun setNlpResultListener(listener: NlpResultListener) {
         nlpListener = listener
+    }
+
+    override fun start() {
+        vad.start()
+    }
+
+    override fun waitForUtterance(): String {
+        // Temporarily swap listeners
+        val asr = LexASR(botName, botAlias)
+        vad.setVoiceActivityListener(asr)
+        val utterance = asr.waitForUtterance()
+        vad.setVoiceActivityListener(this)
+        return utterance
+    }
+
+    override fun terminate() {
+        mic.close()
+        vad.terminate()
     }
 
     /** This starts a new JARVIS VAD thread which calls onVoiceActivity() with results */
@@ -66,10 +86,10 @@ open class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
 
         when (result.dialogState) {
             DialogState.Fulfilled.name -> {
-                val slots: Map<String, String>? = if (result.slots == null) {
+                val slots: MutableMap<String, String>? = if (result.slots == null) {
                     null
                 } else {
-                    JSONObject(result.slots).toMap() as Map<String, out String>
+                    JSONObject(result.slots).toMap() as MutableMap<String, String>
 //                val json = JSONObject(result.slots)
 //                val map = HashMap<String, String>(json.length())
 //                for (key in json.keys()) {
@@ -86,12 +106,13 @@ open class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
                 val sessionAttributes = if (result.sessionAttributes == null) {
                     null
                 } else {
-                    JSONObject(result.sessionAttributes).toMap()
+                    JSONObject(result.sessionAttributes).toMap() as MutableMap<String, String>
                 }
 
 //                result.message
 
-                nlpListener.onFulfilled(result.intentName, slots)
+                nlpListener.onFulfilled(result.intentName, slots, sessionAttributes)
+                nlpListener.onMessage(result.message, NlpResultListener.Companion.Verbosity.valueOf(sessionAttributes?.get("Verbosity") ?: "ALL"))
             }
             else -> {
                 nlpListener.onFailure(result.message)

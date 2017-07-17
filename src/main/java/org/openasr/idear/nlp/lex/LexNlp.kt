@@ -88,13 +88,15 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
 
 
         if (response.dialogState == DialogState.Fulfilled.name) {
-            listener.onFulfilled(response.intentName, response.sessionAttributes)
+            listener.onFulfilled(response.intentName, response.slots, response.sessionAttributes)
+            listener.onMessage(response.message, Verbosity.valueOf(response.sessionAttributes["Verbosity"] ?: "ALL"))
         } else {
 //            for (card in response.responseCard.genericAttachments) {
 //                listener.onMessage()
 //            }
+            listener.onFailure(response.message)
         }
-        listener.onMessage(response.message, Verbosity.valueOf(response.sessionAttributes["Verbosity"] ?: "ALL"))
+
 //        sessionAttributes.remove("Verbosity")
 
         /*when (response.dialogState) {

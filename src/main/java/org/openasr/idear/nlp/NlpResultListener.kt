@@ -13,7 +13,7 @@ interface NlpResultListener {
         }
     }
 
-    fun onFulfilled(intentName: String, params: MutableMap<String, out String>?)
+    fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?)
     fun onFailure(message: String)
     //    fun onIncomplete()
     fun onMessage(message: String, verbosity: Verbosity)

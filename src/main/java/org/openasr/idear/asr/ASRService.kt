@@ -6,31 +6,24 @@ import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
 object ASRService {
-    private lateinit var speechThread: Thread
-    private lateinit var asrProvider: ASRProvider
-    private lateinit var nlpProvider: NlpProvider
+    private lateinit var asrSystem: ASRSystem
 
     fun init() {
         try {
-            asrProvider = IdearConfiguration.getASRProvider()
-            nlpProvider = IdearConfiguration.getNLPProvider()
-            speechThread = Thread(ASRControlLoop(asrProvider, nlpProvider), "ASR Thread")
-            asrProvider.startRecognition()
-
-            // Fire up control-loop
-            speechThread.start()
+            asrSystem = IdearConfiguration.getASRSystem()
+            asrSystem.start()
         } catch (e: IOException) {
             logger.error( "Couldn't initialize speech asrProvider!", e)
         }
     }
 
-    fun waitForUtterance() = asrProvider.waitForUtterance()
+    fun waitForUtterance() = asrSystem.waitForUtterance()
 
     fun activate(): Boolean = ListeningState.activate()
 
     fun deactivate(): Boolean = ListeningState.standBy()
 
-    private fun terminate() = asrProvider.stopRecognition()
+    private fun terminate() = asrSystem.stopRecognition()
 
     fun dispose() {
         // Deactivate in the first place, therefore actually

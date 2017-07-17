@@ -32,4 +32,6 @@ object ListeningState {
     fun standBy() = STANDBY == setStatus(STANDBY)
 
     fun activate() = ACTIVE == setStatus(ACTIVE)
+
+    fun terminate() = setStatus(TERMINATED)
 }
