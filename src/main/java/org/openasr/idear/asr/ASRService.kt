@@ -1,34 +1,36 @@
 package org.openasr.idear.asr
 
 import com.intellij.openapi.diagnostic.Logger
+import org.openasr.idear.nlp.NlpProvider
 import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
 object ASRService {
     private lateinit var speechThread: Thread
-    private lateinit var recognizer: ASRProvider
+    private lateinit var asrProvider: ASRProvider
+    private lateinit var nlpProvider: NlpProvider
 
     fun init() {
         try {
-            recognizer = IdearConfiguration.getASRProvider()
-            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
-            recognizer.startRecognition()
-
-            // TODO: LexVoiceASR(nlpResultListener) : ASRProvider, NlpProvider
-            // TODO: recogniser.withNlpService( LexTextNlp(nlpResultListener): NlpProvider )
+            asrProvider = IdearConfiguration.getASRProvider()
+            nlpProvider = IdearConfiguration.getNLPProvider()
+            speechThread = Thread(ASRControlLoop(asrProvider, nlpProvider), "ASR Thread")
+            asrProvider.startRecognition()
 
             // Fire up control-loop
             speechThread.start()
         } catch (e: IOException) {
-            logger.error( "Couldn't initialize speech recognizer!", e)
+            logger.error( "Couldn't initialize speech asrProvider!", e)
         }
     }
+
+    fun waitForUtterance() = asrProvider.waitForUtterance()
 
     fun activate(): Boolean = ListeningState.activate()
 
     fun deactivate(): Boolean = ListeningState.standBy()
 
-    private fun terminate() = recognizer.stopRecognition()
+    private fun terminate() = asrProvider.stopRecognition()
 
     fun dispose() {
         // Deactivate in the first place, therefore actually

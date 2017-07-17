@@ -86,7 +86,7 @@ open class LexRecognizer : SpeechRecognizer, VoiceActivityListener {
                 val sessionAttributes = if (result.sessionAttributes == null) {
                     null
                 } else {
-                    JSONObject(result.sessionAttributes).toMap() as Map<String, out String>
+                    JSONObject(result.sessionAttributes).toMap()
                 }
 
 //                result.message

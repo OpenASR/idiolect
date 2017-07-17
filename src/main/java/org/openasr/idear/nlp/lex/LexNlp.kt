@@ -6,17 +6,21 @@ import com.amazonaws.services.lexruntime.model.DialogState
 import com.amazonaws.services.lexruntime.model.PostTextRequest
 import org.openasr.idear.nlp.NlpProvider
 import org.openasr.idear.nlp.NlpResultListener
+import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 import org.openasr.idear.recognizer.awslex.AwsUtils
 
+
+/**
+ * Posts an utterance (String) to Lex to be processed into actions
+ */
 class LexNlp(val listener: NlpResultListener) : NlpProvider {
     private lateinit var lex: AmazonLexRuntime;
-    //    private lateinit var lexAsync: AmazonLexRuntimeAsync
     private lateinit var userId: String
+    private val sessionAttributes: MutableMap<String, String> = HashMap<String, String>()
 
     init {
         // TODO: get userId from Cognito
         userId = "anonymous"
-//        lexAsync = AmazonLexRuntimeAsyncClientBuilder.standard().build()
         lex = AmazonLexRuntimeClientBuilder.standard()
                 .withCredentials(AwsUtils.credentialsProvider)
                 .withRegion(AwsUtils.REGION)
@@ -49,8 +53,7 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
      *         Lambda fulfilment function returned <code>DelegateDialogAction</code> to Amazon Lex without changing any
      *         slot values.
      */
-    override fun processUtterance(utterance: String,
-                                  sessionAttributes: Map<String, String>?) {
+    override fun processUtterance(utterance: String) {
         val request = PostTextRequest()
             .withBotName("idear")
             .withBotAlias("PROD")
@@ -59,38 +62,40 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
             .withSessionAttributes(sessionAttributes)
 
         val response = lex.postText(request)
-        println(response)
+//        println(response)
 
-        // Close      - Fulfilled or Failed   (ReadyForFulfillment?)
+        /*// Close      - Fulfilled or Failed   (ReadyForFulfillment?)
         // Incomplete - ElicitIntent, ConfirmIntent, ElicitSlot
         response.dialogState
         // ApplyInspection | ApplyFile/Code/LiveTemplate | InvokeAction | ExecuteUserScript
         //
         response.intentName
         response.message
-        /* {genericAttachments:[
+        *//* {genericAttachments:[
                 {
                     title:"templateName",
                     subTitle:"templateGroup or contexts?",
                     imageUrl:"?",
                     attachmentLinkUrl:"url to template source",
                     buttons:[{text:"variableName", value:"value"}...]
-        }]}*/
+        }]}*//*
         response.responseCard
         response.slotToElicit
         // {className:"MyComponent", fileName:"MyComponent.tsx", functionName:...}
         response.slots
         // {ext:html,lang:js,context:{},ide:intellij, scope:{},toolWindow:"Terminal" ,PreviousAction:{},...}
-        response.sessionAttributes
+        response.sessionAttributes*/
 
 
         if (response.dialogState == DialogState.Fulfilled.name) {
-//            listener.onFulfilled(response.intentName, response.responseCard.genericAttachments[0].buttons.map { it.text, it.value })
+            listener.onFulfilled(response.intentName, response.sessionAttributes)
         } else {
-            for (card in response.responseCard.genericAttachments) {
-                listener.onMessage()
-            }
+//            for (card in response.responseCard.genericAttachments) {
+//                listener.onMessage()
+//            }
         }
+        listener.onMessage(response.message, Verbosity.valueOf(response.sessionAttributes["Verbosity"] ?: "ALL"))
+//        sessionAttributes.remove("Verbosity")
 
         /*when (response.dialogState) {
             DialogState.Fulfilled.name, DialogState.ReadyForFulfillment.name -> listener.onFulfilled()

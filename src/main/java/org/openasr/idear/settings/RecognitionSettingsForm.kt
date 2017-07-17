@@ -14,6 +14,11 @@ class RecognitionSettingsForm {
             AWS_LEX("awsLex")
         }
 
+        enum class NLPServiceId(val label: String) {
+            PATTERN("pattern"),
+            AWS_LEX("awsLex")
+        }
+
         enum class TTSServiceId(val label: String) {
             MARY("mary"),
             AWS_POLLY("awsPolly")
