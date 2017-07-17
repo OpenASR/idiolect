@@ -4,24 +4,26 @@ import com.intellij.openapi.ui.ComboBox
 import javax.swing.JPanel
 
 class RecognitionSettingsForm {
+//    private var ttsProviderCombo = ComboBox(TTSServiceId.values().map({option -> option.label}).toTypedArray())
+//    private var asrProviderCombo = ComboBox(ASRServiceId.values().map({option -> option.label}).toTypedArray())
     private var ttsProviderCombo = ComboBox(TTSServiceId.values())
     private var asrProviderCombo = ComboBox(ASRServiceId.values())
     lateinit var rootPanel: JPanel
 
     companion object {
         enum class ASRServiceId(val label: String) {
-            CMU_SPHINX("cmuSphinx"),
-            AWS_LEX("awsLex")
+            CMU_SPHINX("CMU Sphinx"),
+            AWS_LEX("Amazon Lex")
         }
 
         enum class NLPServiceId(val label: String) {
-            PATTERN("pattern"),
-            AWS_LEX("awsLex")
+            PATTERN("Pattern"),
+            AWS_LEX("Amazon Lex")
         }
 
         enum class TTSServiceId(val label: String) {
-            MARY("mary"),
-            AWS_POLLY("awsPolly")
+            MARY("Mary TTS"),
+            AWS_POLLY("Amazon Polly")
         }
     }
 
