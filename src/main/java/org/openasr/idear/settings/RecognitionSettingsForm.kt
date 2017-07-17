@@ -4,8 +4,8 @@ import com.intellij.openapi.ui.ComboBox
 import javax.swing.JPanel
 
 class RecognitionSettingsForm {
-    private val ttsProviderCombo = ComboBox(TTSServiceId.values())
-    private val asrProviderCombo = ComboBox(ASRServiceId.values())
+    private var ttsProviderCombo = ComboBox(TTSServiceId.values())
+    private var asrProviderCombo = ComboBox(ASRServiceId.values())
     lateinit var rootPanel: JPanel
 
     companion object {

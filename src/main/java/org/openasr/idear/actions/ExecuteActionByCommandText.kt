@@ -2,6 +2,7 @@ package org.openasr.idear.actions
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_NEXT_TEMPLATE_VARIABLE
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionManager
 import org.openasr.idear.actions.recognition.ActionCallInfo
@@ -25,7 +26,7 @@ abstract class ExecuteActionByCommandText : AnAction() {
             invoke(editor, info)
     }
 
-    protected operator fun invoke(editor: Editor, info: ActionCallInfo) {
+    protected open operator fun invoke(editor: Editor, info: ActionCallInfo) {
         val action = ActionManager.getInstance().getAction(info.actionId)
         val type = info.typeAfter
         val isHitTabAfter = info.hitTabAfter
@@ -46,12 +47,11 @@ abstract class ExecuteActionByCommandText : AnAction() {
         }
     }
 
-    private fun hitTab(context: DataContext) {
-        val action = ActionManager.getInstance().getAction("NextTemplateVariable")
-        action.actionPerformed(AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0))
-    }
+    fun hitTab(context: DataContext) {
+        val action = ActionManager.getInstance().getAction(ACTION_EDITOR_NEXT_TEMPLATE_VARIABLE)
+        action.actionPerformed(AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0)) }
 
-    private fun typeText(editor: Editor, type: String, context: DataContext) {
+    fun typeText(editor: Editor, type: String, context: DataContext) {
         val typing = EditorActionManager.getInstance().typedAction
         for (c in type.toCharArray()) {
             typing.actionPerformed(editor, c, context)

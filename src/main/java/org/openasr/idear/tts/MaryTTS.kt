@@ -4,7 +4,6 @@ import com.intellij.openapi.diagnostic.Logger
 import marytts.LocalMaryInterface
 import marytts.MaryInterface
 import marytts.exceptions.MaryConfigurationException
-import marytts.exceptions.SynthesisException
 import marytts.modules.synthesis.Voice
 import marytts.util.data.audio.AudioPlayer
 import java.util.*
@@ -21,34 +20,31 @@ class MaryTTS : TTSProvider {
         try {
             maryTTS = LocalMaryInterface()
             val systemLocale = Locale.getDefault()
-            if (maryTTS.availableLocales.contains(systemLocale)) {
-                voice = Voice.getDefaultVoice(systemLocale)
-            }
-
-            if (voice == null) {
-                voice = Voice.getVoice(maryTTS.availableVoices.iterator().next())
+            voice = if (maryTTS.availableLocales.contains(systemLocale)) {
+                Voice.getDefaultVoice(systemLocale)
+            } else {
+                Voice.getVoice(maryTTS.availableVoices.iterator().next())
             }
 
             maryTTS.locale = voice.locale
             maryTTS.voice = voice.name
         } catch (e: MaryConfigurationException) {
-            e.printStackTrace()
+            logger.error(e)
         }
     }
 
-    override fun say(text: String?) {
-        if (text == null || text.isEmpty()) return
+    @Synchronized
+    override fun say(utterance: String?): Boolean {
+        if (utterance == null || utterance.isEmpty()) return false
 
         try {
-            val audio = maryTTS!!.generateAudio(text)
-            val player = AudioPlayer(audio)
-            player.start()
-            player.join()
-        } catch (e: SynthesisException) {
-            logger.error("Sorry! Could not pronounce $text", e)
-        } catch (e: InterruptedException) {
-            logger.error("Sorry! Could not pronounce $text", e)
+            AudioPlayer(maryTTS.generateAudio(utterance)).start()
+        } catch (e: Exception) {
+            logger.error("Sorry! Could not pronounce $utterance", e)
+            return false
         }
+
+        return true
     }
 
     override fun dispose() {
@@ -59,8 +55,7 @@ fun main(args: Array<String>) {
     val ttService = MaryTTS()
     val scan = Scanner(System.`in`)
 
-    while (true) {
-        println("Text to speak:")
-        ttService.say(scan.nextLine())
-    }
+    do {
+        print("Text to speak: ")
+    } while (ttService.say(scan.nextLine()))
 }
