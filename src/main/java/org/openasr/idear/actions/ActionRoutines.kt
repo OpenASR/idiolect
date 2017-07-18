@@ -18,17 +18,17 @@ import org.openasr.idear.nlp.Commands
 import org.openasr.idear.recognizer.CustomMicrophone
 import org.openasr.idear.tts.TTSService
 import java.awt.EventQueue
-import java.awt.event.KeyEvent
+import java.awt.event.KeyEvent.*
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
 import javax.sound.sampled.AudioSystem
 
 
-object Routines {
+object ActionRoutines {
     private val COMMAND_DURATION: Long = 3500
     private val GOOGLE_QUERY_DURATION: Long = 3000
-    private val logger = Logger.getInstance(Routines::class.java)
+    private val logger = Logger.getInstance(ActionRoutines::class.java)
 
     fun routineReleaseKey(c: String) {
         if (c.contains("shift")) IDEService.releaseShift()
@@ -44,55 +44,51 @@ object Routines {
 
     fun routineOfLine(c: String) {
         if (c.startsWith("beginning")) {
-            IDEService.type(KeyEvent.VK_META, KeyEvent.VK_LEFT)
+            IDEService.type(VK_META, VK_LEFT)
         } else if (c.startsWith("end")) {
-            IDEService.type(KeyEvent.VK_META, KeyEvent.VK_RIGHT)
+            IDEService.type(VK_META, VK_RIGHT)
         }
     }
 
     fun routinePsvm() {
-        IDEService.type("psvm")
-        pressKeystroke(KeyEvent.VK_TAB)
+        IDEService.type("psvm").also { pressKeystroke(VK_TAB) }
+        pressKeystroke(VK_TAB)
     }
 
-    fun routineEnter(c: String) {
-        val result = webSpeechResult
-        if (result != null) {
-            if (c.endsWith("text")) {
-                IDEService.type(result.first)
-            } else if (c.endsWith("camel case")) {
-                IDEService.type(convertToCamelCase(result.first))
+    fun routineEnter(c: String) =
+            webSpeechResult?.run {
+                if (c.endsWith("text")) {
+                    IDEService.type(first)
+                } else if (c.endsWith("camel case")) {
+                    IDEService.type(convertToCamelCase(first))
+                }
+            }
+
+    fun routineNewString() =
+            webSpeechResult?.run {
+                IDEService.type(VK_SHIFT, VK_QUOTE)
+                IDEService.type(first)
+                IDEService.type(VK_SHIFT, VK_QUOTE)
+            }
+
+    fun routinePrintln() {
+        IDEService.type("sout")
+        pressKeystroke(VK_TAB)
+    }
+
+    fun routineAddNewClass() {
+        webSpeechResult?.run {
+            IDEService.invokeAction("NewElement")
+            pressKeystroke(VK_ENTER)
+            convertToCamelCase(first).wordCapitalize().let {
+                logger.info("Class name: $it")
+                IDEService.type(it)
+                pressKeystroke(VK_ENTER)
             }
         }
     }
 
-    fun routineNewString() {
-        val result = webSpeechResult
-        if (result != null) {
-            IDEService.type(KeyEvent.VK_SHIFT, KeyEvent.VK_QUOTE)
-            IDEService.type(result.first)
-            IDEService.type(KeyEvent.VK_SHIFT, KeyEvent.VK_QUOTE)
-        }
-    }
-
-    fun routinePrintln() {
-        IDEService.type("sout")
-        pressKeystroke(KeyEvent.VK_TAB)
-    }
-
-    fun routineAddNewClass() {
-        IDEService.invokeAction("NewElement")
-        pressKeystroke(KeyEvent.VK_ENTER)
-        val className = webSpeechResult
-        if (className != null) {
-            var camelCase = convertToCamelCase(className.first)
-            logger.info("Class name: $camelCase")
-            camelCase = camelCase.substring(0,
-                    1).toUpperCase() + camelCase.substring(1)
-            IDEService.type(camelCase)
-            pressKeystroke(KeyEvent.VK_ENTER)
-        }
-    }
+    fun String.wordCapitalize() = this[0].toUpperCase().toString() + substring(1)
 
     fun routineAbout() {
         val ai = ApplicationInfo.getInstance()
@@ -100,29 +96,26 @@ object Routines {
         val cal = ai.buildDate
         val df = SimpleDateFormat("EEEE, MMMM dd, yyyy")
 
-        TTSService.say("My name is " + ai.versionName + ", I was built on " + df.format(cal.time) + ", I am running version " + ai.apiVersion + " of the IntelliJ Platform, and I am registered to " + ai.companyName)
+        TTSService.say("My name is " + ai.versionName +
+                ", I was built on " + df.format(cal.time) +
+                ", I am running version " + ai.apiVersion +
+                " of the IntelliJ Platform, and I am registered to " + ai.companyName)
     }
 
-    fun routineCheck(c: String) {
-        val nullCheckRecognizer = SurroundWithNoNullCheckRecognizer()
-        if (nullCheckRecognizer.isMatching(c)) {
-            DataManager.getInstance()
-                    .dataContextFromFocus
-                    .doWhenDone({ dataContext: DataContext ->
-                        run(nullCheckRecognizer,
-                                c,
-                                dataContext)
-                    } as Consumer<DataContext>)
-        }
-    }
+    fun routineCheck(c: String) =
+            SurroundWithNoNullCheckRecognizer().let {
+                if (it.isMatching(c))
+                    DataManager.getInstance().dataContextFromFocus
+                            .doWhenDone({ dataContext: DataContext ->
+                                run(it, c, dataContext)
+                            } as Consumer<DataContext>)
+            }
 
     fun routineStep(c: String) {
-        if (c.endsWith("over")) {
-            IDEService.invokeAction("StepOver")
-        } else if (c.endsWith("into")) {
-            IDEService.invokeAction("StepInto")
-        } else if (c.endsWith("return")) {
-            IDEService.invokeAction("StepOut")
+        when {
+            c.endsWith("over") -> IDEService.invokeAction("StepOver")
+            c.endsWith("into") -> IDEService.invokeAction("StepInto")
+            c.endsWith("return") -> IDEService.invokeAction("StepOut")
         }
     }
 
@@ -148,30 +141,25 @@ object Routines {
     }
 
     fun routineFollowing(c: String) {
-        if (c.endsWith(Commands.LINE)) {
-            IDEService.invokeAction("EditorDown")
-        } else if (c.endsWith(Commands.PAGE)) {
-            IDEService.invokeAction("EditorPageDown")
-        } else if (c.endsWith(Commands.METHOD)) {
-            IDEService.invokeAction("MethodDown")
-        } else if (c.endsWith("tab")) {
-            IDEService.invokeAction("Diff.FocusOppositePane")
-        } else if (c.endsWith("page")) {
-            IDEService.invokeAction("EditorPageDown")
-        } else if (c.endsWith("word")) {
-            IDEService.type(KeyEvent.VK_ALT, KeyEvent.VK_RIGHT)
+        when {
+            c.endsWith(Commands.LINE) -> IDEService.invokeAction("EditorDown")
+            c.endsWith(Commands.PAGE) -> IDEService.invokeAction("EditorPageDown")
+            c.endsWith(Commands.METHOD) -> IDEService.invokeAction("MethodDown")
+            c.endsWith("tab") -> IDEService.invokeAction("Diff.FocusOppositePane")
+            c.endsWith("page") -> IDEService.invokeAction("EditorPageDown")
+            c.endsWith("word") -> IDEService.type(VK_ALT, VK_RIGHT)
         }
     }
 
     fun routinePress(c: String) {
         if (c.contains(Commands.DELETE)) {
-            pressKeystroke(KeyEvent.VK_DELETE)
+            pressKeystroke(VK_DELETE)
         } else if (c.contains("return") || c.contains("enter")) {
-            pressKeystroke(KeyEvent.VK_ENTER)
+            pressKeystroke(VK_ENTER)
         } else if (c.contains(Commands.ESCAPE)) {
-            pressKeystroke(KeyEvent.VK_ESCAPE)
+            pressKeystroke(VK_ESCAPE)
         } else if (c.contains(Commands.TAB)) {
-            pressKeystroke(KeyEvent.VK_TAB)
+            pressKeystroke(VK_TAB)
         } else if (c.contains(Commands.UNDO)) {
             IDEService.invokeAction("\$Undo")
         } else if (c.contains("shift")) {
@@ -183,7 +171,7 @@ object Routines {
         IDEService.invokeAction("GotoLine").doWhenDone({
             IDEService.type(*("" + WordToNumberConverter.getNumber(c.substring(
                     10))).toCharArray())
-            IDEService.type(KeyEvent.VK_ENTER)
+            IDEService.type(VK_ENTER)
         })
     }
 
@@ -197,7 +185,7 @@ object Routines {
 
     fun routineFocus(c: String) {
         when {
-            c.endsWith(Commands.EDITOR) -> pressKeystroke(KeyEvent.VK_ESCAPE)
+            c.endsWith(Commands.EDITOR) -> pressKeystroke(VK_ESCAPE)
             c.endsWith(Commands.PROJECT) -> IDEService.invokeAction("ActivateProjectToolWindow")
             c.endsWith("symbols") -> {
                 val ar = IDEService.invokeAction("AceAction")
@@ -239,10 +227,7 @@ object Routines {
 
     fun run(rec: SurroundWithNoNullCheckRecognizer, c: String, dataContext: DataContext) =
             EventQueue.invokeLater {
-                ApplicationManager.getApplication().runWriteAction {
-                    rec.getActionInfo(c,
-                            dataContext)
-                }
+                ApplicationManager.getApplication().runWriteAction { rec.getActionInfo(c, dataContext) }
             }
 
     fun tellJoke() {
@@ -293,7 +278,7 @@ object Routines {
         GoogleHelper.searchGoogle(searchQueryTuple.first)
     }
 
-    val webSpeechResult: Pair<String, Double>?
+    private val webSpeechResult: Pair<String, Double>?
         get() {
             var searchQueryTuple: Pair<String, Double>? = null
             beep()

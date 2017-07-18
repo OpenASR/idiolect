@@ -12,7 +12,7 @@ plugins {
 intellij {
   pluginName = "idear"
   updateSinceUntilBuild = false
-  setPlugins("acejump:3.3.4")
+  setPlugins("acejump:3.3.5")
 }
 
 group = "org.openasr"

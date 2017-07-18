@@ -1,6 +1,6 @@
 package org.openasr.idear.nlp
 
-import org.openasr.idear.actions.Routines
+import org.openasr.idear.actions.ActionRoutines
 import org.openasr.idear.ide.IDEService
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 import org.openasr.idear.tts.TTSService
@@ -15,8 +15,8 @@ class IntellijNlpResultListener(var verbosity: Verbosity = Verbosity.INFO) : Nlp
                 when (key) {
                     "invokeAction" -> IDEService.invokeAction(value)
                     "pressKeystroke" -> value.split(",").forEach({keyStroke -> IDEService.type(keyStroke.toInt())})
-                    "routineGoto" -> Routines.routineGoto(value)
-                    "routinePress" -> Routines.routinePress(value)
+                    "routineGoto" -> ActionRoutines.routineGoto(value)
+                    "routinePress" -> ActionRoutines.routinePress(value)
                 }
 
 //                if (remove) {

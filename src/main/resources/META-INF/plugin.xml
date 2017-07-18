@@ -29,13 +29,14 @@
        on how to target different products -->
   <depends>com.intellij.modules.lang</depends>
   <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
-  <!--<depends>AceJump</depends>-->
+  <depends>AceJump</depends>
 
   <extensionPoints>
     <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer"/>
   </extensionPoints>
 
   <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceInterface="org.openasr.idear.settings.IdearConfiguration" serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
     <applicationConfigurable groupId="tools" displayName="Idear" id="preferences.IdearConfiguration" instance="org.openasr.idear.settings.IdearConfiguration"/>
   </extensions>
 

@@ -111,8 +111,6 @@ object Keyboard {
         }
     }
 
-//    fun type(character: Char) = doType(getKeyCodeForChar(character))
-
     fun type(vararg keys: Int) {
         keys.forEach { robot.keyPress(it) }
         keys.forEach { robot.keyRelease(it) }
@@ -123,14 +121,10 @@ object Keyboard {
         keys.forEach { robot.keyRelease(it.toInt()) }
     }
 
-    private fun doType(vararg keyCodes: Int) = doType(keyCodes,
-        0,
-        keyCodes.size)
+    private fun doType(vararg keyCodes: Int) = doType(keyCodes, 0, keyCodes.size)
 
     private fun doType(keyCodes: IntArray, offset: Int, length: Int) {
-        if (length == 0) {
-            return
-        }
+        if (length == 0) return
 
         robot.keyPress(keyCodes[offset])
         doType(keyCodes, offset + 1, length - 1)
@@ -142,6 +136,4 @@ object Keyboard {
     fun releaseShift() = robot.keyRelease(VK_SHIFT)
 }
 
-fun main(args: Array<String>) {
-    Keyboard.type("Hello there, how are you?")
-}
+fun main(args: Array<String>) = Keyboard.type("Hello there, how are you?")

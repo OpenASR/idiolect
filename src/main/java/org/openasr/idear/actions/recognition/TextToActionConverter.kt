@@ -8,9 +8,8 @@ class TextToActionConverter(private val dataContext: DataContext) {
     private var EP_NAME = ExtensionPointName<ActionRecognizer>("org.openasr.idear.actionRecognizer")
 
     fun extractAction(sentence: String) =
-        EP_NAME.extensions
-            .firstOrNull { it.isMatching(sentence) }
-            ?.getActionInfo(sentence, dataContext)
+            EP_NAME.extensions.firstOrNull { it.isMatching(sentence) }
+                    ?.getActionInfo(sentence, dataContext)
 }
 
 

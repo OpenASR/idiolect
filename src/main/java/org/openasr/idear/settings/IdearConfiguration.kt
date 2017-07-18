@@ -31,11 +31,8 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
     companion object {
         var settings = Settings()
         fun getASRSystem() =
-                if (settings.asrService == LEX_ASR && settings.nlpService == LEX_NLP) {
-                    LexRecognizer()
-                } else {
-                    ASRControlLoop(getASRProvider(), getNLPProvider())
-                }
+                if (settings.asrService == LEX_ASR && settings.nlpService == LEX_NLP) LexRecognizer()
+                else ASRControlLoop(getASRProvider(), getNLPProvider())
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
@@ -68,7 +65,6 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
     data class Settings(var asrService: ASRServiceId = LEX_ASR, // CMU_SPHINX,
                         var nlpService: NLPServiceId = LEX_NLP, // PATTERN,
                         var ttsService: TTSServiceId = AWS_POLLY) // MARY)
-
 
     override fun getDisplayName() = "Idear"
 
