@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.DataKey
 import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.actions.recognition.TextToActionConverter
 
-object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
+class ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val dataContext = e.dataContext
@@ -22,5 +22,5 @@ object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
     }
 
     private val logger = Logger.getInstance(ExecuteVoiceCommandAction::class.java)
-    val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
+    private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
 }

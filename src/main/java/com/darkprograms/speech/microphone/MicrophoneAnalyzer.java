@@ -1,9 +1,10 @@
 package com.darkprograms.speech.microphone;
 
+import com.darkprograms.speech.util.Complex;
+import com.darkprograms.speech.util.FFT;
+
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
-
-import com.darkprograms.speech.util.*;
 
 /********************************************************************************************
  * Microphone Analyzer class, detects pitch and volume while extending the microphone class.
@@ -306,9 +307,7 @@ ps = powerSpectrum()
 	 */
 	private Complex[] removeNegativeFrequencies(Complex[] c){
 		Complex[] out = new Complex[c.length/2];
-		for(int i = 0; i<out.length; i++){
-			out[i] = c[i];
-		}
+		System.arraycopy(c, 0, out, 0, out.length);
 		return out;
 	}
 	

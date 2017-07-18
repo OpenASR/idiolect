@@ -1,5 +1,10 @@
 package com.darkprograms.speech.recognizer.google;
 
+import com.darkprograms.speech.util.StringUtil;
+import net.sourceforge.javaflacencoder.FLACFileWriter;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,16 +15,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import net.sourceforge.javaflacencoder.*;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.TargetDataLine;
-
-import com.darkprograms.speech.util.StringUtil;
 
 //TODO Add a better logging system to GSpeechDuplex
 //TODO Find out why the V2 version of duplex no longer works.

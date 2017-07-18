@@ -7,7 +7,6 @@ import com.darkprograms.speech.recognizer.RecognitionResult;
 import org.json.JSONObject;
 
 import javax.sound.sampled.AudioInputStream;
-import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 

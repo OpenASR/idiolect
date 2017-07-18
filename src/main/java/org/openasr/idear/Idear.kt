@@ -33,7 +33,5 @@ class Idear : ApplicationComponent {
         TTSService.dispose()
     }
 
-    override fun getComponentName(): String {
-        return "Idear"
-    }
+    override fun getComponentName() = "Idear"
 }

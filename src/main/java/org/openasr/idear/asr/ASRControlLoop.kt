@@ -20,9 +20,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider, private val nlpProvde
         asrProvider.startRecognition()
     }
 
-    override fun waitForUtterance(): String {
-        return asrProvider.waitForUtterance()
-    }
+    override fun waitForUtterance(): String = asrProvider.waitForUtterance()
 
     override fun stopRecognition() {
         asrProvider.stopRecognition()
@@ -56,12 +54,10 @@ class ASRControlLoop(private val asrProvider: ASRProvider, private val nlpProvde
     companion object {
         private val logger = Logger.getInstance(ASRControlLoop::class.java)
 
-        private fun splitCamelCase(s: String): String {
-            return s.replace(String.format("%s|%s|%s",
-                "(?<=[A-Z])(?=[A-Z][a-z])",
-                "(?<=[^A-Z])(?=[A-Z])",
-                "(?<=[A-Za-z])(?=[^A-Za-z])"
-            ).toRegex(), " ")
-        }
+        private fun splitCamelCase(s: String): String = s.replace(String.format("%s|%s|%s",
+            "(?<=[A-Z])(?=[A-Z][a-z])",
+            "(?<=[^A-Z])(?=[A-Z])",
+            "(?<=[A-Za-z])(?=[^A-Za-z])"
+        ).toRegex(), " ")
     }
 }

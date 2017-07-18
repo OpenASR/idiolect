@@ -14,17 +14,15 @@ import org.openasr.idear.recognizer.awslex.AwsUtils
  * Posts an utterance (String) to Lex to be processed into actions
  */
 class LexNlp(val listener: NlpResultListener) : NlpProvider {
-    private lateinit var lex: AmazonLexRuntime;
-    private lateinit var userId: String
-    private val sessionAttributes: MutableMap<String, String> = HashMap<String, String>()
+    private var lex: AmazonLexRuntime = AmazonLexRuntimeClientBuilder.standard()
+            .withCredentials(AwsUtils.credentialsProvider)
+            .withRegion(AwsUtils.REGION)
+            .build()
+    private var userId = "anonymous"
+    private val sessionAttributes: MutableMap<String, String> = HashMap()
 
     init {
         // TODO: get userId from Cognito
-        userId = "anonymous"
-        lex = AmazonLexRuntimeClientBuilder.standard()
-                .withCredentials(AwsUtils.credentialsProvider)
-                .withRegion(AwsUtils.REGION)
-                .build()
     }
 
     /**

@@ -4,25 +4,17 @@ import com.intellij.openapi.actionSystem.DataContext
 
 class RenameActionRecognizer : ActionRecognizer {
 
-    override fun isMatching(sentence: String): Boolean {
-        return sentence.contains("rename")
-    }
+    override fun isMatching(sentence: String) = sentence.contains("rename")
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
         if (!isMatching(sentence)) return null
 
         val words = sentence.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        var renameIndex = 0
-        for (i in words.indices) {
-            if (words[i].contains("rename")) {
-                renameIndex = i
-                break
-            }
-        }
+        val renameIndex = words.indices.firstOrNull { words[it].contains("rename") } ?: 0
 
         val newName = StringBuilder()
         var first = true
-        for (i in renameIndex + 2..words.size - 1) {
+        for (i in renameIndex + 2 until words.size) {
             val word = if (first) words[i] else words[i].toUpperCase()
             newName.append(word)
             first = false

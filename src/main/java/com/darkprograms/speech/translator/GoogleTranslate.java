@@ -8,7 +8,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -166,7 +165,7 @@ public final class GoogleTranslate { //Class marked as final since all methods a
 
 	/**
 	 * Searches RAWData for Language
-	 * @param RAWData the raw String directly from Google you want to search through
+	 * @param rawData the raw String directly from Google you want to search through
 	 * @return The language parsed from the rawData or en-US (English-United States) if Google cannot determine it.
 	 */
 	private static String findLanguage(String rawData){
@@ -228,7 +227,7 @@ public final class GoogleTranslate { //Class marked as final since all methods a
 	 */
 	private static int shr32(int x, int bits) {
 		if (x < 0) {
-			long x_l = 0xffffffffl + x + 1;
+			long x_l = 0xffffffffL + x + 1;
 			return (int) (x_l >> bits);
 		}
 		return x >> bits;
@@ -286,7 +285,7 @@ public final class GoogleTranslate { //Class marked as final since all methods a
 		a_i ^= tkk[1];
 		long a_l;
 		if (0 > a_i) {
-			a_l = 0x80000000l + (a_i & 0x7FFFFFFF);
+			a_l = 0x80000000L + (a_i & 0x7FFFFFFF);
 		} else {
 			a_l = a_i;
 		}

@@ -6,7 +6,8 @@ import com.intellij.openapi.actionSystem.impl.SimpleDataContext
 import com.intellij.psi.PsiElement
 import com.intellij.usages.UsageTarget
 import com.intellij.usages.UsageView
-import org.openasr.idear.psi.PsiUtil
+import org.openasr.idear.psi.PsiUtil.findContainingClass
+import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
 import org.openasr.idear.tts.TTSService
 import java.util.*
 
@@ -28,8 +29,7 @@ class FindUsagesActionRecognizer : ActionRecognizer {
         if (editor == null || project == null)
             return aci
 
-        val e = PsiUtil.findElementUnderCaret(editor, project)
-        val klass = PsiUtil.findContainingClass(e!!) ?: return aci
+        val klass = editor.findElementUnderCaret()!!.findContainingClass() ?: return aci
 
         var targets = arrayOf<PsiElement>()
 
@@ -43,7 +43,7 @@ class FindUsagesActionRecognizer : ActionRecognizer {
             if (targetName.isEmpty())
                 return aci
 
-            targets = arrayOf<PsiElement>(klass.findFieldByName(targetName, /*checkBases*/ true)!!)
+            targets = arrayOf(klass.findFieldByName(targetName, /*checkBases*/ true)!!)
         } else if (wordsSet.contains("method")) {
             subject = "method"
             targetName = extractNameOf("method", words)
@@ -51,7 +51,7 @@ class FindUsagesActionRecognizer : ActionRecognizer {
             if (targetName.isEmpty())
                 return aci
 
-            targets = arrayOf<PsiElement>(*klass.findMethodsByName(targetName, /*checkBases*/ true))
+            targets = arrayOf(*klass.findMethodsByName(targetName, /*checkBases*/ true))
         }
 
         // TODO(kudinkin): need to cure this pain someday
@@ -66,14 +66,12 @@ class FindUsagesActionRecognizer : ActionRecognizer {
         return aci
     }
 
-    private fun prepare(target: PsiElement): Array<UsageTarget> {
-        return arrayOf(PsiElement2UsageTargetAdapter(target))
-    }
+    private fun prepare(target: PsiElement): Array<UsageTarget> = arrayOf(PsiElement2UsageTargetAdapter(target))
 
     private fun extractNameOf(pivot: String, sentence: List<String>): String {
         val target = StringBuilder()
 
-        for (i in sentence.indexOf(pivot) + 1..sentence.size - 1) {
+        for (i in sentence.indexOf(pivot) + 1 until sentence.size) {
             target.append(sentence[i])
         }
 

@@ -9,7 +9,5 @@ object TTSService {
         ttsProvider.say(text)
     }
 
-    fun dispose() {
-        ttsProvider.dispose()
-    }
+    fun dispose() = ttsProvider.dispose()
 }

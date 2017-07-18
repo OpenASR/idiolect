@@ -1,12 +1,11 @@
 package com.darkprograms.speech.recognizer.google;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import com.darkprograms.speech.util.StringUtil;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.xml.ws.http.HTTPException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,11 +15,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.xml.ws.http.HTTPException;
-
-import com.darkprograms.speech.util.StringUtil;
 
 /**
  * This class uses Google's V2 Hook. The class is returns a chunked respones so listeners must be used.

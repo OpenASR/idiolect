@@ -2,7 +2,8 @@ package org.openasr.idear.recognizer;
 
 import com.intellij.openapi.diagnostic.Logger;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.TargetDataLine;
 import java.io.IOException;
 
 public class AudioInputStreamWithAdjustableGain extends AudioInputStream {

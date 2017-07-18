@@ -36,11 +36,11 @@ class PollyTTS : TTSProvider {
     override fun say(utterance: String?): Boolean {
         utterance?.let {
             val audio = synthesize(it, OutputFormat.Mp3)
-            if (audio != null) {
+            return if (audio != null) {
                 playAudio(audio)
-                return true
+                true
             } else {
-                return false
+                false
             }
         }
 
@@ -63,13 +63,9 @@ class PollyTTS : TTSProvider {
                 javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice())
 
         player.playBackListener = object : PlaybackListener() {
-            override fun playbackStarted(evt: PlaybackEvent?) {
-                println("Playback started")
-            }
+            override fun playbackStarted(evt: PlaybackEvent?) = println("Playback started")
 
-            override fun playbackFinished(evt: PlaybackEvent?) {
-                println("Playback finished")
-            }
+            override fun playbackFinished(evt: PlaybackEvent?) = println("Playback finished")
         }
 
         // play it!

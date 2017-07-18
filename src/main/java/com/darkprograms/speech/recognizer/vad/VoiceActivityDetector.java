@@ -1,12 +1,6 @@
 package com.darkprograms.speech.recognizer.vad;
 
 import com.darkprograms.speech.microphone.MicrophoneAnalyzer;
-import com.darkprograms.speech.util.FFT;
-
-import javax.sound.sampled.AudioInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 /**
  * @see [https://github.com/Sciss/SpeechRecognitionHMM/blob/master/src/main/java/org/ioe/tprsa/audio/preProcessings/EndPointDetection.java]

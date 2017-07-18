@@ -1,7 +1,6 @@
 package com.darkprograms.speech.microphone;
 
 import javax.sound.sampled.*;
-
 import java.io.Closeable;
 import java.io.File;
 
@@ -240,7 +239,6 @@ System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			} catch (LineUnavailableException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return;
 			}
         }
     }

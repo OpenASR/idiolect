@@ -2,8 +2,8 @@ package org.openasr.idear.nlp
 
 import org.openasr.idear.actions.Routines
 import org.openasr.idear.ide.IDEService
-import org.openasr.idear.tts.TTSService
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
+import org.openasr.idear.tts.TTSService
 
 
 class IntellijNlpResultListener(var verbosity: Verbosity = Verbosity.INFO) : NlpResultListener {
@@ -26,9 +26,7 @@ class IntellijNlpResultListener(var verbosity: Verbosity = Verbosity.INFO) : Nlp
         }
     }
 
-    override fun onFailure(message: String) {
-        TTSService.say(message)
-    }
+    override fun onFailure(message: String) = TTSService.say(message)
 
     override fun onMessage(message: String, verbosity: Verbosity) {
         if (verbosity >= this.verbosity) {

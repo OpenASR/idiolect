@@ -7,9 +7,8 @@ import com.intellij.util.containers.ContainerUtil
 class ExtractActionRecognizer : ActionRecognizer {
     private val actions = ContainerUtil.newHashSet("extract")
 
-    override fun isMatching(sentence: String): Boolean {
-        return actions.filter({ sentence.contains(it)}).firstOrNull().isNullOrEmpty().not()
-    }
+    override fun isMatching(sentence: String) =
+            !actions.firstOrNull({ sentence.contains(it) }).isNullOrEmpty()
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
         if (!isMatching(sentence)) return null
@@ -27,7 +26,7 @@ class ExtractActionRecognizer : ActionRecognizer {
             index + 1
 
         var first = true
-        for (i in newNameStartIndex..words.size - 1) {
+        for (i in newNameStartIndex until words.size) {
             val word = if (first) words[i] else words[i].capitalize()
             newName.append(word)
             first = false

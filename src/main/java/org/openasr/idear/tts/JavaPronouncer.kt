@@ -12,14 +12,10 @@ import org.jetbrains.annotations.Nls
 class JavaPronouncer : IntentionAction {
 
     @Nls
-    override fun getText(): String {
-        return "Pronounce"
-    }
+    override fun getText(): String = "Pronounce"
 
     @Nls
-    override fun getFamilyName(): String {
-        return "Pronounce"
-    }
+    override fun getFamilyName(): String = "Pronounce"
 
     override fun isAvailable(project: Project,
                              editor: Editor,
@@ -46,7 +42,5 @@ class JavaPronouncer : IntentionAction {
         service.say(converter.toText())
     }
 
-    override fun startInWriteAction(): Boolean {
-        return false
-    }
+    override fun startInWriteAction() = false
 }

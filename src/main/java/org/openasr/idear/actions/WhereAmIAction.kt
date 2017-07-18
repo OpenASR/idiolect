@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiMethod
-import org.openasr.idear.psi.PsiUtil
+import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
 import org.openasr.idear.tts.TTSService
 
 class WhereAmIAction : AnAction() {
@@ -13,9 +13,8 @@ class WhereAmIAction : AnAction() {
         val dataContext = e.dataContext
 
         val editor = CommonDataKeys.EDITOR.getData(dataContext)
-        val project = CommonDataKeys.PROJECT.getData(dataContext)
 
-        var element = PsiUtil.findElementUnderCaret(editor!!, project!!)
+        var element = editor!!.findElementUnderCaret()
 
         val path = StringBuilder()
 

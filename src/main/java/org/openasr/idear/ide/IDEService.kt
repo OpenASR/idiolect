@@ -7,7 +7,7 @@ import com.intellij.openapi.util.ActionCallback
 
 object IDEService {
     /**
-     * @param action - see [com.intellij.openapi.actionSystem.IdeActions]
+     * @param actionId - see [com.intellij.openapi.actionSystem.IdeActions]
      */
     fun invokeAction(actionId: String): ActionCallback =
             with(ActionManager.getInstance()) {

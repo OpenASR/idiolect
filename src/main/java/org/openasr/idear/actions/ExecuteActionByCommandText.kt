@@ -68,10 +68,9 @@ abstract class ExecuteActionByCommandText : AnAction() {
         }
     }
 
-    private fun buildActionEvent(info: ActionCallInfo, action: AnAction, context: DataContext): AnActionEvent {
-        return if (info.actionEvent != null)
-            info.actionEvent as AnActionEvent
-        else
-            AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0)
-    }
+    private fun buildActionEvent(info: ActionCallInfo, action: AnAction, context: DataContext): AnActionEvent =
+            if (info.actionEvent != null)
+                info.actionEvent as AnActionEvent
+            else
+                AnActionEvent(null, context, "", action.templatePresentation, ActionManager.getInstance(), 0)
 }

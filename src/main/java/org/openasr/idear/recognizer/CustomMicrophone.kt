@@ -47,13 +47,9 @@ class CustomMicrophone(sampleRate: Float,
     }
 
 
-    fun startRecording() {
-        line.start()
-    }
+    fun startRecording() = line.start()
 
-    fun stopRecording() {
-        line.stop()
-    }
+    fun stopRecording() = line.stop()
 
     companion object {
         private val logger = Logger.getInstance(CustomMicrophone::class.java)

@@ -1,7 +1,6 @@
 package org.openasr.idear.asr
 
 import com.intellij.openapi.diagnostic.Logger
-import org.openasr.idear.nlp.NlpProvider
 import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
@@ -22,10 +21,8 @@ object ASRService {
         var terminated = false
 
         if (this.asrSystem != asrSystem) {
-            if (this.asrSystem != null) {
                 terminate()
                 terminated = true
-            }
         }
 
         this.asrSystem = asrSystem

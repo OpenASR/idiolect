@@ -12,9 +12,7 @@ import java.util.*
 
 class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
 
-    override fun isMatching(sentence: String): Boolean {
-        return sentence.contains("check") && sentence.contains("not")
-    }
+    override fun isMatching(sentence: String) = sentence.contains("check") && sentence.contains("not")
 
     override fun getActionInfo(sentence: String,
                                dataContext: DataContext): ActionCallInfo? {

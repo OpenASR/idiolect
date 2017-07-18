@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoogleHelper {
-    private static Logger logger = Logger.getInstance(GoogleHelper.class);
+    private static final Logger logger = Logger.getInstance(GoogleHelper.class);
 //    private static final String API_KEY = "AIzaSyB0DS1X9_qkZw2keZWw9p9EwUb9cV2bYsw";
     private static final String URL_PRE = "https://www.google.com/speech-api/v2/recognize";
     private static final String URL_SEARCH = "https://www.google.com/search?q=";

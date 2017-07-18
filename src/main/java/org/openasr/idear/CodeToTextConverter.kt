@@ -9,11 +9,10 @@ import com.intellij.psi.PsiFile
 class CodeToTextConverter(private val myFile: PsiFile,
                           private val myRange: TextRange?,
                           private val myCaretOffset: Int) {
-    private val myProject: Project
+    private val myProject: Project = myFile.project
     private val myDocument: Document?
 
     init {
-        myProject = myFile.project
         myDocument = PsiDocumentManager.getInstance(myProject).getDocument(myFile)
     }
 

@@ -235,20 +235,15 @@ object Routines {
         return sb.toString()
     }
 
-    fun pressKeystroke(vararg keys: Int) {
-        IDEService.type(*keys)
-    }
+    fun pressKeystroke(vararg keys: Int) = IDEService.type(*keys)
 
-    fun run(rec: SurroundWithNoNullCheckRecognizer,
-            c: String,
-            dataContext: DataContext) {
-        EventQueue.invokeLater {
-            ApplicationManager.getApplication().runWriteAction {
-                rec.getActionInfo(c,
-                        dataContext)
+    fun run(rec: SurroundWithNoNullCheckRecognizer, c: String, dataContext: DataContext) =
+            EventQueue.invokeLater {
+                ApplicationManager.getApplication().runWriteAction {
+                    rec.getActionInfo(c,
+                            dataContext)
+                }
             }
-        }
-    }
 
     fun tellJoke() {
         TTSService.say("knock, knock, knock, knock, knock")
@@ -341,7 +336,8 @@ object Routines {
         }
     }
 
-    @Synchronized fun beep() {
+    @Synchronized
+    fun beep() {
         val t = Thread {
             try {
                 val clip = AudioSystem.getClip()

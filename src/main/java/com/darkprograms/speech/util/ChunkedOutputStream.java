@@ -31,8 +31,12 @@ package com.darkprograms.speech.util;
 //fine Java utilities: http://www.acme.com/java/
 
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /// An OutputStream that implements HTTP/1.1 chunking.
 //<P>

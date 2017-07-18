@@ -3,18 +3,15 @@ package org.openasr.idear.recognizer.awslex
 import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
 import com.amazonaws.services.lexruntime.model.DialogState
 import com.darkprograms.speech.microphone.MicrophoneAnalyzer
-import com.darkprograms.speech.recognizer.vad.RecordingListener
 import com.darkprograms.speech.recognizer.vad.SimpleVAD
 import com.darkprograms.speech.recognizer.vad.VoiceActivityDetector
 import com.darkprograms.speech.recognizer.vad.VoiceActivityListener
 import org.json.JSONObject
-import org.openasr.idear.asr.ASRProvider
 import org.openasr.idear.asr.ASRSystem
 import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.nlp.LoggingNlpResultListener
 import org.openasr.idear.nlp.NlpResultListener
 import org.openasr.idear.recognizer.SpeechRecognizer
-import java.util.concurrent.ArrayBlockingQueue
 import java.util.logging.Level
 import java.util.logging.Logger
 import javax.sound.sampled.AudioInputStream
@@ -48,9 +45,7 @@ open class LexRecognizer(val botName: String = "idear", val botAlias: String = "
         nlpListener = listener
     }
 
-    override fun start() {
-        vad.start()
-    }
+    override fun start() = vad.start()
 
     override fun waitForUtterance(): String {
         // Temporarily swap listeners
@@ -67,14 +62,12 @@ open class LexRecognizer(val botName: String = "idear", val botAlias: String = "
     }
 
     /** This starts a new JARVIS VAD thread which calls onVoiceActivity() with results */
-    override fun startRecognition() {
-        vad.detectVoiceActivity(mic, this)
+    override fun startRecognition() = vad.detectVoiceActivity(mic, this)
 //        // debug versions
 //        // just record utterances to /tmp
 //        vad.detectVoiceActivity(mic, RecordingListener())
 //        // record to /tmp, but also call onVoiceActivity() below
 //        vad.detectVoiceActivity(mic, RecordingListener().withNextListener(this))
-    }
     override fun stopRecognition() = mic.close()
 
     override fun onVoiceActivity(audioInputStream: AudioInputStream) {
@@ -120,13 +113,7 @@ open class LexRecognizer(val botName: String = "idear", val botAlias: String = "
         }
     }
 
-    private fun stringToMap(json: String?): MutableMap<String, Any>? {
-        if (json == null) {
-            return null
-        } else {
-            return JSONObject(json).toMap()
-        }
-    }
+    private fun stringToMap(json: String?) = if (json == null) { null } else { JSONObject(json).toMap() }
 
     companion object {
         private val logger = Logger.getLogger(LexRecognizer::class.java.simpleName)

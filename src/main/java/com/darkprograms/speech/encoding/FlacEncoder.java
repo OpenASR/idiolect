@@ -109,9 +109,7 @@ public class FlacEncoder {
     private int[] truncateNullData(int[] sampleData, int index){
     	if(index == sampleData.length) return sampleData;
     	int[] out = new int[index];
-    	for(int i = 0; i<index; i++){
-    		out[i] = sampleData[i];
-    	}
+        System.arraycopy(sampleData, 0, out, 0, index);
     	return out;
     }
 
