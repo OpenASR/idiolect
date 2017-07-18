@@ -4,11 +4,16 @@ import com.intellij.openapi.ui.ComboBox
 import javax.swing.JPanel
 
 class RecognitionSettingsForm {
-//    private var ttsProviderCombo = ComboBox(TTSServiceId.values().map({option -> option.label}).toTypedArray())
-//    private var asrProviderCombo = ComboBox(ASRServiceId.values().map({option -> option.label}).toTypedArray())
-    private var ttsProviderCombo = ComboBox(TTSServiceId.values())
-    private var asrProviderCombo = ComboBox(ASRServiceId.values())
+    private lateinit var ttsProviderCombo: ComboBox<TTSServiceId>
+    private lateinit var asrProviderCombo: ComboBox<ASRServiceId>
+    private lateinit var nlpProviderCombo: ComboBox<NLPServiceId>
     lateinit var rootPanel: JPanel
+
+    init {
+        TTSServiceId.values().forEach { ttsProviderCombo.addItem(it)}
+        NLPServiceId.values().forEach { nlpProviderCombo.addItem(it)}
+        ASRServiceId.values().forEach { asrProviderCombo.addItem(it)}
+    }
 
     companion object {
         enum class ASRServiceId(val label: String) {
@@ -32,9 +37,16 @@ class RecognitionSettingsForm {
         set(value) {
             asrProviderCombo.selectedItem = value
         }
+
     var ttsService: TTSServiceId
         get() = TTSServiceId.valueOf(ttsProviderCombo.selectedItem.toString())
         set(value) {
             ttsProviderCombo.selectedItem = value
+        }
+
+    var nlpService: NLPServiceId
+        get() = NLPServiceId.valueOf(nlpProviderCombo.selectedItem.toString())
+        set(value) {
+            nlpProviderCombo.selectedItem = value
         }
 }

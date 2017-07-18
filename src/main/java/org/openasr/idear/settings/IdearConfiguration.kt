@@ -5,7 +5,6 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.options.Configurable
 import org.openasr.idear.asr.ASRControlLoop
-import org.openasr.idear.asr.ASRService
 import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
 import org.openasr.idear.nlp.IntellijNlpResultListener
@@ -27,67 +26,70 @@ import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId
 /**
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
  */
-@State(name = "IdearConfiguration",
-        storages = arrayOf(Storage("recognition.xml")))
-object IdearConfiguration : Configurable, PersistentStateComponent<IdearConfiguration.Settings> {
-    override fun getState() = settings
-    override fun loadState(state: Settings) {
-        this.settings = state
+@State(name = "IdearConfiguration", storages = arrayOf(Storage("recognition.xml")))
+class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfiguration.Settings> {
+    companion object {
+        var settings = Settings()
+        fun getASRSystem() =
+                if (settings.asrService == LEX_ASR && settings.nlpService == LEX_NLP) {
+                    LexRecognizer()
+                } else {
+                    ASRControlLoop(getASRProvider(), getNLPProvider())
+                }
+
+        // TODO: list voices by locale
+        // TODO: allow user to select voice
+        fun getTTSProvider() =
+                when (settings.ttsService) {
+                    MARY -> MaryTTS()
+                    AWS_POLLY -> PollyTTS()
+                }
+
+        private fun getASRProvider() =
+                when (settings.asrService) {
+                    CMU_SPHINX -> CMUSphinxASR()
+                    LEX_ASR -> LexASR()
+                }
+
+        private fun getNLPProvider(/*listener: NlpResultListener*/) =
+                when (settings.nlpService) {
+                    PATTERN -> PatternBasedNlpProvider()
+                    LEX_NLP -> LexNlp(IntellijNlpResultListener())
+                }
     }
 
-    private var settings = Settings()
-    private lateinit var gui: RecognitionSettingsForm
+    override fun getState() = settings
+    override fun loadState(state: Settings) {
+        settings = state
+    }
+
+    private var gui = RecognitionSettingsForm()
 
     data class Settings(var asrService: ASRServiceId = CMU_SPHINX,
                         var nlpService: NLPServiceId = PATTERN,
                         var ttsService: TTSServiceId = MARY)
 
-    fun getASRSystem() =
-        if (settings.asrService == LEX_ASR && settings.nlpService == LEX_NLP) {
-            LexRecognizer()
-        } else {
-            ASRControlLoop(getASRProvider(), getNLPProvider())
-        }
 
-    private fun getASRProvider() =
-            when (settings.asrService) {
-                CMU_SPHINX -> CMUSphinxASR()
-                LEX_ASR -> LexASR()
-            }
-
-    private fun getNLPProvider(/*listener: NlpResultListener*/) =
-            when (settings.nlpService) {
-                PATTERN -> PatternBasedNlpProvider()
-                LEX_NLP -> LexNlp(IntellijNlpResultListener())
-            }
-
-    // TODO: list voices by locale
-    // TODO: allow user to select voice
-    fun getTTSProvider() =
-            when (settings.ttsService) {
-                MARY -> MaryTTS()
-                AWS_POLLY -> PollyTTS()
-            }
-
-    override fun getDisplayName() = "Recognition"
+    override fun getDisplayName() = "Idear"
 
     override fun isModified() =
             gui.asrService != settings.asrService ||
-                    gui.ttsService != settings.ttsService
+                    gui.ttsService != settings.ttsService ||
+                    gui.nlpService != settings.nlpService
 
     override fun createComponent() = RecognitionSettingsForm().apply { gui = this }.rootPanel
 
     override fun apply() {
-        val changed = (settings.ttsService != gui.ttsService || settings.asrService != gui.asrService)
-        if (changed) {
+        if (isModified) {
+            settings.nlpService = gui.nlpService
             settings.ttsService = gui.ttsService
             settings.asrService = gui.asrService
-            ASRService.setASRSystem(getASRSystem())
         }
     }
 
     override fun reset() {
         gui.asrService = settings.asrService
         gui.ttsService = settings.ttsService
+        gui.nlpService = settings.nlpService
     }
 }

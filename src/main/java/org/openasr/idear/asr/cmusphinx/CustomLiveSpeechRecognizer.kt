@@ -1,28 +1,20 @@
 package org.openasr.idear.asr.cmusphinx
 
+import com.intellij.openapi.diagnostic.Logger
 import edu.cmu.sphinx.api.AbstractSpeechRecognizer
 import edu.cmu.sphinx.api.Configuration
 import edu.cmu.sphinx.decoder.ResultListener
 import edu.cmu.sphinx.frontend.endpoint.SpeechClassifier
 import edu.cmu.sphinx.frontend.util.StreamDataSource
 import org.openasr.idear.recognizer.CustomMicrophone
-import java.io.IOException
 
 /**
  * High-level class for live speech recognition.
  */
-class CustomLiveSpeechRecognizer
 
-/**
- * Constructs new live recognition object.
-
- * @param configuration common configuration
- * *
- * @throws IOException if model IO went wrong
- */
-@Throws(IOException::class)
-constructor(configuration: Configuration) : AbstractSpeechRecognizer(configuration) {
+class CustomLiveSpeechRecognizer(configuration: Configuration) : AbstractSpeechRecognizer(configuration) {
     private val microphone: CustomMicrophone = CustomMicrophone(16000f, 16, true, false)
+    private val logger = Logger.getInstance(CustomLiveSpeechRecognizer::class.java)
 
     // sphinx4 default sensitivity is 13.
     private val SPEECH_SENSITIVITY = 20
@@ -37,9 +29,9 @@ constructor(configuration: Configuration) : AbstractSpeechRecognizer(configurati
      * @see CustomLiveSpeechRecognizer.stopRecognition
      */
     fun startRecognition() {
-        println("Recording to file....")
+        logger.debug("Recording to file....")
         CustomMicrophone.recordFromMic(10000)
-        println("FIle is ready now")
+        logger.debug("File is ready now")
 
         recognizer.allocate()
         microphone.startRecording()

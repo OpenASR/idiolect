@@ -34,8 +34,8 @@ class MaryTTS : TTSProvider {
     }
 
     @Synchronized
-    override fun say(utterance: String?): Boolean {
-        if (utterance == null || utterance.isEmpty()) return false
+    override fun say(utterance: String): Boolean {
+        if (utterance.isEmpty()) return false
 
         try {
             AudioPlayer(maryTTS.generateAudio(utterance)).start()

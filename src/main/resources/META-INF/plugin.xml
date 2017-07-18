@@ -36,7 +36,7 @@
   </extensionPoints>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationConfigurable groupId="tools" displayName="Recognition" id="preferences.IdearConfiguration" instance="org.openasr.idear.settings.IdearConfiguration"/>
+    <applicationConfigurable groupId="tools" displayName="Idear" id="preferences.IdearConfiguration" instance="org.openasr.idear.settings.IdearConfiguration"/>
   </extensions>
 
   <extensions defaultExtensionNs="org.openasr.idear">

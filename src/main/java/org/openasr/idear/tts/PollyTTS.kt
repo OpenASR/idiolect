@@ -33,21 +33,18 @@ class PollyTTS : TTSProvider {
     }.build()
     private var voice: Voice = polly.describeVoices(DescribeVoicesRequest()).voices[0]
 
-    override fun say(utterance: String?): Boolean {
-        utterance?.let {
-            val audio = synthesize(it, OutputFormat.Mp3)
-            return if (audio != null) {
-                playAudio(audio)
-                true
-            } else {
-                false
+    override fun say(utterance: String) =
+            utterance.let {
+                val audio = synthesize(it, OutputFormat.Mp3)
+                if (audio != null) {
+                    playAudio(audio)
+                    true
+                } else {
+                    false
+                }
             }
-        }
 
-        return false
-    }
-
-    override fun dispose() { }
+    override fun dispose() {}
 
     @Throws(IOException::class)
     private fun synthesize(text: String, format: OutputFormat): InputStream? {
