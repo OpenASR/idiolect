@@ -36,19 +36,19 @@ class RecognitionSettingsForm {
     }
 
     var asrService: ASRServiceId
-        get() = ASRServiceId.valueOf(asrProviderCombo.selectedItem.toString())
+        get() = ASRServiceId.valueOf((asrProviderCombo.selectedItem as ASRServiceId).name)
         set(value) {
             asrProviderCombo.selectedItem = value
         }
 
     var ttsService: TTSServiceId
-        get() = TTSServiceId.valueOf(ttsProviderCombo.selectedItem.toString())
+        get() = TTSServiceId.valueOf((ttsProviderCombo.selectedItem as TTSServiceId).name)
         set(value) {
             ttsProviderCombo.selectedItem = value
         }
 
     var nlpService: NLPServiceId
-        get() = NLPServiceId.valueOf(nlpProviderCombo.selectedItem.toString())
+        get() = NLPServiceId.valueOf((nlpProviderCombo.selectedItem as NLPServiceId).name)
         set(value) {
             nlpProviderCombo.selectedItem = value
         }
