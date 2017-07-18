@@ -2,7 +2,7 @@ package org.openasr.idear.recognizer.awslex
 
 import com.amazonaws.auth.AWSCredentialsProvider
 import com.amazonaws.auth.AWSStaticCredentialsProvider
-import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.auth.BasicSessionCredentials
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentityClientBuilder
 import com.amazonaws.services.cognitoidentity.model.Credentials
 import com.amazonaws.services.cognitoidentity.model.GetCredentialsForIdentityRequest
@@ -20,7 +20,7 @@ class AwsUtils {
                 if (_credentialsProvider == null) {
                     // TODO: use STSProfileCredentialsServiceProvider?  would let admins to add Slots etc by voice
                     val credentials = getCognitoCredentials()
-                    _credentialsProvider = AWSStaticCredentialsProvider(BasicAWSCredentials(credentials.accessKeyId, credentials.secretKey))
+                    _credentialsProvider = AWSStaticCredentialsProvider(BasicSessionCredentials(credentials.accessKeyId, credentials.secretKey, credentials.sessionToken))
                 }
                 return _credentialsProvider ?: throw AssertionError("Logged out by another thread")
             }
