@@ -24,7 +24,7 @@ import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
  * @see LexASR which implements #waitForUtterance() instead of posting to NlpResultListener
  */
 // TODO: should LexRecognizer and LexASR be swapped around?
-open class LexRecognizer(val botName: String = "idear", val botAlias: String = "PROD") : SpeechRecognizer, VoiceActivityListener, ASRSystem {
+open class LexRecognizer(val botName: String = "Idear", val botAlias: String = "PROD") : SpeechRecognizer, VoiceActivityListener, ASRSystem {
     private val mic = MicrophoneAnalyzer(16_000F)
     private val vad: VoiceActivityDetector = SimpleVAD()
     protected val lex: JarvisLex
@@ -45,7 +45,7 @@ open class LexRecognizer(val botName: String = "idear", val botAlias: String = "
         nlpListener = listener
     }
 
-    override fun start() = vad.start()
+    override fun start() = startRecognition()
 
     override fun waitForUtterance(): String {
         // Temporarily swap listeners
@@ -56,10 +56,6 @@ open class LexRecognizer(val botName: String = "idear", val botAlias: String = "
         return utterance
     }
 
-    override fun terminate() {
-        mic.close()
-        vad.terminate()
-    }
 
     /** This starts a new JARVIS VAD thread which calls onVoiceActivity() with results */
     override fun startRecognition() = vad.detectVoiceActivity(mic, this)
@@ -69,6 +65,11 @@ open class LexRecognizer(val botName: String = "idear", val botAlias: String = "
 //        // record to /tmp, but also call onVoiceActivity() below
 //        vad.detectVoiceActivity(mic, RecordingListener().withNextListener(this))
     override fun stopRecognition() = mic.close()
+
+    override fun terminate() {
+        mic.close()
+        vad.terminate()
+    }
 
     override fun onVoiceActivity(audioInputStream: AudioInputStream) {
         logger.log(Level.FINE, "processing speech...", audioInputStream.frameLength)

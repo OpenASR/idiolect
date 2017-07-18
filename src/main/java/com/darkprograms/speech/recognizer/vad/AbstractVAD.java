@@ -25,7 +25,7 @@ public abstract class AbstractVAD implements VoiceActivityDetector, Runnable {
     protected AudioInputStream audio;
     MicrophoneAnalyzer mic;
     private VoiceActivityListener listener;
-    private VadState state;
+    private VadState state = VadState.INITIALISING;
     private Thread thread;
 
     private int maxSpeechMs;
@@ -48,6 +48,7 @@ public abstract class AbstractVAD implements VoiceActivityDetector, Runnable {
         this.listener = listener;
         this.maxSpeechMs = maxSpeechMs;
         maxSpeechWindows = maxSpeechMs / WINDOW_MILLIS;
+        state = VadState.LISTENING;
 
         if (this.mic != null) {
             if (this.mic == mic) {
@@ -66,6 +67,17 @@ public abstract class AbstractVAD implements VoiceActivityDetector, Runnable {
         }
 
         this.mic = mic;
+
+        if (thread == null || !thread.isAlive()) {
+            thread = new Thread(this, "JARVIS-VAD");
+            thread.start();
+        }
+    }
+
+    @Override
+    public void pause() {
+        state = VadState.PAUSED;
+        mic.close();
     }
 
     @Override
@@ -74,14 +86,9 @@ public abstract class AbstractVAD implements VoiceActivityDetector, Runnable {
     }
 
     @Override
-    public void start() {
-        thread = new Thread(this, "JARVIS-VAD");
-        thread.start();
-    }
-
-    @Override
     public void terminate() {
-//        state = VadState.CLOSED;
+        state = VadState.CLOSED;
+        mic.close();
         thread.interrupt();
     }
 
@@ -105,8 +112,10 @@ public abstract class AbstractVAD implements VoiceActivityDetector, Runnable {
         while (state != VadState.CLOSED) {
             try {
                 int bytesRead = this.audio.read(audioData, 0, bytesToRead);
-                boolean speechDetected = sampleForSpeech(audioData);
-                incrementSpeechCounter(speechDetected, bytesRead, audioData);
+                if (bytesRead > 0) {
+                    boolean speechDetected = sampleForSpeech(audioData);
+                    incrementSpeechCounter(speechDetected, bytesRead, audioData);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 state = VadState.CLOSED;

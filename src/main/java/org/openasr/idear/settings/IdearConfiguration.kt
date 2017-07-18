@@ -65,9 +65,9 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
     private var gui = RecognitionSettingsForm()
 
-    data class Settings(var asrService: ASRServiceId = CMU_SPHINX,
-                        var nlpService: NLPServiceId = PATTERN,
-                        var ttsService: TTSServiceId = MARY)
+    data class Settings(var asrService: ASRServiceId = LEX_ASR, // CMU_SPHINX,
+                        var nlpService: NLPServiceId = LEX_NLP, // PATTERN,
+                        var ttsService: TTSServiceId = AWS_POLLY) // MARY)
 
 
     override fun getDisplayName() = "Idear"

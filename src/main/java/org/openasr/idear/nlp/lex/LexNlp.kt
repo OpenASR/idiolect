@@ -53,7 +53,7 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
      */
     override fun processUtterance(utterance: String) {
         val request = PostTextRequest()
-            .withBotName("idear")
+            .withBotName("Idear")
             .withBotAlias("PROD")
             .withInputText(utterance)
             .withUserId(userId)
