@@ -10,25 +10,22 @@ class RecognitionSettingsForm {
     lateinit var rootPanel: JPanel
 
     init {
-        TTSServiceId.values().forEach { ttsProviderCombo.addItem(it)}
-        NLPServiceId.values().forEach { nlpProviderCombo.addItem(it)}
-        ASRServiceId.values().forEach { asrProviderCombo.addItem(it)}
+        TTSServiceId.values().forEach { ttsProviderCombo.addItem(it) }
+        NLPServiceId.values().forEach { nlpProviderCombo.addItem(it) }
+        ASRServiceId.values().forEach { asrProviderCombo.addItem(it) }
     }
 
     companion object {
         enum class ASRServiceId(val label: String) {
-            CMU_SPHINX("CMU Sphinx"),
-            AWS_LEX("Amazon Lex")
+            CMU_SPHINX("CMU Sphinx"), AWS_LEX("Amazon Lex");
         }
 
         enum class NLPServiceId(val label: String) {
-            PATTERN("Pattern"),
-            AWS_LEX("Amazon Lex")
+            PATTERN("Pattern"), AWS_LEX("Amazon Lex");
         }
 
         enum class TTSServiceId(val label: String) {
-            MARY("Mary TTS"),
-            AWS_POLLY("Amazon Polly")
+            MARY("Mary TTS"), AWS_POLLY("Amazon Polly");
         }
     }
 
