@@ -1,34 +1,46 @@
 package org.openasr.idear.asr
 
 import com.intellij.openapi.diagnostic.Logger
+import org.openasr.idear.nlp.NlpProvider
 import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
 object ASRService {
-    private lateinit var speechThread: Thread
-    private lateinit var recognizer: ASRProvider
+    private lateinit var asrSystem: ASRSystem
 
     fun init() {
         try {
-            recognizer = IdearConfiguration.getASRProvider()
-            speechThread = Thread(ASRControlLoop(recognizer), "ASR Thread")
-            recognizer.startRecognition()
-
-            // TODO: LexVoiceASR(nlpResultListener) : ASRProvider, NlpProvider
-            // TODO: recogniser.withNlpService( LexTextNlp(nlpResultListener): NlpProvider )
-
-            // Fire up control-loop
-            speechThread.start()
+            asrSystem = IdearConfiguration.getASRSystem()
+            asrSystem.start()
         } catch (e: IOException) {
-            logger.error( "Couldn't initialize speech recognizer!", e)
+            logger.error( "Couldn't initialize speech asrProvider!", e)
         }
     }
+
+    fun setASRSystem(asrSystem: ASRSystem) {
+        val status = ListeningState.getStatus()
+        var terminated = false
+
+        if (this.asrSystem != asrSystem) {
+            if (this.asrSystem != null) {
+                terminate()
+                terminated = true
+            }
+        }
+
+        this.asrSystem = asrSystem
+        if (terminated && status == ListeningState.Status.ACTIVE) {
+            asrSystem.start()
+        }
+    }
+
+    fun waitForUtterance() = asrSystem.waitForUtterance()
 
     fun activate(): Boolean = ListeningState.activate()
 
     fun deactivate(): Boolean = ListeningState.standBy()
 
-    private fun terminate() = recognizer.stopRecognition()
+    private fun terminate() = asrSystem.stopRecognition()
 
     fun dispose() {
         // Deactivate in the first place, therefore actually
