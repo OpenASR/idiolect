@@ -20,11 +20,10 @@ class MaryTTS : TTSProvider {
         try {
             maryTTS = LocalMaryInterface()
             val systemLocale = Locale.getDefault()
-            voice = if (maryTTS.availableLocales.contains(systemLocale)) {
+            voice = if (maryTTS.availableLocales.contains(systemLocale))
                 Voice.getDefaultVoice(systemLocale)
-            } else {
+            else
                 Voice.getVoice(maryTTS.availableVoices.iterator().next())
-            }
 
             maryTTS.locale = voice.locale
             maryTTS.voice = voice.name
@@ -47,8 +46,7 @@ class MaryTTS : TTSProvider {
         return true
     }
 
-    override fun dispose() {
-    }
+    override fun dispose() {}
 }
 
 fun main(args: Array<String>) {

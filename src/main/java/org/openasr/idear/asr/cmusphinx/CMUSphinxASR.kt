@@ -9,17 +9,18 @@ class CMUSphinxASR : ASRProvider {
     private lateinit var recognizer: CustomLiveSpeechRecognizer
 
     init {
-        val configuration = Configuration()
-        configuration.acousticModelPath = ACOUSTIC_MODEL
-        configuration.dictionaryPath = DICTIONARY_PATH
-        configuration.grammarPath = GRAMMAR_PATH
-        configuration.useGrammar = true
-        configuration.grammarName = "command"
+        Configuration().run {
+            acousticModelPath = ACOUSTIC_MODEL
+            dictionaryPath = DICTIONARY_PATH
+            grammarPath = GRAMMAR_PATH
+            useGrammar = true
+            grammarName = "command"
 
-        try {
-            recognizer = CustomLiveSpeechRecognizer(configuration)
-        } catch (e: IOException) {
-            logger.error("Couldn't initialize speech recognizer", e)
+            try {
+                recognizer = CustomLiveSpeechRecognizer(this)
+            } catch (e: IOException) {
+                logger.error("Couldn't initialize speech recognizer", e)
+            }
         }
     }
 

@@ -20,26 +20,17 @@ constructor(private val path: String?) : ParserService() {
     private val modelInputStream: InputStream
         @Throws(FileNotFoundException::class)
         get() {
-            if (path != null) {
-                return FileInputStream(path)
-            }
-
+            if (path != null) return FileInputStream(path)
             val id = PluginId.getId("org.openasr.idear")
             val plugin = PluginManager.getPlugin(id)!!
 
-            val classLoader = plugin.pluginClassLoader
-            return classLoader.getResourceAsStream("en-parser-chunking.bin")
+            return plugin.pluginClassLoader.getResourceAsStream("en-parser-chunking.bin")
         }
 
 
-    override fun parseSentence(sentence: String): Parse? {
-        if (parser == null) {
-            throw IllegalStateException()
-        }
-        val topParses = ParserTool.parseLine(sentence, parser!!, 1)
-        assert(topParses.size == 1)
-        return topParses[0]
-    }
+    override fun parseSentence(sentence: String): Parse? =
+            if (parser == null) throw IllegalStateException()
+            else ParserTool.parseLine(sentence, parser!!, 1).apply { assert(size == 1) }[0]
 
     override fun init() {
         val model = readParserModel() ?: return
@@ -57,7 +48,6 @@ constructor(private val path: String?) : ParserService() {
 
         return model
     }
-
 }
 
 

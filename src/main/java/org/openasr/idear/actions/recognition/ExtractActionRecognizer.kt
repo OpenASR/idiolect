@@ -20,10 +20,11 @@ class ExtractActionRecognizer : ActionRecognizer {
         val index = data.second
 
         val newName = StringBuilder()
-        val newNameStartIndex = if (index + 1 < words.size && words[index + 1] == "to")
-            index + 2
-        else
-            index + 1
+        val newNameStartIndex =
+                if (index + 1 < words.size && words[index + 1] == "to")
+                    index + 2
+                else
+                    index + 1
 
         var first = true
         for (i in newNameStartIndex until words.size) {

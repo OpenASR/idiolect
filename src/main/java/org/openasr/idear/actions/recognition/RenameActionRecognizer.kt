@@ -3,7 +3,6 @@ package org.openasr.idear.actions.recognition
 import com.intellij.openapi.actionSystem.DataContext
 
 class RenameActionRecognizer : ActionRecognizer {
-
     override fun isMatching(sentence: String) = sentence.contains("rename")
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {

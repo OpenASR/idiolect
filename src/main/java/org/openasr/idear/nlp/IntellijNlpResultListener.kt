@@ -9,20 +9,18 @@ import org.openasr.idear.tts.TTSService
 class IntellijNlpResultListener(var verbosity: Verbosity = Verbosity.INFO) : NlpResultListener {
 
     override fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?) {
-        if (sessionAttributes != null) {
-            for((key, value) in sessionAttributes) {
-//                var remove = true
-                when (key) {
-                    "invokeAction" -> IDEService.invokeAction(value)
-                    "pressKeystroke" -> value.split(",").forEach({keyStroke -> IDEService.type(keyStroke.toInt())})
-                    "routineGoto" -> ActionRoutines.routineGoto(value)
-                    "routinePress" -> ActionRoutines.routinePress(value)
-                }
+        sessionAttributes?.forEach { (key, value) ->
+            //                var remove = true
+            when (key) {
+                "invokeAction" -> IDEService.invokeAction(value)
+                "pressKeystroke" -> value.split(",").forEach({ keyStroke -> IDEService.type(keyStroke.toInt()) })
+                "routineGoto" -> ActionRoutines.routineGoto(value)
+                "routinePress" -> ActionRoutines.routinePress(value)
+            }
 
 //                if (remove) {
 //                    params.remove(key)
 //                }
-            }
         }
     }
 

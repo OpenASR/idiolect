@@ -6,6 +6,8 @@ import java.util.logging.Logger
 
 
 class LoggingNlpResultListener : NlpResultListener {
+    private val logger = Logger.getLogger("NlpResultListener")
+
     override fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?) =
             logger.log(Level.INFO, "Fulfilled: ", intentName)
 
@@ -14,6 +16,4 @@ class LoggingNlpResultListener : NlpResultListener {
 
     override fun onMessage(message: String, verbosity: Verbosity) =
             logger.log(Level.INFO, "Message: " + message)
-
-    private val logger = Logger.getLogger("NlpResultListener")
 }

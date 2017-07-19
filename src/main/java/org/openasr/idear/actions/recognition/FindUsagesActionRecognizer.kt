@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.impl.SimpleDataContext
 import com.intellij.psi.PsiElement
 import com.intellij.usages.UsageTarget
 import com.intellij.usages.UsageView
+import org.openasr.idear.ide.IDEService
 import org.openasr.idear.psi.PsiUtil.findContainingClass
 import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
 import org.openasr.idear.tts.TTSService
@@ -23,11 +24,10 @@ class FindUsagesActionRecognizer : ActionRecognizer {
         val words = Arrays.asList(*sentence.split("\\W+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
         val wordsSet = HashSet(words)
 
-        val editor = CommonDataKeys.EDITOR.getData(dataContext)
-        val project = CommonDataKeys.PROJECT.getData(dataContext)
+        val editor = IDEService.getEditor(dataContext)
+        val project = IDEService.getProject(dataContext)
 
-        if (editor == null || project == null)
-            return aci
+        if (editor == null || project == null) return aci
 
         val klass = editor.findElementUnderCaret()!!.findContainingClass() ?: return aci
 
@@ -40,17 +40,13 @@ class FindUsagesActionRecognizer : ActionRecognizer {
             subject = "field"
             targetName = extractNameOf("field", words)
 
-            if (targetName.isEmpty())
-                return aci
-
+            if (targetName.isEmpty()) return aci
             targets = arrayOf(klass.findFieldByName(targetName, /*checkBases*/ true)!!)
         } else if (wordsSet.contains("method")) {
             subject = "method"
             targetName = extractNameOf("method", words)
 
-            if (targetName.isEmpty())
-                return aci
-
+            if (targetName.isEmpty()) return aci
             targets = arrayOf(*klass.findMethodsByName(targetName, /*checkBases*/ true))
         }
 
@@ -71,9 +67,7 @@ class FindUsagesActionRecognizer : ActionRecognizer {
     private fun extractNameOf(pivot: String, sentence: List<String>): String {
         val target = StringBuilder()
 
-        for (i in sentence.indexOf(pivot) + 1 until sentence.size) {
-            target.append(sentence[i])
-        }
+        for (i in sentence.indexOf(pivot) + 1 until sentence.size) { target.append(sentence[i]) }
 
         return target.toString()
     }

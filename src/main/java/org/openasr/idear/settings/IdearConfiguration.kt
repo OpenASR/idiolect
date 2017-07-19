@@ -62,14 +62,13 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
     private var gui = RecognitionSettingsForm()
 
-    data class Settings(var asrService: ASRServiceId = LEX_ASR, // CMU_SPHINX,
-                        var nlpService: NLPServiceId = LEX_NLP, // PATTERN,
-                        var ttsService: TTSServiceId = AWS_POLLY) // MARY)
+    data class Settings(var asrService: ASRServiceId = CMU_SPHINX,
+                        var nlpService: NLPServiceId = PATTERN,
+                        var ttsService: TTSServiceId = MARY)
 
     override fun getDisplayName() = "Idear"
 
-    override fun isModified() =
-            gui.asrService != settings.asrService ||
+    override fun isModified() = gui.asrService != settings.asrService ||
                     gui.ttsService != settings.ttsService ||
                     gui.nlpService != settings.nlpService
 

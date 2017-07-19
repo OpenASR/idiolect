@@ -9,8 +9,7 @@ import java.io.IOException;
 public class AudioInputStreamWithAdjustableGain extends AudioInputStream {
     private static final double DEFAULT_MASTER_GAIN = 1.0;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
-    private static final Logger logger =
-        Logger.getInstance(AudioInputStreamWithAdjustableGain.class);
+    private static final Logger logger = Logger.getInstance(AudioInputStreamWithAdjustableGain.class);
     private double masterGain;
     private double noiseLevel;
 
