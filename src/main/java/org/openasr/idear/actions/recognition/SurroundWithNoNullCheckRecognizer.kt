@@ -5,21 +5,20 @@ import com.intellij.ide.DataManager
 import com.intellij.ide.actions.ApplyIntentionAction
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys.EDITOR
-import com.intellij.openapi.actionSystem.CommonDataKeys.PROJECT
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.Presentation
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.Computable
 import com.intellij.psi.PsiDocumentManager
+import org.openasr.idear.ide.IDEService
 import java.util.*
 
 class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
     override fun isMatching(sentence: String) = sentence.contains("check") && sentence.contains("not")
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
-        val editor = EDITOR.getData(dataContext)
-        val project = PROJECT.getData(dataContext)
+        val editor = IDEService.getEditor(dataContext)
+        val project = IDEService.getProject(dataContext)
 
         if (project == null || editor == null) return null
 

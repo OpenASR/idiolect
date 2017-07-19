@@ -4,14 +4,11 @@ import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.components.ApplicationComponent
 import com.intellij.openapi.extensions.PluginId
 import org.openasr.idear.asr.ASRService
-import org.openasr.idear.asr.GrammarService
 import org.openasr.idear.tts.TTSService
 
 class Idear : ApplicationComponent {
 
     override fun initComponent() {
-        ASRService.init()
-        GrammarService.init()
         initTTSService()
     }
 
@@ -19,12 +16,12 @@ class Idear : ApplicationComponent {
         val id = PluginId.getId("org.openasr.idear")
         val plugin = PluginManager.getPlugin(id)!!
 
-        val current = Thread.currentThread().contextClassLoader
+        val currentThread = Thread.currentThread()
+        val currentClassLoader = Thread.currentThread().contextClassLoader
         try {
-            val classLoader = plugin.pluginClassLoader
-            Thread.currentThread().contextClassLoader = classLoader
+            currentThread.contextClassLoader = plugin.pluginClassLoader
         } finally {
-            Thread.currentThread().contextClassLoader = current
+            currentThread.contextClassLoader = currentClassLoader
         }
     }
 

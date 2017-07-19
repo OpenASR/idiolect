@@ -26,7 +26,7 @@ import java.util.*
  * @see http://docs.aws.amazon.com/polly/latest/dg/examples-java.html
  */
 
-class PollyTTS : TTSProvider {
+object PollyTTS : TTSProvider {
     val polly: AmazonPolly = AmazonPollyClientBuilder.standard().apply {
         region = AwsUtils.REGION
         credentials = AwsUtils.credentialsProvider
@@ -103,7 +103,7 @@ class PollyTTS : TTSProvider {
 }
 
 fun main(args: Array<String>) {
-    val ttService = PollyTTS()
+    val ttService = PollyTTS
     val scan = Scanner(System.`in`)
 
     while (true) {

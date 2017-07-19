@@ -1,6 +1,5 @@
 package org.openasr.idear.actions
 
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
@@ -10,7 +9,7 @@ import org.openasr.idear.ide.IDEService
 import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
 import org.openasr.idear.tts.TTSService
 
-class WhereAmIAction : AnAction() {
+object WhereAmIAction : IdearAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val editor = IDEService.getEditor(e.dataContext)
 

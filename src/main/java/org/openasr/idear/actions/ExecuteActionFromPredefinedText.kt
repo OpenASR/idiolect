@@ -4,7 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import org.openasr.idear.actions.recognition.TextToActionConverter
 import org.openasr.idear.ide.IDEService
 
-class ExecuteActionFromPredefinedText : ExecuteActionByCommandText() {
+object ExecuteActionFromPredefinedText : ExecuteActionByCommandText() {
     override fun actionPerformed(e: AnActionEvent) {
         val dataContext = e.dataContext
         val editor = IDEService.getEditor(dataContext)!!
@@ -13,6 +13,6 @@ class ExecuteActionFromPredefinedText : ExecuteActionByCommandText() {
         val text = "idea rename to my super test"
         // String text = "idea inline";
 
-        TextToActionConverter(e.dataContext).extractAction(text)?.let { invoke(editor, it) }
+        TextToActionConverter(e.dataContext).extractAction(text)?.let { runInEditor(editor, it) }
     }
 }

@@ -5,14 +5,15 @@ import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
 object ASRService {
+    private val logger = Logger.getInstance(ASRService::class.java)
     private lateinit var asrSystem: ASRSystem
 
-    fun init() {
+    init {
         try {
             asrSystem = IdearConfiguration.getASRSystem()
             asrSystem.start()
         } catch (e: IOException) {
-            logger.error( "Couldn't initialize speech asrProvider!", e)
+            logger.error("Couldn't initialize speech asrProvider!", e)
         }
     }
 
@@ -21,8 +22,8 @@ object ASRService {
         var terminated = false
 
         if (this.asrSystem != asrSystem) {
-                terminate()
-                terminated = true
+            terminate()
+            terminated = true
         }
 
         this.asrSystem = asrSystem
@@ -46,7 +47,6 @@ object ASRService {
         terminate()
     }
 
-    private val logger = Logger.getInstance(ASRService::class.java)
 }
 
 // This is for testing purposes solely

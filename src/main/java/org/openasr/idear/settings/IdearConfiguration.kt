@@ -38,8 +38,8 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         // TODO: allow user to select voice
         fun getTTSProvider() =
                 when (settings.ttsService) {
-                    MARY -> MaryTTS()
-                    AWS_POLLY -> PollyTTS()
+                    MARY -> MaryTTS
+                    AWS_POLLY -> PollyTTS
                 }
 
         private fun getASRProvider() =
@@ -64,7 +64,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
     data class Settings(var asrService: ASRServiceId = CMU_SPHINX,
                         var nlpService: NLPServiceId = PATTERN,
-                        var ttsService: TTSServiceId = MARY)
+                        var ttsService: TTSServiceId = AWS_POLLY)
 
     override fun getDisplayName() = "Idear"
 

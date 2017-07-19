@@ -1,7 +1,7 @@
 package org.openasr.idear.asr
 
 import com.intellij.openapi.diagnostic.Logger
-import org.openasr.idear.ide.IDEService
+import org.openasr.idear.VoiceRecordControllerAction
 import org.openasr.idear.nlp.Commands
 import org.openasr.idear.nlp.NlpProvider
 import org.openasr.idear.tts.TTSService
@@ -41,7 +41,7 @@ class ASRControlLoop(private val asrProvider: ASRProvider, private val nlpProvde
                 if (result == Commands.HI_IDEA) {
                     // Greet invoker
                     TTSService.say("Hi")
-                    IDEService.invokeAction("Idear.Start")
+                    VoiceRecordControllerAction.invoke()
                 }
             } else if (ListeningState.isActive) {
                 logger.info("Recognized: $result")

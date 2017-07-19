@@ -1,13 +1,13 @@
 package org.openasr.idear
 
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.johnlindquist.acejump.config.AceConfig
+import org.openasr.idear.actions.IdearAction
 import org.openasr.idear.asr.ASRService
 import org.openasr.idear.presentation.Icons
 
 
-class VoiceRecordControllerAction : AnAction() {
+object VoiceRecordControllerAction : IdearAction() {
     @Volatile private var isRecording = false
     private var aceJumpDefaults = AceConfig.settings.allowedChars
 

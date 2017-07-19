@@ -11,7 +11,7 @@ import java.util.*
 /**
  * Created by breandan on 7/9/2015.
  */
-class MaryTTS : TTSProvider {
+object MaryTTS : TTSProvider {
     val logger = Logger.getInstance(MaryTTS::class.java)
     private lateinit var voice: Voice
     private lateinit var maryTTS: MaryInterface
@@ -49,11 +49,9 @@ class MaryTTS : TTSProvider {
     override fun dispose() {}
 }
 
-fun main(args: Array<String>) {
-    val ttService = MaryTTS()
-    val scan = Scanner(System.`in`)
-
-    do {
-        print("Text to speak: ")
-    } while (ttService.say(scan.nextLine()))
-}
+fun main(args: Array<String>) =
+        with(Scanner(System.`in`)) {
+            do {
+                print("Text to speak: ")
+            } while (MaryTTS.say(nextLine()))
+        }

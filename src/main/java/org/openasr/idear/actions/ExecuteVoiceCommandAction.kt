@@ -6,21 +6,19 @@ import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.actions.recognition.TextToActionConverter
 import org.openasr.idear.ide.IDEService
 
-class ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
+object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
+    private val logger = Logger.getInstance(ExecuteVoiceCommandAction::class.java)
+    private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
 
     override fun actionPerformed(e: AnActionEvent) {
-        val dataContext = e.dataContext
-        val editor = IDEService.getEditor(dataContext)!!
+        val editor = IDEService.getEditor(e.dataContext)!!
 
         val provider = TextToActionConverter(e.dataContext)
         val info = provider.extractAction(e.getData(KEY)!!)
         if (info != null) {
-            invoke(editor, info)
+            runInEditor(editor, info)
         } else {
             logger.info("Command not recognized")
         }
     }
-
-    private val logger = Logger.getInstance(ExecuteVoiceCommandAction::class.java)
-    private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
 }

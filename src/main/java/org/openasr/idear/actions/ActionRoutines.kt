@@ -2,7 +2,8 @@ package org.openasr.idear.actions
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.actionSystem.IdeActions
+import com.intellij.openapi.actionSystem.IdeActions.ACTION_RECENT_FILES
+import com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_SETTINGS
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
@@ -177,8 +178,8 @@ object ActionRoutines {
 
     fun routineOpen(c: String) {
         when {
-            c.endsWith(Commands.SETTINGS) -> IDEService.invokeAction(IdeActions.ACTION_SHOW_SETTINGS)
-            c.endsWith(Commands.RECENT) -> IDEService.invokeAction(IdeActions.ACTION_RECENT_FILES)
+            c.endsWith(Commands.SETTINGS) -> IDEService.invokeAction(ACTION_SHOW_SETTINGS)
+            c.endsWith(Commands.RECENT) -> IDEService.invokeAction(ACTION_RECENT_FILES)
             c.endsWith(Commands.TERMINAL) -> IDEService.invokeAction("ActivateTerminalToolWindow")
         }
     }
@@ -265,7 +266,7 @@ object ActionRoutines {
             // Notify of successful proceed
             beep()
 
-            IDEService.invokeAction("Idear.VoiceAction")
+            ExecuteVoiceCommandAction.invoke()
         } catch (e: IOException) {
             logger.error("Panic! Failed to dump WAV", e)
         }

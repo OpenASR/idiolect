@@ -16,11 +16,12 @@ object IDEService {
      */
     fun invokeAction(actionId: String): ActionCallback =
             with(ActionManager.getInstance()) {
-                var t: ActionCallback? = null
+                var callback: ActionCallback? = null
                 ApplicationManager.getApplication().invokeAndWait {
-                    t = tryToExecute(getAction(actionId), ActionCommand.getInputEvent(actionId), null, null, true)
+                    callback = tryToExecute(getAction(actionId),
+                            ActionCommand.getInputEvent(actionId), null, null, true)
                 }
-                return t!!
+                return callback!!
             }
 
     fun type(vararg keys: Int) = Keyboard.type(*keys)
