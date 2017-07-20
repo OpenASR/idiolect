@@ -7,9 +7,7 @@ import com.intellij.openapi.diagnostic.Logger
 object GrammarService : AnActionListener {
     private val logger = Logger.getInstance(GrammarService::class.java)
 
-    fun init() {
-        ActionManager.getInstance().addAnActionListener(this)
-    }
+    fun init() = ActionManager.getInstance().addAnActionListener(this)
 
     override fun beforeActionPerformed(anAction: AnAction,
                                        dataContext: DataContext,
@@ -24,12 +22,8 @@ object GrammarService : AnActionListener {
 
     override fun afterActionPerformed(anAction: AnAction?,
                                       dataContext: DataContext?,
-                                      anActionEvent: AnActionEvent?) {
+                                      anActionEvent: AnActionEvent?) = //swap out a context aware grammar
+            Unit
 
-        //swap out a context aware grammar
-    }
-
-    override fun beforeEditorTyping(c: Char, dataContext: DataContext?) {
-
-    }
+    override fun beforeEditorTyping(c: Char, dataContext: DataContext?) = Unit
 }

@@ -45,7 +45,7 @@ object MaryTTS : TTSProvider {
         return true
     }
 
-    override fun dispose() {}
+    override fun dispose() = Unit
 }
 
 fun main(args: Array<String>) =

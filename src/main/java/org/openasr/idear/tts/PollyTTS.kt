@@ -37,7 +37,7 @@ object PollyTTS : TTSProvider {
                 } else false
             }
 
-    override fun dispose() {}
+    override fun dispose() = Unit
 
     private fun synthesize(text: String, format: OutputFormat): InputStream? {
         val synthReq = SynthesizeSpeechRequest().withText(text).withVoiceId(voice.id).withOutputFormat(format)
