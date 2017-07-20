@@ -3,8 +3,7 @@ package org.openasr.idear
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiFile
+import com.intellij.psi.*
 
 class CodeToTextConverter(private val myFile: PsiFile,
                           private val myRange: TextRange?,

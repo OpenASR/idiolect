@@ -6,15 +6,14 @@ import com.intellij.openapi.extensions.PluginId
 import org.openasr.idear.asr.ASRService
 import org.openasr.idear.tts.TTSService
 
-class Idear : ApplicationComponent {
+object Idear : ApplicationComponent {
+    val plugin = PluginManager.getPlugin(PluginId.getId("org.openasr.idear"))!!
 
     override fun initComponent() {
         initTTSService()
     }
 
     private fun initTTSService() {
-        val id = PluginId.getId("org.openasr.idear")
-        val plugin = PluginManager.getPlugin(id)!!
 
         val currentThread = Thread.currentThread()
         val currentClassLoader = Thread.currentThread().contextClassLoader

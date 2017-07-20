@@ -21,7 +21,7 @@ import java.util.List;
 
 public class GoogleHelper {
     private static final Logger logger = Logger.getInstance(GoogleHelper.class);
-//    private static final String API_KEY = "AIzaSyB0DS1X9_qkZw2keZWw9p9EwUb9cV2bYsw";
+    //    private static final String API_KEY = "AIzaSyB0DS1X9_qkZw2keZWw9p9EwUb9cV2bYsw";
     private static final String URL_PRE = "https://www.google.com/speech-api/v2/recognize";
     private static final String URL_SEARCH = "https://www.google.com/search?q=";
     private static final String API_KEY = "AIzaSyDhaglUIfPFvtYqKKpmhLQfkeiBBzgT2XE";
@@ -41,7 +41,7 @@ public class GoogleHelper {
             // chunking-ly with two JSON objects instead of single one
             return parseGSAPIResponse(slurp(jsonResponse.getRawBody()));
         } catch (IOException | UnirestException | JSONException e) {
-            logger.error("Panic! Failed process response of GSAPI!",e);
+            logger.error("Panic! Failed process response of GSAPI!", e);
         }
 
         return Collections.emptyList();
@@ -67,8 +67,8 @@ public class GoogleHelper {
     }
 
     private static List<Pair<String, Double>> parseGSAPIResponse(String r)
-        throws
-        JSONException {
+            throws
+            JSONException {
         List<Pair<String, Double>> res = new ArrayList<>();
         logger.info(r);
         if (r.length() < 30) {

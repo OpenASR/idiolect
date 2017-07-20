@@ -1,12 +1,8 @@
 package org.openasr.idear.recognizer.awslex
 
-import com.amazonaws.auth.AWSCredentialsProvider
-import com.amazonaws.auth.AWSStaticCredentialsProvider
-import com.amazonaws.auth.BasicSessionCredentials
+import com.amazonaws.auth.*
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentityClientBuilder
-import com.amazonaws.services.cognitoidentity.model.Credentials
-import com.amazonaws.services.cognitoidentity.model.GetCredentialsForIdentityRequest
-import com.amazonaws.services.cognitoidentity.model.GetIdRequest
+import com.amazonaws.services.cognitoidentity.model.*
 
 object AwsUtils {
     val ACCOUNT_ID = "317105675130"

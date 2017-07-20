@@ -1,8 +1,7 @@
 package org.openasr.idear.tts
 
 import com.intellij.openapi.diagnostic.Logger
-import marytts.LocalMaryInterface
-import marytts.MaryInterface
+import marytts.*
 import marytts.exceptions.MaryConfigurationException
 import marytts.modules.synthesis.Voice
 import marytts.util.data.audio.AudioPlayer

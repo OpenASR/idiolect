@@ -2,8 +2,7 @@ package org.openasr.idear.asr
 
 import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.VoiceRecordControllerAction
-import org.openasr.idear.nlp.Commands
-import org.openasr.idear.nlp.NlpProvider
+import org.openasr.idear.nlp.*
 import org.openasr.idear.tts.TTSService
 
 
@@ -55,9 +54,9 @@ class ASRControlLoop(private val asrProvider: ASRProvider, private val nlpProvde
         private val logger = Logger.getInstance(ASRControlLoop::class.java)
 
         private fun splitCamelCase(s: String): String = s.replace(String.format("%s|%s|%s",
-            "(?<=[A-Z])(?=[A-Z][a-z])",
-            "(?<=[^A-Z])(?=[A-Z])",
-            "(?<=[A-Za-z])(?=[^A-Za-z])"
+                "(?<=[A-Z])(?=[A-Z][a-z])",
+                "(?<=[^A-Z])(?=[A-Z])",
+                "(?<=[A-Za-z])(?=[^A-Za-z])"
         ).toRegex(), " ")
     }
 }

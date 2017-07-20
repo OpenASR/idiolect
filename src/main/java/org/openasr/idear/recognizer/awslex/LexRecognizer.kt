@@ -3,17 +3,13 @@ package org.openasr.idear.recognizer.awslex
 import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
 import com.amazonaws.services.lexruntime.model.DialogState
 import com.darkprograms.speech.microphone.MicrophoneAnalyzer
-import com.darkprograms.speech.recognizer.vad.SimpleVAD
-import com.darkprograms.speech.recognizer.vad.VoiceActivityDetector
-import com.darkprograms.speech.recognizer.vad.VoiceActivityListener
+import com.darkprograms.speech.recognizer.vad.*
 import org.json.JSONObject
 import org.openasr.idear.asr.ASRSystem
 import org.openasr.idear.asr.awslex.LexASR
-import org.openasr.idear.nlp.LoggingNlpResultListener
-import org.openasr.idear.nlp.NlpResultListener
+import org.openasr.idear.nlp.*
 import org.openasr.idear.recognizer.SpeechRecognizer
-import java.util.logging.Level
-import java.util.logging.Logger
+import java.util.logging.*
 import javax.sound.sampled.AudioInputStream
 import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
 
@@ -32,10 +28,10 @@ open class LexRecognizer(val botName: String = "Idear", val botAlias: String = "
 
     init {
         var lexRuntime = AmazonLexRuntimeClientBuilder
-                            .standard()
-                            .withRegion(AwsUtils.REGION)
-                            .withCredentials(AwsUtils.credentialsProvider)
-                            .build()
+                .standard()
+                .withRegion(AwsUtils.REGION)
+                .withCredentials(AwsUtils.credentialsProvider)
+                .build()
         lex = JarvisLex(lexRuntime, botName, botAlias, "anonymous")
     }
 
@@ -59,7 +55,8 @@ open class LexRecognizer(val botName: String = "Idear", val botAlias: String = "
 
     /** This starts a new JARVIS VAD thread which calls onVoiceActivity() with results */
     override fun startRecognition() = vad.detectVoiceActivity(mic, this)
-//        // debug versions
+
+    //        // debug versions
 //        // just record utterances to /tmp
 //        vad.detectVoiceActivity(mic, RecordingListener())
 //        // record to /tmp, but also call onVoiceActivity() below
@@ -114,7 +111,11 @@ open class LexRecognizer(val botName: String = "Idear", val botAlias: String = "
         }
     }
 
-    private fun stringToMap(json: String?) = if (json == null) { null } else { JSONObject(json).toMap() }
+    private fun stringToMap(json: String?) = if (json == null) {
+        null
+    } else {
+        JSONObject(json).toMap()
+    }
 
     companion object {
         private val logger = Logger.getLogger(LexRecognizer::class.java.simpleName)

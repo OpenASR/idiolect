@@ -1,7 +1,5 @@
 package org.openasr.idear.tts
 
-import org.junit.Test
-
 class PollyTTSTest {
 
 //    @Test

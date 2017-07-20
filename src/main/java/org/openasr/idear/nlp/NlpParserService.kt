@@ -1,32 +1,17 @@
 package org.openasr.idear.nlp
 
-import com.intellij.ide.plugins.PluginManager
-import com.intellij.openapi.extensions.PluginId
 import opennlp.tools.cmdline.parser.ParserTool
-import opennlp.tools.parser.Parse
-import opennlp.tools.parser.Parser
-import opennlp.tools.parser.ParserFactory
-import opennlp.tools.parser.ParserModel
+import opennlp.tools.parser.*
 import org.jetbrains.annotations.TestOnly
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
+import org.openasr.idear.Idear
+import java.io.*
 
-class NlpParserService @TestOnly
-constructor(private val path: String?) : ParserService() {
+class NlpParserService @TestOnly constructor(path: String?) : ParserService() {
     private var parser: Parser? = null
 
-    private val modelInputStream: InputStream
-        @Throws(FileNotFoundException::class)
-        get() {
-            if (path != null) return FileInputStream(path)
-            val id = PluginId.getId("org.openasr.idear")
-            val plugin = PluginManager.getPlugin(id)!!
-
-            return plugin.pluginClassLoader.getResourceAsStream("en-parser-chunking.bin")
-        }
-
+    private val modelInputStream: InputStream =
+            if (path != null) FileInputStream(path)
+            else Idear.plugin.pluginClassLoader.getResourceAsStream("en-parser-chunking.bin")
 
     override fun parseSentence(sentence: String): Parse? =
             if (parser == null) throw IllegalStateException()

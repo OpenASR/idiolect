@@ -6,7 +6,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
-import com.intellij.util.IncorrectOperationException
 import org.jetbrains.annotations.Nls
 
 class JavaPronouncer : IntentionAction {
@@ -24,7 +23,6 @@ class JavaPronouncer : IntentionAction {
         return psiFile.language === JavaLanguage.INSTANCE && selectionModel.hasSelection()
     }
 
-    @Throws(IncorrectOperationException::class)
     override fun invoke(project: Project, editor: Editor, psiFile: PsiFile) {
         val start = editor.selectionModel.selectionStart
         val end = editor.selectionModel.selectionEnd
@@ -35,8 +33,8 @@ class JavaPronouncer : IntentionAction {
         val caretOffset = editor.caretModel.offset
 
         val converter = org.openasr.idear.CodeToTextConverter(psiFile,
-            range,
-            caretOffset)
+                range,
+                caretOffset)
 
         val service = TTSService
         service.say(converter.toText())

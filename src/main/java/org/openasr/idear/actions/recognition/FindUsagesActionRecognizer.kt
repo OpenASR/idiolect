@@ -4,8 +4,7 @@ import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext
 import com.intellij.psi.PsiElement
-import com.intellij.usages.UsageTarget
-import com.intellij.usages.UsageView
+import com.intellij.usages.*
 import org.openasr.idear.ide.IDEService
 import org.openasr.idear.psi.PsiUtil.findContainingClass
 import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
@@ -67,7 +66,9 @@ class FindUsagesActionRecognizer : ActionRecognizer {
     private fun extractNameOf(pivot: String, sentence: List<String>): String {
         val target = StringBuilder()
 
-        for (i in sentence.indexOf(pivot) + 1 until sentence.size) { target.append(sentence[i]) }
+        for (i in sentence.indexOf(pivot) + 1 until sentence.size) {
+            target.append(sentence[i])
+        }
 
         return target.toString()
     }

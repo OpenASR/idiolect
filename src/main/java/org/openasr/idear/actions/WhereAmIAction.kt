@@ -1,10 +1,7 @@
 package org.openasr.idear.actions
 
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiMethod
+import com.intellij.psi.*
 import org.openasr.idear.ide.IDEService
 import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
 import org.openasr.idear.tts.TTSService

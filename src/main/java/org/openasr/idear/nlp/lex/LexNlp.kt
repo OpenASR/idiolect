@@ -1,11 +1,8 @@
 package org.openasr.idear.nlp.lex
 
-import com.amazonaws.services.lexruntime.AmazonLexRuntime
-import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
-import com.amazonaws.services.lexruntime.model.DialogState
-import com.amazonaws.services.lexruntime.model.PostTextRequest
-import org.openasr.idear.nlp.NlpProvider
-import org.openasr.idear.nlp.NlpResultListener
+import com.amazonaws.services.lexruntime.*
+import com.amazonaws.services.lexruntime.model.*
+import org.openasr.idear.nlp.*
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 import org.openasr.idear.recognizer.awslex.AwsUtils
 
@@ -53,11 +50,11 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
      */
     override fun processUtterance(utterance: String) {
         val request = PostTextRequest()
-            .withBotName("Idear")
-            .withBotAlias("PROD")
-            .withInputText(utterance)
-            .withUserId(userId)
-            .withSessionAttributes(sessionAttributes)
+                .withBotName("Idear")
+                .withBotAlias("PROD")
+                .withInputText(utterance)
+                .withUserId(userId)
+                .withSessionAttributes(sessionAttributes)
 
         val response = lex.postText(request)
 //        println(response)

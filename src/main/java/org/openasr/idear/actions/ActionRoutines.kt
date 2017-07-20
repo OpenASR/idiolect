@@ -2,18 +2,14 @@ package org.openasr.idear.actions
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.actionSystem.IdeActions.ACTION_RECENT_FILES
-import com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_SETTINGS
-import com.intellij.openapi.application.ApplicationInfo
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.actionSystem.IdeActions.*
+import com.intellij.openapi.application.*
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Pair
 import com.intellij.util.Consumer
-import org.openasr.idear.GoogleHelper
-import org.openasr.idear.WordToNumberConverter
+import org.openasr.idear.*
 import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
-import org.openasr.idear.asr.ASRService
-import org.openasr.idear.asr.ListeningState
+import org.openasr.idear.asr.*
 import org.openasr.idear.ide.IDEService
 import org.openasr.idear.nlp.Commands
 import org.openasr.idear.recognizer.CustomMicrophone
@@ -284,8 +280,7 @@ object ActionRoutines {
             var searchQueryTuple: Pair<String, Double>? = null
             beep()
             try {
-                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(
-                        GOOGLE_QUERY_DURATION))
+                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION))
             } catch (e: IOException) {
                 logger.error("Panic! Failed to dump WAV", e)
             }

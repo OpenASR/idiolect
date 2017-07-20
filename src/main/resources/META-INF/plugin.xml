@@ -1,12 +1,12 @@
 <idea-plugin>
-  <id>org.openasr.idear</id>
-  <name>idear</name>
-  <vendor email="breandan.considine@gmail.com" url="http://github.com/OpenASR/idear">OpenASR</vendor>
+    <id>com.jetbrains.idear</id>
+    <name>idear</name>
+    <vendor email="bre@ndan.co" url="http://github.com/OpenASR/idear">OpenASR</vendor>
 
-  <description>
-    <![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands and assists with simple actions like debugging, navigation, and refactoring. For a complete list of commands, please see the <a href="https://github.com/breandan/idear/blob/master/src/main/resources/org.openasr.idear/grammars/command.gram">command grammar</a>.]]></description>
-  <change-notes>
-    <![CDATA[
+    <description>
+        <![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands and assists with simple actions like debugging, navigation, and refactoring. For a complete list of commands, please see the <a href="https://github.com/breandan/idear/blob/master/src/main/resources/org.openasr.idear/grammars/command.gram">command grammar</a>.]]></description>
+    <change-notes>
+        <![CDATA[
         <html>
         <dl>
             <dt>1.3</dt>
@@ -18,58 +18,62 @@
         </dl>
         </html>
         ]]>
-    <![CDATA[]]>
-  </change-notes>
+        <![CDATA[]]>
+    </change-notes>
 
-  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="131"/>
+    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
 
-  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-  <depends>com.intellij.modules.lang</depends>
-  <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
-  <depends>AceJump</depends>
+    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
+    <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
+    <depends>AceJump</depends>
 
-  <extensionPoints>
-    <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer"/>
-  </extensionPoints>
+    <extensionPoints>
+        <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer"/>
+    </extensionPoints>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceInterface="org.openasr.idear.settings.IdearConfiguration" serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
-    <applicationConfigurable groupId="tools" displayName="Idear" id="preferences.IdearConfiguration" instance="org.openasr.idear.settings.IdearConfiguration"/>
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceInterface="org.openasr.idear.settings.IdearConfiguration"
+                            serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
+        <applicationConfigurable groupId="tools" displayName="Idear" id="preferences.IdearConfiguration"
+                                 instance="org.openasr.idear.settings.IdearConfiguration"/>
+    </extensions>
 
-  <extensions defaultExtensionNs="org.openasr.idear">
-    <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
-    <actionRecognizer implementation="org.openasr.idear.actions.recognition.InlineActionRecognizer"/>
-    <actionRecognizer implementation="org.openasr.idear.actions.recognition.RunActionRecognizer"/>
-    <actionRecognizer implementation="org.openasr.idear.actions.recognition.DebugActionRecognizer"/>
-    <actionRecognizer implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
-    <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
-    <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
-  </extensions>
+    <extensions defaultExtensionNs="org.openasr.idear">
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.InlineActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RunActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.DebugActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
+    </extensions>
 
-  <application-components>
-    <component>
-      <implementation-class>org.openasr.idear.Idear</implementation-class>
-    </component>
-  </application-components>
+    <application-components>
+        <component>
+            <implementation-class>org.openasr.idear.Idear</implementation-class>
+        </component>
+    </application-components>
 
-  <project-components>
-    <!-- Add your project components here -->
-  </project-components>
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
 
-  <actions>
-    <action id="Idear.Start" class="org.openasr.idear.VoiceRecordControllerAction" text="Voice control" description="Start" icon="/org.openasr.idear/icons/start.png">
-      <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
-    </action>
+    <actions>
+        <action id="Idear.Start" class="org.openasr.idear.VoiceRecordControllerAction" text="Voice control"
+                description="Start" icon="/org.openasr.idear/icons/start.png">
+            <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
+        </action>
 
-    <action id="Idear.SpeechStuff" text="Invoke by speech" class="org.openasr.idear.actions.ExecuteActionFromPredefinedText"/>
-    <action id="Idear.VoiceAction" text="Invoke by voice-command" class="org.openasr.idear.actions.ExecuteVoiceCommandAction"/>
+        <action id="Idear.SpeechStuff" text="Invoke by speech"
+                class="org.openasr.idear.actions.ExecuteActionFromPredefinedText"/>
+        <action id="Idear.VoiceAction" text="Invoke by voice-command"
+                class="org.openasr.idear.actions.ExecuteVoiceCommandAction"/>
 
-    <!-- Home-grown actions -->
+        <!-- Home-grown actions -->
 
-    <action id="Idear.WhereAmI" text="Name the place you are" class="org.openasr.idear.actions.WhereAmIAction"/>
-  </actions>
-
+        <action id="Idear.WhereAmI" text="Name the place you are" class="org.openasr.idear.actions.WhereAmIAction"/>
+    </actions>
 </idea-plugin>

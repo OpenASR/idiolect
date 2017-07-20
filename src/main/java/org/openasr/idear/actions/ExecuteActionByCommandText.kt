@@ -1,16 +1,11 @@
 package org.openasr.idear.actions
 
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_NEXT_TEMPLATE_VARIABLE
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionManager
-import org.openasr.idear.actions.recognition.ActionCallInfo
-import org.openasr.idear.actions.recognition.TextToActionConverter
-import org.openasr.idear.ide.IDEService
-import org.openasr.idear.ide.dataContext
+import org.openasr.idear.actions.recognition.*
+import org.openasr.idear.ide.*
 
 abstract class ExecuteActionByCommandText : IdearAction() {
     override fun actionPerformed(e: AnActionEvent) {

@@ -1,7 +1,6 @@
 package org.openasr.idear.nlp
 
-import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_SELECT_WORD_AT_CARET
-import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_UNSELECT_WORD_AT_CARET
+import com.intellij.openapi.actionSystem.IdeActions.*
 import org.openasr.idear.actions.ActionRoutines.fireGoogleSearch
 import org.openasr.idear.actions.ActionRoutines.pauseSpeech
 import org.openasr.idear.actions.ActionRoutines.routineAbout

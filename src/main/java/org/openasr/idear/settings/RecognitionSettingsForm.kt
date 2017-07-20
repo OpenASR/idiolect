@@ -16,19 +16,19 @@ class RecognitionSettingsForm {
     }
 
     companion object {
-        enum class ASRServiceId(val label: String) {
+        enum class ASRServiceId(private val label: String) {
             CMU_SPHINX("CMU Sphinx"), AWS_LEX("Amazon Lex");
 
             override fun toString() = label
         }
 
-        enum class NLPServiceId(val label: String) {
+        enum class NLPServiceId(private val label: String) {
             PATTERN("Pattern"), AWS_LEX("Amazon Lex");
 
             override fun toString() = label
         }
 
-        enum class TTSServiceId(val label: String) {
+        enum class TTSServiceId(private val label: String) {
             MARY("Mary TTS"), AWS_POLLY("Amazon Polly");
 
             override fun toString() = label

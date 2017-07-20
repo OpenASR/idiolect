@@ -1,8 +1,7 @@
 package org.openasr.idear.nlp
 
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
-import java.util.logging.Level
-import java.util.logging.Logger
+import java.util.logging.*
 
 
 class LoggingNlpResultListener : NlpResultListener {

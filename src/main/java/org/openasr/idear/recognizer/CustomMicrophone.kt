@@ -1,8 +1,7 @@
 package org.openasr.idear.recognizer
 
 import com.intellij.openapi.diagnostic.Logger
-import java.io.File
-import java.io.IOException
+import java.io.*
 import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
 

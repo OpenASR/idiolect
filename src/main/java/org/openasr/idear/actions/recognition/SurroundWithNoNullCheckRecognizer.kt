@@ -3,10 +3,7 @@ package org.openasr.idear.actions.recognition
 import com.intellij.codeInsight.daemon.impl.ShowIntentionsPass
 import com.intellij.ide.DataManager
 import com.intellij.ide.actions.ApplyIntentionAction
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.actionSystem.Presentation
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.Computable
 import com.intellij.psi.PsiDocumentManager

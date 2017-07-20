@@ -1,8 +1,7 @@
 package org.openasr.idear.asr.cmusphinx
 
 import com.intellij.openapi.diagnostic.Logger
-import edu.cmu.sphinx.api.AbstractSpeechRecognizer
-import edu.cmu.sphinx.api.Configuration
+import edu.cmu.sphinx.api.*
 import edu.cmu.sphinx.decoder.ResultListener
 import edu.cmu.sphinx.frontend.endpoint.SpeechClassifier.PROP_THRESHOLD
 import edu.cmu.sphinx.frontend.util.StreamDataSource

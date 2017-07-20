@@ -1,7 +1,6 @@
 package org.openasr.idear.actions
 
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.DataKey
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.actions.recognition.TextToActionConverter
 import org.openasr.idear.ide.IDEService

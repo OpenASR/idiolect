@@ -1,14 +1,11 @@
 package org.openasr.idear.settings
 
-import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.State
-import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.*
 import com.intellij.openapi.options.Configurable
 import org.openasr.idear.asr.ASRControlLoop
 import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
-import org.openasr.idear.nlp.IntellijNlpResultListener
-import org.openasr.idear.nlp.PatternBasedNlpProvider
+import org.openasr.idear.nlp.*
 import org.openasr.idear.nlp.lex.LexNlp
 import org.openasr.idear.recognizer.awslex.LexRecognizer
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId
@@ -16,10 +13,8 @@ import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId.PATTERN
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.TTSServiceId
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.TTSServiceId.AWS_POLLY
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.TTSServiceId.MARY
-import org.openasr.idear.tts.MaryTTS
-import org.openasr.idear.tts.PollyTTS
+import org.openasr.idear.settings.RecognitionSettingsForm.Companion.TTSServiceId.*
+import org.openasr.idear.tts.*
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.AWS_LEX as LEX_ASR
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId.AWS_LEX as LEX_NLP
 
@@ -69,8 +64,8 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
     override fun getDisplayName() = "Idear"
 
     override fun isModified() = gui.asrService != settings.asrService ||
-                    gui.ttsService != settings.ttsService ||
-                    gui.nlpService != settings.nlpService
+            gui.ttsService != settings.ttsService ||
+            gui.nlpService != settings.nlpService
 
     override fun createComponent() = RecognitionSettingsForm().apply { gui = this }.rootPanel
 
