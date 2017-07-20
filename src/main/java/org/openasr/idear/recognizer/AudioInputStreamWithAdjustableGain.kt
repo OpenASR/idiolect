@@ -6,10 +6,13 @@ import java.lang.Byte.*
 import javax.sound.sampled.*
 
 class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLine) : AudioInputStream(line) {
-    private var masterGain: Double = DEFAULT_MASTER_GAIN
-    private var noiseLevel: Double = DEFAULT_NOISE_LEVEL
+    private val DEFAULT_MASTER_GAIN = 1.0
+    private val DEFAULT_NOISE_LEVEL = 0.0
+    private val logger = Logger.getInstance(AudioInputStreamWithAdjustableGain::class.java)
+    private var masterGain = DEFAULT_MASTER_GAIN
+    private var noiseLevel = DEFAULT_NOISE_LEVEL
 
-    override fun read(): Int = super.read()
+    override fun read() = super.read()
 
     override fun read(b: ByteArray): Int {
         val read = super.read(b)
@@ -50,14 +53,8 @@ class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLi
 
     fun setNoiseLevel(nl: Double) = nl.let { noiseLevel = it }
 
-    private fun adjust(b: Byte): Byte = cut((b * masterGain).toByte())
+    private fun adjust(b: Byte) = cut((b * masterGain).toByte())
 
     private fun cut(b: Byte) =
             if (b < MAX_VALUE * noiseLevel && b > MIN_VALUE * noiseLevel) 0 else b
-
-    companion object {
-        private val DEFAULT_MASTER_GAIN = 1.0
-        private val DEFAULT_NOISE_LEVEL = 0.0
-        private val logger = Logger.getInstance(AudioInputStreamWithAdjustableGain::class.java)
-    }
 }

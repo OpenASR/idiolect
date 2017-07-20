@@ -6,38 +6,27 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
-import org.jetbrains.annotations.Nls
+import org.openasr.idear.CodeToTextConverter
+import org.openasr.idear.ide.isTextCurrentlySelected
 
 class JavaPronouncer : IntentionAction {
 
-    @Nls
-    override fun getText(): String = "Pronounce"
+    override fun getText() = "Pronounce"
 
-    @Nls
-    override fun getFamilyName(): String = "Pronounce"
+    override fun getFamilyName() = "Pronounce"
 
-    override fun isAvailable(project: Project,
-                             editor: Editor,
-                             psiFile: PsiFile): Boolean {
-        val selectionModel = editor.selectionModel
-        return psiFile.language === JavaLanguage.INSTANCE && selectionModel.hasSelection()
-    }
+    override fun isAvailable(project: Project, editor: Editor, psiFile: PsiFile) =
+        psiFile.language === JavaLanguage.INSTANCE && editor.isTextCurrentlySelected()
 
     override fun invoke(project: Project, editor: Editor, psiFile: PsiFile) {
         val start = editor.selectionModel.selectionStart
         val end = editor.selectionModel.selectionEnd
         var range: TextRange? = null
-        if (end > start) {
-            range = TextRange(start, end)
-        }
+        if (end > start) range = TextRange(start, end)
         val caretOffset = editor.caretModel.offset
+        val converter = CodeToTextConverter(psiFile, range, caretOffset)
 
-        val converter = org.openasr.idear.CodeToTextConverter(psiFile,
-                range,
-                caretOffset)
-
-        val service = TTSService
-        service.say(converter.toText())
+        TTSService.say(converter.toText())
     }
 
     override fun startInWriteAction() = false

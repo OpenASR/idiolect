@@ -34,9 +34,9 @@ object ASRService {
 
     fun waitForUtterance() = asrSystem.waitForUtterance()
 
-    fun activate(): Boolean = ListeningState.activate()
+    fun activate() = ListeningState.activate()
 
-    fun deactivate(): Boolean = ListeningState.standBy()
+    fun deactivate() = ListeningState.standBy()
 
     private fun terminate() = asrSystem.stopRecognition()
 

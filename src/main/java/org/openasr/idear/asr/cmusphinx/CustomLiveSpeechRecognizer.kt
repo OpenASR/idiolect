@@ -20,7 +20,7 @@ class CustomLiveSpeechRecognizer(configuration: Configuration) : AbstractSpeechR
 
     init {
         context.getInstance(StreamDataSource::class.java).setInputStream(microphone.stream)
-        context.setLocalProperty(String.format("speechClassifier->%s", PROP_THRESHOLD), SPEECH_SENSITIVITY)
+        context.setLocalProperty("speechClassifier->$PROP_THRESHOLD", SPEECH_SENSITIVITY)
     }
 
     /**
@@ -46,14 +46,9 @@ class CustomLiveSpeechRecognizer(configuration: Configuration) : AbstractSpeechR
         recognizer.deallocate()
     }
 
-    fun addResultListener(listener: ResultListener) {
-        recognizer.addResultListener(listener)
-    }
+    fun addResultListener(listener: ResultListener) = recognizer.addResultListener(listener)
 
-    fun removeResultListener(listener: ResultListener) {
-        recognizer.removeResultListener(listener)
-    }
-
+    fun removeResultListener(listener: ResultListener) = recognizer.removeResultListener(listener)
 
     //    public void setMasterGain(double mg) {
     //        microphone.setMasterGain(mg);

@@ -11,7 +11,7 @@ class LexASR(botName: String = "idear", botAlias: String = "PROD") : LexRecogniz
     // TODO: the capacity of the queue could probably be 1...
     private var utterances: ArrayBlockingQueue<String> = ArrayBlockingQueue(10)
 
-    override fun waitForUtterance(): String = utterances.take()
+    override fun waitForUtterance() = utterances.take()
 
     override fun onVoiceActivity(audioInputStream: AudioInputStream) {
         val result = lex.getRecognizedDataForStream(audioInputStream).result

@@ -4,8 +4,13 @@ import com.intellij.openapi.diagnostic.Logger
 import java.io.*
 import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
+import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
 
 class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigEndian: Boolean) {
+    private val logger = Logger.getInstance(CustomMicrophone::class.java)
+
+    private val DURATION = 4500
+
     private val line: TargetDataLine
     //    /* package */ void setMasterGain(double mg) {
     //        double pmg = inputStream.setMasterGain(mg);
@@ -26,19 +31,14 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
     init {
         val format = AudioFormat(sampleRate, sampleSize, 1, signed, bigEndian)
 
-        try {
-            line = AudioSystem.getTargetDataLine(format)
-            line.open()
+        line = AudioSystem.getTargetDataLine(format)
+        line.open()
 
-            if (line.isControlSupported(FloatControl.Type.MASTER_GAIN))
-                logger.info("Microphone: MASTER_GAIN supported")
-            else
-                logger.warn("Microphone: MASTER_GAIN NOT supported")
+        if (line.isControlSupported(MASTER_GAIN))
+            logger.info("Microphone: MASTER_GAIN supported")
+        else logger.warn("Microphone: MASTER_GAIN NOT supported")
 
-            //masterGainControl = findMGControl(line);
-        } catch (e: LineUnavailableException) {
-            throw IllegalStateException(e)
-        }
+        //masterGainControl = findMGControl(line);
 
         stream = AudioInputStreamWithAdjustableGain(line)
     }
@@ -47,11 +47,7 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
     fun stopRecording() = line.stop()
 
     companion object {
-        private val logger = Logger.getInstance(CustomMicrophone::class.java)
-
-        private val DURATION = 4500
         private val TEMP_FILE = "/tmp/X.wav"
-
         //TODO Refactor this API into a CustomMicrophone instance
         @Throws(IOException::class)
         fun recordFromMic(duration: Long): File {
@@ -69,7 +65,6 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
             mic.startRecording()
 
             return File(TEMP_FILE).apply { AudioSystem.write(mic.stream, WAVE, this) }
-
         }
     }
 }

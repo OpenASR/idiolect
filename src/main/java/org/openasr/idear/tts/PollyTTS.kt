@@ -1,7 +1,8 @@
 package org.openasr.idear.tts
 
-import com.amazonaws.services.polly.*
+import com.amazonaws.services.polly.AmazonPollyClientBuilder
 import com.amazonaws.services.polly.model.*
+import javazoom.jl.player.FactoryRegistry.systemRegistry
 import javazoom.jl.player.advanced.*
 import org.openasr.idear.recognizer.awslex.AwsUtils
 import java.io.InputStream
@@ -20,11 +21,12 @@ import java.util.*
  */
 
 object PollyTTS : TTSProvider {
-    val polly: AmazonPolly = AmazonPollyClientBuilder.standard().apply {
+    private val polly = AmazonPollyClientBuilder.standard().apply {
         region = AwsUtils.REGION
         credentials = AwsUtils.credentialsProvider
     }.build()
-    private var voice: Voice = polly.describeVoices(DescribeVoicesRequest()).voices[0]
+
+    private var voice = polly.describeVoices(DescribeVoicesRequest()).voices[0]
 
     override fun say(utterance: String) =
             utterance.let {
@@ -32,9 +34,7 @@ object PollyTTS : TTSProvider {
                 if (audio != null) {
                     playAudio(audio)
                     true
-                } else {
-                    false
-                }
+                } else false
             }
 
     override fun dispose() {}
@@ -48,8 +48,7 @@ object PollyTTS : TTSProvider {
 
     private fun playAudio(inputStream: InputStream) {
         //create an MP3 player
-        val player = AdvancedPlayer(inputStream,
-                javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice())
+        val player = AdvancedPlayer(inputStream, systemRegistry().createAudioDevice())
 
         player.playBackListener = object : PlaybackListener() {
             override fun playbackStarted(evt: PlaybackEvent?) = println("Playback started")
@@ -59,39 +58,7 @@ object PollyTTS : TTSProvider {
 
         // play it!
         player.play()
-
-        /* Borrowed from http://blog.conygre.com/2016/12/06/at-the-third-stroke-the-time-will-be-spoken-by-aws-polly/
-        ...but it didn't work
-
-        val audio = AudioSystem.getAudioInputStream(BufferedInputStream(inputStream))
-        val format = getOutFormat(audio.format)
-        val info = DataLine.Info(SourceDataLine::class.java, format)
-
-        val line = AudioSystem.getLine(info) as SourceDataLine
-        if (line != null) {
-            line!!.open(format)
-            line!!.start()
-            stream(AudioSystem.getAudioInputStream(format, audio), line)
-            line!!.drain()
-            line!!.stop()
-        }*/
     }
-
-    /*private fun getOutFormat(inFormat: AudioFormat): AudioFormat {
-        val ch = inFormat.channels
-        val rate = inFormat.sampleRate
-        return AudioFormat(PCM_SIGNED, rate, 16, ch, ch * 2, rate, false)
-    }
-
-    @Throws(IOException::class)
-    private fun stream(`in`: AudioInputStream, line: SourceDataLine) {
-        val buffer = ByteArray(65536)
-        var n = 0
-        while (n != -1) {
-            line.write(buffer, 0, n)
-            n = `in`.read(buffer, 0, buffer.size)
-        }
-    }*/
 }
 
 fun main(args: Array<String>) {

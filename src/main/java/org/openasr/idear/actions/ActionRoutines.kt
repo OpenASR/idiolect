@@ -23,8 +23,8 @@ import javax.sound.sampled.AudioSystem
 
 
 object ActionRoutines {
-    private val COMMAND_DURATION: Long = 3500
-    private val GOOGLE_QUERY_DURATION: Long = 3000
+    private val COMMAND_DURATION = 3500L
+    private val GOOGLE_QUERY_DURATION = 3000L
     private val logger = Logger.getInstance(ActionRoutines::class.java)
 
     fun routineReleaseKey(c: String) {
