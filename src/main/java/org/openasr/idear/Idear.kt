@@ -7,14 +7,13 @@ import org.openasr.idear.asr.ASRService
 import org.openasr.idear.tts.TTSService
 
 object Idear : ApplicationComponent {
-    val plugin = PluginManager.getPlugin(PluginId.getId("org.openasr.idear"))!!
+    val plugin = PluginManager.getPlugin(PluginId.getId("com.jetbrains.idear"))!!
 
     override fun initComponent() {
         initTTSService()
     }
 
     private fun initTTSService() {
-
         val currentThread = Thread.currentThread()
         val currentClassLoader = Thread.currentThread().contextClassLoader
         try {
