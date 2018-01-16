@@ -21,7 +21,7 @@ import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
  */
 // TODO: should LexRecognizer and LexASR be swapped around?
 open class LexRecognizer(val botName: String = "Idear", val botAlias: String = "PROD") : SpeechRecognizer, VoiceActivityListener, ASRSystem {
-    private var logger = Logger.getInstance(LexRecognizer::class.java)
+    private var logger = Logger.getInstance(javaClass)
     private val mic = MicrophoneAnalyzer(16_000F)
     private val vad = SimpleVAD()
     protected val lex =
@@ -29,13 +29,9 @@ open class LexRecognizer(val botName: String = "Idear", val botAlias: String = "
                     .withRegion(AwsUtils.REGION)
                     .withCredentials(AwsUtils.credentialsProvider)
                     .build(), botName, botAlias, "anonymous")
-    private var nlpListener: NlpResultListener = LoggingNlpResultListener()
+    var nlpListener: NlpResultListener = LoggingNlpResultListener
 
     fun setUserId(userId: String) = lex.setUserId(userId)
-
-    fun setNlpResultListener(listener: NlpResultListener) {
-        nlpListener = listener
-    }
 
     override fun start() = startRecognition()
 

@@ -5,8 +5,8 @@ buildscript {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "0.2.14"
-    id("org.jetbrains.kotlin.jvm") version "1.1.3"
+    id("org.jetbrains.intellij") version "0.2.17"
+    id("org.jetbrains.kotlin.jvm") version "1.2.10"
 }
 
 intellij {
@@ -16,16 +16,12 @@ intellij {
 }
 
 group = "org.openasr"
-version = "1.3"
+version = "1.3.1"
 
 repositories {
     jcenter()
-    maven {
-        setUrl("https://oss.sonatype.org/content/repositories/releases/")
-    }
-    maven {
-        setUrl("https://oss.sonatype.org/content/repositories/snapshots/")
-    }
+    maven { setUrl("https://oss.sonatype.org/content/repositories/releases/") }
+    maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots/") }
 }
 
 dependencies {

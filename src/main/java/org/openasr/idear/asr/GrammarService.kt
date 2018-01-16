@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.ex.AnActionListener
 import com.intellij.openapi.diagnostic.Logger
 
 object GrammarService : AnActionListener {
-    private val logger = Logger.getInstance(GrammarService::class.java)
+    private val logger = Logger.getInstance(javaClass)
 
     fun init() = ActionManager.getInstance().addAnActionListener(this)
 

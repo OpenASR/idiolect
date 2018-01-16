@@ -39,7 +39,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
         private fun getASRProvider() =
                 when (settings.asrService) {
-                    CMU_SPHINX -> CMUSphinxASR()
+                    CMU_SPHINX -> CMUSphinxASR
                     LEX_ASR -> LexASR()
                 }
 

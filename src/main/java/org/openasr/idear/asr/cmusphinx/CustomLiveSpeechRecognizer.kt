@@ -13,7 +13,7 @@ import org.openasr.idear.recognizer.CustomMicrophone
 
 class CustomLiveSpeechRecognizer(configuration: Configuration) : AbstractSpeechRecognizer(configuration) {
     private val microphone = CustomMicrophone(16000f, 16, true, false)
-    private val logger = Logger.getInstance(CustomLiveSpeechRecognizer::class.java)
+    private val logger = Logger.getInstance(javaClass)
 
     // sphinx4 default sensitivity is 13.
     private val SPEECH_SENSITIVITY = 20

@@ -7,7 +7,7 @@ import javax.sound.sampled.AudioFileFormat.Type.WAVE
 import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
 
 class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigEndian: Boolean) {
-    private val logger = Logger.getInstance(CustomMicrophone::class.java)
+    private val logger = Logger.getInstance(javaClass)
 
     private val DURATION = 4500
 

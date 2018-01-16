@@ -3,9 +3,8 @@ package org.openasr.idear.nlp
 import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 
-
-class LoggingNlpResultListener : NlpResultListener {
-    private val logger = Logger.getInstance(LoggingNlpResultListener::class.java)
+object LoggingNlpResultListener : NlpResultListener {
+    private val logger = Logger.getInstance(javaClass)
 
     override fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?) =
             logger.info("Fulfilled: $intentName")

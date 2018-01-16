@@ -4,7 +4,7 @@ import com.intellij.openapi.diagnostic.Logger
 import edu.cmu.sphinx.api.Configuration
 import org.openasr.idear.asr.ASRProvider
 
-class CMUSphinxASR : ASRProvider {
+object CMUSphinxASR : ASRProvider {
     val MASTER_GAIN = 0.85
     val CONFIDENCE_LEVEL_THRESHOLD = 0.5
 
@@ -12,7 +12,7 @@ class CMUSphinxASR : ASRProvider {
     private val DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict"
     private val GRAMMAR_PATH = "resource:/org.openasr.idear/grammars"
 
-    private val logger = Logger.getInstance(CMUSphinxASR::class.java)
+    private val logger = Logger.getInstance(javaClass)
 
     private var recognizer = CustomLiveSpeechRecognizer(Configuration().apply {
         acousticModelPath = ACOUSTIC_MODEL

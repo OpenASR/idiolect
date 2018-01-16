@@ -25,7 +25,7 @@ import javax.sound.sampled.AudioSystem
 object ActionRoutines {
     private val COMMAND_DURATION = 3500L
     private val GOOGLE_QUERY_DURATION = 3000L
-    private val logger = Logger.getInstance(ActionRoutines::class.java)
+    private val logger = Logger.getInstance(javaClass)
 
     fun routineReleaseKey(c: String) {
         if (c.contains("shift")) IDEService.releaseShift()
@@ -323,7 +323,7 @@ object ActionRoutines {
             try {
                 val clip = AudioSystem.getClip()
                 val inputStream = AudioSystem.getAudioInputStream(
-                        ASRService::class.java.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
+                        ASRService.javaClass.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
                 clip.open(inputStream)
                 clip.start()
             } catch (e: Exception) {

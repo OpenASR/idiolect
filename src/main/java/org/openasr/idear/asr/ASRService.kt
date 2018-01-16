@@ -5,7 +5,7 @@ import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
 object ASRService {
-    private val logger = Logger.getInstance(ASRService::class.java)
+    private val logger = Logger.getInstance(javaClass)
     private lateinit var asrSystem: ASRSystem
 
     init {

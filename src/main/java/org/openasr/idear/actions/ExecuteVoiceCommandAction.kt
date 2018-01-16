@@ -6,7 +6,7 @@ import org.openasr.idear.actions.recognition.TextToActionConverter
 import org.openasr.idear.ide.IDEService
 
 object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
-    private val logger = Logger.getInstance(ExecuteVoiceCommandAction::class.java)
+    private val logger = Logger.getInstance(javaClass)
     private val KEY = DataKey.create<String>("Idear.VoiceCommand.Text")
 
     override fun actionPerformed(e: AnActionEvent) {

@@ -11,7 +11,7 @@ import java.util.*
  * Created by breandan on 7/9/2015.
  */
 object MaryTTS : TTSProvider {
-    val logger = Logger.getInstance(MaryTTS::class.java)
+    val logger = Logger.getInstance(javaClass)
     private lateinit var voice: Voice
     private lateinit var maryTTS: MaryInterface
 

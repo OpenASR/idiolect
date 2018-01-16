@@ -8,7 +8,7 @@ import javax.sound.sampled.*
 class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLine) : AudioInputStream(line) {
     private val DEFAULT_MASTER_GAIN = 1.0
     private val DEFAULT_NOISE_LEVEL = 0.0
-    private val logger = Logger.getInstance(AudioInputStreamWithAdjustableGain::class.java)
+    private val logger = Logger.getInstance(javaClass)
     private var masterGain = DEFAULT_MASTER_GAIN
     private var noiseLevel = DEFAULT_NOISE_LEVEL
 
