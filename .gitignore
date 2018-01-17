@@ -45,3 +45,6 @@ gradle-app.setting
 
 # MaryTTS Logs
 server.log
+
+# Mac OS
+.DS_Store
