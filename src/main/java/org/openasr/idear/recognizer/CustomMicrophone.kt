@@ -6,10 +6,14 @@ import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
 import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
 
-class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigEndian: Boolean) {
+object CustomMicrophone {
+    const val sampleRate = 16000f
+    const val sampleSize = 16
+    const val signed = true
+    const val bigEndian = false
     private val logger = Logger.getInstance(javaClass)
 
-    private val DURATION = 4500
+    private const val DURATION = 4500
 
     private val line: TargetDataLine
     //    /* package */ void setMasterGain(double mg) {
@@ -46,25 +50,22 @@ class CustomMicrophone(sampleRate: Float, sampleSize: Int, signed: Boolean, bigE
     fun startRecording() = line.start()
     fun stopRecording() = line.stop()
 
-    companion object {
-        private val TEMP_FILE = "/tmp/X.wav"
-        //TODO Refactor this API into a CustomMicrophone instance
-        @Throws(IOException::class)
-        fun recordFromMic(duration: Long): File {
-            val mic = CustomMicrophone(16000f, 16, true, false)
-            //Why is this in a thread?
-            Thread {
-                try {
-                    Thread.sleep(duration)
-                } catch (ignored: InterruptedException) {
-                } finally {
-                    mic.stopRecording()
-                }
-            }.start()
+    private val TEMP_FILE = "/tmp/X.wav"
+    //TODO Refactor this API into a CustomMicrophone instance
+    @Throws(IOException::class)
+    fun recordFromMic(duration: Long): File {
+        //Why is this in a thread?
+        Thread {
+            try {
+                Thread.sleep(duration)
+            } catch (ignored: InterruptedException) {
+            } finally {
+                stopRecording()
+            }
+        }.start()
 
-            mic.startRecording()
+        startRecording()
 
-            return File(TEMP_FILE).apply { AudioSystem.write(mic.stream, WAVE, this) }
-        }
+        return File(TEMP_FILE).apply { AudioSystem.write(stream, WAVE, this) }
     }
 }

@@ -1,21 +1,16 @@
 package org.openasr.idear.nlp
 
 import com.intellij.openapi.actionSystem.IdeActions.*
-import org.openasr.idear.actions.ActionRoutines.fireGoogleSearch
 import org.openasr.idear.actions.ActionRoutines.pauseSpeech
 import org.openasr.idear.actions.ActionRoutines.routineAbout
-import org.openasr.idear.actions.ActionRoutines.routineAddNewClass
 import org.openasr.idear.actions.ActionRoutines.routineCheck
-import org.openasr.idear.actions.ActionRoutines.routineEnter
 import org.openasr.idear.actions.ActionRoutines.routineExtract
 import org.openasr.idear.actions.ActionRoutines.routineFind
 import org.openasr.idear.actions.ActionRoutines.routineFocus
 import org.openasr.idear.actions.ActionRoutines.routineFollowing
 import org.openasr.idear.actions.ActionRoutines.routineGoto
 import org.openasr.idear.actions.ActionRoutines.routineHandleBreakpoint
-import org.openasr.idear.actions.ActionRoutines.routineNewString
 import org.openasr.idear.actions.ActionRoutines.routineOfLine
-import org.openasr.idear.actions.ActionRoutines.routineOkIdea
 import org.openasr.idear.actions.ActionRoutines.routineOpen
 import org.openasr.idear.actions.ActionRoutines.routinePress
 import org.openasr.idear.actions.ActionRoutines.routinePrintln
@@ -65,8 +60,8 @@ class PatternBasedNlpProvider : NlpProvider {
             u.startsWith("inspect code") -> invokeAction("CodeInspection.OnEditor")
             u.startsWith("speech pause") -> pauseSpeech()
             u == SHOW_USAGES -> invokeAction("ShowUsages")
-            u.startsWith(OKAY_IDEA) -> routineOkIdea()
-            u.startsWith(OKAY_GOOGLE) -> fireGoogleSearch()
+//            u.startsWith(OKAY_IDEA) -> routineOkIdea()
+//            u.startsWith(OKAY_GOOGLE) -> fireGoogleSearch()
             "break point" in u -> routineHandleBreakpoint(u)
             u.startsWith(DEBUG) -> IDEService.type(VK_CONTROL, VK_SHIFT, VK_F9)
             u.startsWith("step") -> routineStep(u)
@@ -74,10 +69,10 @@ class PatternBasedNlpProvider : NlpProvider {
             u.startsWith("tell me a joke") -> tellJoke()
             "check" in u -> routineCheck(u)
             "tell me about yourself" in u -> routineAbout()
-            "add new class" in u -> routineAddNewClass()
+//            "add new class" in u -> routineAddNewClass()
             "print line" in u -> routinePrintln()
-            "new string" in u -> routineNewString()
-            "enter " in u -> routineEnter(u)
+//            "new string" in u -> routineNewString()
+//            "enter " in u -> routineEnter(u)
             "public static void main" in u -> routinePsvm()
             u.endsWith("of line") -> routineOfLine(u)
             u.startsWith("find in") -> routineFind(u)

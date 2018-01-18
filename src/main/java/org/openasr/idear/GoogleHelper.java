@@ -111,7 +111,7 @@ public class GoogleHelper {
 
     public static void main(String[] args) {
         try {
-            CustomMicrophone.Companion.recordFromMic(4500);
+            CustomMicrophone.INSTANCE.recordFromMic(4500);
         } catch (IOException e) {
             e.printStackTrace();
         }

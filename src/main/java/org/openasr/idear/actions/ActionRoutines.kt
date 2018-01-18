@@ -52,38 +52,38 @@ object ActionRoutines {
         pressKeystroke(VK_TAB)
     }
 
-    fun routineEnter(c: String) =
-            webSpeechResult?.run {
-                if (c.endsWith("text")) {
-                    IDEService.type(first)
-                } else if (c.endsWith("camel case")) {
-                    IDEService.type(convertToCamelCase(first))
-                }
-            }
+//    fun routineEnter(c: String) =
+//            webSpeechResult?.run {
+//                if (c.endsWith("text")) {
+//                    IDEService.type(first)
+//                } else if (c.endsWith("camel case")) {
+//                    IDEService.type(convertToCamelCase(first))
+//                }
+//            }
 
-    fun routineNewString() =
-            webSpeechResult?.run {
-                IDEService.type(VK_SHIFT, VK_QUOTE)
-                IDEService.type(first)
-                IDEService.type(VK_SHIFT, VK_QUOTE)
-            }
+//    fun routineNewString() =
+//            webSpeechResult?.run {
+//                IDEService.type(VK_SHIFT, VK_QUOTE)
+//                IDEService.type(first)
+//                IDEService.type(VK_SHIFT, VK_QUOTE)
+//            }
 
     fun routinePrintln() {
         IDEService.type("sout")
         pressKeystroke(VK_TAB)
     }
 
-    fun routineAddNewClass() {
-        webSpeechResult?.run {
-            IDEService.invokeAction("NewElement")
-            pressKeystroke(VK_ENTER)
-            convertToCamelCase(first).wordCapitalize().let {
-                logger.info("Class name: $it")
-                IDEService.type(it)
-                pressKeystroke(VK_ENTER)
-            }
-        }
-    }
+//    fun routineAddNewClass() {
+//        webSpeechResult?.run {
+//            IDEService.invokeAction("NewElement")
+//            pressKeystroke(VK_ENTER)
+//            convertToCamelCase(first).wordCapitalize().let {
+//                logger.info("Class name: $it")
+//                IDEService.type(it)
+//                pressKeystroke(VK_ENTER)
+//            }
+//        }
+//    }
 
     fun String.wordCapitalize() = this[0].toUpperCase().toString() + substring(1)
 
@@ -124,10 +124,10 @@ object ActionRoutines {
         }
     }
 
-    fun routineOkIdea() {
-        beep()
-        fireVoiceCommand()
-    }
+//    fun routineOkIdea() {
+//        beep()
+//        fireVoiceCommand()
+//    }
 
     fun routineExtract(c: String) {
         if (c.endsWith("method")) {
@@ -149,18 +149,13 @@ object ActionRoutines {
     }
 
     fun routinePress(c: String) {
-        if (c.contains(Commands.DELETE)) {
-            pressKeystroke(VK_DELETE)
-        } else if (c.contains("return") || c.contains("enter")) {
-            pressKeystroke(VK_ENTER)
-        } else if (c.contains(Commands.ESCAPE)) {
-            pressKeystroke(VK_ESCAPE)
-        } else if (c.contains(Commands.TAB)) {
-            pressKeystroke(VK_TAB)
-        } else if (c.contains(Commands.UNDO)) {
-            IDEService.invokeAction("\$Undo")
-        } else if (c.contains("shift")) {
-            IDEService.pressShift()
+        when {
+            c.contains(Commands.DELETE) -> pressKeystroke(VK_DELETE)
+            c.contains("return") || c.contains("enter") -> pressKeystroke(VK_ENTER)
+            c.contains(Commands.ESCAPE) -> pressKeystroke(VK_ESCAPE)
+            c.contains(Commands.TAB) -> pressKeystroke(VK_TAB)
+            c.contains(Commands.UNDO) -> IDEService.invokeAction("\$Undo")
+            c.contains("shift") -> IDEService.pressShift()
         }
     }
 
@@ -252,45 +247,45 @@ object ActionRoutines {
         TTSService.say("It is me, Jah java va va, va, va. Open up already!")
     }
 
-    fun fireVoiceCommand() {
-        try {
-            val commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(COMMAND_DURATION))
+//    fun fireVoiceCommand() {
+//        try {
+//            val commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(COMMAND_DURATION))
+//
+//            if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
+//                return
+//
+//            // Notify of successful proceed
+//            beep()
+//
+//            ExecuteVoiceCommandAction.invoke()
+//        } catch (e: IOException) {
+//            logger.error("Panic! Failed to dump WAV", e)
+//        }
+//    }
 
-            if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
-                return
+//    fun fireGoogleSearch() {
+//        val searchQueryTuple = webSpeechResult ?: return
+//        TTSService.say("I think you said " + searchQueryTuple.first + ", searching Google now")
+//
+//        GoogleHelper.searchGoogle(searchQueryTuple.first)
+//    }
 
-            // Notify of successful proceed
-            beep()
-
-            ExecuteVoiceCommandAction.invoke()
-        } catch (e: IOException) {
-            logger.error("Panic! Failed to dump WAV", e)
-        }
-    }
-
-    fun fireGoogleSearch() {
-        val searchQueryTuple = webSpeechResult ?: return
-        TTSService.say("I think you said " + searchQueryTuple.first + ", searching Google now")
-
-        GoogleHelper.searchGoogle(searchQueryTuple.first)
-    }
-
-    private val webSpeechResult: Pair<String, Double>?
-        get() {
-            var searchQueryTuple: Pair<String, Double>? = null
-            beep()
-            try {
-                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION))
-            } catch (e: IOException) {
-                logger.error("Panic! Failed to dump WAV", e)
-            }
-
-            if (searchQueryTuple == null || searchQueryTuple.first.isEmpty())
-                return null
-
-            beep()
-            return searchQueryTuple
-        }
+//    private val webSpeechResult: Pair<String, Double>?
+//        get() {
+//            var searchQueryTuple: Pair<String, Double>? = null
+//            beep()
+//            try {
+//                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION))
+//            } catch (e: IOException) {
+//                logger.error("Panic! Failed to dump WAV", e)
+//            }
+//
+//            if (searchQueryTuple == null || searchQueryTuple.first.isEmpty())
+//                return null
+//
+//            beep()
+//            return searchQueryTuple
+//        }
 
     fun pauseSpeech() {
         beep()
