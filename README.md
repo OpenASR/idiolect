@@ -78,3 +78,8 @@ TTS is supported by [Amazon Polly](https://aws.amazon.com/polly/) and [MaryTTS](
 Run `git clone https://github.com/OpenASR/idear && cd idear && ./gradlew runIde`.
 
 Recognition works with most popular microphones (preferably 16kHz, 16-bit). For best results, minimize background noise.
+
+# Programming By Voice
+
+- [Using Python to Code by Voice](https://www.youtube.com/watch?v=8SkdfdXWYaI)
+- [How a Blind Developer uses Visual Studio](https://www.youtube.com/watch?v=iWXebEeGwn0)
