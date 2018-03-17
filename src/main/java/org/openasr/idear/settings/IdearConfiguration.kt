@@ -59,7 +59,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
     data class Settings(var asrService: ASRServiceId = CMU_SPHINX,
                         var nlpService: NLPServiceId = PATTERN,
-                        var ttsService: TTSServiceId = AWS_POLLY)
+                        var ttsService: TTSServiceId = MARY)
 
     override fun getDisplayName() = "Idear"
 

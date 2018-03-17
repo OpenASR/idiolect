@@ -17,9 +17,9 @@ object WhereAmIAction : IdearAction() {
 
     private tailrec fun PsiElement.firstNamedParent(): String? =
             when (this) {
-                is PsiMethod -> "method " + name
-                is PsiClass -> "class " + name
-                is PsiFile -> "file " + name
+                is PsiMethod -> "method $name"
+                is PsiClass -> "class $name"
+                is PsiFile -> "file $name"
                 else -> parent.firstNamedParent()
             }
 }
