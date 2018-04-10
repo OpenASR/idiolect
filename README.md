@@ -75,7 +75,14 @@ TTS is supported by [Amazon Polly](https://aws.amazon.com/polly/) and [MaryTTS](
 
 # Building
 
-Run `git clone https://github.com/OpenASR/idear && cd idear && ./gradlew runIde`.
+For Linux or Mac OS users:
+
+`git clone https://github.com/OpenASR/idear && cd idear && ./gradlew runIde`
+
+For Windows users:
+
+`git clone https://github.com/OpenASR/idear & cd idear & gradlew.bat runIde`
+
 
 Recognition works with most popular microphones (preferably 16kHz, 16-bit). For best results, minimize background noise.
 
