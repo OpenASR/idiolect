@@ -7,9 +7,6 @@ import marytts.modules.synthesis.Voice
 import marytts.util.data.audio.AudioPlayer
 import java.util.*
 
-/**
- * Created by breandan on 7/9/2015.
- */
 object MaryTTS : TTSProvider {
     val logger = Logger.getInstance(javaClass)
     private lateinit var voice: Voice
@@ -17,8 +14,10 @@ object MaryTTS : TTSProvider {
 
     init {
         try {
+            Thread.currentThread().contextClassLoader = this.javaClass.classLoader
             maryTTS = LocalMaryInterface()
             val systemLocale = Locale.getDefault()
+            logger.info("Getting MaryTTS voice for: $systemLocale")
             voice = if (maryTTS.availableLocales.contains(systemLocale))
                 Voice.getDefaultVoice(systemLocale)
             else
