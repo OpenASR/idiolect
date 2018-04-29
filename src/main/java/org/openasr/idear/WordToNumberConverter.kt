@@ -1,8 +1,5 @@
 package org.openasr.idear
 
-/**
- * Created by breandan on 10/25/2015.
- */
 object WordToNumberConverter {
     fun getNumber(input: String): Int {
         var accumulator = 0

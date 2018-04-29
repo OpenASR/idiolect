@@ -28,8 +28,6 @@ import org.openasr.idear.nlp.Commands.FOCUS
 import org.openasr.idear.nlp.Commands.GOTO
 import org.openasr.idear.nlp.Commands.HI_IDEA
 import org.openasr.idear.nlp.Commands.NAVIGATE
-import org.openasr.idear.nlp.Commands.OKAY_GOOGLE
-import org.openasr.idear.nlp.Commands.OKAY_IDEA
 import org.openasr.idear.nlp.Commands.OPEN
 import org.openasr.idear.nlp.Commands.PRESS
 import org.openasr.idear.nlp.Commands.SHOW_USAGES
@@ -48,7 +46,7 @@ class PatternBasedNlpProvider : NlpProvider {
             u.startsWith(OPEN) -> routineOpen(u)
             u.startsWith(NAVIGATE) -> invokeAction("GotoDeclaration")
             u.startsWith(EXECUTE) -> invokeAction("Run")
-            u == WHERE_AM_I -> WhereAmIAction.invoke()
+            u == WHERE_AM_I -> WhereAmIAction()
             u.startsWith(FOCUS) -> routineFocus(u)
             u.startsWith(GOTO) -> routineGoto(u)
             u.startsWith(EXPAND) -> invokeAction(ACTION_EDITOR_SELECT_WORD_AT_CARET)

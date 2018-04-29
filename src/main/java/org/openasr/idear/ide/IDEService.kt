@@ -22,6 +22,16 @@ object IDEService {
                 return callback!!
             }
 
+    fun invokeAction(actionId: AnAction): ActionCallback =
+                with(ActionManager.getInstance()) {
+                    var callback: ActionCallback? = null
+                    ApplicationManager.getApplication().invokeAndWait {
+                        callback = tryToExecute(actionId,
+                                ActionCommand.getInputEvent(null), null, null, true)
+                    }
+                    return callback!!
+                }
+
     fun type(vararg keys: Int) = Keyboard.type(*keys)
 
     fun pressShift() = Keyboard.pressShift()

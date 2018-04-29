@@ -1,8 +1,8 @@
 package org.openasr.idear.actions
 
-import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.actionSystem.AnAction
 import org.openasr.idear.ide.IDEService.invokeAction
 
 abstract class IdearAction : AnAction() {
-    fun invoke() = invokeAction(ActionManager.getInstance().getId(this))
+    operator fun invoke() = invokeAction(this)
 }

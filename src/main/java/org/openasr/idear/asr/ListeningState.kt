@@ -3,9 +3,6 @@ package org.openasr.idear.asr
 import org.openasr.idear.asr.ListeningState.Status.*
 import java.util.concurrent.atomic.AtomicReference
 
-/**
- * Created by breandan on 10/23/2015.
- */
 object ListeningState {
     private val status = AtomicReference(INIT)
 
