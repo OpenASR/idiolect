@@ -14,7 +14,9 @@ object MaryTTS : TTSProvider {
 
     init {
         try {
+            // This line is important: https://github.com/OpenASR/idear/issues/31
             Thread.currentThread().contextClassLoader = this.javaClass.classLoader
+            
             maryTTS = LocalMaryInterface()
             val systemLocale = Locale.getDefault()
             logger.info("Getting MaryTTS voice for: $systemLocale")
