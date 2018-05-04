@@ -4,13 +4,13 @@ buildscript {
     }
 
     dependencies {
-    	classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.21")
+    	classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.41")
     }
 }
 
 plugins {
     id("org.jetbrains.intellij") version "0.2.18"
-    id("org.jetbrains.kotlin.jvm") version "1.2.30"
+    id("org.jetbrains.kotlin.jvm") version "1.2.41"
 }
 
 intellij {
