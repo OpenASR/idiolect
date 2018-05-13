@@ -2,10 +2,6 @@
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
-# Roadmap
-
-Idear is currently a work in progress. These are some of the features we are currently working on:
-
 ## Speech Recognition
 
 ASR is supported by [Amazon Lex](https://aws.amazon.com/lex/) and [CMU Sphinx](https://github.com/cmusphinx/sphinx4/).
@@ -31,6 +27,10 @@ implements `NlpProvider` and notifies the `NlpResultListener`.
 ## Text-to-Speech
 
 TTS is supported by [Amazon Polly](https://aws.amazon.com/polly/) and [MaryTTS](https://github.com/marytts/marytts). 
+
+## Roadmap
+
+Idear is currently a work in progress. These are some of the features we are currently working on:
 
 ### Activation
 
