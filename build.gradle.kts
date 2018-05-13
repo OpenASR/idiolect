@@ -1,13 +1,3 @@
-buildscript {
-    repositories {
-        maven { setUrl("http://dl.bintray.com/jetbrains/intellij-plugin-service") }
-    }
-
-    dependencies {
-    	classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.41")
-    }
-}
-
 plugins {
     id("org.jetbrains.intellij") version "0.3.1"
     id("org.jetbrains.kotlin.jvm") version "1.2.41"
