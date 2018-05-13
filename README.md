@@ -2,13 +2,9 @@
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
-# Roadmap
-
-Idear is currently a work in progress. These are some of the features we are currently working on:
-
 ## Speech Recognition
 
-ASR is supported by [Amazon Lex](https://aws.amazon.com/lex/) and [CMU Sphinx](https://github.com/cmusphinx/sphinx4/).
+ASR is supported by [CMU Sphinx](https://github.com/cmusphinx/sphinx4/) and [Amazon Lex](https://aws.amazon.com/lex/). All recognition is offline by default.
 
 ### Speech-to-Text
 
@@ -21,7 +17,7 @@ provide a method `waitForUtterance()` which blocks until the speech to text serv
 
 If Lex _does_ manage to resolve and fulfill (to the point where it delegates to client-side fulfillment) an intent by 
 invoking a Lamba function then [`LexRecognizer`](https://github.com/OpenASR/idear/blob/master/src/main/java/org/openasr/idear/asr/awslex/LexRecogniser.kt)
-notifies a `NlpResultListener` that the the request has been fulfilled or failed etc.
+notifies a `NlpResultListener` that the request has been fulfilled or failed etc.
 
 [`NlpProvider`](https://github.com/OpenASR/idear/blob/master/src/main/java/org/openasr/idear/nlp/NlpProvider.kt)
 defines a method `processUtterance()` which takes a string utterance and context. 
@@ -30,7 +26,11 @@ implements `NlpProvider` and notifies the `NlpResultListener`.
 
 ## Text-to-Speech
 
-TTS is supported by [Amazon Polly](https://aws.amazon.com/polly/) and [MaryTTS](https://github.com/marytts/marytts). 
+TTS is supported by [MaryTTS](https://github.com/marytts/marytts) and [Amazon Polly](https://aws.amazon.com/polly/). Speech synthesis is offline by default. 
+
+## Roadmap
+
+Idear is currently a work in progress. These are some of the features we have implemented and are currently working on:
 
 ### Activation
 
@@ -82,7 +82,6 @@ For Linux or Mac OS users:
 For Windows users:
 
 `git clone https://github.com/OpenASR/idear & cd idear & gradlew.bat runIde`
-
 
 Recognition works with most popular microphones (preferably 16kHz, 16-bit). For best results, minimize background noise.
 
