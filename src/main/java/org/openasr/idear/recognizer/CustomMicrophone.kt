@@ -50,7 +50,7 @@ object CustomMicrophone {
     fun startRecording() = line.start()
     fun stopRecording() = line.stop()
 
-    private val TEMP_FILE = "/tmp/X.wav"
+    private const val TEMP_FILE = "/tmp/X.wav"
     //TODO Refactor this API into a CustomMicrophone instance
     @Throws(IOException::class)
     fun recordFromMic(duration: Long): File {

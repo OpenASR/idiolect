@@ -1,6 +1,6 @@
 package org.openasr.idear.nlp.lex
 
-import com.amazonaws.services.lexruntime.*
+import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
 import com.amazonaws.services.lexruntime.model.*
 import org.openasr.idear.nlp.*
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
@@ -22,7 +22,7 @@ class LexNlp(val listener: NlpResultListener) : NlpProvider {
         // TODO: get userId from Cognito
     }
 
-    /**
+    /*
      * @param utterance - what the user said
      * @param sessionAttributes - **new** context.
      *                  eg: {ext:html,lang:js,ide:intellij, context:{}, scope:{}, toolWindow:"Terminal", PreviousAction:{}, ...}

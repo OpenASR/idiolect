@@ -8,7 +8,7 @@ import org.openasr.idear.recognizer.awslex.AwsUtils
 import java.io.InputStream
 import java.util.*
 
-/**
+/*
  * Either:
  * <ul>
  *     <li>Users define <code>AWS_ACCESS_KEY_ID</code> (or <code>AWS_ACCESS_KEY</code>) and

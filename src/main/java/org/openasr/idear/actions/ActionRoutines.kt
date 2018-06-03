@@ -5,26 +5,23 @@ import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.IdeActions.*
 import com.intellij.openapi.application.*
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.util.Pair
 import com.intellij.util.Consumer
-import org.openasr.idear.*
+import org.openasr.idear.WordToNumberConverter
 import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
 import org.openasr.idear.asr.*
 import org.openasr.idear.ide.IDEService
 import org.openasr.idear.nlp.Commands
-import org.openasr.idear.recognizer.CustomMicrophone
 import org.openasr.idear.tts.TTSService
 import java.awt.EventQueue
 import java.awt.event.KeyEvent.*
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
 import javax.sound.sampled.AudioSystem
 
 
 object ActionRoutines {
-    private val COMMAND_DURATION = 3500L
-    private val GOOGLE_QUERY_DURATION = 3000L
+    private const val COMMAND_DURATION = 3500L
+    private const val GOOGLE_QUERY_DURATION = 3000L
     private val logger = Logger.getInstance(javaClass)
 
     fun routineReleaseKey(c: String) {
@@ -160,11 +157,11 @@ object ActionRoutines {
     }
 
     fun routineGoto(c: String) {
-        IDEService.invokeAction("GotoLine").doWhenDone({
+        IDEService.invokeAction("GotoLine").doWhenDone {
             IDEService.type(*("" + WordToNumberConverter.getNumber(c.substring(
                     10))).toCharArray())
             IDEService.type(VK_ENTER)
-        })
+        }
     }
 
     fun routineOpen(c: String) {
@@ -196,7 +193,7 @@ object ActionRoutines {
                 IDEService.type(" ")
                 val jumpMarker = recognizeJumpMarker()
                 IDEService.type("" + jumpMarker)
-                logger.info("Typed: " + jumpMarker)
+                logger.info("Typed: $jumpMarker")
             }
         }
     }
@@ -306,7 +303,7 @@ object ActionRoutines {
             result = ASRService.waitForUtterance()
             if (result.startsWith("jump ")) {
                 val number = WordToNumberConverter.getNumber(result.substring(5))
-                logger.info("Recognized number: " + number)
+                logger.info("Recognized number: $number")
                 return number
             }
         }

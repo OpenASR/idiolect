@@ -8,7 +8,7 @@ class ExtractActionRecognizer : ActionRecognizer {
     private val actions = ContainerUtil.newHashSet("extract")
 
     override fun isMatching(sentence: String) =
-            !actions.firstOrNull({ sentence.contains(it) }).isNullOrEmpty()
+            !actions.firstOrNull { sentence.contains(it) }.isNullOrEmpty()
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
         if (!isMatching(sentence)) return null

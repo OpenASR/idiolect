@@ -1,8 +1,7 @@
 package org.openasr.idear.asr.cmusphinx
 
 import com.intellij.openapi.diagnostic.Logger
-import edu.cmu.sphinx.api.AbstractSpeechRecognizer
-import edu.cmu.sphinx.api.Configuration
+import edu.cmu.sphinx.api.*
 import edu.cmu.sphinx.decoder.ResultListener
 import edu.cmu.sphinx.frontend.endpoint.SpeechClassifier.PROP_THRESHOLD
 import edu.cmu.sphinx.frontend.util.StreamDataSource
@@ -12,12 +11,12 @@ import org.openasr.idear.recognizer.CustomMicrophone
  * High-level class for live speech recognition.
  */
 
-val MASTER_GAIN = 0.85
-val CONFIDENCE_LEVEL_THRESHOLD = 0.5
+const val MASTER_GAIN = 0.85
+const val CONFIDENCE_LEVEL_THRESHOLD = 0.5
 
-private val ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us"
-private val DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict"
-private val GRAMMAR_PATH = "resource:/org.openasr.idear/grammars"
+private const val ACOUSTIC_MODEL = "resource:/edu.cmu.sphinx.models.en-us/en-us"
+private const val DICTIONARY_PATH = "resource:/edu.cmu.sphinx.models.en-us/cmudict-en-us.dict"
+private const val GRAMMAR_PATH = "resource:/org.openasr.idear/grammars"
 
 val configuration = Configuration().apply {
     acousticModelPath = ACOUSTIC_MODEL
@@ -31,7 +30,7 @@ object CustomLiveSpeechRecognizer : AbstractSpeechRecognizer(configuration) {
     private val logger = Logger.getInstance(javaClass)
 
     // sphinx4 default sensitivity is 13.
-    private val SPEECH_SENSITIVITY = 20
+    private const val SPEECH_SENSITIVITY = 20
 
     init {
         context.getInstance(StreamDataSource::class.java).setInputStream(CustomMicrophone.stream)

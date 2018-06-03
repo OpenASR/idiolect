@@ -106,7 +106,7 @@ object Keyboard {
         '/' -> doType(VK_SLASH)
         '?' -> doType(VK_SHIFT, VK_SLASH)
         ' ' -> doType(VK_SPACE)
-        else -> throw IllegalArgumentException("Cannot type character " + character)
+        else -> throw IllegalArgumentException("Cannot type character $character")
     }
 
     fun type(vararg keys: Int) {

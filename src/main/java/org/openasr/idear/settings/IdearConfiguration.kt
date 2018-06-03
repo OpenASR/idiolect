@@ -18,7 +18,7 @@ import org.openasr.idear.tts.*
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.AWS_LEX as LEX_ASR
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId.AWS_LEX as LEX_NLP
 
-/**
+/*
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
  */
 @State(name = "IdearConfiguration", storages = [(Storage("recognition.xml"))])

@@ -13,7 +13,7 @@ class IntellijNlpResultListener(var verbosity: Verbosity = Verbosity.INFO) : Nlp
             //                var remove = true
             when (key) {
                 "invokeAction" -> IDEService.invokeAction(value)
-                "pressKeystroke" -> value.split(",").forEach({ keyStroke -> IDEService.type(keyStroke.toInt()) })
+                "pressKeystroke" -> value.split(",").forEach { keyStroke -> IDEService.type(keyStroke.toInt()) }
                 "routineGoto" -> ActionRoutines.routineGoto(value)
                 "routinePress" -> ActionRoutines.routinePress(value)
             }
