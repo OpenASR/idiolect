@@ -21,7 +21,7 @@ import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId
 /**
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
  */
-@State(name = "IdearConfiguration", storages = arrayOf(Storage("recognition.xml")))
+@State(name = "IdearConfiguration", storages = [(Storage("recognition.xml"))])
 class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfiguration.Settings> {
     companion object {
         var settings = Settings()
