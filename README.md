@@ -1,4 +1,5 @@
 # idear
+[![Build Status](https://travis-ci.com/OpenASR/idear.svg?branch=master)](https://travis-ci.com/OpenASR/idear)
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
