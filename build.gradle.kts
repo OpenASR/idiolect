@@ -16,7 +16,6 @@ repositories {
     jcenter()
     maven("https://oss.sonatype.org/content/repositories/releases/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
-    maven("https://plugins.jetbrains.com/maven")
 }
 
 
