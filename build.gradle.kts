@@ -16,7 +16,9 @@ repositories {
     jcenter()
     maven("https://oss.sonatype.org/content/repositories/releases/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://plugins.jetbrains.com/maven")
 }
+
 
 dependencies {
     compile("net.sourceforge.javaflacencoder:java-flac-encoder:0.3.7")
