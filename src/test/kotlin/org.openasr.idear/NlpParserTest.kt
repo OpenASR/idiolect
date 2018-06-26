@@ -48,7 +48,7 @@ class NlpParserTest {
         @BeforeClass
         @JvmStatic
         fun setUp() {
-            myParser = NlpParserService("en-parser-chunking.bin")
+            myParser = NlpParserService() //"en-parser-chunking.bin")
             myParser!!.init()
         }
     }
