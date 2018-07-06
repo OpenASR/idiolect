@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.intellij") version "0.3.4"
-    id("org.jetbrains.kotlin.jvm") version "1.2.50"
+    id("org.jetbrains.kotlin.jvm") version "1.2.51"
 }
 
 intellij {
