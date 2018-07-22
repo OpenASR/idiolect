@@ -1,5 +1,6 @@
 # idear
-[![Build Status](https://travis-ci.com/OpenASR/idear.svg?branch=master)](https://travis-ci.com/OpenASR/idear)
+[![Travis Build Status][travis-status-svg]][travis-build-status] [![TeamCity Build Status][teamcity-status-svg]][teamcity-build-status]
+
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
@@ -90,3 +91,9 @@ Recognition works with most popular microphones (preferably 16kHz, 16-bit). For 
 
 - [Using Python to Code by Voice](https://www.youtube.com/watch?v=8SkdfdXWYaI)
 - [How a Blind Developer uses Visual Studio](https://www.youtube.com/watch?v=iWXebEeGwn0)
+
+<!-- Badges -->
+[travis-build-status]: https://travis-ci.com/OpenASR/idear
+[travis-status-svg]: https://travis-ci.com/OpenASR/idear.svg?branch=master
+[teamcity-build-status]: https://teamcity.jetbrains.com/viewType.html?buildTypeId=idear_buildplugin&guest=1
+[teamcity-status-svg]: https://teamcity.jetbrains.com/app/rest/builds/buildType:idear_buildplugin/statusIcon.svg
