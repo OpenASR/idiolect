@@ -1,6 +1,8 @@
 # idear
-[![](http://jb.gg/badges/team-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
-[![][travis-status-svg]][travis-build-status][![][teamcity-status-svg]][teamcity-build-status][![][plugin-repo-svg]][plugin-repo-page]
+[![][jetbrains-team-svg]][jetbrains-team-page]
+[![][travis-status-svg]][travis-build-status]
+[![][teamcity-status-svg]][teamcity-build-status]
+[![][plugin-repo-svg]][plugin-repo-page]
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
@@ -94,6 +96,8 @@ Recognition works with most popular microphones (preferably 16kHz, 16-bit). For 
 
 
 <!-- Badges -->
+[jetbrains-team-page]: https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub
+[jetbrains-team-svg]: http://jb.gg/badges/team-flat-square.svg
 [travis-build-status]: https://travis-ci.com/OpenASR/idear
 [travis-status-svg]: https://travis-ci.com/OpenASR/idear.svg?branch=master
 [teamcity-build-status]: https://teamcity.jetbrains.com/viewType.html?buildTypeId=idear_buildplugin&guest=1
