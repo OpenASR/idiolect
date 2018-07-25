@@ -1,6 +1,6 @@
 # idear
 [![](http://jb.gg/badges/team-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
-[![Travis Build Status][travis-status-svg]][travis-build-status] [![TeamCity Build Status][teamcity-status-svg]][teamcity-build-status][![JetBrains Plugin Repository][plugin-repo-svg]][plugin-repo-page]
+[![][travis-status-svg]][travis-build-status][![][teamcity-status-svg]][teamcity-build-status][![][plugin-repo-svg]][plugin-repo-page]
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
