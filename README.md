@@ -89,6 +89,12 @@ For Windows users:
 
 Recognition works with most popular microphones (preferably 16kHz, 16-bit). For best results, minimize background noise.
 
+# Contributing
+
+Run the following command from the project root directory:
+
+`./gradlew runIde -PluginDev`
+
 # Programming By Voice
 
 - [Using Python to Code by Voice](https://www.youtube.com/watch?v=8SkdfdXWYaI)

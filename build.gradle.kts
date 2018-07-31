@@ -1,3 +1,9 @@
+import org.jetbrains.intellij.tasks.RunIdeTask
+
+tasks.withType<RunIdeTask> {
+    findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
+}
+
 plugins {
     id("org.jetbrains.intellij") version "0.3.5"
     id("org.jetbrains.kotlin.jvm") version "1.2.51"
