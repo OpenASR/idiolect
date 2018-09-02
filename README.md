@@ -1,4 +1,8 @@
 # idear
+[![][jetbrains-team-svg]][jetbrains-team-page]
+[![][travis-status-svg]][travis-build-status]
+[![][teamcity-status-svg]][teamcity-build-status]
+[![][plugin-repo-svg]][plugin-repo-page]
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
@@ -85,7 +89,24 @@ For Windows users:
 
 Recognition works with most popular microphones (preferably 16kHz, 16-bit). For best results, minimize background noise.
 
+# Contributing
+
+Run the following command from the project root directory:
+
+`./gradlew runIde -PluginDev`
+
 # Programming By Voice
 
 - [Using Python to Code by Voice](https://www.youtube.com/watch?v=8SkdfdXWYaI)
 - [How a Blind Developer uses Visual Studio](https://www.youtube.com/watch?v=iWXebEeGwn0)
+
+
+<!-- Badges -->
+[jetbrains-team-page]: https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub
+[jetbrains-team-svg]: http://jb.gg/badges/team-flat-square.svg
+[travis-build-status]: https://travis-ci.com/OpenASR/idear
+[travis-status-svg]: https://travis-ci.com/OpenASR/idear.svg?branch=master
+[teamcity-build-status]: https://teamcity.jetbrains.com/viewType.html?buildTypeId=idear_buildplugin&guest=1
+[teamcity-status-svg]: https://teamcity.jetbrains.com/app/rest/builds/buildType:idear_buildplugin/statusIcon.svg
+[plugin-repo-page]: https://plugins.jetbrains.com/plugin/7910-idear
+[plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/7910-idear.svg

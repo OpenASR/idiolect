@@ -99,10 +99,10 @@ object ActionRoutines {
     fun routineCheck(c: String) =
             SurroundWithNoNullCheckRecognizer().let {
                 if (it.isMatching(c))
-                    DataManager.getInstance().dataContextFromFocus
-                            .doWhenDone({ dataContext: DataContext ->
+                    DataManager.getInstance().dataContextFromFocusAsync
+                            .then { dataContext: DataContext -> {
                                 run(it, c, dataContext)
-                            } as Consumer<DataContext>)
+                            }}
             }
 
     fun routineStep(c: String) {
