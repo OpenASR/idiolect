@@ -20,10 +20,8 @@ object GrammarService : AnActionListener {
         }
     }
 
-    override fun afterActionPerformed(anAction: AnAction?,
-                                      dataContext: DataContext?,
-                                      anActionEvent: AnActionEvent?) = //swap out a context aware grammar
+    override fun afterActionPerformed(anAction: AnAction?, dataContext: DataContext, anActionEvent: AnActionEvent?) = //swap out a context aware grammar
             Unit
 
-    override fun beforeEditorTyping(c: Char, dataContext: DataContext?) = Unit
+    override fun beforeEditorTyping(c: Char, dataContext: DataContext) = Unit
 }
