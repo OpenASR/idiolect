@@ -43,9 +43,8 @@ abstract class ExecuteActionByCommandText : IdearAction() {
         for (c in type.toCharArray()) typedAction.actionPerformed(editor, c, context)
     }
 
-    override fun update(event: AnActionEvent?) =
-            IDEService.getEditor(event?.dataContext)
-                    ?.run { event?.presentation?.isEnabled = true } ?: Unit
+    override fun update(e: AnActionEvent) =
+            IDEService.getEditor(e.dataContext)?.run { e.presentation.isEnabled = true } ?: Unit
 
     private fun buildActionEvent(info: ActionCallInfo, action: AnAction, context: DataContext): AnActionEvent =
             if (info.actionEvent != null) info.actionEvent as AnActionEvent
