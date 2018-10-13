@@ -103,7 +103,7 @@ Run the following command from the project root directory:
 
 <!-- Badges -->
 [jetbrains-team-page]: https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub
-[jetbrains-team-svg]: http://jb.gg/badges/team-flat-square.svg
+[jetbrains-team-svg]: http://jb.gg/badges/team.svg
 [travis-build-status]: https://travis-ci.com/OpenASR/idear
 [travis-status-svg]: https://travis-ci.com/OpenASR/idear.svg?branch=master
 [teamcity-build-status]: https://teamcity.jetbrains.com/viewType.html?buildTypeId=idear_buildplugin&guest=1
