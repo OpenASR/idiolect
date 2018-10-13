@@ -3,6 +3,7 @@
 [![][travis-status-svg]][travis-build-status]
 [![][teamcity-status-svg]][teamcity-build-status]
 [![][plugin-repo-svg]][plugin-repo-page]
+[![][plugin-download-svg]][plugin-repo-page]
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
@@ -110,3 +111,5 @@ Run the following command from the project root directory:
 [teamcity-status-svg]: https://teamcity.jetbrains.com/app/rest/builds/buildType:idear_buildplugin/statusIcon.svg
 [plugin-repo-page]: https://plugins.jetbrains.com/plugin/7910-idear
 [plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/7910-idear.svg
+[plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/7910-idear.svg
+
