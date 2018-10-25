@@ -5,8 +5,9 @@ tasks.withType<RunIdeTask> {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "0.3.11"
-    kotlin("jvm") version "1.3.0-rc-116"
+    `kotlin-dsl`
+    id("org.jetbrains.intellij") version "0.3.12"
+    kotlin("jvm") version "1.3.0-rc-190"
 }
 
 intellij {
