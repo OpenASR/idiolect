@@ -31,7 +31,7 @@ public class MicrophoneAnalyzer extends Microphone {
 	public MicrophoneAnalyzer(float sampleRate){
 		super(sampleRate);
 	}
-	
+
     /**
      * Gets the volume of the microphone input
      * Interval is 100ms so allow 100ms for this method to run in your code or specify smaller interval.
@@ -40,16 +40,16 @@ public class MicrophoneAnalyzer extends Microphone {
     public int getAudioVolume(){
     	return getAudioVolume(100);
     }
-    
+
     /**
      * Gets the volume of the microphone input
      * @param interval: The length of time you would like to calculate the volume over in milliseconds.
-     * @return The volume of the microphone input or -1 if data-line is not available. 
-     */    
+     * @return The volume of the microphone input or -1 if data-line is not available.
+     */
     public int getAudioVolume(int interval){
     	return calculateAudioVolume(this.getNumOfBytes(interval/1000d));
     }
-    
+
     /**
      * Gets the volume of microphone input
      * @param numOfBytes The number of bytes you want for volume interpretation
@@ -61,7 +61,7 @@ public class MicrophoneAnalyzer extends Microphone {
     		return -1;
     	return calculateRMSLevel(data);
     }
-    
+
     /**
      * Calculates the volume of AudioData which may be buffered data from a data-line.
      * @param audioData The byte[] you want to determine the volume of
@@ -81,7 +81,7 @@ public class MicrophoneAnalyzer extends Microphone {
 		double averageMeanSquare = sumMeanSquare / audioData.length;
 		return (int)(Math.pow(averageMeanSquare,0.5d) + 0.5);
 	}
-	
+
 	/**
 	 * Returns the number of bytes over interval for useful when figuring out how long to record.
 	 * @param seconds The length in seconds
@@ -90,7 +90,7 @@ public class MicrophoneAnalyzer extends Microphone {
 	public int getNumOfBytes(int seconds){
 		return getNumOfBytes((double)seconds);
 	}
-	
+
 	/**
 	 * Returns the number of bytes over interval for useful when figuring out how long to record.
 	 * @param seconds The length in seconds
@@ -105,7 +105,7 @@ public class MicrophoneAnalyzer extends Microphone {
 		AudioFormat format = getAudioFormat();
 		return bytes / format.getFrameSize();
 	}
-	
+
 	/**
 	 * Returns the a byte[] containing the specified number of bytes
 	 * @param numOfBytes The length of the returned array.
@@ -119,7 +119,7 @@ public class MicrophoneAnalyzer extends Microphone {
 		}
 		return null;//If data cannot be read, returns a null array.
 	}
-	
+
 
 	/**
 	 * Calculates the fundamental frequency. In other words, it calculates pitch,
@@ -137,7 +137,7 @@ public class MicrophoneAnalyzer extends Microphone {
 	}
 
 	/**
-	 * Calculates the frequency based off of the number of bytes. 
+	 * Calculates the frequency based off of the number of bytes.
 	 * CAVEAT: THE NUMBER OF BYTES MUST BE A MULTIPLE OF 2!!!
 	 * @param numOfBytes The number of bytes which must be a multiple of 2!!!
 	 * @return The calculated frequency in Hertz.
@@ -150,20 +150,19 @@ public class MicrophoneAnalyzer extends Microphone {
     	this.getTargetDataLine().read(data, 0, numOfBytes);
 		return getFrequency(data);
 	}
-	
+
 	/**
 	 * Calculates the frequency based off of the byte array,
 	 * @param bytes The audioData you want to analyze
 	 * @return The calculated frequency in Hertz.
 	 */
 	public int getFrequency(byte[] bytes){
-		double[] audioData = this.bytesToDoubleArray(bytes);
-		audioData = applyHanningWindow(audioData);
+		double[] audioData = applyHanningWindow(bytesToDoubleArray(bytes));
 		Complex[] complex = new Complex[audioData.length];
 		for(int i = 0; i<complex.length; i++){
 			complex[i] = new Complex(audioData[i], 0);
 		}
-		Complex[] fftTransformed = FFT.fft(complex);
+		Complex[] fftTransformed = FFT.INSTANCE.fft(complex);
 		return this.calculateFundamentalFrequency(fftTransformed, 4);
 	}
 
@@ -236,7 +235,7 @@ ps = powerSpectrum()
 		realTransform(real, false);
 		return computePowerSpectrum_FD(real);
 	}*/
-	
+
 	/**
 	 * Applies a Hanning Window to the data set.
 	 * Hanning Windows are used to increase the accuracy of the FFT.
@@ -279,7 +278,7 @@ ps = powerSpectrum()
 	 */
 	private int calculateFundamentalFrequency(Complex[] fftData, int N){
 		if (N <= 0 || fftData == null) { return -1; } //error case
-		
+
 		final int LENGTH = fftData.length;//Used to calculate bin size
 		fftData = removeNegativeFrequencies(fftData);
 		Complex[][] data = new Complex[N][fftData.length/N];
@@ -310,7 +309,7 @@ ps = powerSpectrum()
 		System.arraycopy(c, 0, out, 0, out.length);
 		return out;
 	}
-	
+
 	/**
 	 * Calculates the FFTbin size based off the length of the the array
 	 * Each FFTBin size represents the range of frequencies treated as one.
@@ -342,7 +341,7 @@ ps = powerSpectrum()
 		}
 		return index;
 	}
-	
+
 	/**
 	 * Converts bytes from a TargetDataLine into a double[] allowing the information to be read.
 	 * NOTE: One byte is lost in the conversion so don't expect the arrays to be the same length!
@@ -351,11 +350,10 @@ ps = powerSpectrum()
 	 */
 	private double[] bytesToDoubleArray(byte[] bufferData){
 	    final int bytesRecorded = bufferData.length;
-		final int bytesPerSample = getAudioFormat().getSampleSizeInBits()/8; 
+		final int bytesPerSample = getAudioFormat().getSampleSizeInBits()/8;
 	    final double amplification = 100.0; // choose a number as you like
-		int micBufferLength = bytesRecorded;  // bytesRecorded - bytesPerSample +1
-	    double[] micBufferData = new double[micBufferLength];
-	    for (int index = 0, floatIndex = 0; index < micBufferLength; index += bytesPerSample, floatIndex++) {
+		double[] micBufferData = new double[bytesRecorded];
+	    for (int index = 0, floatIndex = 0; index < bytesRecorded; index += bytesPerSample, floatIndex++) {
 	        double sample = 0;
 	        for (int b = 0; b < bytesPerSample; b++) {
 	            int v = bufferData[index + b];
@@ -366,7 +364,7 @@ ps = powerSpectrum()
 	        }
 	        double sample32 = amplification * (sample / 32768.0);
 	        micBufferData[floatIndex] = sample32;
-	        
+
 	    }
 	    return micBufferData;
 	}

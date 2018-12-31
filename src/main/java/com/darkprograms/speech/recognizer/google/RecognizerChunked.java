@@ -220,15 +220,15 @@ public class RecognizerChunked {
 	private void parseResponse(String rawResponse, GoogleResponse gr){
 		if(rawResponse == null || !rawResponse.contains("\"result\"")){ return; }
 		if(rawResponse.contains("\"confidence\":")){
-			String confidence = StringUtil.substringBetween(rawResponse, "\"confidence\":", "}");
+			String confidence = StringUtil.INSTANCE.substringBetween(rawResponse, "\"confidence\":", "}");
 			gr.setConfidence(confidence);
 		}
 		else{
 			gr.setConfidence(String.valueOf(1d));
 		}
-		String array = StringUtil.trimString(rawResponse, "[", "]");
+		String array = StringUtil.INSTANCE.trimString(rawResponse, "[", "]");
 		if(array.contains("[")){
-			array = StringUtil.trimString(array, "[", "]");
+			array = StringUtil.INSTANCE.trimString(array, "[", "]");
 		}
 		String[] parts = array.split(",");
 		gr.setResponse(parseTranscript(parts[0]));
@@ -247,7 +247,7 @@ public class RecognizerChunked {
 		if(s.endsWith("}")){
 			tmp = tmp.substring(0, tmp.length()-1);
 		}
-		tmp = StringUtil.stripQuotes(tmp);
+		tmp = StringUtil.INSTANCE.stripQuotes(tmp);
 		return tmp;
 	}
 

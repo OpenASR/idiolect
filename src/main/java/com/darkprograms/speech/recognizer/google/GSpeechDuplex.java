@@ -434,15 +434,15 @@ public class GSpeechDuplex{
 				|| rawResponse.equals("{\"result\":[]}")){ return; }
 		gr.getOtherPossibleResponses().clear(); // Emptys the list
 		if(rawResponse.contains("\"confidence\":")){
-			String confidence = StringUtil.substringBetween(rawResponse, "\"confidence\":", "}");
+			String confidence = StringUtil.INSTANCE.substringBetween(rawResponse, "\"confidence\":", "}");
 			gr.setConfidence(confidence);
 		}
 		else{
 			gr.setConfidence(String.valueOf(1));
 		}
-		String response = StringUtil.substringBetween(rawResponse, "[{\"transcript\":\"", "\"}],");
+		String response = StringUtil.INSTANCE.substringBetween(rawResponse, "[{\"transcript\":\"", "\"}],");
 		if (response == null) {
-			response = StringUtil.substringBetween(rawResponse, "[{\"transcript\":\"", "\",\"");
+			response = StringUtil.INSTANCE.substringBetween(rawResponse, "[{\"transcript\":\"", "\",\"");
 		}
 		gr.setResponse(response);
 		gr.setFinalResponse(rawResponse.contains("\"final\":true"));
