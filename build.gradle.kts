@@ -5,8 +5,8 @@ tasks.withType<RunIdeTask> {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "0.3.11"
-    kotlin("jvm") version "1.3.0-rc-116"
+    id("org.jetbrains.intellij") version "0.3.12"
+    kotlin("jvm") version "1.3.0"
 }
 
 intellij {
@@ -33,7 +33,7 @@ dependencies {
     compile("com.amazonaws:aws-java-sdk-cognitoidentity:1.11.340")
     compile("com.amazonaws:aws-java-sdk-lex:1.11.340")
     compile("com.amazonaws:aws-java-sdk-polly:1.11.340")
-    compile("com.googlecode.soundlibs:jlayer:1.0.1-1")
-    compile("com.google.cloud:google-cloud-speech:0.17.1-alpha")
+    compile("com.googlecode.soundlibs:jlayer:1.0.1.4")
+    compile("com.google.cloud:google-cloud-speech:0.32.0-alpha")
     testCompile("junit:junit:4.12")
 }
