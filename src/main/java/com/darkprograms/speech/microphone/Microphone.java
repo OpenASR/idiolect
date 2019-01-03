@@ -103,7 +103,7 @@ public class Microphone implements Closeable{
         return targetDataLine;
     }
 
-    
+
     public void setTargetDataLine(TargetDataLine targetDataLine) {
         this.targetDataLine = targetDataLine;
     }
@@ -143,7 +143,7 @@ public class Microphone implements Closeable{
      * Captures audio from the microphone and saves it a file
      *
      * @param audioFile The File to save the audio to
-     * @throws LineUnavailableException 
+     * @throws LineUnavailableException
      */
     public void captureAudioToFile(File audioFile) throws LineUnavailableException {
         setState(CaptureState.STARTING_CAPTURE);
@@ -161,7 +161,7 @@ public class Microphone implements Closeable{
      * Captures audio from the microphone and saves it a file
      *
      * @param audioFile The fully path (String) to a file you want to save the audio in
-     * @throws LineUnavailableException 
+     * @throws LineUnavailableException
      */
     public void captureAudioToFile(String audioFile) throws LineUnavailableException {
         File file = new File(audioFile);
