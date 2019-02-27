@@ -15,13 +15,10 @@ object GrammarService : AnActionListener {
         val actionId = ActionManager.getInstance().getId(anAction)
 
         if ("someaction" == actionId) {
-            logger.info("Swapping in grammar for action: " + anAction.toString())
+            logger.info("Swapping in grammar for action: $anAction")
             //swap in a context aware grammar
         }
     }
-
-    override fun afterActionPerformed(anAction: AnAction?, dataContext: DataContext, anActionEvent: AnActionEvent?) = //swap out a context aware grammar
-            Unit
 
     override fun beforeEditorTyping(c: Char, dataContext: DataContext) = Unit
 }
