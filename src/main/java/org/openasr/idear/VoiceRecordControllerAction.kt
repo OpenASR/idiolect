@@ -1,11 +1,10 @@
 package org.openasr.idear
 
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.johnlindquist.acejump.config.AceConfig
+import org.acejump.config.AceConfig
 import org.openasr.idear.actions.IdearAction
 import org.openasr.idear.asr.ASRService
 import org.openasr.idear.presentation.Icons
-
 
 object VoiceRecordControllerAction : IdearAction() {
     @Volatile private var isRecording = false
@@ -22,7 +21,7 @@ object VoiceRecordControllerAction : IdearAction() {
             isRecording = true
             templatePresentation.icon = Icons.RECORD_END
             isDefaultIcon = false
-            AceConfig.settings.allowedChars = "1234567890".toList()
+            AceConfig.settings.allowedChars = "1234567890"
             ASRService.activate()
         }
     }
