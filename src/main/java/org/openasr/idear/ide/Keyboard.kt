@@ -134,4 +134,4 @@ object Keyboard {
     fun releaseShift() = robot.keyRelease(VK_SHIFT)
 }
 
-fun main(args: Array<String>) = Keyboard.type("Hello there, how are you?")
+fun main() = Keyboard.type("Hello there, how are you?")

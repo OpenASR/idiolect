@@ -61,7 +61,7 @@ object PollyTTS : TTSProvider {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val ttService = PollyTTS
     val scan = Scanner(System.`in`)
 

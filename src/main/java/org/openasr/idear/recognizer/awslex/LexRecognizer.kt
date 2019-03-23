@@ -20,7 +20,7 @@ import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
  * @see LexASR which implements #waitForUtterance() instead of posting to NlpResultListener
  */
 // TODO: should LexRecognizer and LexASR be swapped around?
-open class LexRecognizer(val botName: String = "Idear", val botAlias: String = "PROD") : SpeechRecognizer, VoiceActivityListener, ASRSystem {
+open class LexRecognizer(private val botName: String = "Idear", private val botAlias: String = "PROD") : SpeechRecognizer, VoiceActivityListener, ASRSystem {
     private var logger = Logger.getInstance(javaClass)
     private val mic = MicrophoneAnalyzer(16_000F)
     private val vad = SimpleVAD()
@@ -29,7 +29,7 @@ open class LexRecognizer(val botName: String = "Idear", val botAlias: String = "
                     .withRegion(AwsUtils.REGION)
                     .withCredentials(AwsUtils.credentialsProvider)
                     .build(), botName, botAlias, "anonymous")
-    var nlpListener: NlpResultListener = LoggingNlpResultListener
+    private var nlpListener: NlpResultListener = LoggingNlpResultListener
 
     fun setUserId(userId: String) = lex.setUserId(userId)
 

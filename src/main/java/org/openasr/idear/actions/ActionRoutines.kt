@@ -5,7 +5,6 @@ import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.IdeActions.*
 import com.intellij.openapi.application.*
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.util.Consumer
 import org.openasr.idear.WordToNumberConverter
 import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
 import org.openasr.idear.asr.*
@@ -212,7 +211,7 @@ object ActionRoutines {
         return sb.toString()
     }
 
-    fun pressKeystroke(vararg keys: Int) = IDEService.type(*keys)
+    private fun pressKeystroke(vararg keys: Int) = IDEService.type(*keys)
 
     fun run(rec: SurroundWithNoNullCheckRecognizer, c: String, dataContext: DataContext) =
             EventQueue.invokeLater {
@@ -296,7 +295,7 @@ object ActionRoutines {
         }
     }
 
-    fun recognizeJumpMarker(): Int {
+    private fun recognizeJumpMarker(): Int {
         var result: String
         logger.info("Recognizing number...")
         while (true) {

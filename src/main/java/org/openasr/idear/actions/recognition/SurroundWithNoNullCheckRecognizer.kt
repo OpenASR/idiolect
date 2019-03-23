@@ -29,7 +29,7 @@ class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
         val result = arrayOfNulls<ApplyIntentionAction>(actions.size)
         for (i in result.indices) {
             val descriptor = actions[i]
-            val actionText = ApplicationManager.getApplication().runReadAction({ descriptor.action.text } as Computable<String>)
+            val actionText = ApplicationManager.getApplication().runReadAction(Computable { descriptor.action.text })
             result[i] = ApplyIntentionAction(descriptor, actionText, editor, file)
         }
 

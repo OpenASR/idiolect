@@ -7,10 +7,10 @@ import javax.sound.sampled.AudioFileFormat.Type.WAVE
 import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
 
 object CustomMicrophone {
-    const val sampleRate = 16000f
-    const val sampleSize = 16
-    const val signed = true
-    const val bigEndian = false
+    private const val sampleRate = 16000f
+    private const val sampleSize = 16
+    private const val signed = true
+    private const val bigEndian = false
     private val logger = Logger.getInstance(javaClass)
 
     private const val DURATION = 4500

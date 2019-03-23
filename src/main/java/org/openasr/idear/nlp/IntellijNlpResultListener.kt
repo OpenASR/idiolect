@@ -6,7 +6,7 @@ import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 import org.openasr.idear.tts.TTSService
 
 
-class IntellijNlpResultListener(var verbosity: Verbosity = Verbosity.INFO) : NlpResultListener {
+class IntellijNlpResultListener(private var verbosity: Verbosity = Verbosity.INFO) : NlpResultListener {
 
     override fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?) {
         sessionAttributes?.forEach { (key, value) ->

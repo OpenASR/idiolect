@@ -2,15 +2,10 @@ package org.openasr.idear.nlp
 
 import com.intellij.openapi.diagnostic.Logger
 import opennlp.tools.cmdline.parser.ParserTool
-import opennlp.tools.parser.Parse
-import opennlp.tools.parser.Parser
-import opennlp.tools.parser.ParserFactory
-import opennlp.tools.parser.ParserModel
+import opennlp.tools.parser.*
 import org.jetbrains.annotations.TestOnly
 import org.openasr.idear.Idear
-import java.io.FileInputStream
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
 
 class NlpParserService @TestOnly constructor(path: String?) : ParserService() {
     private lateinit var parser: Parser

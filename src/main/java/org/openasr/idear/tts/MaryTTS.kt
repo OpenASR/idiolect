@@ -49,7 +49,7 @@ object MaryTTS : TTSProvider {
     override fun dispose() = Unit
 }
 
-fun main(args: Array<String>) =
+fun main() =
         with(Scanner(System.`in`)) {
             do {
                 print("Text to speak: ")

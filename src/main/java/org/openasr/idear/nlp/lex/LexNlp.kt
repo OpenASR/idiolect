@@ -10,7 +10,7 @@ import org.openasr.idear.recognizer.awslex.AwsUtils
 /**
  * Posts an utterance (String) to Lex to be processed into actions
  */
-class LexNlp(val listener: NlpResultListener) : NlpProvider {
+class LexNlp(private val listener: NlpResultListener) : NlpProvider {
     private var lex = AmazonLexRuntimeClientBuilder.standard()
             .withCredentials(AwsUtils.credentialsProvider)
             .withRegion(AwsUtils.REGION)

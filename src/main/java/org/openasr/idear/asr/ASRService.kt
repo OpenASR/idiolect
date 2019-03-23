@@ -50,6 +50,6 @@ object ASRService {
 }
 
 // This is for testing purposes solely
-fun main(args: Array<String>) {
+fun main() {
     ASRService.activate()
 }
