@@ -9,6 +9,8 @@
         <![CDATA[
         <html>
         <dl>
+            <dt>1.3.4</dt>
+            <dd>Update AceJump version for cursor movement.</dd>
             <dt>1.3.3</dt>
             <dd>Fix for MaryTTS. Text to speech now works as intended.</dd>
             <dt>1.3.2</dt>
