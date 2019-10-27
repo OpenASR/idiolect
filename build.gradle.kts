@@ -5,14 +5,15 @@ tasks.withType<RunIdeTask> {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "0.4.7"
-    kotlin("jvm") version "1.3.30"
+    id("org.jetbrains.intellij") version "0.4.10"
+    kotlin("jvm") version "1.3.50"
 }
 
 intellij {
+    version = "193-EAP-SNAPSHOT"
     pluginName = "idear"
     updateSinceUntilBuild = false
-    setPlugins("AceJump:3.5.4")
+    setPlugins("AceJump:3.5.6", "java")
 }
 
 group = "org.openasr"
