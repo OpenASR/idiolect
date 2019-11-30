@@ -5,12 +5,12 @@ tasks.withType<RunIdeTask> {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "0.4.13"
-    kotlin("jvm") version "1.3.60"
+    id("org.jetbrains.intellij") version "0.4.14"
+    kotlin("jvm") version "1.3.61"
 }
 
 intellij {
-    version = "193-EAP-SNAPSHOT"
+    version = "2019.3"
     pluginName = "idear"
     updateSinceUntilBuild = false
     setPlugins("AceJump:3.5.6", "java")
