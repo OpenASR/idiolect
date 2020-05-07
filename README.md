@@ -16,7 +16,9 @@ ASR is supported by [CMU Sphinx](https://github.com/cmusphinx/sphinx4/) and [Ama
 Whether Lex manages to resolve and fulfill an intent or not, it will still return the recognised utterance in text ([unless it did not hear anything at all](https://github.com/OpenASR/idear/issues/40)).
 [`LexASR`](https://github.com/OpenASR/idear/blob/master/src/main/java/org/openasr/idear/asr/awslex/LexASR.kt) and
 [`CMUSphinxASR`](https://github.com/OpenASR/idear/blob/master/src/main/java/org/openasr/idear/asr/cmusphinx/CMUSphinxASR.kt)
-provide a method `waitForUtterance()` which blocks until the speech to text service returns a string. 
+provide a method `waitForUtterance()` which blocks until the speech to text service returns a string.
+
+If you'd prefer [Mozilla's DeepSpeech](https://github.com/mozilla/deepspeech), or [Picovoice](https://picovoice.ai/#offline-voice-ai), feel free to [help out](https://github.com/OpenASR/idear/issues/52). 
 
 ### NLP - Text to Action
 
@@ -32,6 +34,8 @@ implements `NlpProvider` and notifies the `NlpResultListener`.
 ## Text-to-Speech
 
 TTS is supported by [MaryTTS](https://github.com/marytts/marytts) and [Amazon Polly](https://aws.amazon.com/polly/). Speech synthesis is offline by default. 
+
+If you'd prefer [Mozilla's deep-learning TTS](https://github.com/mozilla/tts), feel free to [help out](https://github.com/OpenASR/idear/issues/53). 
 
 ## Roadmap
 
