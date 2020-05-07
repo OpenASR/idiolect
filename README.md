@@ -101,6 +101,44 @@ Run the following command from the project root directory:
 
 `./gradlew runIde -PluginDev`
 
+# Architecture
+
+## Plugin Actions
+
+[plugin.xml](src/main/resources/META-INF/plugin.xml) defines `<action>`s:
+
+### [`VoiceRecordControllerAction`](src/main/java/org/openasr/idear/VoiceRecordControllerAction.kt)
+  This action is invoked when the user clicks on the ![Voice control](src/main/resources/org.openasr.idear/icons/start.png) button in the toolbar. 
+  This simply tells [`ASRService`](src/main/java/org/openasr/idear/asr/ASRService.kt) to activate or standby.
+  When the `ASRService` is active, the [`ASRSystem`](src/main/java/org/openasr/idear/asr/ASRSystem.kt), 
+  by default [`ASRControlLoop`][ASRControlLoop] [(see below)](#ASRControlLoop).
+
+### [`ExecuteActionFromPredefinedText`](src/main/java/org/openasr/idear/actions/ExecuteActionFromPredefinedText.kt)
+  A debugging aid to use one of the [**`ActionRecognizer`**](src/main/java/org/openasr/idear/actions/recognition/ActionRecognizer.kt) 
+  extension classes configured in `plugin.xml` to generate an [`ActionCallInfo`](src/main/java/org/openasr/idear/actions/recognition/ActionCallInfo.kt)
+  which is then [`runInEditor()`](src/main/java/org/openasr/idear/actions/ExecuteActionByCommandText.kt#L25).
+  
+### [`ExecuteVoiceCommandAction`](src/main/java/org/openasr/idear/actions/ExecuteVoiceCommandAction.kt)
+  Similar to `ExecuteActionFromPredefinedText` but uses the `Idear.VoiceCommand.Text` data attached to the invoking `AnActionEvent`.
+
+### [`WhereAmIAction`](src/main/java/org/openasr/idear/actions/WhereAmIAction.kt)  
+   
+### IDEA Actions 
+
+There are many Actions (classes which extend `AnAction`) provided by IDEA:   
+   
+  - [ExternalSystemActions](https://upsource.jetbrains.com/idea-ce/file/idea-ce-1d111593d9e5208b6783f381b507e34866587ec8/platform/platform-resources/src/idea/ExternalSystemActions.xml)
+  - [LangActions](https://upsource.jetbrains.com/idea-ce/file/idea-ce-1d111593d9e5208b6783f381b507e34866587ec8/platform/platform-resources/src/idea/LangActions.xml)
+  - [PlatformActions](https://upsource.jetbrains.com/idea-ce/file/idea-ce-1d111593d9e5208b6783f381b507e34866587ec8/platform/platform-resources/src/idea/PlatformActions.xml)
+  - [VcsActions](https://upsource.jetbrains.com/idea-ce/file/idea-ce-1d111593d9e5208b6783f381b507e34866587ec8/platform/platform-resources/src/idea/VcsActions.xml)
+
+## ASRControlLoop
+
+When [`ASRControlLoop`][ASRControlLoop] detects an utterance, it invokes 
+[`PatternBasedNlpProvider.processUtterance()`](src/main/java/org/openasr/idear/nlp/PatternBasedNlpProvider.kt#L43)
+which typically calls `invokeAction()` and/or one or more of the methods of [`IDEService`](src/main/java/org/openasr/idear/ide/IDEService.kt)
+
+
 # Programming By Voice
 
 - [Using Python to Code by Voice](https://www.youtube.com/watch?v=8SkdfdXWYaI)
@@ -118,3 +156,5 @@ Run the following command from the project root directory:
 [plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/7910-idear.svg
 [plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/7910-idear.svg
 
+
+[ASRControlLoop]: src/main/java/org/openasr/idear/asr/ASRControlLoop.kt
