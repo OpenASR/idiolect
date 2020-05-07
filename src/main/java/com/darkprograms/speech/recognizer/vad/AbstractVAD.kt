@@ -113,7 +113,7 @@ abstract class AbstractVAD : VoiceActivityDetector, Runnable {
     protected abstract fun sampleForSpeech(audioData: ByteArray): Boolean
 
     protected fun incrementSpeechCounter(speechDetected: Boolean, bytesRead: Int, audioData: ByteArray) {
-        var bytesRead = bytesRead
+        var updatedBytesRead = bytesRead
         if (speechDetected) {
             speechCount++
             // Ignore speech runs less than 5 successive frames.
@@ -122,9 +122,9 @@ abstract class AbstractVAD : VoiceActivityDetector, Runnable {
                 silenceCount = 0
             }
 
-            if (offset + bytesRead < bufferSize) {
-                outBuffer!!.write(audioData, 0, bytesRead)
-                offset += bytesRead
+            if (offset + updatedBytesRead < bufferSize) {
+                outBuffer!!.write(audioData, 0, updatedBytesRead)
+                offset += updatedBytesRead
 
                 if (speechCount >= maxSpeechWindows) {
                     println("in theory, this should be handled by the following end of buffer handler")
@@ -132,8 +132,8 @@ abstract class AbstractVAD : VoiceActivityDetector, Runnable {
                 }
             } else {
                 println("Reached the end of the buffer! Send what we've captured so far")
-                bytesRead = bufferSize - offset
-                outBuffer!!.write(audioData, 0, bytesRead)
+                updatedBytesRead = bufferSize - offset
+                outBuffer!!.write(audioData, 0, updatedBytesRead)
                 emitVoiceActivity(outBuffer)
             }
         } else {
