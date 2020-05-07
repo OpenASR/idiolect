@@ -1,5 +1,6 @@
 # idear
 [![][jetbrains-team-svg]][jetbrains-team-page]
+![CI](https://github.com/OpenASR/idear/workflows/CI/badge.svg)
 [![][travis-status-svg]][travis-build-status]
 [![][teamcity-status-svg]][teamcity-build-status]
 [![][plugin-repo-svg]][plugin-repo-page]
