@@ -17,7 +17,7 @@ class RecognitionSettingsForm {
 
     companion object {
         enum class ASRServiceId(private val label: String) {
-            CMU_SPHINX("CMU Sphinx"), AWS_LEX("Amazon Lex");
+            CMU_SPHINX("CMU Sphinx"), AWS_LEX("Amazon Lex"), PICOVOICE("Picovoice");
 
             override fun toString() = label
         }

@@ -5,11 +5,14 @@ import com.intellij.openapi.options.Configurable
 import org.openasr.idear.asr.ASRControlLoop
 import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
+import org.openasr.idear.asr.picovoice.PicovoiceASR
+import org.openasr.idear.asr.picovoice.PicovoiceASRSystem
 import org.openasr.idear.nlp.*
 import org.openasr.idear.nlp.lex.LexNlp
 import org.openasr.idear.recognizer.awslex.LexRecognizer
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.CMU_SPHINX
+import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.PICOVOICE
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId.PATTERN
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.TTSServiceId
@@ -19,6 +22,7 @@ import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId.AWS_LEX as LEX_NLP
 
 /*
+ * @see https://picovoice.ai/
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
  */
 @State(name = "IdearConfiguration", storages = [(Storage("recognition.xml"))])
@@ -27,6 +31,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         var settings = Settings()
         fun getASRSystem() =
                 if (settings.asrService == LEX_ASR && settings.nlpService == LEX_NLP) LexRecognizer()
+                else if (settings.asrService == PICOVOICE /*&& settings.*/) PicovoiceASRSystem(PicovoiceASRSystem.MODEL_FILE_PATH, PicovoiceASRSystem.CONTEXT_FILE_PATH)
                 else ASRControlLoop(getASRProvider(), getNLPProvider())
 
         // TODO: list voices by locale
@@ -41,6 +46,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
                 when (settings.asrService) {
                     CMU_SPHINX -> CMUSphinxASR
                     LEX_ASR -> LexASR()
+                    PICOVOICE -> PicovoiceASR()
                 }
 
         private fun getNLPProvider(/*listener: NlpResultListener*/) =

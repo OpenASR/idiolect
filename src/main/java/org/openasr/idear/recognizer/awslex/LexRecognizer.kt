@@ -60,6 +60,7 @@ open class LexRecognizer(private val botName: String = "Idear", private val botA
         vad.terminate()
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onVoiceActivity(audioInputStream: AudioInputStream) {
         logger.info("processing speech... ${audioInputStream.frameLength}")
         val result = lex.getRecognizedDataForStream(audioInputStream).result

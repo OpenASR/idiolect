@@ -51,6 +51,4 @@ class ASRControlLoop(private val asrProvider: ASRProvider, private val nlpProvde
             }
         }
     }
-
-
 }

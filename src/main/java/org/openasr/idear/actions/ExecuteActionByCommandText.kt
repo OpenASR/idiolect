@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_NEXT_TEMPLATE_VARIABLE
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionManager
+import com.intellij.openapi.editor.actionSystem.TypedAction
 import org.openasr.idear.actions.recognition.*
 import org.openasr.idear.ide.*
 
@@ -39,6 +40,10 @@ abstract class ExecuteActionByCommandText : IdearAction() {
     }
 
     private fun typeText(editor: Editor, type: String, context: DataContext) {
+        // TODO: getTypedAction() is deprecated, but this alternative is only supported in #193 (2019.3)
+        //       Currently we're supporting <idea-version since-build="131"/> which is pre-2016
+//        val typedAction = TypedAction.getInstance();
+        @Suppress("DEPRECATION")
         val typedAction = EditorActionManager.getInstance().typedAction
         for (c in type.toCharArray()) typedAction.actionPerformed(editor, c, context)
     }
