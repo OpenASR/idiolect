@@ -9,7 +9,7 @@ A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_use
 
 ## Features
 
-Idear supports a [simple grammar](src/main/resources/org.openasr.idear/grammars/command.gramsrc/main/resources/org.openasr.idear/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idear/wiki/Feature-Roadmap).
+Idear supports a [simple grammar](src/main/resources/org.openasr.idear/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idear/wiki/Feature-Roadmap).
 
 # Building
 
