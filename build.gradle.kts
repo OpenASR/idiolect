@@ -1,22 +1,47 @@
 import org.jetbrains.intellij.tasks.RunIdeTask
-
-tasks.withType<RunIdeTask> {
-    findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
-}
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.jetbrains.intellij") version "0.4.7"
-    kotlin("jvm") version "1.3.70"
+    idea apply true
+    id("org.jetbrains.intellij") version "0.4.18"
+    kotlin("jvm") version "1.3.72"
 }
 
 intellij {
+    version = "2020.1"
     pluginName = "idear"
     updateSinceUntilBuild = false
-    setPlugins("AceJump:3.5.4")
+    setPlugins("AceJump:3.6.1", "java")
 }
 
 group = "org.openasr"
 version = "1.3.4"
+
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+//    named<Zip>("buildPlugin") {
+//        dependsOn("test")
+//        archiveFileName.set("idear.zip")
+//    }
+
+    withType<RunIdeTask> {
+        dependsOn("test")
+        findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
+    }
+
+//    withType<PublishTask> {
+//        val intellijPublishToken: String? by project
+//        token(intellijPublishToken)
+//    }
+//
+//    withType<PatchPluginXmlTask> {
+//        sinceBuild("201.6668.0")
+//        changeNotes(fetchChangeNotes())
+//    }
+}
 
 repositories {
     jcenter()
@@ -25,15 +50,16 @@ repositories {
 }
 
 dependencies {
-    compile("net.sourceforge.javaflacencoder:java-flac-encoder:0.3.7")
-    compile("edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT")
-    compile("com.mashape.unirest:unirest-java:1.4.9")
-    compile("org.codehaus.jettison:jettison:1.4.0")
-    compile("de.dfki.mary:voice-cmu-slt-hsmm:5.2")
-    compile("com.amazonaws:aws-java-sdk-cognitoidentity:1.11.340")
-    compile("com.amazonaws:aws-java-sdk-lex:1.11.340")
-    compile("com.amazonaws:aws-java-sdk-polly:1.11.340")
-    compile("com.googlecode.soundlibs:jlayer:1.0.1.4")
-    compile("com.google.cloud:google-cloud-speech:0.32.0-alpha")
-    testCompile("junit:junit:4.12")
+    implementation(kotlin("stdlib-jdk8"))
+    implementation("net.sourceforge.javaflacencoder:java-flac-encoder:0.3.7")
+    implementation("edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT")
+    implementation("com.mashape.unirest:unirest-java:1.4.9")
+    implementation("org.codehaus.jettison:jettison:1.4.0")
+    implementation("de.dfki.mary:voice-cmu-slt-hsmm:5.2")
+    implementation("com.amazonaws:aws-java-sdk-cognitoidentity:1.11.340")
+    implementation("com.amazonaws:aws-java-sdk-lex:1.11.340")
+    implementation("com.amazonaws:aws-java-sdk-polly:1.11.340")
+    implementation("com.googlecode.soundlibs:jlayer:1.0.1.4")
+    implementation("com.google.cloud:google-cloud-speech:0.32.0-alpha")
+    testImplementation("junit:junit:4.12")
 }

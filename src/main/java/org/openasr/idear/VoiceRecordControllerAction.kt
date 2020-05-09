@@ -8,20 +8,20 @@ import org.openasr.idear.presentation.Icons
 
 object VoiceRecordControllerAction : IdearAction() {
     @Volatile private var isRecording = false
-    private var aceJumpDefaults = AceConfig.settings.allowedChars
+    private var aceJumpDefaults = AceConfig.state.allowedChars
 
     override fun actionPerformed(anActionEvent: AnActionEvent) {
         if (isRecording) {
             isRecording = false
             templatePresentation.icon = Icons.RECORD_START
             isDefaultIcon = false
-            AceConfig.settings.allowedChars = aceJumpDefaults
+            AceConfig.state.allowedChars = aceJumpDefaults
             ASRService.deactivate()
         } else {
             isRecording = true
             templatePresentation.icon = Icons.RECORD_END
             isDefaultIcon = false
-            AceConfig.settings.allowedChars = "1234567890"
+            AceConfig.state.allowedChars = "1234567890"
             ASRService.activate()
         }
     }
