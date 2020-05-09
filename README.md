@@ -25,13 +25,13 @@ Recognition works with most popular microphones (preferably 16kHz, 16-bit). For 
 
 ## Contributing
 
-Run the following command from the project root directory:
+Contributors who have IntelliJ IDEA installed can simply open the project. Otherwise, run the following command from the project's root directory:
 
 `./gradlew runIde -PluginDev`
 
-For more information about the plugin architecture, please refer to [the wiki page](https://github.com/OpenASR/idear/wiki/Architecture).
-
 ## Architecture
+
+Idear is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.org/intellij/sdk/docs/intro/welcome.html). For more information about the plugin architecture, please refer to [the wiki page](https://github.com/OpenASR/idear/wiki/Architecture).
 
 ### Plugin Actions
 
@@ -77,7 +77,7 @@ which typically calls `invokeAction()` and/or one or more of the methods of [`ID
 ## Maintainers
 
 * [Breandan Considine](https://github.com/breandan/)
-* [Nicolas Albion](https://github.com/nalbion)
+* [Nicholas Albion](https://github.com/nalbion)
 
 <!-- Badges -->
 [jetbrains-team-page]: https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub
