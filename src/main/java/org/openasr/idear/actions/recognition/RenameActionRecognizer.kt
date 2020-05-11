@@ -3,13 +3,13 @@ package org.openasr.idear.actions.recognition
 import com.intellij.openapi.actionSystem.DataContext
 
 class RenameActionRecognizer : ActionRecognizer {
-    override fun isMatching(sentence: String) = sentence.contains("rename")
+    override fun isMatching(sentence: String) = "rename" in sentence
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
         if (!isMatching(sentence)) return null
 
         val words = sentence.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val renameIndex = words.indices.firstOrNull { words[it].contains("rename") } ?: 0
+        val renameIndex = words.indices.firstOrNull { "rename" in words[it] } ?: 0
 
         val newName = StringBuilder()
         var first = true

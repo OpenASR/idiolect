@@ -53,9 +53,7 @@ object StringUtil {
      * @return The trimmed String
      */
     fun trimString(s: String, part1: String, part2: String): String? {
-        if (!s.contains(part1) || !s.contains(part2)) {
-            return null
-        }
+        if (part1 !in s || part2 !in s) return null
         val first = s.indexOf(part1) + part1.length + 1
         var tmp = s.substring(first)
         val last = tmp.lastIndexOf(part2)

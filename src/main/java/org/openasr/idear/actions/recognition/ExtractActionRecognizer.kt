@@ -8,7 +8,7 @@ class ExtractActionRecognizer : ActionRecognizer {
     private val actions = ContainerUtil.newHashSet("extract")
 
     override fun isMatching(sentence: String) =
-            !actions.firstOrNull { sentence.contains(it) }.isNullOrEmpty()
+            !actions.firstOrNull { it in sentence }.isNullOrEmpty()
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
         if (!isMatching(sentence)) return null
@@ -44,9 +44,9 @@ class ExtractActionRecognizer : ActionRecognizer {
     private fun getActionId(words: Array<String>): Pair<String, Int>? {
         for (i in words.indices) {
             val word = words[i]
-            if (word.contains("variable")) {
+            if ("variable" in word) {
                 return Pair.create("IntroduceVariable", i)
-            } else if (word.contains("field")) {
+            } else if ("field" in word) {
                 return Pair.create("IntroduceField", i)
             }
         }

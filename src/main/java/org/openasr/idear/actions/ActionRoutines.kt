@@ -24,7 +24,7 @@ object ActionRoutines {
     private val logger = Logger.getInstance(javaClass)
 
     fun routineReleaseKey(c: String) {
-        if (c.contains("shift")) IDEService.releaseShift()
+        if ("shift" in c) IDEService.releaseShift()
     }
 
     fun routineFind(c: String) {
@@ -146,12 +146,12 @@ object ActionRoutines {
 
     fun routinePress(c: String) {
         when {
-            c.contains(Commands.DELETE) -> pressKeystroke(VK_DELETE)
-            c.contains("return") || c.contains("enter") -> pressKeystroke(VK_ENTER)
-            c.contains(Commands.ESCAPE) -> pressKeystroke(VK_ESCAPE)
-            c.contains(Commands.TAB) -> pressKeystroke(VK_TAB)
-            c.contains(Commands.UNDO) -> IDEService.invokeAction("\$Undo")
-            c.contains("shift") -> IDEService.pressShift()
+            Commands.DELETE in c -> pressKeystroke(VK_DELETE)
+            "return" in c || "enter" in c -> pressKeystroke(VK_ENTER)
+            Commands.ESCAPE in c -> pressKeystroke(VK_ESCAPE)
+            Commands.TAB in c -> pressKeystroke(VK_TAB)
+            Commands.UNDO in c -> IDEService.invokeAction("\$Undo")
+            "shift" in c -> IDEService.pressShift()
         }
     }
 
@@ -222,9 +222,7 @@ object ActionRoutines {
         TTSService.say("knock, knock, knock, knock, knock")
 
         var result: String? = null
-        while ("who is there" != result) {
-            result = ASRService.waitForUtterance()
-        }
+        while ("who is there" != result) result = ASRService.waitForUtterance()
 
         TTSService.say("Hang on, I will be right back")
 
@@ -236,9 +234,7 @@ object ActionRoutines {
 
         TTSService.say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va")
 
-        while (!result!!.contains("wait who") && !result.contains("who are you")) {
-            result = ASRService.waitForUtterance()
-        }
+        while ("who" !in result!!) result = ASRService.waitForUtterance()
 
         TTSService.say("It is me, Jah java va va, va, va. Open up already!")
     }

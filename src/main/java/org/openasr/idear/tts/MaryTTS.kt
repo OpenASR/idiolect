@@ -20,7 +20,7 @@ object MaryTTS : TTSProvider {
             maryTTS = LocalMaryInterface()
             val systemLocale = Locale.getDefault()
             logger.info("Getting MaryTTS voice for: $systemLocale")
-            voice = if (maryTTS.availableLocales.contains(systemLocale))
+            voice = if (systemLocale in maryTTS.availableLocales)
                 Voice.getDefaultVoice(systemLocale)
             else
                 Voice.getVoice(maryTTS.availableVoices.iterator().next())

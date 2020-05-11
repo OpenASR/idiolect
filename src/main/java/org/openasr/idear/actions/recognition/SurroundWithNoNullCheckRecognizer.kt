@@ -11,7 +11,7 @@ import org.openasr.idear.ide.IDEService
 import java.util.*
 
 class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
-    override fun isMatching(sentence: String) = sentence.contains("check") && sentence.contains("not")
+    override fun isMatching(sentence: String) = "check" in sentence && "not" in sentence
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
         val editor = IDEService.getEditor(dataContext)

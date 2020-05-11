@@ -14,7 +14,7 @@ import java.util.*
 //runs only selected configuration
 class FindUsagesActionRecognizer : ActionRecognizer {
 
-    override fun isMatching(sentence: String) = sentence.contains("find")
+    override fun isMatching(sentence: String) = "find" in sentence
 
     override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo {
         val aci = ActionCallInfo("FindUsages")
@@ -35,13 +35,13 @@ class FindUsagesActionRecognizer : ActionRecognizer {
         var targetName: String? = null
         var subject: String? = null
 
-        if (wordsSet.contains("field")) {
+        if ("field" in wordsSet) {
             subject = "field"
             targetName = extractNameOf("field", words)
 
             if (targetName.isEmpty()) return aci
             targets = arrayOf(klass.findFieldByName(targetName, /*checkBases*/ true)!!)
-        } else if (wordsSet.contains("method")) {
+        } else if ("method" in wordsSet) {
             subject = "method"
             targetName = extractNameOf("method", words)
 
