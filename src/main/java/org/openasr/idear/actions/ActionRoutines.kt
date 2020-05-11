@@ -292,10 +292,9 @@ object ActionRoutines {
     }
 
     private fun recognizeJumpMarker(): Int {
-        var result: String
         logger.info("Recognizing number...")
         while (true) {
-            result = ASRService.waitForUtterance()
+            val result = ASRService.waitForUtterance()
             if (result.startsWith("jump ")) {
                 val number = WordToNumberConverter.getNumber(result.substring(5))
                 logger.info("Recognized number: $number")

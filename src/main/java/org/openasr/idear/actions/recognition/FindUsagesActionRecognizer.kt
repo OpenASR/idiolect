@@ -20,7 +20,7 @@ class FindUsagesActionRecognizer : ActionRecognizer {
         val aci = ActionCallInfo("FindUsages")
 
         // Ok, that's lame
-        val words = Arrays.asList(*sentence.split("\\W+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
+        val words = listOf(*sentence.split("\\W+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
         val wordsSet = HashSet(words)
 
         val editor = IDEService.getEditor(dataContext)

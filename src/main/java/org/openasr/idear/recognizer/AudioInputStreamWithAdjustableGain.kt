@@ -12,8 +12,6 @@ class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLi
     private var masterGain = DEFAULT_MASTER_GAIN
     private var noiseLevel = DEFAULT_NOISE_LEVEL
 
-    override fun read() = super.read()
-
     override fun read(b: ByteArray): Int {
         val read = super.read(b)
 
@@ -53,7 +51,7 @@ class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLi
 
     fun setNoiseLevel(nl: Double) = nl.let { noiseLevel = it }
 
-    private fun adjust(b: Byte) = cut((b * masterGain).toByte())
+    private fun adjust(b: Byte) = cut((b * masterGain).toInt().toByte())
 
     private fun cut(b: Byte) =
             if (b < MAX_VALUE * noiseLevel && b > MIN_VALUE * noiseLevel) 0 else b

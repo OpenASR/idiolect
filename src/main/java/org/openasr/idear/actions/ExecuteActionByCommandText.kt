@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_NEXT_TEMPLATE_VARIABLE
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.EditorActionManager
+import com.intellij.openapi.editor.actionSystem.TypedAction
 import org.openasr.idear.actions.recognition.*
 import org.openasr.idear.ide.*
 
@@ -39,8 +40,7 @@ abstract class ExecuteActionByCommandText : IdearAction() {
     }
 
     private fun typeText(editor: Editor, type: String, context: DataContext) {
-        val typedAction = EditorActionManager.getInstance().typedAction
-        for (c in type.toCharArray()) typedAction.actionPerformed(editor, c, context)
+      type.forEach { TypedAction.getInstance().actionPerformed(editor, it, context) }
     }
 
     override fun update(e: AnActionEvent) =
