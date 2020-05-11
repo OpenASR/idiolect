@@ -29,24 +29,18 @@
         <![CDATA[]]>
     </change-notes>
 
-    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="131"/>
-
-    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-         on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
     <depends>AceJump</depends>
 
     <extensionPoints>
-        <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer"/>
+        <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer" dynamic="true"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceInterface="org.openasr.idear.settings.IdearConfiguration"
-                            serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
+        <applicationService serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
         <applicationConfigurable groupId="tools" displayName="Idear" id="preferences.IdearConfiguration"
-                                 instance="org.openasr.idear.settings.IdearConfiguration"/>
+                                 instance="org.openasr.idear.settings.IdearConfiguration" dynamic="true"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idear">
@@ -58,16 +52,6 @@
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
     </extensions>
-
-    <application-components>
-        <component>
-            <implementation-class>org.openasr.idear.Idear</implementation-class>
-        </component>
-    </application-components>
-
-    <project-components>
-        <!-- Add your project components here -->
-    </project-components>
 
     <actions>
         <action id="Idear.Start" class="org.openasr.idear.VoiceRecordControllerAction" text="Voice control"
