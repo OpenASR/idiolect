@@ -28,6 +28,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd libdeepspeech
+          sed -i "2i\
+              id 'maven-publish'\
+          " build.gradle
+
           tee -a build.gradle << END
 
           publishing {
@@ -43,7 +47,7 @@ jobs:
             }
           }
           END
-          cat build.gradle  
+          cat build.gradle
           gradle publish -x test
           ls -al
 
