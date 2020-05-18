@@ -28,7 +28,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd libdeepspeech
-          cat <<EOT >> build.gradle
+          tee -a build.gradle << END
+
           publishing {
             repositories {
               maven {
@@ -41,7 +42,8 @@ jobs:
               }
             }
           }
-          EOT
+          END
+          cat build.gradle  
           gradle publish -x test
           ls -al
 
