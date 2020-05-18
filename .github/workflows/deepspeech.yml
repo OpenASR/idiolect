@@ -1,0 +1,56 @@
+name: DeepSpeech
+
+on:
+  push:
+    branches:
+      - feature/deepspeech
+#      - master
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout DeepSpeech
+        uses: actions/checkout@v2
+        with:
+         repository: GommeAntiLegit/DeepSpeech-Java-Bindings
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Build libdeepspeech-java.jar
+#        wget https://github.com/mozilla/DeepSpeech/archive/v0.7.1.tar.gz
+#        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
+#        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cuda.win.tar.xz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd libdeepspeech
+          cat <<EOT >> build.gradle
+          publishing {
+            repositories {
+              maven {
+                name = "GitHubPackages"
+                url = "https://maven.pkg.github.com/openasr/idear"
+                credentials = {
+                  username = System.getenv("GITHUB_ACTOR")
+                  password = System.getenv("GITHUB_TOKEN")
+                }
+              }
+            }
+          }
+          EOT
+          gradle publish -x test
+          ls -al
+
+
+      - name: Build libdeepspeech-jni
+        run: |
+          cd DeepSpeech-jni
+          cmake build .
+          ls -al
+          ls -al cmake-build-release
+
+#set(CUDA_CONFIGURATION FALSE)
