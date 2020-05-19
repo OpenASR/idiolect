@@ -61,6 +61,7 @@ jobs:
           sed -i "s/set(CUDA_CONFIGURATION .*)/set(CUDA_CONFIGURATION FALSE)/" CMakeLists.txt
           sed -i "s/set(PLATFORM .*)/set(PLATFORM linux)/" CMakeLists.txt
           cmake build .
+          make
           ls -al
           ls -al cmake-build-release
 
