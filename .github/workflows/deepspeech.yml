@@ -24,6 +24,7 @@ jobs:
 #        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
 #        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cuda.win.tar.xz
       - name: Download libdeepspeech
+        working-directory: DeepSpeech-jni
         run: |
           mkdir -p libs/linux; cd $_
           wget -q https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
@@ -31,10 +32,10 @@ jobs:
           mv libdeepspeech.so libdeepspeech_cpu.so
 
       - name: Build libdeepspeech-java.jar
+        working-directory: libdeepspeech
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd libdeepspeech
           sed -i "2i\
               id 'maven-publish'\
           " build.gradle
@@ -56,8 +57,8 @@ jobs:
           gradle publish -x test
 
       - name: Build libdeepspeech-jni
+        working-directory: DeepSpeech-jni
         run: |
-          cd DeepSpeech-jni
           sed -i "s/set(CUDA_CONFIGURATION .*)/set(CUDA_CONFIGURATION FALSE)/" CMakeLists.txt
           sed -i "s/set(PLATFORM .*)/set(PLATFORM linux)/" CMakeLists.txt
           cmake build .
