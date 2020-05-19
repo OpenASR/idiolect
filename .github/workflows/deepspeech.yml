@@ -32,7 +32,6 @@ jobs:
           mv libdeepspeech.so libs/linux/libdeepspeech_cpu.so
           cp deepspeech.h libs/
           cp deepspeech.h libs/linux
-          cp deepspeech.h /usr/local/include
 
       - name: Build libdeepspeech-java.jar
         working-directory: libdeepspeech
