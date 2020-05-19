@@ -35,6 +35,11 @@ jobs:
           tee -a build.gradle << END
 
           publishing {
+            publications {
+              deepspeech(MavenPublication) {
+                from components.java
+              }
+            }
             repositories {
               maven {
                 name = "GitHubPackages"
@@ -48,7 +53,7 @@ jobs:
           }
           END
           cat build.gradle
-          gradle publish -x test
+          gradle publish -x test --warning-mode all --info
           ls -al
 
 
