@@ -45,14 +45,13 @@ jobs:
                 name = "GitHubPackages"
                 url = "https://maven.pkg.github.com/openasr/idear"
                 credentials = {
-                  username = System.getenv("GITHUB_ACTOR")
-                  password = System.getenv("GITHUB_TOKEN")
+                  username = "$System.env.GITHUB_ACTOR"
+                  password = "$System.env.GITHUB_TOKEN"
                 }
               }
             }
           }
           END
-          cat build.gradle
           gradle publish -x test --warning-mode all --info
           ls -al
 
