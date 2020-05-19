@@ -20,10 +20,18 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Build libdeepspeech-java.jar
 #        wget https://github.com/mozilla/DeepSpeech/archive/v0.7.1.tar.gz
 #        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
 #        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cuda.win.tar.xz
+      - name: Download libdeepspeech
+        run: |
+          wget https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
+          tar -xzvf native_client.amd64.cpu.linux.tar.xz && rm native_client.amd64.cpu.linux.tar.xz
+          ls -al
+          ls -al native_client.amd64.cpu.linux
+          mkdir -p libs/linux; mv native_client.amd64.cpu.linux/libdeepspeech.so $_
+
+      - name: Build libdeepspeech-java.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -31,15 +39,9 @@ jobs:
           sed -i "2i\
               id 'maven-publish'\
           " build.gradle
-
           tee -a build.gradle << END
 
           publishing {
-            publications {
-              deepspeech(MavenPublication) {
-                from components.java
-              }
-            }
             repositories {
               maven {
                 name "GitHubPackages"
@@ -52,15 +54,13 @@ jobs:
             }
           }
           END
-
-          cat build.gradle
-          gradle publish -x test --warning-mode all --info
-          ls -al
-
+          gradle publish -x test
 
       - name: Build libdeepspeech-jni
         run: |
           cd DeepSpeech-jni
+          sed -i "s/set(CUDA_CONFIGURATION .*)/set(CUDA_CONFIGURATION FALSE)/" CMakeLists.txt
+          sed -i "s/set(PLATFORM .*)/set(PLATFORM linux)/" CMakeLists.txt
           cmake build .
           ls -al
           ls -al cmake-build-release

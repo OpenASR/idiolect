@@ -47,6 +47,15 @@ repositories {
     jcenter()
     maven("https://oss.sonatype.org/content/repositories/releases/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
+
+    if (System.getenv("GITHUB_TOKEN") != null) {
+        maven("https://maven.pkg.github.com/OpenASR/idear") {
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -61,5 +70,6 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-polly:1.11.340")
     implementation("com.googlecode.soundlibs:jlayer:1.0.1.4")
     implementation("com.google.cloud:google-cloud-speech:0.32.0-alpha")
+    implementation("org.mozilla.deepspeech:libdeepspeech:1.0")
     testImplementation("junit:junit:4.13")
 }
