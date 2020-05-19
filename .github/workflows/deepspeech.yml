@@ -31,6 +31,7 @@ jobs:
           wget -q https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
           tar -xf native_client.amd64.cpu.linux.tar.xz && rm native_client.amd64.cpu.linux.tar.xz
           mkdir -p ../DeepSpeech-Java-Bindings/libs/linux && mv libdeepspeech.so $_/libdeepspeech_cpu.so
+          ls -al ../DeepSpeech-Java-Bindings/libs/linux
 
       - name: Build libdeepspeech-java.jar
         working-directory: DeepSpeech-Java-Bindings/libdeepspeech
@@ -63,6 +64,7 @@ jobs:
           sed -i "s/set(CUDA_CONFIGURATION .*)/set(CUDA_CONFIGURATION FALSE)/" CMakeLists.txt
           sed -i "s/set(PLATFORM .*)/set(PLATFORM linux)/" CMakeLists.txt
           cmake build .
+          ls -al
           ls -al libs/linux
           ls -al ../../
           make
