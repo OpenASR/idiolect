@@ -30,6 +30,9 @@ jobs:
           tar -xf native_client.amd64.cpu.linux.tar.xz && rm native_client.amd64.cpu.linux.tar.xz
           mkdir -p libs/linux
           mv libdeepspeech.so libs/linux/libdeepspeech_cpu.so
+          cp deepspeech.h libs/
+          cp deepspeech.h libs/linux
+          cp deepspeech.h /usr/local/include
 
       - name: Build libdeepspeech-java.jar
         working-directory: libdeepspeech
@@ -62,8 +65,7 @@ jobs:
           sed -i "s/set(CUDA_CONFIGURATION .*)/set(CUDA_CONFIGURATION FALSE)/" CMakeLists.txt
           sed -i "s/set(PLATFORM .*)/set(PLATFORM linux)/" CMakeLists.txt
           cmake build .
-          ls -al
-          cat Makefile
+          gcc -xc++ -E -v -
           make
           ls -al
           ls -al cmake-build-release
