@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v2
         with:
          repository: GommeAntiLegit/DeepSpeech-Java-Bindings
+         path: DeepSpeech-Java-Bindings
 
       - uses: actions/setup-java@v1
         with:
@@ -24,15 +25,15 @@ jobs:
 #        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
 #        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cuda.win.tar.xz
       - name: Download libdeepspeech
-        working-directory: DeepSpeech-jni
+#        working-directory: DeepSpeech-Java-Bindings/DeepSpeech-jni
         run: |
-          mkdir -p libs/linux && cd $_
+          mkdir deepspeech && cd $_
           wget -q https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
           tar -xf native_client.amd64.cpu.linux.tar.xz && rm native_client.amd64.cpu.linux.tar.xz
-          mv libdeepspeech.so libdeepspeech_cpu.so
+          mkdir -p ../DeepSpeech-Java-Bindings/libs/linux && mv libdeepspeech.so $_/libdeepspeech_cpu.so
 
       - name: Build libdeepspeech-java.jar
-        working-directory: libdeepspeech
+        working-directory: DeepSpeech-Java-Bindings/libdeepspeech
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -57,11 +58,11 @@ jobs:
           gradle publish -x test
 
       - name: Build libdeepspeech-jni
-        working-directory: DeepSpeech-jni
+        working-directory: DeepSpeech-Java-Bindings/DeepSpeech-jni
         run: |
           sed -i "s/set(CUDA_CONFIGURATION .*)/set(CUDA_CONFIGURATION FALSE)/" CMakeLists.txt
           sed -i "s/set(PLATFORM .*)/set(PLATFORM linux)/" CMakeLists.txt
-          CXXFLAGS=-isystem\ libs/linux/ cmake build .
+          cmake build .
           make
           ls -al
           ls -al cmake-build-release
