@@ -25,8 +25,8 @@ jobs:
 #        https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cuda.win.tar.xz
       - name: Download libdeepspeech
         run: |
-          wget https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
-          tar -xzvf native_client.amd64.cpu.linux.tar.xz && rm native_client.amd64.cpu.linux.tar.xz
+          wget -q https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
+          tar -xf native_client.amd64.cpu.linux.tar.xz && rm native_client.amd64.cpu.linux.tar.xz
           ls -al
           ls -al native_client.amd64.cpu.linux
           mkdir -p libs/linux; mv native_client.amd64.cpu.linux/libdeepspeech.so $_
