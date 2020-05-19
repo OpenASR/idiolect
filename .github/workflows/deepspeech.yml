@@ -30,8 +30,9 @@ jobs:
           mkdir deepspeech && cd $_
           wget -q https://github.com/mozilla/DeepSpeech/releases/download/v0.7.1/native_client.amd64.cpu.linux.tar.xz
           tar -xf native_client.amd64.cpu.linux.tar.xz && rm native_client.amd64.cpu.linux.tar.xz
-          mkdir -p ../DeepSpeech-Java-Bindings/libs/linux && mv libdeepspeech.so $_/libdeepspeech_cpu.so
-          ls -al ../DeepSpeech-Java-Bindings/libs/linux
+          mkdir -p ../DeepSpeech-Java-Bindings/DeepSpeech-jni/libs/linux && mv libdeepspeech.so $_/libdeepspeech_cpu.so
+          pwd
+          ls -al ../DeepSpeech-Java-Bindings/DeepSpeech-jni/libs/linux
 
       - name: Build libdeepspeech-java.jar
         working-directory: DeepSpeech-Java-Bindings/libdeepspeech
