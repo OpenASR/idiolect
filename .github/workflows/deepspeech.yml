@@ -5,6 +5,8 @@ on:
     branches:
       - feature/deepspeech
 #      - master
+#    paths:
+#      - '.github/workflows/deepspeech.yml'
 
 jobs:
   linux:
@@ -48,6 +50,35 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gradle publish -x test
+
+      - name: Archive linux zip
+        uses: actions/upload-artifact@v1
+        with:
+          name: linux
+          path: DeepSpeech-Java-Bindings/libdeepspeech/build/distributions/*-linux-*.zip
+
+  idear:
+    needs: linux
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download math result for job 2
+        uses: actions/download-artifact@v1
+        with:
+          name: linux
+
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: Build
+        run: |
+          ls -al
+          ./gradlew buildPlugin
 
 # now we have:
 #  DeepSpeech-jni
