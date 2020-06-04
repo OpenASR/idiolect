@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: linux
-          path: DeepSpeech-Java-Bindings/libdeepspeech/build/distributions/*-linux-*.zip
+          path: DeepSpeech-Java-Bindings/DeepSpeech-jni/libs/linux
 
   idear:
     needs: linux
