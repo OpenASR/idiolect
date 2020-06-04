@@ -77,7 +77,8 @@ jobs:
 
       - name: Build
         run: |
-          ls -al
+          ls -al linux
+          mkdir --parents src/main/resources/natives/UNIX; mv linux $_
           ./gradlew buildPlugin
 
 # now we have:
