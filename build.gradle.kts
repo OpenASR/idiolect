@@ -70,6 +70,6 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-polly:1.11.340")
     implementation("com.googlecode.soundlibs:jlayer:1.0.1.4")
     implementation("com.google.cloud:google-cloud-speech:0.32.0-alpha")
-    implementation("org.mozilla.deepspeech:libdeepspeech:1.0")
+    implementation("org.mozilla.deepspeech:libdeepspeech:1.0.4-SNAPSHOT")
     testImplementation("junit:junit:4.13")
 }

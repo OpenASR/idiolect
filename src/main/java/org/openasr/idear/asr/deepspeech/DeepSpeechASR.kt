@@ -4,6 +4,7 @@ import com.intellij.execution.Platform
 import com.intellij.openapi.diagnostic.Logger
 import org.mozilla.deepspeech.libraryloader.DeepSpeechLibraryConfig
 import org.mozilla.deepspeech.recognition.DeepSpeechModel
+import org.mozilla.deepspeech.recognition.stream.StreamingState
 import org.mozilla.deepspeech.recognition.SpeechRecognitionResult
 import java.io.File
 import java.io.IOException
@@ -32,8 +33,9 @@ class DeepSpeechASR {
     }
 
     fun loadModel() {
-//        val model = DeepSpeechModel(File("model/output_graph.pb"), N_CEP, N_CONTEXT, File("model/alphabet.txt"), BEAM_WIDTH)
-//        model.enableLMLanguageModel(new File("model/alphabet.txt"), new File("model/lm.binary"), new File("model/trie"), LM_ALPHA, LM_BETA);
+        val model = DeepSpeechModel(File("model/output_graph.pb"))
+//        model.setBeamWidth(42)
+//        model.enableLMLanguageModel(new File("model/scorer"), LM_ALPHA, LM_BETA);
     }
 
     fun audioTranscription() {
@@ -46,6 +48,11 @@ class DeepSpeechASR {
         val audioBuffer = ByteBuffer.allocateDirect((numSamples * 2).toInt()) // 2 bytes for each sample --> 16 bit audio
 
         val transcription: String? = model?.doSpeechToText(audioBuffer, numSamples, sampleRate)
+
+        val streamingState = StreamingState.setupStream(model)
+        streamingState.feedAudioContent(audioBuffer, numSamples)
+        val intermediateResult = streamingState.intermediateDecode()
+        val utterance = streamingState.finishStream()
 
 //        model.enableLMLanguageModel(File alphabetFile, @NotNull File lmBinaryFile, @NotNull File trieFile, float lmAlpha, float lmBeta)
 
