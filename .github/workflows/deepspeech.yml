@@ -33,13 +33,6 @@ jobs:
 #          pwd
 #          ls -al DeepSpeech-Java-Bindings/DeepSpeech-jni/libs/linux
 
-      - name: Build libdeepspeech-java.jar
-        working-directory: DeepSpeech-Java-Bindings/libdeepspeech
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gradle publish -x test
-
       - name: Build libdeepspeech-jni
         working-directory: DeepSpeech-Java-Bindings/DeepSpeech-jni
         run: |
@@ -48,6 +41,13 @@ jobs:
           cmake build .
           make
           mv libdeepspeech-jni.so libs/linux/libdeepspeech-jni_cpu.so
+
+      - name: Build libdeepspeech-java.jar
+        working-directory: DeepSpeech-Java-Bindings/libdeepspeech
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gradle publish -x test
 
 # now we have:
 #  DeepSpeech-jni
