@@ -4,8 +4,9 @@ import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 
 plugins {
     idea apply true
-    id("org.jetbrains.intellij") version "0.6.1"
-    kotlin("jvm") version "1.4.10"
+    id("org.jetbrains.intellij") version "0.6.5"
+    kotlin("jvm") version "1.4.20"
+    id("com.github.ben-manes.versions") version "0.36.0"
 }
 
 intellij {
