@@ -4,15 +4,16 @@ import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 
 plugins {
     idea apply true
-    id("org.jetbrains.intellij") version "0.4.18"
-    kotlin("jvm") version "1.3.72"
+    id("org.jetbrains.intellij") version "0.6.5"
+    kotlin("jvm") version "1.4.20"
+    id("com.github.ben-manes.versions") version "0.36.0"
 }
 
 intellij {
-    version = "2020.1"
+    version = "2020.2"
     pluginName = "idear"
     updateSinceUntilBuild = false
-    setPlugins("AceJump:3.6.1", "java")
+    setPlugins("AceJump:3.6.2", "java")
 }
 
 group = "org.openasr"

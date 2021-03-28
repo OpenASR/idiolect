@@ -1,8 +1,8 @@
 default:
-	@docker run --rm -v $(PWD):/idear -w /idear openasr/idear ./gradlew buildPlugin
+	@docker run --rm -v $(PWD):/idear -w /idear openasr/idear ./gradlew buildPlugin --stacktrace
 
 test:
-	@docker run --rm -v $(PWD):/idear -w /idear openasr/idear ./gradlew test
+	@docker run --rm -v $(PWD):/idear -w /idear openasr/idear ./gradlew test --stacktrace
 
 docker:
 	@rm -rf build out
@@ -10,4 +10,3 @@ docker:
 
 push:
 	@docker push openasr/idear:latest
-
