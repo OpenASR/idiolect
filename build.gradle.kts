@@ -48,6 +48,7 @@ repositories {
     jcenter()
     maven("https://oss.sonatype.org/content/repositories/releases/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://alphacephei.com/maven/")
 }
 
 dependencies {
@@ -62,5 +63,6 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-polly:1.11.340")
     implementation("com.googlecode.soundlibs:jlayer:1.0.1.4")
     implementation("com.google.cloud:google-cloud-speech:0.32.0-alpha")
+    implementation("com.alphacephei:vosk:0.3.21+")
     testImplementation("junit:junit:4.13")
 }

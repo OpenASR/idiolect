@@ -5,11 +5,13 @@ import com.intellij.openapi.options.Configurable
 import org.openasr.idear.asr.ASRControlLoop
 import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
+import org.openasr.idear.asr.vosk.VoskASR
 import org.openasr.idear.nlp.*
 import org.openasr.idear.nlp.lex.LexNlp
 import org.openasr.idear.recognizer.awslex.LexRecognizer
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.CMU_SPHINX
+import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.VOSK
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId.PATTERN
 import org.openasr.idear.settings.RecognitionSettingsForm.Companion.TTSServiceId
@@ -41,6 +43,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
                 when (settings.asrService) {
                     CMU_SPHINX -> CMUSphinxASR
                     LEX_ASR -> LexASR()
+                    VOSK -> VoskASR("C:\\sw-dev\\vosk-model-en-us-aspire-0.2")
                 }
 
         private fun getNLPProvider(/*listener: NlpResultListener*/) =
