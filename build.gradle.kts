@@ -4,16 +4,16 @@ import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 
 plugins {
     idea apply true
-    id("org.jetbrains.intellij") version "0.6.5"
-    kotlin("jvm") version "1.4.20"
-    id("com.github.ben-manes.versions") version "0.36.0"
+    id("org.jetbrains.intellij") version "1.0"
+    kotlin("jvm") version "1.5.20-M1"
+    id("com.github.ben-manes.versions") version "0.39.0"
 }
 
 intellij {
-    version = "2020.2"
-    pluginName = "idear"
-    updateSinceUntilBuild = false
-    setPlugins("AceJump:3.6.2", "java")
+    version.set("2021.1.1")
+    pluginName.set("idear")
+    updateSinceUntilBuild.set(false)
+    plugins.set(listOf("AceJump:3.6.2", "java"))
 }
 
 group = "org.openasr"
@@ -39,8 +39,8 @@ tasks {
 //        token(intellijPublishToken)
 //    }
 
-    withType<PatchPluginXmlTask> {
-        sinceBuild("201.6668.0")
+    patchPluginXml {
+        sinceBuild.set("201.6668.0")
     }
 }
 
