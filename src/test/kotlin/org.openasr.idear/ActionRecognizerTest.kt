@@ -8,7 +8,7 @@ import org.openasr.idear.actions.recognition.ExtractActionRecognizer
 
 class ActionRecognizerTest {
     private val emptyDataContext: DataContext
-        get() = SimpleDataContext.getSimpleContext("", null)
+        get() = SimpleDataContext.getSimpleContext("", Any())
 
     @Test
     fun test_extract_with_name() {
