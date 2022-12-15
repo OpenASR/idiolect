@@ -1,24 +1,13 @@
 package org.openasr.idear.settings
 
 import com.intellij.openapi.components.*
+import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.options.Configurable
-import org.openasr.idear.asr.ASRControlLoop
-import org.openasr.idear.asr.awslex.LexASR
-import org.openasr.idear.asr.cmusphinx.CMUSphinxASR
-import org.openasr.idear.asr.vosk.VoskASR
+import org.openasr.idear.asr.AsrSystem
+import org.openasr.idear.asr.AsrProvider
 import org.openasr.idear.nlp.*
-import org.openasr.idear.nlp.lex.LexNlp
-import org.openasr.idear.recognizer.awslex.LexRecognizer
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.CMU_SPHINX
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.VOSK
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId.PATTERN
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.TTSServiceId
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.TTSServiceId.*
 import org.openasr.idear.tts.*
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.ASRServiceId.AWS_LEX as LEX_ASR
-import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId.AWS_LEX as LEX_NLP
+import java.util.concurrent.atomic.AtomicReference
 
 /*
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
@@ -26,32 +15,50 @@ import org.openasr.idear.settings.RecognitionSettingsForm.Companion.NLPServiceId
 @State(name = "IdearConfiguration", storages = [(Storage("recognition.xml"))])
 class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfiguration.Settings> {
     companion object {
-        var settings = Settings()
-        fun getASRSystem() =
-                if (settings.asrService == LEX_ASR && settings.nlpService == LEX_NLP) LexRecognizer()
-                else ASRControlLoop(getASRProvider(), getNLPProvider())
+        private val AsrSystemEp: ExtensionPointName<AsrSystem> = ExtensionPointName.create("org.openasr.idear.asrSystem")
+        private val AsrEp: ExtensionPointName<AsrProvider> = ExtensionPointName.create("org.openasr.idear.asrProvider")
+        private val TtsEp: ExtensionPointName<TtsProvider> = ExtensionPointName.create("org.openasr.idear.ttsProvider")
+        private val NlpEp: ExtensionPointName<NlpProvider> = ExtensionPointName.create("org.openasr.idear.nlpProvider")
+
+        private val ttsProvider = AtomicReference<TtsProvider>()
+        private val nlpProvider = AtomicReference<NlpProvider>()
+        private val asrProvider = AtomicReference<AsrProvider>()
+
+        private var settings = Settings()
+
+        /** Called by AsrService */
+        fun getASRSystem(): AsrSystem {
+            val asrProvider = getAsrProvider()
+            val nlpProvdier = getNlpProvider()
+
+            var extension = AsrSystemEp.extensionList.firstOrNull { e -> e.supportsAsrAndNlp(asrProvider, nlpProvdier) }
+            if (extension == null) {
+                extension = AsrSystemEp.extensionList.first()
+            }
+
+            return extension!!
+        }
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
-        fun getTTSProvider() =
-                when (settings.ttsService) {
-                    MARY -> MaryTTS
-                    AWS_POLLY -> PollyTTS
-                }
+        private fun getTtsProvider() = getExtension(TtsEp.extensionList, settings.ttsService)
 
-        private fun getASRProvider() =
-                when (settings.asrService) {
-                    CMU_SPHINX -> CMUSphinxASR
-                    LEX_ASR -> LexASR()
-                    VOSK -> VoskASR("C:\\sw-dev\\vosk-model-en-us-aspire-0.2")
-                }
+        private fun getAsrProvider() = getExtension(AsrEp.extensionList, settings.asrService)
 
-        private fun getNLPProvider(/*listener: NlpResultListener*/) =
-                when (settings.nlpService) {
-                    PATTERN -> PatternBasedNlpProvider()
-                    LEX_NLP -> LexNlp(IntellijNlpResultListener())
-                }
+        private fun getNlpProvider() = getExtension(NlpEp.extensionList, settings.nlpService)
+
+        private fun <T : ConfigurableExtension> getExtension(extensions: List<T>, displayName: String): T {
+            var extension = extensions.firstOrNull { e -> e.displayName() == displayName }
+            if (extension == null) {
+                extension = extensions.first()
+            }
+
+            extension!!.activate()
+            return extension
+        }
     }
+
+    override fun getDisplayName() = "Idear"
 
     override fun getState() = settings
     override fun loadState(state: Settings) {
@@ -60,13 +67,13 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
     private var gui = RecognitionSettingsForm()
 
-    data class Settings(var asrService: ASRServiceId = CMU_SPHINX,
-                        var nlpService: NLPServiceId = PATTERN,
-                        var ttsService: TTSServiceId = MARY)
+    data class Settings(var asrService: String = "",
+                        var asrModelPath: String = "",
+                        var nlpService: String = "",
+                        var ttsService: String = "")
 
-    override fun getDisplayName() = "Idear"
-
-    override fun isModified() = gui.asrService != settings.asrService ||
+    override fun isModified() = gui.getAsrProvider().displayName() != settings.asrService ||
+            gui.asrModelPath != settings.asrModelPath ||
             gui.ttsService != settings.ttsService ||
             gui.nlpService != settings.nlpService
 
@@ -77,10 +84,12 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
             settings.nlpService = gui.nlpService
             settings.ttsService = gui.ttsService
             settings.asrService = gui.asrService
+            settings.asrModelPath = gui.asrModelPath
         }
     }
 
     override fun reset() {
+        gui.asrModelPath = settings.asrModelPath
         gui.asrService = settings.asrService
         gui.ttsService = settings.ttsService
         gui.nlpService = settings.nlpService

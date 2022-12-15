@@ -6,7 +6,7 @@ import com.darkprograms.speech.microphone.MicrophoneAnalyzer
 import com.darkprograms.speech.recognizer.vad.*
 import com.intellij.openapi.diagnostic.Logger
 import org.json.JSONObject
-import org.openasr.idear.asr.ASRSystem
+import org.openasr.idear.asr.AsrSystem
 import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.nlp.*
 import org.openasr.idear.recognizer.SpeechRecognizer
@@ -20,20 +20,30 @@ import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
  * @see LexASR which implements #waitForUtterance() instead of posting to NlpResultListener
  */
 // TODO: should LexRecognizer and LexASR be swapped around?
-open class LexRecognizer(private val botName: String = "Idear", private val botAlias: String = "PROD") : SpeechRecognizer, VoiceActivityListener, ASRSystem {
+open class LexRecognizer(
+    private val botName: String = "Idear",
+    private val botAlias: String = "PROD"
+) : SpeechRecognizer, VoiceActivityListener, AsrSystem {
+
     private var logger = Logger.getInstance(javaClass)
-    private val mic = MicrophoneAnalyzer(16_000F)
+    private lateinit var mic: MicrophoneAnalyzer
     private val vad = SimpleVAD()
-    protected val lex =
-            JarvisLex(AmazonLexRuntimeClientBuilder.standard()
-                    .withRegion(AwsUtils.REGION)
-                    .withCredentials(AwsUtils.credentialsProvider)
-                    .build(), botName, botAlias, "anonymous")
+    protected lateinit var lex: JarvisLex
     private var nlpListener: NlpResultListener = LoggingNlpResultListener
 
     fun setUserId(userId: String) = lex.setUserId(userId)
 
-    override fun start() = startRecognition()
+    override fun start() {
+        if (!this::mic.isInitialized) {
+            mic = MicrophoneAnalyzer(16_000F)
+            lex = JarvisLex(AmazonLexRuntimeClientBuilder.standard()
+                .withRegion(AwsUtils.REGION)
+                .withCredentials(AwsUtils.credentialsProvider)
+                .build(), botName, botAlias, "anonymous")
+        }
+
+        startRecognition()
+    }
 
     override fun waitForUtterance(): String {
         // Temporarily swap listeners

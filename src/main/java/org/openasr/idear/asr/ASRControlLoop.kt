@@ -6,8 +6,13 @@ import org.openasr.idear.nlp.*
 import org.openasr.idear.tts.TTSService
 
 
-class ASRControlLoop(private val asrProvider: ASRProvider, private val nlpProvder: NlpProvider) : ASRSystem, Runnable {
-    private val logger = Logger.getInstance(javaClass)
+class ASRControlLoop : AsrSystem, Runnable {
+    companion object {
+        private val logger = Logger.getInstance(javaClass)
+    }
+
+    private lateinit var asrProvider: AsrProvider
+    private lateinit var nlpProvder: NlpProvider
 
     private var speechThread = Thread(this, "ASR Thread")
 

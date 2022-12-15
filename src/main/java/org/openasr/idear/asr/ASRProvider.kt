@@ -1,9 +1,10 @@
 package org.openasr.idear.asr
 
 import org.openasr.idear.recognizer.SpeechRecognizer
+import org.openasr.idear.settings.ConfigurableExtension
 
 // TODO: delete SpeechRecogniser or refactor
-interface ASRProvider : SpeechRecognizer {
+interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
     /**
      * Starts recognition process.
      */
@@ -15,6 +16,8 @@ interface ASRProvider : SpeechRecognizer {
      */
     override fun stopRecognition()
 
-    /** Blocks until a we recognise something from the user. Called from [ASRControlLoop.run] */
+    /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
     fun waitForUtterance(): String
+
+    fun defaultModel() = ""
 }

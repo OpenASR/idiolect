@@ -37,6 +37,8 @@ import org.openasr.idear.tts.TTSService
 import java.awt.event.KeyEvent.*
 
 class PatternBasedNlpProvider : NlpProvider {
+    override fun displayName() = "Pattern"
+
     /**
      * @param utterance - the command as spoken
      */

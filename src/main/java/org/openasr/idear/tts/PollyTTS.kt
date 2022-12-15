@@ -1,5 +1,6 @@
 package org.openasr.idear.tts
 
+import com.amazonaws.services.polly.AmazonPolly
 import com.amazonaws.services.polly.AmazonPollyClientBuilder
 import com.amazonaws.services.polly.model.*
 import javazoom.jl.player.FactoryRegistry.systemRegistry
@@ -19,14 +20,22 @@ import java.util.*
  *
  * @see http://docs.aws.amazon.com/polly/latest/dg/examples-java.html
  */
+object PollyTTS : TtsProvider {
+    private lateinit var polly: AmazonPolly
+    private lateinit var voice: Voice
 
-object PollyTTS : TTSProvider {
-    private val polly = AmazonPollyClientBuilder.standard().apply {
-        region = AwsUtils.REGION
-        credentials = AwsUtils.credentialsProvider
-    }.build()
+    override fun displayName() = "Amazon Polly"
 
-    private var voice = polly.describeVoices(DescribeVoicesRequest()).voices[0]
+    override fun activate() {
+        if (!this::polly.isInitialized) {
+            AmazonPollyClientBuilder.standard().apply {
+                region = AwsUtils.REGION
+                credentials = AwsUtils.credentialsProvider
+            }.build()
+
+            voice = polly.describeVoices(DescribeVoicesRequest()).voices[0]
+        }
+    }
 
     override fun say(utterance: String) =
             utterance.let {

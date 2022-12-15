@@ -1,40 +1,33 @@
 package org.openasr.idear.recognizer
 
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
 import java.io.*
 import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
 import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
 
-object CustomMicrophone {
-    private const val sampleRate = 16000f
-    private const val sampleSize = 16
-    private const val signed = true
-    private const val bigEndian = false
-    private val logger = Logger.getInstance(javaClass)
+@Service
+class CustomMicrophone : Closeable, Disposable {
+    companion object {
+        private val logger = Logger.getInstance(javaClass)
 
-    private const val DURATION = 4500
+        private const val sampleRate = 16000f
+        private const val sampleSize = 16
+        private const val signed = true
+        private const val bigEndian = false
+        private const val DURATION = 4500
 
-    private val line: TargetDataLine
-    //    /* package */ void setMasterGain(double mg) {
-    //        double pmg = inputStream.setMasterGain(mg);
-    //
-    //        logger.info("Microphone: LINE_IN VOL = " + pmg);
-    //        logger.info("Microphone: LINE_IN VOL = " + mg);
-    //    }
-    //
-    //    /* package */ void setNoiseLevel(double mg) {
-    //        double pmg = inputStream.setNoiseLevel(mg);
-    //
-    //        logger.info("Microphone: LINE_IN VOL = " + pmg);
-    //        logger.info("Microphone: LINE_IN VOL = " + mg);
-    //    }
+        private const val TEMP_FILE = "/tmp/X.wav"
+    }
 
-    val stream: AudioInputStream
+    private lateinit var line: TargetDataLine
+    lateinit var stream: AudioInputStream
 
-    init {
-        val format = AudioFormat(sampleRate, sampleSize, 1, signed, bigEndian)
-
+    fun open() {
+        val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSize, 1, 2, sampleRate, bigEndian)
+        logger.info("formats: ${DataLine.Info(TargetDataLine::class.java, null).formats}")
         line = AudioSystem.getTargetDataLine(format)
         line.open()
 
@@ -47,11 +40,19 @@ object CustomMicrophone {
         stream = AudioInputStreamWithAdjustableGain(line)
     }
 
+    override fun close() {
+        dispose()
+    }
+
+    override fun dispose() {
+        stopRecording()
+        line.close()
+        stream.close()
+    }
+
     fun startRecording() = line.start()
     fun stopRecording() = line.stop()
 
-    private const val TEMP_FILE = "/tmp/X.wav"
-    //TODO Refactor this API into a CustomMicrophone instance
     @Throws(IOException::class)
     fun recordFromMic(duration: Long): File {
         //Why is this in a thread?

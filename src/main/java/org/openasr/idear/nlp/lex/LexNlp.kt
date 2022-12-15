@@ -1,5 +1,7 @@
 package org.openasr.idear.nlp.lex
 
+import com.amazonaws.services.lexruntime.AmazonLexRuntime
+import com.amazonaws.services.lexruntime.AmazonLexRuntimeClient
 import com.amazonaws.services.lexruntime.AmazonLexRuntimeClientBuilder
 import com.amazonaws.services.lexruntime.model.*
 import org.openasr.idear.nlp.*
@@ -10,13 +12,22 @@ import org.openasr.idear.recognizer.awslex.AwsUtils
 /**
  * Posts an utterance (String) to Lex to be processed into actions
  */
-class LexNlp(private val listener: NlpResultListener) : NlpProvider {
-    private var lex = AmazonLexRuntimeClientBuilder.standard()
-            .withCredentials(AwsUtils.credentialsProvider)
-            .withRegion(AwsUtils.REGION)
-            .build()
+class LexNlp : NlpProvider {
+    private val listener: NlpResultListener = IntellijNlpResultListener()
+    private lateinit var lex: AmazonLexRuntime
     private var userId = "anonymous"
     private val sessionAttributes: MutableMap<String, String> = HashMap()
+
+    override fun displayName() = "Amazon Lex"
+
+    override fun activate() {
+        if (!this::lex.isInitialized) {
+            lex = AmazonLexRuntimeClientBuilder.standard()
+                .withCredentials(AwsUtils.credentialsProvider)
+                .withRegion(AwsUtils.REGION)
+                .build()
+        }
+    }
 
     init {
         // TODO: get userId from Cognito

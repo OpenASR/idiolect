@@ -6,7 +6,7 @@ import java.io.IOException
 
 object ASRService {
     private val logger = Logger.getInstance(javaClass)
-    private lateinit var asrSystem: ASRSystem
+    private lateinit var asrSystem: AsrSystem
 
     init {
         try {
@@ -17,7 +17,7 @@ object ASRService {
         }
     }
 
-    fun setASRSystem(asrSystem: ASRSystem) {
+    fun setASRSystem(asrSystem: AsrSystem) {
         val status = ListeningState.getStatus()
         var terminated = false
 

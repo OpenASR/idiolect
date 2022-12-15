@@ -1,9 +1,13 @@
 package org.openasr.idear.asr
 
+import org.openasr.idear.nlp.NlpProvider
+
 /**
  * Processes audio input, recognises speech to text and executes actions
  */
-interface ASRSystem {
+interface AsrSystem {
+    fun supportsAsrAndNlp(asrProvider: AsrProvider, nlpProvider: NlpProvider) = false
+
     fun start()
 
     /**

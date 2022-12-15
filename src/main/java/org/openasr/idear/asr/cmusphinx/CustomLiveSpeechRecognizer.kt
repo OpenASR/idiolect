@@ -1,11 +1,13 @@
 package org.openasr.idear.asr.cmusphinx
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
 import edu.cmu.sphinx.api.*
 import edu.cmu.sphinx.decoder.ResultListener
 import edu.cmu.sphinx.frontend.endpoint.SpeechClassifier.PROP_THRESHOLD
 import edu.cmu.sphinx.frontend.util.StreamDataSource
 import org.openasr.idear.recognizer.CustomMicrophone
+import java.io.InputStream
 
 /**
  * High-level class for live speech recognition.
@@ -31,10 +33,19 @@ object CustomLiveSpeechRecognizer : AbstractSpeechRecognizer(configuration) {
 
     // sphinx4 default sensitivity is 13.
     private const val SPEECH_SENSITIVITY = 20
+    private lateinit var microphone: CustomMicrophone
 
-    init {
-        context.getInstance(StreamDataSource::class.java).setInputStream(CustomMicrophone.stream)
+    fun activate() {
+        microphone = service()
+        microphone.open()
+
+        context.getInstance(StreamDataSource::class.java).setInputStream(microphone.stream)
         context.setLocalProperty("speechClassifier->$PROP_THRESHOLD", SPEECH_SENSITIVITY)
+    }
+
+    fun deactivate() {
+        microphone.close()
+        context.getInstance(StreamDataSource::class.java).setInputStream(InputStream.nullInputStream())
     }
 
     /**
@@ -47,7 +58,7 @@ object CustomLiveSpeechRecognizer : AbstractSpeechRecognizer(configuration) {
 //        logger.debug("File is ready now")
 //
         recognizer.allocate()
-        CustomMicrophone.startRecording()
+        microphone.startRecording()
     }
 
     /**
@@ -56,7 +67,7 @@ object CustomLiveSpeechRecognizer : AbstractSpeechRecognizer(configuration) {
      * @see CustomLiveSpeechRecognizer.startRecognition
      */
     fun stopRecognition() {
-        CustomMicrophone.stopRecording()
+        microphone.stopRecording()
         recognizer.deallocate()
     }
 

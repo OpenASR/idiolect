@@ -1,6 +1,8 @@
 package org.openasr.idear.tts
 
-interface TTSProvider {
+import org.openasr.idear.settings.ConfigurableExtension
+
+interface TtsProvider : ConfigurableExtension {
     /**
      * Reads text aloud through the microphone.
      *

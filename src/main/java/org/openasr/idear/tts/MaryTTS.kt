@@ -7,28 +7,32 @@ import marytts.modules.synthesis.Voice
 import marytts.util.data.audio.AudioPlayer
 import java.util.*
 
-object MaryTTS : TTSProvider {
+object MaryTTS : TtsProvider {
     val logger = Logger.getInstance(javaClass)
     private lateinit var voice: Voice
     private lateinit var maryTTS: MaryInterface
 
-    init {
-        try {
-            // This line is important: https://github.com/OpenASR/idear/issues/31
-            Thread.currentThread().contextClassLoader = this.javaClass.classLoader
-            
-            maryTTS = LocalMaryInterface()
-            val systemLocale = Locale.getDefault()
-            logger.info("Getting MaryTTS voice for: $systemLocale")
-            voice = if (systemLocale in maryTTS.availableLocales)
-                Voice.getDefaultVoice(systemLocale)
-            else
-                Voice.getVoice(maryTTS.availableVoices.iterator().next())
+    override fun displayName() = "Mary TTS"
 
-            maryTTS.locale = voice.locale
-            maryTTS.voice = voice.name
-        } catch (e: MaryConfigurationException) {
-            logger.error(e)
+    override fun activate() {
+        if (!this::maryTTS.isInitialized) {
+            try {
+                // This line is important: https://github.com/OpenASR/idear/issues/31
+                Thread.currentThread().contextClassLoader = this.javaClass.classLoader
+
+                maryTTS = LocalMaryInterface()
+                val systemLocale = Locale.getDefault()
+                logger.info("Getting MaryTTS voice for: $systemLocale")
+                voice = if (systemLocale in maryTTS.availableLocales)
+                    Voice.getDefaultVoice(systemLocale)
+                else
+                    Voice.getVoice(maryTTS.availableVoices.iterator().next())
+
+                maryTTS.locale = voice.locale
+                maryTTS.voice = voice.name
+            } catch (e: MaryConfigurationException) {
+                logger.error(e)
+            }
         }
     }
 

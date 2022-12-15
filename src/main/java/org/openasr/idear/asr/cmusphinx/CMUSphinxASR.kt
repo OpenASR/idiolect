@@ -1,12 +1,19 @@
 package org.openasr.idear.asr.cmusphinx
 
 import com.intellij.openapi.diagnostic.Logger
-import org.openasr.idear.asr.ASRProvider
+import org.openasr.idear.asr.AsrProvider
 
-object CMUSphinxASR : ASRProvider {
+object CMUSphinxASR : AsrProvider {
     private val logger = Logger.getInstance(javaClass)
 
-    private var recognizer = CustomLiveSpeechRecognizer
+    private lateinit var recognizer: CustomLiveSpeechRecognizer
+
+    override fun activate() {
+        recognizer = CustomLiveSpeechRecognizer
+    }
+
+
+    override fun displayName() = "CMU Sphinx"
 
     override fun waitForUtterance(): String {
         val result = recognizer.result
