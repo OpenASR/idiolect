@@ -55,7 +55,7 @@
 
     <actions>
         <action id="Idear.Start" class="org.openasr.idear.VoiceRecordControllerAction" text="Voice control"
-                description="Start" icon="/org.openasr.idear/icons/start.png">
+                description="Start" icon="/org.openasr.idear/icons/start.svg">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 
