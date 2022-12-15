@@ -8,6 +8,8 @@ import org.openasr.idear.nlp.NlpProvider
 interface AsrSystem {
     fun supportsAsrAndNlp(asrProvider: AsrProvider, nlpProvider: NlpProvider) = false
 
+    fun initialise(asrProvider: AsrProvider, nlpProvider: NlpProvider) {}
+
     fun start()
 
     /**

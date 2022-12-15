@@ -36,9 +36,9 @@
     <extensionPoints>
         <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer" dynamic="true"/>
         <extensionPoint name="asrSystem" interface="org.openasr.idear.asr.AsrSystem" dynamic="true"/>
-        <extensionPoint name="asrProvider" interface="org.openasr.idear.asr.AsrProvider" area="IDEA_APPLICATION" dynamic="true"/>
-        <extensionPoint name="ttsProvider" interface="org.openasr.idear.tts.TtsProvider" area="IDEA_APPLICATION" dynamic="true"/>
-        <extensionPoint name="nlpProvider" interface="org.openasr.idear.nlp.NlpProvider" area="IDEA_APPLICATION" dynamic="true"/>
+        <extensionPoint name="asrProvider" interface="org.openasr.idear.asr.AsrProvider" dynamic="true"/>
+        <extensionPoint name="ttsProvider" interface="org.openasr.idear.tts.TtsProvider" dynamic="true"/>
+        <extensionPoint name="nlpProvider" interface="org.openasr.idear.nlp.NlpProvider" dynamic="true"/>
                 <!--<with attribute="" implements="" tag=""
         </extensionPoint>-->
     </extensionPoints>

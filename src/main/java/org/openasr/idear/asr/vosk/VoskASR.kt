@@ -19,23 +19,7 @@ class VoskASR : AsrProvider {
     private var recognizer: Recognizer? = null
 
     var modelPath: String? = defaultModel()
-        set(value) {
-            recognizer = Recognizer(Model(value), 16000f)
-        }
 
-    init {
-        if (Platform.isWindows()) {
-            // To get a tmp folder we unpack small library and mark it for deletion
-            val tmpFile = Native.extractFromResourcePath("/win32-x86-64/empty", Recognizer::class.java.classLoader)
-            val tmpDir = tmpFile.parentFile
-            File(tmpDir, tmpFile.name + ".x").createNewFile()
-
-//            ApplicationManager.getApplication().
-//            PlatformUtils.
-        }
-//        System.loadLibrary("libvosk")
-        LibVosk.setLogLevel(org.vosk.LogLevel.DEBUG)
-    }
 
     override fun displayName() = "Vosk"
 
@@ -44,6 +28,20 @@ class VoskASR : AsrProvider {
     private lateinit var microphone: CustomMicrophone
 
     override fun activate() {
+//        if (Platform.isWindows()) {
+//            // To get a tmp folder we unpack small library and mark it for deletion
+//            val tmpFile = Native.extractFromResourcePath("/win32-x86-64/empty", Recognizer::class.java.classLoader)
+//            val tmpDir = tmpFile.parentFile
+//            File(tmpDir, tmpFile.name + ".x").createNewFile()
+//
+////            ApplicationManager.getApplication().
+////            PlatformUtils.
+//        }
+////        System.loadLibrary("libvosk")
+//        LibVosk.setLogLevel(org.vosk.LogLevel.DEBUG)
+//
+//        recognizer = Recognizer(Model(modelPath), 16000f)
+
         microphone = service()
         microphone.open()
     }

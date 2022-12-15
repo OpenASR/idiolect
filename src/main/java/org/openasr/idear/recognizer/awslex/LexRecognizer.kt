@@ -6,6 +6,7 @@ import com.darkprograms.speech.microphone.MicrophoneAnalyzer
 import com.darkprograms.speech.recognizer.vad.*
 import com.intellij.openapi.diagnostic.Logger
 import org.json.JSONObject
+import org.openasr.idear.asr.AsrProvider
 import org.openasr.idear.asr.AsrSystem
 import org.openasr.idear.asr.awslex.LexASR
 import org.openasr.idear.nlp.*

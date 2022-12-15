@@ -19,6 +19,10 @@ class LexASR(botName: String = "idear", botAlias: String = "PROD") : LexRecogniz
         return asrProvider is LexASR && nlpProvider is LexNlp
     }
 
+    override fun initialise(asrProvider: AsrProvider, nlpProvider: NlpProvider) {
+        assert(asrProvider == this)
+    }
+
     override fun waitForUtterance() = utterances.take()
 
     override fun onVoiceActivity(audioInputStream: AudioInputStream) {

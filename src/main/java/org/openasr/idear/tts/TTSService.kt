@@ -4,8 +4,8 @@ import org.openasr.idear.settings.IdearConfiguration
 
 object TTSService {
     fun say(text: String) {
-        IdearConfiguration.getTTSProvider().say(text)
+        IdearConfiguration.getTtsProvider().say(text)
     }
 
-    fun dispose() = IdearConfiguration.getTTSProvider().dispose()
+    fun dispose() = IdearConfiguration.getTtsProvider().dispose()
 }

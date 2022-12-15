@@ -16,6 +16,11 @@ class ASRControlLoop : AsrSystem, Runnable {
 
     private var speechThread = Thread(this, "ASR Thread")
 
+    override fun initialise(asrProvider: AsrProvider, nlpProvider: NlpProvider) {
+        this.asrProvider = asrProvider
+        this.nlpProvder = nlpProvider
+    }
+
     override fun start() {
         startRecognition()
         speechThread.start()

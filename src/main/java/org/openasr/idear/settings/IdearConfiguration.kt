@@ -1,7 +1,9 @@
 package org.openasr.idear.settings
 
 import com.intellij.openapi.components.*
+import com.intellij.openapi.extensions.ExtensionPointListener
 import com.intellij.openapi.extensions.ExtensionPointName
+import com.intellij.openapi.extensions.PluginDescriptor
 import com.intellij.openapi.options.Configurable
 import org.openasr.idear.asr.AsrSystem
 import org.openasr.idear.asr.AsrProvider
@@ -15,45 +17,50 @@ import java.util.concurrent.atomic.AtomicReference
 @State(name = "IdearConfiguration", storages = [(Storage("recognition.xml"))])
 class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfiguration.Settings> {
     companion object {
-        private val AsrSystemEp: ExtensionPointName<AsrSystem> = ExtensionPointName.create("org.openasr.idear.asrSystem")
-        private val AsrEp: ExtensionPointName<AsrProvider> = ExtensionPointName.create("org.openasr.idear.asrProvider")
-        private val TtsEp: ExtensionPointName<TtsProvider> = ExtensionPointName.create("org.openasr.idear.ttsProvider")
-        private val NlpEp: ExtensionPointName<NlpProvider> = ExtensionPointName.create("org.openasr.idear.nlpProvider")
+        private val asrSystemEp: ExtensionPointName<AsrSystem> = ExtensionPointName.create("org.openasr.idear.asrSystem")
+        private val asrEp: ExtensionPointName<AsrProvider> = ExtensionPointName.create("org.openasr.idear.asrProvider")
+        private val ttsEp: ExtensionPointName<TtsProvider> = ExtensionPointName.create("org.openasr.idear.ttsProvider")
+        private val nlpEp: ExtensionPointName<NlpProvider> = ExtensionPointName.create("org.openasr.idear.nlpProvider")
 
-        private val ttsProvider = AtomicReference<TtsProvider>()
-        private val nlpProvider = AtomicReference<NlpProvider>()
-        private val asrProvider = AtomicReference<AsrProvider>()
+        private var asrSelector: ExtensionSelector<AsrProvider> = ExtensionSelector(asrEp)
+        private var ttsSelector: ExtensionSelector<TtsProvider> = ExtensionSelector(ttsEp)
+        private var nlpSelector: ExtensionSelector<NlpProvider> = ExtensionSelector(nlpEp)
+
+        private var asrProvider = AtomicReference<AsrProvider?>()
+        private var ttsProvider = AtomicReference<TtsProvider?>()
+        private var nlpProvider = AtomicReference<NlpProvider?>()
 
         private var settings = Settings()
 
         /** Called by AsrService */
         fun getASRSystem(): AsrSystem {
             val asrProvider = getAsrProvider()
-            val nlpProvdier = getNlpProvider()
+            val nlpProvider = getNlpProvider()
 
-            var extension = AsrSystemEp.extensionList.firstOrNull { e -> e.supportsAsrAndNlp(asrProvider, nlpProvdier) }
-            if (extension == null) {
-                extension = AsrSystemEp.extensionList.first()
-            }
+            var extension = asrSystemEp.extensionList.first { e -> e.supportsAsrAndNlp(asrProvider, nlpProvider) }
+            extension.initialise(asrProvider, nlpProvider)
 
-            return extension!!
+            return extension
         }
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
-        private fun getTtsProvider() = getExtension(TtsEp.extensionList, settings.ttsService)
+        fun getTtsProvider() = getExtension(ttsSelector, settings.ttsService, ttsProvider)
 
-        private fun getAsrProvider() = getExtension(AsrEp.extensionList, settings.asrService)
+        private fun getAsrProvider() = getExtension(asrSelector, settings.asrService, asrProvider)
 
-        private fun getNlpProvider() = getExtension(NlpEp.extensionList, settings.nlpService)
+        private fun getNlpProvider() = getExtension(nlpSelector, settings.nlpService, nlpProvider)
 
-        private fun <T : ConfigurableExtension> getExtension(extensions: List<T>, displayName: String): T {
-            var extension = extensions.firstOrNull { e -> e.displayName() == displayName }
-            if (extension == null) {
-                extension = extensions.first()
+        private fun <T : ConfigurableExtension> getExtension(extensionSelector: ExtensionSelector<T>,
+                                                             displayName: String,
+                                                             originalExtension: AtomicReference<T?>): T {
+            val extension = extensionSelector.getExtensionByName(displayName)
+
+            if (extension != originalExtension.get()) {
+                originalExtension.get()?.deactivate()
+                extension!!.activate()
+                originalExtension.set(extension)
             }
-
-            extension!!.activate()
             return extension
         }
     }
@@ -72,26 +79,73 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
                         var nlpService: String = "",
                         var ttsService: String = "")
 
-    override fun isModified() = gui.getAsrProvider().displayName() != settings.asrService ||
+    override fun isModified() = gui.asrService != settings.asrService ||
             gui.asrModelPath != settings.asrModelPath ||
-            gui.ttsService != settings.ttsService ||
-            gui.nlpService != settings.nlpService
+            gui.nlpService != settings.nlpService ||
+            gui.ttsService != settings.ttsService
+
 
     override fun createComponent() = RecognitionSettingsForm().apply { gui = this }.rootPanel
 
     override fun apply() {
         if (isModified) {
+            settings.asrService = gui.asrService
             settings.nlpService = gui.nlpService
             settings.ttsService = gui.ttsService
-            settings.asrService = gui.asrService
             settings.asrModelPath = gui.asrModelPath
         }
     }
 
     override fun reset() {
-        gui.asrModelPath = settings.asrModelPath
+        gui.setAsrOptions(asrEp.extensionList.map { e -> e.displayName() })
+        gui.setNlpOptions(nlpEp.extensionList.map { e -> e.displayName() })
+        gui.setTtsOptions(ttsEp.extensionList.map { e -> e.displayName() })
+
         gui.asrService = settings.asrService
-        gui.ttsService = settings.ttsService
         gui.nlpService = settings.nlpService
+        gui.ttsService = settings.ttsService
+
+        gui.asrModelPath = if (settings.asrModelPath.isNullOrEmpty())
+            getAsrProvider().defaultModel()
+        else
+            settings.asrModelPath
     }
+}
+
+private class ExtensionSelector<T : ConfigurableExtension>(
+    val extensionPointName: ExtensionPointName<T>
+) : ExtensionPointListener<T> {
+    private val options = HashMap<String, ExtensionOption<T>>()
+
+    init {
+        extensionPointName.addExtensionPointListener(this, null)
+
+        for (extension in extensionPointName.extensionList) {
+            val option = ExtensionOption(extension)
+            options[extension.displayName()] = option
+        }
+    }
+
+    fun getExtensionByName(displayName: String): T {
+        for (option in options.entries) {
+            if (option.key == displayName) {
+                return option.value.extension
+            }
+        }
+
+        return extensionPointName.extensions.first()
+    }
+
+    override fun extensionAdded(extension: T, pluginDescriptor: PluginDescriptor) {
+        val option = ExtensionOption(extension)
+        options[extension.displayName()] = option
+    }
+
+    override fun extensionRemoved(extension: T, pluginDescriptor: PluginDescriptor) {
+        val option = options.remove(extension.displayName())
+    }
+}
+
+private class ExtensionOption<T : ConfigurableExtension>(val extension: T) {
+    override fun toString() = extension.displayName()
 }
