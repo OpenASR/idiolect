@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.jetbrains.idear</id>
+    <id>org.openasr.idear</id>
     <name>idear</name>
     <vendor email="idear@ndan.co" url="http://github.com/OpenASR/idear">OpenASR</vendor>
 
