@@ -1,6 +1,7 @@
 package org.openasr.idear
 
 import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.actionSystem.DataKey
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext
 import org.junit.Assert.*
 import org.junit.Test
@@ -8,7 +9,7 @@ import org.openasr.idear.actions.recognition.ExtractActionRecognizer
 
 class ActionRecognizerTest {
     private val emptyDataContext: DataContext
-        get() = SimpleDataContext.getSimpleContext("", Any())
+        get() = SimpleDataContext.getSimpleContext(DataKey.create(""), Any())
 
     @Test
     fun test_extract_with_name() {
