@@ -14,7 +14,7 @@ class RenameActionRecognizer : ActionRecognizer {
         val newName = StringBuilder()
         var first = true
         for (i in renameIndex + 2 until words.size) {
-            val word = if (first) words[i] else words[i].toUpperCase()
+            val word = if (first) words[i] else words[i].uppercase()
             newName.append(word)
             first = false
         }

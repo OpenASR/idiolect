@@ -3,6 +3,7 @@ package org.openasr.idear.actions.recognition
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.util.Pair
 import com.intellij.util.containers.ContainerUtil
+import java.util.*
 
 class ExtractActionRecognizer : ActionRecognizer {
     private val actions = ContainerUtil.newHashSet("extract")
@@ -28,7 +29,7 @@ class ExtractActionRecognizer : ActionRecognizer {
 
         var first = true
         for (i in newNameStartIndex until words.size) {
-            val word = if (first) words[i] else words[i].capitalize()
+            val word = if (first) words[i] else words[i].replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             newName.append(word)
             first = false
         }

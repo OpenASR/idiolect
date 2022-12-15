@@ -81,7 +81,7 @@ object ActionRoutines {
 //        }
 //    }
 
-    fun String.wordCapitalize() = this[0].toUpperCase().toString() + substring(1)
+    fun String.wordCapitalize() = this[0].uppercaseChar().toString() + substring(1)
 
     fun routineAbout() {
         val ai = ApplicationInfo.getInstance()
@@ -203,7 +203,7 @@ object ActionRoutines {
         var last = 0
         while (m.find()) {
             sb.append(s.substring(last, m.start()))
-            sb.append(m.group(2).toUpperCase())
+            sb.append(m.group(2).uppercase())
             last = m.end()
         }
         sb.append(s.substring(last))

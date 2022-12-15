@@ -52,7 +52,7 @@ class FindUsagesActionRecognizer : ActionRecognizer {
         // TODO(kudinkin): need to cure this pain someday
 
         aci.actionEvent = AnActionEvent(null,
-                SimpleDataContext.getSimpleContext(UsageView.USAGE_TARGETS_KEY.name, prepare(targets[0]), dataContext),
+                SimpleDataContext.getSimpleContext(UsageView.USAGE_TARGETS_KEY, prepare(targets[0]), dataContext),
                 ActionPlaces.UNKNOWN, Presentation(), ActionManager.getInstance(), 0)
 
         // TODO(kudinkin): move it to appropriate place
@@ -61,7 +61,7 @@ class FindUsagesActionRecognizer : ActionRecognizer {
         return aci
     }
 
-    private fun prepare(target: PsiElement): Array<UsageTarget> = arrayOf(PsiElement2UsageTargetAdapter(target))
+    private fun prepare(target: PsiElement): Array<UsageTarget> = arrayOf(PsiElement2UsageTargetAdapter(target, false))
 
     private fun extractNameOf(pivot: String, sentence: List<String>): String {
         val target = StringBuilder()

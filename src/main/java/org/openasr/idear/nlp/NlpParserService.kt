@@ -15,7 +15,7 @@ class NlpParserService @TestOnly constructor(path: String?) : ParserService() {
 
     private val modelInputStream: InputStream =
             if (path != null) FileInputStream(path)
-            else plugin.pluginClassLoader.getResourceAsStream("en-parser-chunking.bin")
+            else plugin.pluginClassLoader!!.getResourceAsStream("en-parser-chunking.bin")
 
     override fun parseSentence(sentence: String): Parse? =
             ParserTool.parseLine(sentence, parser, 1).apply { assert(size == 1) }[0]
