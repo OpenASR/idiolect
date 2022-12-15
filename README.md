@@ -11,7 +11,7 @@ A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_use
 
 ## Usage
 
-To get started, press the ![Voice control](src/main/resources/org.openasr.idear/icons/start.png) button in the toolbar, then speak a command, e.g. "Hi, IDEA!" Idear supports a simple [grammar](src/main/resources/org.openasr.idear/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idear/wiki/Feature-Roadmap#features). Click the button once more to deactivate.
+To get started, press the [<img src="src/main/resources/org.openasr.idear/icons/start.svg" height="24"/>](Voice control) button in the toolbar, then speak a command, e.g. "Hi, IDEA!" Idear supports a simple [grammar](src/main/resources/org.openasr.idear/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idear/wiki/Feature-Roadmap#features). Click the button once more to deactivate.
 
 ## Building
 
@@ -40,7 +40,7 @@ Idear is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.org
 [plugin.xml](src/main/resources/META-INF/plugin.xml) defines `<action>`s:
 
 #### [`VoiceRecordControllerAction`](src/main/java/org/openasr/idear/VoiceRecordControllerAction.kt)
-  This action is invoked when the user clicks on the ![Voice control](src/main/resources/org.openasr.idear/icons/start.png) button in the toolbar.
+  This action is invoked when the user clicks on the [<img src="src/main/resources/org.openasr.idear/icons/start.svg" height="24"/>](Voice control) button in the toolbar.
   This simply tells [`ASRService`](src/main/java/org/openasr/idear/asr/ASRService.kt) to activate or standby.
   When the `ASRService` is active, the [`ASRSystem`](src/main/java/org/openasr/idear/asr/ASRSystem.kt), 
   by default [`ASRControlLoop`][ASRControlLoop] [(see below)](#ASRControlLoop).
