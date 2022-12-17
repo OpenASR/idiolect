@@ -1,15 +1,13 @@
 package org.openasr.idear.asr
 
-import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.logger
 import org.openasr.idear.VoiceRecordControllerAction
 import org.openasr.idear.nlp.*
 import org.openasr.idear.tts.TTSService
 
 
-class ASRControlLoop : AsrSystem, Runnable {
-    companion object {
-        private val logger = Logger.getInstance(ASRControlLoop::class.java)
-    }
+class AsrControlLoop : AsrSystem, Runnable {
+    val log = logger<AsrControlLoop>()
 
     private lateinit var asrProvider: AsrProvider
     private lateinit var nlpProvder: NlpProvider
@@ -55,7 +53,7 @@ class ASRControlLoop : AsrSystem, Runnable {
                     VoiceRecordControllerAction.invoke()
                 }
             } else if (ListeningState.isActive) {
-                logger.info("Recognized: $result")
+                log.info("Recognized: $result")
 
                 nlpProvder.processUtterance(result)
             }

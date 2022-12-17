@@ -3,28 +3,30 @@ package org.openasr.idear.actions.recognition
 import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext
+import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.psi.PsiElement
 import com.intellij.usages.*
-import org.openasr.idear.ide.IDEService
+import org.openasr.idear.ide.IdeService
 import org.openasr.idear.psi.PsiUtil.findContainingClass
 import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
 import org.openasr.idear.tts.TTSService
+import java.awt.Component
 import java.util.*
 
 //runs only selected configuration
 class FindUsagesActionRecognizer : ActionRecognizer {
+    override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
+    override fun isMatching(utterance: String) = "find" in utterance
 
-    override fun isMatching(sentence: String) = "find" in sentence
-
-    override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo {
-        val aci = ActionCallInfo("FindUsages")
+    override fun getActionInfo(utterance: String, dataContext: DataContext): ActionCallInfo {
+        val aci = ActionCallInfo(IdeActions.ACTION_FIND_USAGES)
 
         // Ok, that's lame
-        val words = listOf(*sentence.split("\\W+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
+        val words = listOf(*utterance.split("\\W+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
         val wordsSet = HashSet(words)
 
-        val editor = IDEService.getEditor(dataContext)
-        val project = IDEService.getProject(dataContext)
+        val editor = IdeService.getEditor(dataContext)
+        val project = IdeService.getProject(dataContext)
 
         if (editor == null || project == null) return aci
 
@@ -63,11 +65,11 @@ class FindUsagesActionRecognizer : ActionRecognizer {
 
     private fun prepare(target: PsiElement): Array<UsageTarget> = arrayOf(PsiElement2UsageTargetAdapter(target, false))
 
-    private fun extractNameOf(pivot: String, sentence: List<String>): String {
+    private fun extractNameOf(pivot: String, utterance: List<String>): String {
         val target = StringBuilder()
 
-        for (i in sentence.indexOf(pivot) + 1 until sentence.size) {
-            target.append(sentence[i])
+        for (i in utterance.indexOf(pivot) + 1 until utterance.size) {
+            target.append(utterance[i])
         }
 
         return target.toString()

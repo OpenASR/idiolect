@@ -9,14 +9,14 @@ import javax.sound.sampled.AudioInputStream
 
 
 /** Extends LexRecognizer, but implements blocking #waitForUtterance() */
-class LexASR(botName: String = "idear", botAlias: String = "PROD") : LexRecognizer(botName, botAlias), AsrProvider {
+class LexAsr(botName: String = "idear", botAlias: String = "PROD") : LexRecognizer(botName, botAlias), AsrProvider {
     // TODO: the capacity of the queue could probably be 1...
     private var utterances: ArrayBlockingQueue<String> = ArrayBlockingQueue(10)
 
     override fun displayName() = "Amazon Lex"
 
     override fun supportsAsrAndNlp(asrProvider: AsrProvider, nlpProvider: NlpProvider): Boolean {
-        return asrProvider is LexASR && nlpProvider is LexNlp
+        return asrProvider is LexAsr && nlpProvider is LexNlp
     }
 
     override fun initialise(asrProvider: AsrProvider, nlpProvider: NlpProvider) {

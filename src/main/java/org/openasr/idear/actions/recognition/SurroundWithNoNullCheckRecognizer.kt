@@ -5,17 +5,20 @@ import com.intellij.ide.DataManager
 import com.intellij.ide.actions.ApplyIntentionAction
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.openapi.util.Computable
 import com.intellij.psi.PsiDocumentManager
-import org.openasr.idear.ide.IDEService
+import org.openasr.idear.ide.IdeService
+import java.awt.Component
 import java.util.*
 
 class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
-    override fun isMatching(sentence: String) = "check" in sentence && "not" in sentence
+    override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
+    override fun isMatching(utterance: String) = "check" in utterance && "not" in utterance
 
-    override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
-        val editor = IDEService.getEditor(dataContext)
-        val project = IDEService.getProject(dataContext)
+    override fun getActionInfo(utterance: String, dataContext: DataContext): ActionCallInfo? {
+        val editor = IdeService.getEditor(dataContext)
+        val project = IdeService.getProject(dataContext)
 
         if (project == null || editor == null) return null
 

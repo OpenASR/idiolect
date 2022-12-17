@@ -1,11 +1,11 @@
 package org.openasr.idear.asr
 
-import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.logger
 import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
 object ASRService {
-    private val logger = Logger.getInstance(javaClass)
+    private val log = logger<ASRService>()
     private lateinit var asrSystem: AsrSystem
 
     init {
@@ -13,7 +13,7 @@ object ASRService {
             asrSystem = IdearConfiguration.getASRSystem()
             asrSystem.start()
         } catch (e: IOException) {
-            logger.error("Couldn't initialize speech asrProvider!", e)
+            log.error("Couldn't initialize speech asrProvider!", e)
         }
     }
 

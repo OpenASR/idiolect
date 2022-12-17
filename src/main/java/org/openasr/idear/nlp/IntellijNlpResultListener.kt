@@ -1,7 +1,7 @@
 package org.openasr.idear.nlp
 
 import org.openasr.idear.actions.ActionRoutines
-import org.openasr.idear.ide.IDEService
+import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 import org.openasr.idear.tts.TTSService
 
@@ -12,8 +12,8 @@ class IntellijNlpResultListener(private var verbosity: Verbosity = Verbosity.INF
         sessionAttributes?.forEach { (key, value) ->
             //                var remove = true
             when (key) {
-                "invokeAction" -> IDEService.invokeAction(value)
-                "pressKeystroke" -> value.split(",").forEach { keyStroke -> IDEService.type(keyStroke.toInt()) }
+                "invokeAction" -> IdeService.invokeAction(value)
+                "pressKeystroke" -> value.split(",").forEach { keyStroke -> IdeService.type(keyStroke.toInt()) }
                 "routineGoto" -> ActionRoutines.routineGoto(value)
                 "routinePress" -> ActionRoutines.routinePress(value)
             }

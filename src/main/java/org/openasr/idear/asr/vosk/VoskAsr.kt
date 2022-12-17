@@ -1,6 +1,7 @@
 package org.openasr.idear.asr.vosk
 
 import com.intellij.openapi.components.service
+import com.intellij.openapi.diagnostic.logger
 import com.jsoniter.JsonIterator
 import org.openasr.idear.asr.AsrProvider
 import org.openasr.idear.recognizer.CustomMicrophone
@@ -8,7 +9,8 @@ import org.vosk.Model
 import org.vosk.Recognizer
 
 
-class VoskASR : AsrProvider {
+class VoskAsr : AsrProvider {
+    private val log = logger<VoskAsr>()
     private var recognizer: Recognizer? = null
     private var modelPath: String? = defaultModel()
 
@@ -72,11 +74,11 @@ class VoskASR : AsrProvider {
                     val text = parseResult(recognizer.result)
                     if (text.isNotEmpty())
                         return text
-                } else {
-                    val partial = parsePartialResult(recognizer.partialResult)
-                    if (partial.isNotEmpty()) {
-                        println("partialResult: $partial")
-                    }
+//                } else {
+//                    val partial = parsePartialResult(recognizer.partialResult)
+//                    if (partial.isNotEmpty()) {
+//                        println("partialResult: $partial")
+//                    }
                 }
             }
 

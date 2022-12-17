@@ -9,7 +9,7 @@ object Commands {
     const val EDITOR = "editor"
     const val PROJECT = "project"
     const val SELECTION = "selection"
-    const val EXPAND = "grow"
+    const val GROW = "grow"
     const val SHRINK = "shrink"
     const val PRESS = "press"
     const val DELETE = "delete"
@@ -32,6 +32,6 @@ object Commands {
     const val WHERE_AM_I = "where am i"
     const val NAVIGATE = "navigate"
     const val EXECUTE = "execute"
-    const val GOTO = "goto line"
+    const val GOTO = "go to line"
     const val SHOW_USAGES = "show usages"
 }

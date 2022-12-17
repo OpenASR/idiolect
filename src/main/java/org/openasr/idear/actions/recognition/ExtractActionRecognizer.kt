@@ -1,20 +1,23 @@
 package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.openapi.util.Pair
 import com.intellij.util.containers.ContainerUtil
+import java.awt.Component
 import java.util.*
 
 class ExtractActionRecognizer : ActionRecognizer {
     private val actions = ContainerUtil.newHashSet("extract")
 
-    override fun isMatching(sentence: String) =
-            !actions.firstOrNull { it in sentence }.isNullOrEmpty()
+    override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
+    override fun isMatching(utterance: String) =
+            !actions.firstOrNull { it in utterance }.isNullOrEmpty()
 
-    override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
-        if (!isMatching(sentence)) return null
+    override fun getActionInfo(utterance: String, dataContext: DataContext): ActionCallInfo? {
+        if (!isMatching(utterance)) return null
 
-        val words = sentence.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val words = utterance.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val data = getActionId(words) ?: return null
 
         val info = ActionCallInfo(data.first)

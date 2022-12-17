@@ -3,7 +3,7 @@ package org.openasr.idear.asr.cmusphinx
 import com.intellij.openapi.diagnostic.Logger
 import org.openasr.idear.asr.AsrProvider
 
-object CMUSphinxASR : AsrProvider {
+object CmuSphinxAsr : AsrProvider {
     private val logger = Logger.getInstance(javaClass)
 
     private lateinit var recognizer: CustomLiveSpeechRecognizer

@@ -3,10 +3,11 @@ package org.openasr.idear.asr
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.ex.AnActionListener
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.util.messages.MessageBus
 
 object GrammarService : AnActionListener {
-    private val logger = Logger.getInstance(javaClass)
+    private val log = logger<GrammarService>()
 
     fun init(bus: MessageBus) = bus.connect().subscribe(AnActionListener.TOPIC, this)
 
@@ -14,8 +15,9 @@ object GrammarService : AnActionListener {
                                        anActionEvent: AnActionEvent) {
         val actionId = ActionManager.getInstance().getId(anAction)
 
+
         if ("someaction" == actionId) {
-            logger.info("Swapping in grammar for action: $anAction")
+            log.info("Swapping in grammar for action: $anAction")
             //swap in a context aware grammar
         }
     }

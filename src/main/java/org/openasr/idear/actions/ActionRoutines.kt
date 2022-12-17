@@ -3,12 +3,15 @@ package org.openasr.idear.actions
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.IdeActions.*
-import com.intellij.openapi.application.*
+import com.intellij.openapi.application.ApplicationInfo
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.util.SystemInfo
 import org.openasr.idear.WordToNumberConverter
 import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
-import org.openasr.idear.asr.*
-import org.openasr.idear.ide.IDEService
+import org.openasr.idear.asr.ASRService
+import org.openasr.idear.asr.ListeningState
+import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.Commands
 import org.openasr.idear.tts.TTSService
 import java.awt.EventQueue
@@ -24,62 +27,54 @@ object ActionRoutines {
     private val logger = Logger.getInstance(javaClass)
 
     fun routineReleaseKey(c: String) {
-        if ("shift" in c) IDEService.releaseShift()
+        if ("shift" in c) IdeService.releaseShift()
     }
 
     fun routineFind(c: String) {
         if (c.endsWith("file")) {
-            IDEService.invokeAction("Find")
+            IdeService.invokeAction(ACTION_FIND)
         } else if (c.endsWith("project")) {
-            IDEService.invokeAction("FindInPath")
+            IdeService.invokeAction(ACTION_FIND_IN_PATH)
         }
     }
 
     fun routineOfLine(c: String) {
         if (c.startsWith("beginning")) {
-            IDEService.type(VK_META, VK_LEFT)
+            if (SystemInfo.isWindows) IdeService.type(VK_HOME) else IdeService.type(VK_META, VK_LEFT)
         } else if (c.startsWith("end")) {
-            IDEService.type(VK_META, VK_RIGHT)
+            if (SystemInfo.isWindows) IdeService.type(VK_END) else IdeService.type(VK_META, VK_RIGHT)
         }
     }
 
+    /**
+     * Creates a `public static void Main` function
+     */
     fun routinePsvm() {
-        IDEService.type("psvm").also { pressKeystroke(VK_TAB) }
+        IdeService.type("psvm").also { pressKeystroke(VK_TAB) }
         pressKeystroke(VK_TAB)
     }
 
-//    fun routineEnter(c: String) =
-//            webSpeechResult?.run {
-//                if (c.endsWith("text")) {
-//                    IDEService.type(first)
-//                } else if (c.endsWith("camel case")) {
-//                    IDEService.type(convertToCamelCase(first))
-//                }
-//            }
-
-//    fun routineNewString() =
-//            webSpeechResult?.run {
-//                IDEService.type(VK_SHIFT, VK_QUOTE)
-//                IDEService.type(first)
-//                IDEService.type(VK_SHIFT, VK_QUOTE)
-//            }
-
+    /** `System.out.println()` */
     fun routinePrintln() {
-        IDEService.type("sout")
+        IdeService.type("sout")
         pressKeystroke(VK_TAB)
     }
 
-//    fun routineAddNewClass() {
-//        webSpeechResult?.run {
-//            IDEService.invokeAction("NewElement")
-//            pressKeystroke(VK_ENTER)
-//            convertToCamelCase(first).wordCapitalize().let {
-//                logger.info("Class name: $it")
-//                IDEService.type(it)
-//                pressKeystroke(VK_ENTER)
-//            }
-//        }
-//    }
+    fun routineAddNewClass(utterance: String) {
+        var name = Regex(".*new class( .*)?").matchEntire(utterance)?.groups?.get(1)?.value
+        if (name.isNullOrEmpty()) {
+            TTSService.say("what shall we call it?")
+            name = ASRService.waitForUtterance()
+        }
+
+        IdeService.invokeAction(ACTION_NEW_ELEMENT)
+        pressKeystroke(VK_ENTER)
+        convertToCamelCase(name).wordCapitalize().let {
+            logger.info("Class name: $it")
+            IdeService.type(it)
+            pressKeystroke(VK_ENTER)
+        }
+    }
 
     fun String.wordCapitalize() = this[0].uppercaseChar().toString() + substring(1)
 
@@ -106,17 +101,17 @@ object ActionRoutines {
 
     fun routineStep(c: String) {
         when {
-            c.endsWith("over") -> IDEService.invokeAction("StepOver")
-            c.endsWith("into") -> IDEService.invokeAction("StepInto")
-            c.endsWith("return") -> IDEService.invokeAction("StepOut")
+            c.endsWith("over") -> IdeService.invokeAction("StepOver")
+            c.endsWith("into") -> IdeService.invokeAction("StepInto")
+            c.endsWith("return") -> IdeService.invokeAction("StepOut")
         }
     }
 
     fun routineHandleBreakpoint(c: String) {
         if (c.startsWith("toggle")) {
-            IDEService.invokeAction("ToggleLineBreakpoint")
+            IdeService.invokeAction(ACTION_TOGGLE_LINE_BREAKPOINT)
         } else if (c.startsWith("view")) {
-            IDEService.invokeAction("ViewBreakpoints")
+            IdeService.invokeAction("ViewBreakpoints")
         }
     }
 
@@ -127,20 +122,19 @@ object ActionRoutines {
 
     fun routineExtract(c: String) {
         if (c.endsWith("method")) {
-            IDEService.invokeAction("ExtractMethod")
+            IdeService.invokeAction("ExtractMethod")
         } else if (c.endsWith("parameter")) {
-            IDEService.invokeAction("IntroduceParameter")
+            IdeService.invokeAction("IntroduceParameter")
         }
     }
 
     fun routineFollowing(c: String) {
         when {
-            c.endsWith(Commands.LINE) -> IDEService.invokeAction("EditorDown")
-            c.endsWith(Commands.PAGE) -> IDEService.invokeAction("EditorPageDown")
-            c.endsWith(Commands.METHOD) -> IDEService.invokeAction("MethodDown")
-            c.endsWith("tab") -> IDEService.invokeAction("Diff.FocusOppositePane")
-            c.endsWith("page") -> IDEService.invokeAction("EditorPageDown")
-            c.endsWith("word") -> IDEService.type(VK_ALT, VK_RIGHT)
+            c.endsWith(Commands.LINE) -> IdeService.invokeAction("EditorDown")
+            c.endsWith(Commands.PAGE) -> IdeService.invokeAction("EditorPageDown")
+            c.endsWith(Commands.METHOD) -> IdeService.invokeAction("MethodDown")
+            c.endsWith("tab") -> IdeService.invokeAction("Diff.FocusOppositePane")
+            c.endsWith("word") -> IdeService.type(if (SystemInfo.isWindows) VK_CONTROL else VK_ALT, VK_RIGHT)
         }
     }
 
@@ -150,33 +144,36 @@ object ActionRoutines {
             "return" in c || "enter" in c -> pressKeystroke(VK_ENTER)
             Commands.ESCAPE in c -> pressKeystroke(VK_ESCAPE)
             Commands.TAB in c -> pressKeystroke(VK_TAB)
-            Commands.UNDO in c -> IDEService.invokeAction("\$Undo")
-            "shift" in c -> IDEService.pressShift()
+            Commands.UNDO in c -> IdeService.invokeAction("\$Undo")
+            "shift" in c -> IdeService.pressShift()
         }
     }
 
     fun routineGoto(c: String) {
-        IDEService.invokeAction("GotoLine").doWhenDone {
-            IDEService.type(*("" + WordToNumberConverter.getNumber(c.substring(
+        IdeService.invokeAction("GotoLine").doWhenDone {
+            IdeService.type(*("" + WordToNumberConverter.getNumber(c.substring(
                     10))).toCharArray())
-            IDEService.type(VK_ENTER)
+            IdeService.type(VK_ENTER)
         }
     }
 
+    /**
+     * "open settings|recent|terminal"
+     */
     fun routineOpen(c: String) {
         when {
-            c.endsWith(Commands.SETTINGS) -> IDEService.invokeAction(ACTION_SHOW_SETTINGS)
-            c.endsWith(Commands.RECENT) -> IDEService.invokeAction(ACTION_RECENT_FILES)
-            c.endsWith(Commands.TERMINAL) -> IDEService.invokeAction("ActivateTerminalToolWindow")
+            c.endsWith(Commands.SETTINGS) -> IdeService.invokeAction(ACTION_SHOW_SETTINGS)
+            c.endsWith(Commands.RECENT) -> IdeService.invokeAction(ACTION_RECENT_FILES)
+            c.endsWith(Commands.TERMINAL) -> IdeService.invokeAction("ActivateTerminalToolWindow")
         }
     }
 
     fun routineFocus(c: String) {
         when {
             c.endsWith(Commands.EDITOR) -> pressKeystroke(VK_ESCAPE)
-            c.endsWith(Commands.PROJECT) -> IDEService.invokeAction("ActivateProjectToolWindow")
+            c.endsWith(Commands.PROJECT) -> IdeService.invokeAction("ActivateProjectToolWindow")
             c.endsWith("symbols") -> {
-                val ar = IDEService.invokeAction("AceAction")
+                val ar = IdeService.invokeAction("AceAction")
 
                 while (!ar.isProcessed) {
                     //Spin lock
@@ -189,9 +186,9 @@ object ActionRoutines {
                 }
                 logger.info("Done!")
 
-                IDEService.type(" ")
+                IdeService.type(" ")
                 val jumpMarker = recognizeJumpMarker()
-                IDEService.type("" + jumpMarker)
+                IdeService.type("" + jumpMarker)
                 logger.info("Typed: $jumpMarker")
             }
         }
@@ -211,7 +208,7 @@ object ActionRoutines {
         return sb.toString()
     }
 
-    private fun pressKeystroke(vararg keys: Int) = IDEService.type(*keys)
+    private fun pressKeystroke(vararg keys: Int) = IdeService.type(*keys)
 
     fun run(rec: SurroundWithNoNullCheckRecognizer, c: String, dataContext: DataContext) =
             EventQueue.invokeLater {

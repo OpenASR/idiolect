@@ -57,13 +57,14 @@
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.JavaActionRecognizer"/>
 
-        <asrSystem implementation="org.openasr.idear.asr.awslex.LexASR" order="first"/>
-        <asrSystem implementation="org.openasr.idear.asr.ASRControlLoop" order="last"/>
+        <asrSystem implementation="org.openasr.idear.asr.awslex.LexAsr" order="first"/>
+        <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop" order="last"/>
 
-        <asrProvider implementation="org.openasr.idear.asr.vosk.VoskASR" order="first"/>
-        <asrProvider implementation="org.openasr.idear.asr.cmusphinx.CMUSphinxASR"/>
-        <asrProvider implementation="org.openasr.idear.asr.awslex.LexASR" order="last"/>
+        <asrProvider implementation="org.openasr.idear.asr.vosk.VoskAsr" order="first"/>
+        <asrProvider implementation="org.openasr.idear.asr.cmusphinx.CmuSphinxAsr"/>
+        <asrProvider implementation="org.openasr.idear.asr.awslex.LexAsr" order="last"/>
 
         <ttsProvider implementation="org.openasr.idear.tts.MaryTTS" order="first"/>
         <ttsProvider implementation="org.openasr.idear.tts.PollyTTS" order="last"/>
@@ -73,18 +74,21 @@
     </extensions>
 
     <actions>
-        <action id="Idear.Start" class="org.openasr.idear.VoiceRecordControllerAction" text="Voice control"
-                description="Start" icon="/org.openasr.idear/icons/start.svg">
+        <action id="Idear.Start" text="Voice control" description="Start"
+                class="org.openasr.idear.VoiceRecordControllerAction"
+                icon="/org.openasr.idear/icons/start.svg">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 
-        <action id="Idear.SpeechStuff" text="Invoke by speech"
-                class="org.openasr.idear.actions.ExecuteActionFromPredefinedText"/>
+        <!--<action id="Idear.SpeechStuff" text="Invoke by speech"
+                class="org.openasr.idear.actions.ExecuteActionFromPredefinedText"/>-->
         <action id="Idear.VoiceAction" text="Invoke by voice-command"
-                class="org.openasr.idear.actions.ExecuteVoiceCommandAction"/>
+                class="org.openasr.idear.actions.ExecuteVoiceCommandAction">
+<!--            <add-to-group group-id="Internal.UI.Demos"/>-->
+        </action>
 
         <!-- Home-grown actions -->
 
-        <action id="Idear.WhereAmI" text="Name the place you are" class="org.openasr.idear.actions.WhereAmIAction"/>
+        <!--<action id="Idear.WhereAmI" text="Name the place you are" class="org.openasr.idear.actions.WhereAmIAction"/> -->
     </actions>
 </idea-plugin>

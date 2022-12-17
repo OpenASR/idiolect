@@ -6,9 +6,8 @@ import com.darkprograms.speech.microphone.MicrophoneAnalyzer
 import com.darkprograms.speech.recognizer.vad.*
 import com.intellij.openapi.diagnostic.Logger
 import org.json.JSONObject
-import org.openasr.idear.asr.AsrProvider
 import org.openasr.idear.asr.AsrSystem
-import org.openasr.idear.asr.awslex.LexASR
+import org.openasr.idear.asr.awslex.LexAsr
 import org.openasr.idear.nlp.*
 import org.openasr.idear.recognizer.SpeechRecognizer
 import javax.sound.sampled.AudioInputStream
@@ -18,7 +17,7 @@ import com.darkprograms.speech.recognizer.awslex.LexRecognizer as JarvisLex
  * [AWS Lex](http://docs.aws.amazon.com/lex/latest/dg/what-is.html) can process speech and return recognised text,
  * but can also do further NLP processing and convert the text into actions with parameters.
  *
- * @see LexASR which implements #waitForUtterance() instead of posting to NlpResultListener
+ * @see LexAsr which implements #waitForUtterance() instead of posting to NlpResultListener
  */
 // TODO: should LexRecognizer and LexASR be swapped around?
 open class LexRecognizer(
@@ -48,7 +47,7 @@ open class LexRecognizer(
 
     override fun waitForUtterance(): String {
         // Temporarily swap listeners
-        val asr = LexASR(botName, botAlias)
+        val asr = LexAsr(botName, botAlias)
         vad.setVoiceActivityListener(asr)
         val utterance = asr.waitForUtterance()
         vad.setVoiceActivityListener(this)

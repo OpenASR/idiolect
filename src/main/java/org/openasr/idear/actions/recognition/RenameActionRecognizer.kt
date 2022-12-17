@@ -1,14 +1,20 @@
 package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.editor.impl.EditorComponentImpl
+import java.awt.Component
 
+/**
+ * "rename"
+ */
 class RenameActionRecognizer : ActionRecognizer {
-    override fun isMatching(sentence: String) = "rename" in sentence
+    override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
+    override fun isMatching(utterance: String) = "rename" in utterance
 
-    override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
-        if (!isMatching(sentence)) return null
+    override fun getActionInfo(utterance: String, dataContext: DataContext): ActionCallInfo? {
+        if (!isMatching(utterance)) return null
 
-        val words = sentence.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val words = utterance.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val renameIndex = words.indices.firstOrNull { "rename" in words[it] } ?: 0
 
         val newName = StringBuilder()

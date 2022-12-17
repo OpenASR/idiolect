@@ -16,7 +16,7 @@ interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
      */
     override fun stopRecognition()
 
-    /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
+    /** Blocks until we recognise something from the user. Called from [AsrControlLoop.run] */
     fun waitForUtterance(): String
 
     fun defaultModel() = ""

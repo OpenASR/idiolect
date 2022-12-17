@@ -3,6 +3,7 @@ package org.openasr.idear.recognizer
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.logger
 import java.io.*
 import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
@@ -11,7 +12,7 @@ import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
 @Service
 class CustomMicrophone : Closeable, Disposable {
     companion object {
-        private val logger = Logger.getInstance(CustomMicrophone::class.java)
+        private val log = logger<CustomMicrophone>()
 
         private const val sampleRate = 16000f
         private const val sampleSize = 16
@@ -27,13 +28,12 @@ class CustomMicrophone : Closeable, Disposable {
 
     fun open() {
         val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSize, 1, 2, sampleRate, bigEndian)
-        logger.info("formats: ${DataLine.Info(TargetDataLine::class.java, null).formats}")
         line = AudioSystem.getTargetDataLine(format)
         line.open()
 
         if (line.isControlSupported(MASTER_GAIN))
-            logger.info("Microphone: MASTER_GAIN supported")
-        else logger.warn("Microphone: MASTER_GAIN NOT supported")
+            log.info("Microphone: MASTER_GAIN supported")
+        else log.warn("Microphone: MASTER_GAIN NOT supported")
 
         //masterGainControl = findMGControl(line);
 
