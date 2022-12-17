@@ -57,7 +57,7 @@ class VoskASR : AsrProvider {
      * @param grammar eg: ["hello", "world", "[unk]"]
      */
     fun setGrammar(grammar: Array<String>) {
-        recognizer?.setGrammar(grammar.joinToString("\",\"", "[\"", "\"]"))
+//        recognizer?.setGrammar(grammar.joinToString("\",\"", "[\"", "\"]"))
     }
 
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
