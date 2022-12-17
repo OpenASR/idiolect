@@ -34,11 +34,22 @@ object ASRService {
 
     fun waitForUtterance() = asrSystem.waitForUtterance()
 
-    fun activate() = ListeningState.activate()
+    /** Called from AsrService when the user presses the start button. */
+    fun activate() {
+        ListeningState.activate()
+        asrSystem.startRecognition()
+    }
 
-    fun deactivate() = ListeningState.standBy()
+    /** Called from AsrService when the user presses the stop button. */
+    fun deactivate() {
+        ListeningState.standBy()
+        asrSystem.stopRecognition()
+    }
 
-    private fun terminate() = asrSystem.stopRecognition()
+    private fun terminate() {
+        ListeningState.terminate()
+        asrSystem.terminate()
+    }
 
     fun dispose() {
         // Deactivate in the first place, therefore actually

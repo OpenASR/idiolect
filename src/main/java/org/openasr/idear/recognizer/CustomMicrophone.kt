@@ -11,7 +11,7 @@ import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
 @Service
 class CustomMicrophone : Closeable, Disposable {
     companion object {
-        private val logger = Logger.getInstance(javaClass)
+        private val logger = Logger.getInstance(CustomMicrophone::class.java)
 
         private const val sampleRate = 16000f
         private const val sampleSize = 16

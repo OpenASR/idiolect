@@ -20,4 +20,6 @@ interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
     fun waitForUtterance(): String
 
     fun defaultModel() = ""
+
+    fun setModel(model: String) {}
 }

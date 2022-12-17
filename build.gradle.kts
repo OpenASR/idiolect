@@ -75,6 +75,7 @@ dependencies {
     implementation("com.googlecode.soundlibs:jlayer:1.0.1.4")
     implementation("com.google.cloud:google-cloud-speech:0.32.0-alpha")
     implementation("net.java.dev.jna:jna:5.7.0")
-    implementation("com.alphacephei:vosk:0.3.38+")
+    implementation("com.alphacephei:vosk:0.3.45")
+    implementation("com.jsoniter:jsoniter:0.9.19")
     testImplementation("junit:junit:4.13")
 }

@@ -37,7 +37,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
             val asrProvider = getAsrProvider()
             val nlpProvider = getNlpProvider()
 
-            var extension = asrSystemEp.extensionList.first { e -> e.supportsAsrAndNlp(asrProvider, nlpProvider) }
+            val extension = asrSystemEp.extensionList.first { e -> e.supportsAsrAndNlp(asrProvider, nlpProvider) }
             extension.initialise(asrProvider, nlpProvider)
 
             return extension
@@ -45,21 +45,25 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
-        fun getTtsProvider() = getExtension(ttsSelector, settings.ttsService, ttsProvider)
+        fun getTtsProvider() = getExtension(ttsSelector, settings.ttsService, ttsProvider, null)
 
-        private fun getAsrProvider() = getExtension(asrSelector, settings.asrService, asrProvider)
+        private fun getAsrProvider() = getExtension(asrSelector, settings.asrService, asrProvider) { asrProvider ->
+            asrProvider.setModel(settings.asrModelPath)
+        }
 
-        private fun getNlpProvider() = getExtension(nlpSelector, settings.nlpService, nlpProvider)
+        private fun getNlpProvider() = getExtension(nlpSelector, settings.nlpService, nlpProvider, null)
 
         private fun <T : ConfigurableExtension> getExtension(extensionSelector: ExtensionSelector<T>,
                                                              displayName: String,
-                                                             originalExtension: AtomicReference<T?>): T {
+                                                             ref: AtomicReference<T?>,
+                                                             configure: ((extension: T) -> Unit)?): T {
             val extension = extensionSelector.getExtensionByName(displayName)
 
-            if (extension != originalExtension.get()) {
-                originalExtension.get()?.deactivate()
-                extension!!.activate()
-                originalExtension.set(extension)
+            val current = ref.getAndSet(extension)
+            if (current != extension) {
+                current?.deactivate()
+                configure?.invoke(extension)
+                extension.activate()
             }
             return extension
         }
@@ -142,7 +146,7 @@ private class ExtensionSelector<T : ConfigurableExtension>(
     }
 
     override fun extensionRemoved(extension: T, pluginDescriptor: PluginDescriptor) {
-        val option = options.remove(extension.displayName())
+        options.remove(extension.displayName())
     }
 }
 

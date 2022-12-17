@@ -1,46 +1,34 @@
 package org.openasr.idear.asr.vosk
 
 import com.intellij.openapi.components.service
-import com.sun.jna.Native
-import com.sun.jna.Platform
-import edu.cmu.sphinx.frontend.endpoint.SpeechClassifier
-import edu.cmu.sphinx.frontend.util.StreamDataSource
+import com.jsoniter.JsonIterator
 import org.openasr.idear.asr.AsrProvider
-import org.openasr.idear.asr.cmusphinx.CustomLiveSpeechRecognizer
 import org.openasr.idear.recognizer.CustomMicrophone
-import org.vosk.LibVosk
 import org.vosk.Model
 import org.vosk.Recognizer
-import java.io.File
-import java.io.InputStream
 
 
 class VoskASR : AsrProvider {
     private var recognizer: Recognizer? = null
-
-    var modelPath: String? = defaultModel()
-
+    private var modelPath: String? = defaultModel()
 
     override fun displayName() = "Vosk"
 
-    override fun defaultModel() = System.getProperty("user.home") + "/.ideaLibSources/vosk-model-en-us-daanzu-20200905-lgraph"
+    override fun defaultModel() = System.getProperty("user.home") +
+            "\\.vosk\\vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
+            //    vosk-model-small-en-gb-0.15
+
+    /** @see https://alphacephei.com/vosk/models/model-list.json */
+    override fun setModel(model: String) {
+        if (!model.isNullOrEmpty()) {
+            this.modelPath = model
+        }
+    }
 
     private lateinit var microphone: CustomMicrophone
 
     override fun activate() {
-//        if (Platform.isWindows()) {
-//            // To get a tmp folder we unpack small library and mark it for deletion
-//            val tmpFile = Native.extractFromResourcePath("/win32-x86-64/empty", Recognizer::class.java.classLoader)
-//            val tmpDir = tmpFile.parentFile
-//            File(tmpDir, tmpFile.name + ".x").createNewFile()
-//
-////            ApplicationManager.getApplication().
-////            PlatformUtils.
-//        }
-////        System.loadLibrary("libvosk")
-//        LibVosk.setLogLevel(org.vosk.LogLevel.DEBUG)
-//
-//        recognizer = Recognizer(Model(modelPath), 16000f)
+        recognizer = Recognizer(Model(modelPath), 16000f)
 
         microphone = service()
         microphone.open()
@@ -65,24 +53,40 @@ class VoskASR : AsrProvider {
         microphone.stopRecording()
     }
 
+    /**
+     * @param grammar eg: ["hello", "world", "[unk]"]
+     */
+    fun setGrammar(grammar: Array<String>) {
+        recognizer?.setGrammar(grammar.joinToString("\",\"", "[\"", "\"]"))
+    }
+
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
     override fun waitForUtterance(): String {
         var nbytes: Int
         val b = ByteArray(4096)
-        while (microphone.stream.read(b).also { nbytes = it } >= 0) {
-            val rec = recognizer;
 
-            if (rec != null) {
-                if (rec.acceptWaveForm(b, nbytes)) {
-                    println(rec.result)
+        val recognizer = this.recognizer;
+        if (recognizer != null) {
+            while (microphone.stream.read(b).also { nbytes = it } >= 0) {
+                if (recognizer.acceptWaveForm(b, nbytes)) {
+                    val text = parseResult(recognizer.result)
+                    if (text.isNotEmpty())
+                        return text
                 } else {
-                    println(rec.partialResult)
+                    val partial = parsePartialResult(recognizer.partialResult)
+                    if (partial.isNotEmpty()) {
+                        println("partialResult: $partial")
+                    }
                 }
-
-                return rec.finalResult
             }
+
+            return parseResult(recognizer.finalResult)
         }
 
         return ""
     }
+
+    private fun parsePartialResult(json: String) = JsonIterator.deserialize(json).get("partial").toString()
+
+    private fun parseResult(json: String) = JsonIterator.deserialize(json).get("text").toString()
 }

@@ -8,7 +8,7 @@ import org.openasr.idear.tts.TTSService
 
 class ASRControlLoop : AsrSystem, Runnable {
     companion object {
-        private val logger = Logger.getInstance(javaClass)
+        private val logger = Logger.getInstance(ASRControlLoop::class.java)
     }
 
     private lateinit var asrProvider: AsrProvider
@@ -29,7 +29,6 @@ class ASRControlLoop : AsrSystem, Runnable {
     }
 
     override fun startRecognition() {
-        ListeningState.activate()
         asrProvider.startRecognition()
     }
 
@@ -37,16 +36,15 @@ class ASRControlLoop : AsrSystem, Runnable {
 
     override fun stopRecognition() {
         asrProvider.stopRecognition()
-        ListeningState.standBy()
     }
 
     override fun terminate() {
         asrProvider.stopRecognition()
-        ListeningState.terminate()
     }
 
     override fun run() {
         while (!ListeningState.isTerminated) {
+            ListeningState.waitIfStandby()
             // This blocks on a recognition result
             val result = asrProvider.waitForUtterance()
 
@@ -63,6 +61,4 @@ class ASRControlLoop : AsrSystem, Runnable {
             }
         }
     }
-
-
 }
