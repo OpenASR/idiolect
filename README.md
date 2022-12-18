@@ -1,7 +1,7 @@
 # ![idear icon](src%2Fmain%2Fresources%2Forg.openasr.idear%2Ficons%2FpluginIcon.svg) idear 
 
 [![][jetbrains-team-svg]][jetbrains-team-page]
-[![Build](https://github.com/OpenASR/idear/workflows/Build/badge.svg)](https://github.com/OpenASR/idear/actions?query=workflow%3ABuild)
+[![Deploy](https://github.com/OpenASR/idear/workflows/Deploy/badge.svg)](https://github.com/OpenASR/idear/actions?query=workflow%3ABuild)
 [![][teamcity-status-svg]][teamcity-build-status]
 [![][plugin-repo-svg]][plugin-repo-page]
 [![][plugin-download-svg]][plugin-repo-page]
