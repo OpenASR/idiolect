@@ -1,7 +1,10 @@
 package org.openasr.idear.asr
 
 import com.intellij.openapi.diagnostic.Logger
+import com.sun.jna.JNIEnv
+import com.sun.jna.Native
 import org.openasr.idear.settings.IdearConfiguration
+import java.io.File
 import java.io.IOException
 
 object ASRService {
@@ -9,12 +12,14 @@ object ASRService {
     private lateinit var asrSystem: AsrSystem
 
     init {
-        try {
-            asrSystem = IdearConfiguration.getASRSystem()
-            asrSystem.start()
-        } catch (e: IOException) {
-            logger.error("Couldn't initialize speech asrProvider!", e)
-        }
+      System.setProperty("jna.nounpack", "false")
+      System.setProperty("jna.noclasspath", "false")
+      try {
+          asrSystem = IdearConfiguration.getASRSystem()
+          asrSystem.start()
+      } catch (e: Exception) {
+          logger.error("Couldn't initialize speech asrProvider!", e)
+      }
     }
 
     fun setASRSystem(asrSystem: AsrSystem) {

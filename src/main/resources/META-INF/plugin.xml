@@ -58,18 +58,13 @@
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
 
-        <asrSystem implementation="org.openasr.idear.asr.awslex.LexASR" order="first"/>
         <asrSystem implementation="org.openasr.idear.asr.ASRControlLoop" order="last"/>
 
         <asrProvider implementation="org.openasr.idear.asr.vosk.VoskASR" order="first"/>
-        <asrProvider implementation="org.openasr.idear.asr.cmusphinx.CMUSphinxASR"/>
-        <asrProvider implementation="org.openasr.idear.asr.awslex.LexASR" order="last"/>
 
         <ttsProvider implementation="org.openasr.idear.tts.MaryTTS" order="first"/>
-        <ttsProvider implementation="org.openasr.idear.tts.PollyTTS" order="last"/>
 
         <nlpProvider implementation="org.openasr.idear.nlp.PatternBasedNlpProvider" order="first"/>
-        <nlpProvider implementation="org.openasr.idear.nlp.lex.LexNlp" order="last"/>
     </extensions>
 
     <actions>

@@ -14,15 +14,15 @@ class VoskASR : AsrProvider {
 
     override fun displayName() = "Vosk"
 
-    override fun defaultModel() = System.getProperty("user.home") +
-            "\\.vosk\\vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
+    override fun defaultModel() =
+      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-us-0.15"
+//      System.getProperty("user.home") +
+//            "\\.vosk\\vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
             //    vosk-model-small-en-gb-0.15
 
     /** @see https://alphacephei.com/vosk/models/model-list.json */
     override fun setModel(model: String) {
-        if (!model.isNullOrEmpty()) {
-            this.modelPath = model
-        }
+        if (model.isNotEmpty()) this.modelPath = model
     }
 
     private lateinit var microphone: CustomMicrophone
