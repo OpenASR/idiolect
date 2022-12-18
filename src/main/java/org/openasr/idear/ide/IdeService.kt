@@ -57,8 +57,7 @@ object IdeService {
 
     fun getEditor(dataContext: DataContext? = null) =
             if (dataContext != null) CommonDataKeys.EDITOR.getData(dataContext)
-            else FileEditorManager.getInstance(ProjectManager
-                    .getInstance().openProjects[0]).run {
+            else FileEditorManager.getInstance(ProjectManager.getInstance().openProjects[0]).run {
                 selectedTextEditor ?: allEditors[0] as Editor
             }
 

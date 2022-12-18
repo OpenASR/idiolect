@@ -4,20 +4,20 @@ import com.intellij.openapi.diagnostic.logger
 import org.openasr.idear.settings.IdearConfiguration
 import java.io.IOException
 
-object ASRService {
-    private val log = logger<ASRService>()
+object AsrService {
+    private val log = logger<AsrService>()
     private lateinit var asrSystem: AsrSystem
 
     init {
         try {
-            asrSystem = IdearConfiguration.getASRSystem()
+            asrSystem = IdearConfiguration.getAsrSystem()
             asrSystem.start()
         } catch (e: IOException) {
             log.error("Couldn't initialize speech asrProvider!", e)
         }
     }
 
-    fun setASRSystem(asrSystem: AsrSystem) {
+    fun setAsrSystem(asrSystem: AsrSystem) {
         val status = ListeningState.getStatus()
         var terminated = false
 
@@ -33,6 +33,10 @@ object ASRService {
     }
 
     fun waitForUtterance() = asrSystem.waitForUtterance()
+
+    fun setGrammar(grammar: Array<String>) {
+        asrSystem.setGrammar(grammar)
+    }
 
     /** Called from AsrService when the user presses the start button. */
     fun activate() {
@@ -62,5 +66,5 @@ object ASRService {
 
 // This is for testing purposes solely
 fun main() {
-    ASRService.activate()
+    AsrService.activate()
 }

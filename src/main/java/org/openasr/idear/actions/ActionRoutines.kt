@@ -5,26 +5,24 @@ import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.IdeActions.*
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.SystemInfo
-import org.openasr.idear.WordToNumberConverter
+import org.openasr.idear.utils.WordToNumberConverter
 import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
-import org.openasr.idear.asr.ASRService
+import org.openasr.idear.asr.AsrService
 import org.openasr.idear.asr.ListeningState
 import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.Commands
 import org.openasr.idear.tts.TTSService
+import org.openasr.idear.utils.toUpperCamelCase
 import java.awt.EventQueue
 import java.awt.event.KeyEvent.*
 import java.text.SimpleDateFormat
-import java.util.regex.Pattern
 import javax.sound.sampled.AudioSystem
 
 
 object ActionRoutines {
-    private const val COMMAND_DURATION = 3500L
-    private const val GOOGLE_QUERY_DURATION = 3000L
-    private val logger = Logger.getInstance(javaClass)
+    private val log = logger<ActionRoutines>()
 
     fun routineReleaseKey(c: String) {
         if ("shift" in c) IdeService.releaseShift()
@@ -64,19 +62,17 @@ object ActionRoutines {
         var name = Regex(".*new class( .*)?").matchEntire(utterance)?.groups?.get(1)?.value
         if (name.isNullOrEmpty()) {
             TTSService.say("what shall we call it?")
-            name = ASRService.waitForUtterance()
+            name = AsrService.waitForUtterance()
         }
 
         IdeService.invokeAction(ACTION_NEW_ELEMENT)
         pressKeystroke(VK_ENTER)
-        convertToCamelCase(name).wordCapitalize().let {
-            logger.info("Class name: $it")
+        name.toUpperCamelCase().let {
+            log.info("Class name: $it")
             IdeService.type(it)
             pressKeystroke(VK_ENTER)
         }
     }
-
-    fun String.wordCapitalize() = this[0].uppercaseChar().toString() + substring(1)
 
     fun routineAbout() {
         val ai = ApplicationInfo.getInstance()
@@ -130,8 +126,8 @@ object ActionRoutines {
 
     fun routineFollowing(c: String) {
         when {
-            c.endsWith(Commands.LINE) -> IdeService.invokeAction("EditorDown")
-            c.endsWith(Commands.PAGE) -> IdeService.invokeAction("EditorPageDown")
+            c.endsWith(Commands.LINE) -> IdeService.invokeAction(ACTION_EDITOR_MOVE_CARET_DOWN)
+            c.endsWith(Commands.PAGE) -> IdeService.invokeAction(ACTION_EDITOR_MOVE_CARET_PAGE_DOWN)
             c.endsWith(Commands.METHOD) -> IdeService.invokeAction("MethodDown")
             c.endsWith("tab") -> IdeService.invokeAction("Diff.FocusOppositePane")
             c.endsWith("word") -> IdeService.type(if (SystemInfo.isWindows) VK_CONTROL else VK_ALT, VK_RIGHT)
@@ -144,7 +140,7 @@ object ActionRoutines {
             "return" in c || "enter" in c -> pressKeystroke(VK_ENTER)
             Commands.ESCAPE in c -> pressKeystroke(VK_ESCAPE)
             Commands.TAB in c -> pressKeystroke(VK_TAB)
-            Commands.UNDO in c -> IdeService.invokeAction("\$Undo")
+            Commands.UNDO in c -> IdeService.invokeAction(ACTION_UNDO)
             "shift" in c -> IdeService.pressShift()
         }
     }
@@ -177,35 +173,21 @@ object ActionRoutines {
 
                 while (!ar.isProcessed) {
                     //Spin lock
-                    logger.info("Not done...")
+                    log.info("Not done...")
                     try {
                         Thread.sleep(250)
                     } catch (e: InterruptedException) {
-                        logger.warn(e)
+                        log.warn(e)
                     }
                 }
-                logger.info("Done!")
+                log.info("Done!")
 
                 IdeService.type(" ")
                 val jumpMarker = recognizeJumpMarker()
                 IdeService.type("" + jumpMarker)
-                logger.info("Typed: $jumpMarker")
+                log.info("Typed: $jumpMarker")
             }
         }
-    }
-
-    fun convertToCamelCase(s: String): String {
-        val m = Pattern.compile("([\\s]+)([A-Za-z0-9])").matcher(s)
-        val sb = StringBuilder()
-        var last = 0
-        while (m.find()) {
-            sb.append(s.substring(last, m.start()))
-            sb.append(m.group(2).uppercase())
-            last = m.end()
-        }
-        sb.append(s.substring(last))
-
-        return sb.toString()
     }
 
     private fun pressKeystroke(vararg keys: Int) = IdeService.type(*keys)
@@ -219,7 +201,7 @@ object ActionRoutines {
         TTSService.say("knock, knock, knock, knock, knock")
 
         var result: String? = null
-        while ("who is there" != result) result = ASRService.waitForUtterance()
+        while ("who is there" != result) result = AsrService.waitForUtterance()
 
         TTSService.say("Hang on, I will be right back")
 
@@ -231,7 +213,7 @@ object ActionRoutines {
 
         TTSService.say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va")
 
-        while ("who" !in result!!) result = ASRService.waitForUtterance()
+        while ("who" !in result!!) result = AsrService.waitForUtterance()
 
         TTSService.say("It is me, Jah java va va, va, va. Open up already!")
     }
@@ -280,8 +262,8 @@ object ActionRoutines {
         beep()
         var result: String
         while (ListeningState.isActive) {
-            result = ASRService.waitForUtterance()
-            if (result == "speech resume") {
+            result = AsrService.waitForUtterance()
+            if (result == "resume listening") {
                 beep()
                 break
             }
@@ -289,12 +271,12 @@ object ActionRoutines {
     }
 
     private fun recognizeJumpMarker(): Int {
-        logger.info("Recognizing number...")
+        log.info("Recognizing number...")
         while (true) {
-            val result = ASRService.waitForUtterance()
+            val result = AsrService.waitForUtterance()
             if (result.startsWith("jump ")) {
                 val number = WordToNumberConverter.getNumber(result.substring(5))
-                logger.info("Recognized number: $number")
+                log.info("Recognized number: $number")
                 return number
             }
         }
@@ -306,7 +288,7 @@ object ActionRoutines {
             try {
                 val clip = AudioSystem.getClip()
                 val inputStream = AudioSystem.getAudioInputStream(
-                        ASRService.javaClass.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
+                        AsrService.javaClass.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
                 clip.open(inputStream)
                 clip.start()
             } catch (e: Exception) {

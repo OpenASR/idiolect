@@ -1,7 +1,7 @@
 package org.openasr.idear.asr
 
 import com.intellij.openapi.diagnostic.logger
-import org.openasr.idear.VoiceRecordControllerAction
+import org.openasr.idear.actions.VoiceRecordControllerAction
 import org.openasr.idear.nlp.*
 import org.openasr.idear.tts.TTSService
 
@@ -32,6 +32,10 @@ class AsrControlLoop : AsrSystem, Runnable {
 
     override fun waitForUtterance() = asrProvider.waitForUtterance()
 
+    override fun setGrammar(grammar: Array<String>) {
+        asrProvider.setGrammar(grammar)
+    }
+
     override fun stopRecognition() {
         asrProvider.stopRecognition()
     }
@@ -54,6 +58,7 @@ class AsrControlLoop : AsrSystem, Runnable {
                 }
             } else if (ListeningState.isActive) {
                 log.info("Recognized: $result")
+                println("Recognized: $result")
 
                 nlpProvder.processUtterance(result)
             }

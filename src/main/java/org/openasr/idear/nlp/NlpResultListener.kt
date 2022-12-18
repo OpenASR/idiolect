@@ -14,7 +14,15 @@ interface NlpResultListener {
     }
 
     fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?)
+
+    /**
+     * Display/read a failure message to the user.
+     */
     fun onFailure(message: String)
     //    fun onIncomplete()
+
+    /**
+     * Display/read a message to the user.
+     */
     fun onMessage(message: String, verbosity: Verbosity)
 }

@@ -1,10 +1,7 @@
-package org.openasr.idear
+package org.openasr.idear.actions
 
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.application.ApplicationManager
-import org.acejump.config.AceConfig
-import org.openasr.idear.actions.IdearAction
-import org.openasr.idear.asr.ASRService
+import org.openasr.idear.asr.AsrService
 import org.openasr.idear.presentation.Icons
 
 object VoiceRecordControllerAction : IdearAction() {
@@ -18,13 +15,13 @@ object VoiceRecordControllerAction : IdearAction() {
             templatePresentation.icon = Icons.RECORD_START
             isDefaultIcon = false
 //            settings.allowedChars = aceJumpDefaults
-            ASRService.deactivate()
+            AsrService.deactivate()
         } else {
             isRecording = true
             templatePresentation.icon = Icons.RECORD_END
             isDefaultIcon = false
 //            settings.allowedChars = "1234567890"
-            ASRService.activate()
+            AsrService.activate()
         }
     }
 }

@@ -26,5 +26,7 @@ interface AsrSystem {
     /** Blocks until a we recognise something from the user. Called from [AsrControlLoop.run] */
     fun waitForUtterance(): String
 
+    fun setGrammar(grammar: Array<String>) {}
+
     fun terminate()
 }

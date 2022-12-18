@@ -13,7 +13,6 @@ import org.openasr.idear.tts.TTSService
 import java.awt.Component
 import java.util.*
 
-//runs only selected configuration
 class FindUsagesActionRecognizer : ActionRecognizer {
     override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
     override fun isMatching(utterance: String) = "find" in utterance

@@ -50,6 +50,7 @@
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idear">
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.IdearActionRecognizer" order="first"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.InlineActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.RunActionRecognizer"/>
@@ -58,6 +59,11 @@
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.JavaActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RegisteredEditorActionRecognizer"
+                          order="before RegisteredActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RegisteredActionRecognizer"
+                          id="RegisteredActionRecognizer"
+                          order="last"/>
 
         <asrSystem implementation="org.openasr.idear.asr.awslex.LexAsr" order="first"/>
         <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop" order="last"/>
@@ -75,7 +81,7 @@
 
     <actions>
         <action id="Idear.Start" text="Voice control" description="Start"
-                class="org.openasr.idear.VoiceRecordControllerAction"
+                class="org.openasr.idear.actions.VoiceRecordControllerAction"
                 icon="/org.openasr.idear/icons/start.svg">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>

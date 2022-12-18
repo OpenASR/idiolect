@@ -11,7 +11,7 @@ import org.vosk.Recognizer
 
 class VoskAsr : AsrProvider {
     private val log = logger<VoskAsr>()
-    private var recognizer: Recognizer? = null
+    private lateinit var recognizer: Recognizer
     private var modelPath: String? = defaultModel()
 
     override fun displayName() = "Vosk"
@@ -31,6 +31,7 @@ class VoskAsr : AsrProvider {
 
     override fun activate() {
         recognizer = Recognizer(Model(modelPath), 16000f)
+        recognizer.setMaxAlternatives(4)
 
         microphone = service()
         microphone.open()
@@ -58,8 +59,11 @@ class VoskAsr : AsrProvider {
     /**
      * @param grammar eg: ["hello", "world", "[unk]"]
      */
-    fun setGrammar(grammar: Array<String>) {
-        recognizer?.setGrammar(grammar.joinToString("\",\"", "[\"", "\"]"))
+    override fun setGrammar(grammar: Array<String>) {
+        recognizer.apply {
+            reset()
+            setGrammar(grammar.joinToString("\",\"", "[\"", "\"]"))
+        }
     }
 
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
@@ -67,25 +71,17 @@ class VoskAsr : AsrProvider {
         var nbytes: Int
         val b = ByteArray(4096)
 
-        val recognizer = this.recognizer;
-        if (recognizer != null) {
-            while (microphone.stream.read(b).also { nbytes = it } >= 0) {
-                if (recognizer.acceptWaveForm(b, nbytes)) {
-                    val text = parseResult(recognizer.result)
-                    if (text.isNotEmpty())
-                        return text
-//                } else {
-//                    val partial = parsePartialResult(recognizer.partialResult)
-//                    if (partial.isNotEmpty()) {
-//                        println("partialResult: $partial")
-//                    }
+        while (microphone.stream.read(b).also { nbytes = it } >= 0) {
+            if (recognizer.acceptWaveForm(b, nbytes)) {
+                val text = parseResult(recognizer.result)
+                if (text.isNotEmpty()) {
+                    println(JsonIterator.deserialize(text))
+                    return text
                 }
             }
-
-            return parseResult(recognizer.finalResult)
         }
 
-        return ""
+        return parseResult(recognizer.finalResult)
     }
 
     private fun parsePartialResult(json: String) = JsonIterator.deserialize(json).get("partial").toString()

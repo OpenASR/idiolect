@@ -8,7 +8,9 @@ import org.openasr.idear.tts.TTSService
 
 class IntellijNlpResultListener(private var verbosity: Verbosity = Verbosity.INFO) : NlpResultListener {
 
-    override fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?) {
+    override fun onFulfilled(intentName: String,
+                             slots: MutableMap<String, out String>?,
+                             sessionAttributes: MutableMap<String, out String>?) {
         sessionAttributes?.forEach { (key, value) ->
             //                var remove = true
             when (key) {

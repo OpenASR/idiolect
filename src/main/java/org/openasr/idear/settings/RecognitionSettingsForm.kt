@@ -29,7 +29,7 @@ class RecognitionSettingsForm {
             nlpProviderCombo.selectedItem = value
         }
 
-    var asrService: String
+    var AsrService: String
         get() = asrProviderCombo.selectedItem as String
         set(value) {
             asrProviderCombo.selectedItem = value

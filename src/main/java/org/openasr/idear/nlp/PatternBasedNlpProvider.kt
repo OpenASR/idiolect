@@ -32,6 +32,7 @@ class PatternBasedNlpProvider : NlpProvider {
     override fun processUtterance(utterance: String) {
         when {
             utterance.startsWith("speech pause") -> pauseSpeech()
+
             else -> {
                 for (handler in handlers) {
                     if (handler.processUtterance(utterance)) {

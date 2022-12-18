@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
-import org.openasr.idear.CodeToTextConverter
+import org.openasr.idear.psi.CodeToTextConverter
 import org.openasr.idear.ide.isTextCurrentlySelected
 
 class JavaPronouncer : IntentionAction {

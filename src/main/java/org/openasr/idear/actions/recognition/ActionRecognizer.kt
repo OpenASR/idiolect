@@ -28,6 +28,9 @@ interface ActionRecognizer {
             else null
 }
 
+/**
+ * Classes implementing this interface must implement `getHandler(utterance: String): SpeechActionHandler?`
+ */
 interface MultiSentenceActionRecognizer : ActionRecognizer {
     override fun isMatching(utterance: String) = false
     override fun getActionInfo(utterance: String, dataContext: DataContext): ActionCallInfo? = null

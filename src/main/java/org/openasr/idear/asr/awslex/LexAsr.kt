@@ -25,6 +25,8 @@ class LexAsr(botName: String = "idear", botAlias: String = "PROD") : LexRecogniz
 
     override fun waitForUtterance() = utterances.take()
 
+    override fun setGrammar(grammar: Array<String>) {}
+
     override fun onVoiceActivity(audioInputStream: AudioInputStream) {
         val result = lex.getRecognizedDataForStream(audioInputStream).result
         utterances.offer(result.inputTranscript)
