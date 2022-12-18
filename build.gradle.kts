@@ -47,11 +47,6 @@ tasks {
     dependsOn("test")
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
   }
-
-//    withType<PublishTask> {
-//        val intellijPublishToken: String? by project
-//        token(intellijPublishToken)
-//    }
 }
 
 repositories {
