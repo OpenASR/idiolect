@@ -17,8 +17,9 @@ class VoskAsr : AsrProvider {
     override fun displayName() = "Vosk"
 
     override fun defaultModel() =
-//      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-us-0.15"
-      System.getProperty("user.home") + "/.vosk/vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
+      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
+//    System.getProperty("user.home") + "/.vosk/vosk-model-en-us-0.22-lgraph"  // Big US English model with dynamic graph
+//      System.getProperty("user.home") + "/.vosk/vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
 
 
     /** @see https://alphacephei.com/vosk/models/model-list.json */
