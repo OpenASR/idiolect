@@ -1,21 +1,13 @@
-import org.jetbrains.intellij.tasks.RunIdeTask
-
 plugins {
-  idea apply true
-  id("java")
+  kotlin("jvm") version "1.8.0-Beta"
   id("org.jetbrains.intellij") version "1.11.0"
-  id("org.jetbrains.kotlin.jvm") version "1.8.0-RC"
   id("com.github.ben-manes.versions") version "0.44.0"
 }
 
 group = "org.openasr"
 version = "1.3.5"
 
-java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(17))
-  }
-}
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
   version.set("2022.3")
@@ -27,20 +19,20 @@ intellij {
 tasks {
   patchPluginXml {
     version.set("${project.version}")
-    sinceBuild.set("213")
+    sinceBuild.set("222.*")
     untilBuild.set("223.*")
   }
 
-  compileKotlin {
-    kotlinOptions.jvmTarget = "17"
-  }
+  val jvmTarget = "17"
+
+  compileKotlin { kotlinOptions.jvmTarget = jvmTarget }
 
   compileTestKotlin {
     exclude("**/windows/**")
-    kotlinOptions.jvmTarget = "17"
+    kotlinOptions.jvmTarget = jvmTarget
   }
 
-  named<Zip>("buildPlugin") {
+  buildPlugin {
     dependsOn("test")
     archiveFileName.set("idear.zip")
   }
@@ -54,8 +46,6 @@ tasks {
 repositories {
   mavenCentral()
   maven("https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local")
-  maven("https://oss.sonatype.org/content/repositories/releases/")
-  maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
