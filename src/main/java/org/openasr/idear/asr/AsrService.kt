@@ -2,19 +2,20 @@ package org.openasr.idear.asr
 
 import com.intellij.openapi.diagnostic.logger
 import org.openasr.idear.settings.IdearConfiguration
-import java.io.IOException
 
 object AsrService {
     private val log = logger<AsrService>()
     private lateinit var asrSystem: AsrSystem
 
     init {
-        try {
-            asrSystem = IdearConfiguration.getAsrSystem()
-            asrSystem.start()
-        } catch (e: IOException) {
-            log.error("Couldn't initialize speech asrProvider!", e)
-        }
+      System.setProperty("jna.nounpack", "false")
+      System.setProperty("jna.noclasspath", "false")
+      try {
+          asrSystem = IdearConfiguration.getAsrSystem()
+          asrSystem.start()
+      } catch (e: Exception) {
+          log.error("Couldn't initialize speech asrProvider!", e)
+      }
     }
 
     fun setAsrSystem(asrSystem: AsrSystem) {

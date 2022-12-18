@@ -39,8 +39,6 @@
         <extensionPoint name="asrProvider" interface="org.openasr.idear.asr.AsrProvider" dynamic="true"/>
         <extensionPoint name="ttsProvider" interface="org.openasr.idear.tts.TtsProvider" dynamic="true"/>
         <extensionPoint name="nlpProvider" interface="org.openasr.idear.nlp.NlpProvider" dynamic="true"/>
-                <!--<with attribute="" implements="" tag=""
-        </extensionPoint>-->
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -65,18 +63,10 @@
                           id="RegisteredActionRecognizer"
                           order="last"/>
 
-        <asrSystem implementation="org.openasr.idear.asr.awslex.LexAsr" order="first"/>
-        <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop" order="last"/>
-
-        <asrProvider implementation="org.openasr.idear.asr.vosk.VoskAsr" order="first"/>
-        <asrProvider implementation="org.openasr.idear.asr.cmusphinx.CmuSphinxAsr"/>
-        <asrProvider implementation="org.openasr.idear.asr.awslex.LexAsr" order="last"/>
-
-        <ttsProvider implementation="org.openasr.idear.tts.MaryTTS" order="first"/>
-        <ttsProvider implementation="org.openasr.idear.tts.PollyTTS" order="last"/>
-
-        <nlpProvider implementation="org.openasr.idear.nlp.PatternBasedNlpProvider" order="first"/>
-        <nlpProvider implementation="org.openasr.idear.nlp.lex.LexNlp" order="last"/>
+        <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop"/>
+        <asrProvider implementation="org.openasr.idear.asr.vosk.VoskAsr"/>
+        <ttsProvider implementation="org.openasr.idear.tts.MaryTTS"/>
+        <nlpProvider implementation="org.openasr.idear.nlp.PatternBasedNlpProvider"/>
     </extensions>
 
     <actions>
@@ -86,15 +76,7 @@
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 
-        <!--<action id="Idear.SpeechStuff" text="Invoke by speech"
-                class="org.openasr.idear.actions.ExecuteActionFromPredefinedText"/>-->
         <action id="Idear.VoiceAction" text="Invoke by voice-command"
-                class="org.openasr.idear.actions.ExecuteVoiceCommandAction">
-<!--            <add-to-group group-id="Internal.UI.Demos"/>-->
-        </action>
-
-        <!-- Home-grown actions -->
-
-        <!--<action id="Idear.WhereAmI" text="Name the place you are" class="org.openasr.idear.actions.WhereAmIAction"/> -->
+                class="org.openasr.idear.actions.ExecuteVoiceCommandAction"/>
     </actions>
 </idea-plugin>

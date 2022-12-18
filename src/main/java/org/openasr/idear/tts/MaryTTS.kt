@@ -8,7 +8,7 @@ import marytts.util.data.audio.AudioPlayer
 import java.util.*
 
 object MaryTTS : TtsProvider {
-    val logger = Logger.getInstance(javaClass)
+//    val logger = Logger.getInstance(javaClass)
     private lateinit var voice: Voice
     private lateinit var maryTTS: MaryInterface
 
@@ -22,7 +22,7 @@ object MaryTTS : TtsProvider {
 
                 maryTTS = LocalMaryInterface()
                 val systemLocale = Locale.getDefault()
-                logger.info("Getting MaryTTS voice for: $systemLocale")
+//                logger.info("Getting MaryTTS voice for: $systemLocale")
                 voice = if (systemLocale in maryTTS.availableLocales)
                     Voice.getDefaultVoice(systemLocale)
                 else
@@ -31,7 +31,7 @@ object MaryTTS : TtsProvider {
                 maryTTS.locale = voice.locale
                 maryTTS.voice = voice.name
             } catch (e: MaryConfigurationException) {
-                logger.error(e)
+//                logger.error(e)
             }
         }
     }
@@ -43,7 +43,7 @@ object MaryTTS : TtsProvider {
         try {
             AudioPlayer(maryTTS.generateAudio(utterance)).start()
         } catch (e: Exception) {
-            logger.error("Sorry! Could not pronounce $utterance", e)
+//            logger.error("Sorry! Could not pronounce $utterance", e)
             return false
         }
 
