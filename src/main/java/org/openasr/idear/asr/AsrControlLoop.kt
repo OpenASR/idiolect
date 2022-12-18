@@ -1,5 +1,8 @@
 package org.openasr.idear.asr
 
+import com.intellij.openapi.application.Application
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.ComponentManager
 import com.intellij.openapi.diagnostic.logger
 import org.openasr.idear.actions.VoiceRecordControllerAction
 import org.openasr.idear.nlp.*
@@ -11,8 +14,8 @@ class AsrControlLoop : AsrSystem, Runnable {
 
     private lateinit var asrProvider: AsrProvider
     private lateinit var nlpProvder: NlpProvider
-
     private var speechThread = Thread(this, "ASR Thread")
+    private val messageBus = ApplicationManager.getApplication().messageBus
 
     override fun supportsAsrAndNlp(asrProvider: AsrProvider, nlpProvider: NlpProvider) = true
 
@@ -46,21 +49,26 @@ class AsrControlLoop : AsrSystem, Runnable {
 
     override fun run() {
         while (!ListeningState.isTerminated) {
-            ListeningState.waitIfStandby()
-            // This blocks on a recognition result
-            val result = asrProvider.waitForUtterance()
+            try {
+                ListeningState.waitIfStandby()
+                // This blocks on a recognition result
+                val result = asrProvider.waitForUtterance()
 
-            if (ListeningState.isInit) {
-                if (result == Commands.HI_IDEA) {
-                    // Greet invoker
-                    TTSService.say("Hi")
-                    VoiceRecordControllerAction.invoke()
+                if (ListeningState.isInit) {
+                    if (result == Commands.HI_IDEA) {
+                        // Greet invoker
+                        TTSService.say("Hi")
+                        VoiceRecordControllerAction.invoke()
+                    }
+                } else if (ListeningState.isActive) {
+                    messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onRecognition(result)
+
+                    nlpProvder.processUtterance(result)
                 }
-            } else if (ListeningState.isActive) {
-                log.info("Recognized: $result")
-                println("Recognized: $result")
-
-                nlpProvder.processUtterance(result)
+            } catch (iex: InterruptedException) {
+                break
+            } catch (ex: Exception) {
+                log.warn("Failed to process utterance: ${ex.message}")
             }
         }
     }

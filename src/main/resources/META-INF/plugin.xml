@@ -33,6 +33,11 @@
     <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
     <depends>AceJump</depends>
 
+    <applicationListeners>
+        <listener topic="org.openasr.idear.nlp.NlpResultListener" class="org.openasr.idear.nlp.IntellijNlpResultListener"/>
+        <listener topic="org.openasr.idear.nlp.NlpResultListener" class="org.openasr.idear.nlp.LoggingNlpResultListener"/>
+    </applicationListeners>
+
     <extensionPoints>
         <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer" dynamic="true"/>
         <extensionPoint name="asrSystem" interface="org.openasr.idear.asr.AsrSystem" dynamic="true"/>
@@ -45,6 +50,7 @@
         <applicationService serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
         <applicationConfigurable groupId="tools" displayName="Idear" id="preferences.IdearConfiguration"
                                  instance="org.openasr.idear.settings.IdearConfiguration" dynamic="true"/>
+        <statusBarWidgetFactory implementation="org.openasr.idear.presentation.RecognitionStatusBarWidgetFactory"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idear">

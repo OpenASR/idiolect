@@ -13,13 +13,14 @@ class VoskAsr : AsrProvider {
     private val log = logger<VoskAsr>()
     private lateinit var recognizer: Recognizer
     private var modelPath: String? = defaultModel()
+    private val alternatives = 0;
 
     override fun displayName() = "Vosk"
 
     override fun defaultModel() =
-      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
+//      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
 //    System.getProperty("user.home") + "/.vosk/vosk-model-en-us-0.22-lgraph"  // Big US English model with dynamic graph
-//      System.getProperty("user.home") + "/.vosk/vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
+      System.getProperty("user.home") + "/.vosk/vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
 
 
     /** @see https://alphacephei.com/vosk/models/model-list.json */
@@ -31,7 +32,7 @@ class VoskAsr : AsrProvider {
 
     override fun activate() {
         recognizer = Recognizer(Model(modelPath), 16000f)
-        recognizer.setMaxAlternatives(4)
+//        recognizer.setMaxAlternatives(alternatives)
 
         microphone = service()
         microphone.open()
@@ -73,7 +74,6 @@ class VoskAsr : AsrProvider {
             if (recognizer.acceptWaveForm(b, nbytes)) {
                 val text = parseResult(recognizer.result)
                 if (text.isNotEmpty()) {
-                    println(JsonIterator.deserialize(text))
                     return text
                 }
             }
@@ -85,4 +85,10 @@ class VoskAsr : AsrProvider {
     private fun parsePartialResult(json: String) = JsonIterator.deserialize(json).get("partial").toString()
 
     private fun parseResult(json: String) = JsonIterator.deserialize(json).get("text").toString()
+
+    /** Use this instead of parseResult if alternatives > 0 */
+    private fun parseAlternatives(json: String): List<String> {
+        return JsonIterator.deserialize(json).get("alternatives", '*', "text")
+                .asList().map { it.toString() }
+    }
 }

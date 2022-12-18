@@ -1,5 +1,7 @@
 package org.openasr.idear.nlp
 
+import com.intellij.util.messages.MessageBusConnection
+import com.intellij.util.messages.Topic
 import org.openasr.idear.actions.ActionRoutines
 import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
@@ -7,6 +9,14 @@ import org.openasr.idear.tts.TTSService
 
 
 class IntellijNlpResultListener(private var verbosity: Verbosity = Verbosity.INFO) : NlpResultListener {
+
+    override fun onListening(listening: Boolean) {
+
+    }
+
+    override fun onRecognition(utterance: String) {
+
+    }
 
     override fun onFulfilled(intentName: String,
                              slots: MutableMap<String, out String>?,
