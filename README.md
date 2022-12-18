@@ -2,7 +2,6 @@
 
 [![][jetbrains-team-svg]][jetbrains-team-page]
 [![Build](https://github.com/OpenASR/idear/workflows/Build/badge.svg)](https://github.com/OpenASR/idear/actions?query=workflow%3ABuild)
-[![][travis-status-svg]][travis-build-status]
 [![][teamcity-status-svg]][teamcity-build-status]
 [![][plugin-repo-svg]][plugin-repo-page]
 [![][plugin-download-svg]][plugin-repo-page]
