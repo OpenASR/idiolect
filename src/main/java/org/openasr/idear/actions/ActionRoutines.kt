@@ -58,16 +58,18 @@ object ActionRoutines {
         pressKeystroke(VK_TAB)
     }
 
-    fun routineAddNewClass(utterance: String) {
-        var name = Regex(".*new class( .*)?").matchEntire(utterance)?.groups?.get(1)?.value
+    fun routineAddNewClass(name: String) {
+        var className: String
         if (name.isNullOrEmpty()) {
             TTSService.say("what shall we call it?")
-            name = AsrService.waitForUtterance()
+            className = AsrService.waitForUtterance()
+        } else {
+            className = name
         }
 
         IdeService.invokeAction(ACTION_NEW_ELEMENT)
         pressKeystroke(VK_ENTER)
-        name.toUpperCamelCase().let {
+        className.toUpperCamelCase().let {
             log.info("Class name: $it")
             IdeService.type(it)
             pressKeystroke(VK_ENTER)
@@ -86,14 +88,14 @@ object ActionRoutines {
                 " of the IntelliJ Platform, and I am registered to " + ai.companyName)
     }
 
-    fun routineCheck(c: String) =
-            SurroundWithNoNullCheckRecognizer().let {
-                if (it.isMatching(c))
-                    DataManager.getInstance().dataContextFromFocusAsync
-                            .then { dataContext: DataContext -> {
-                                run(it, c, dataContext)
-                            }}
-            }
+//    fun routineCheck(c: String) =
+//            SurroundWithNoNullCheckRecognizer().let {
+//                if (it.isMatching(c))
+//                    DataManager.getInstance().dataContextFromFocusAsync
+//                            .then { dataContext: DataContext -> {
+//                                run(it, c, dataContext)
+//                            }}
+//            }
 
     fun routineStep(c: String) {
         when {
@@ -192,10 +194,10 @@ object ActionRoutines {
 
     private fun pressKeystroke(vararg keys: Int) = IdeService.type(*keys)
 
-    fun run(rec: SurroundWithNoNullCheckRecognizer, c: String, dataContext: DataContext) =
-            EventQueue.invokeLater {
-                ApplicationManager.getApplication().runWriteAction { rec.getActionInfo(c, dataContext) }
-            }
+//    fun run(rec: SurroundWithNoNullCheckRecognizer, c: String, dataContext: DataContext) =
+//            EventQueue.invokeLater {
+//                ApplicationManager.getApplication().runWriteAction { rec.getActionInfo(c, dataContext) }
+//            }
 
     fun tellJoke() {
         TTSService.say("knock, knock, knock, knock, knock")
@@ -260,9 +262,9 @@ object ActionRoutines {
 
     fun pauseSpeech() {
         beep()
-        var result: String
         while (ListeningState.isActive) {
-            result = AsrService.waitForUtterance()
+            val result = AsrService.waitForUtterance()
+
             if (result == "resume listening") {
                 beep()
                 break

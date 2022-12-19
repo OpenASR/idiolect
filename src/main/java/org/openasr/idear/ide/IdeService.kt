@@ -8,6 +8,7 @@ import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.ui.playback.commands.ActionCommand
 import com.intellij.openapi.util.ActionCallback
 import org.openasr.idear.actions.SpeechEvent
+import org.openasr.idear.nlp.NlpRequest
 import javax.swing.JOptionPane
 
 object IdeService {
@@ -34,12 +35,12 @@ object IdeService {
                     return callback!!
                 }
 
-    fun invokeAction(action: AnAction, utterance: String): ActionCallback =
+    fun invokeAction(action: AnAction, nlpRequest: NlpRequest): ActionCallback =
             with(ActionManager.getInstance()) {
                 var callback: ActionCallback? = null
                 ApplicationManager.getApplication().invokeAndWait {
                     callback = tryToExecute(action,
-                            SpeechEvent(JOptionPane.getRootFrame(), 0, System.currentTimeMillis(), utterance),
+                            SpeechEvent(JOptionPane.getRootFrame(), 0, System.currentTimeMillis(), nlpRequest),
                             null, "microphone", true)
                 }
                 return callback!!

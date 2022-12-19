@@ -1,22 +1,25 @@
 package org.openasr.idear.asr.vosk
 
 import com.intellij.openapi.components.service
-import com.intellij.openapi.diagnostic.logger
 import com.jsoniter.JsonIterator
 import org.openasr.idear.asr.AsrProvider
+import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.recognizer.CustomMicrophone
 import org.vosk.Model
 import org.vosk.Recognizer
 
 
 class VoskAsr : AsrProvider {
-    private val log = logger<VoskAsr>()
     private lateinit var recognizer: Recognizer
     private var modelPath: String? = defaultModel()
-    private val alternatives = 0;
+    private val alternatives = 4;
 
     override fun displayName() = "Vosk"
 
+    /**
+     * @see https://alphacephei.com/vosk/models/model-list.json
+     * check "type" field. "small" and "big-lgraph" support grammar, "big" doesn't
+     */
     override fun defaultModel() =
 //      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
 //    System.getProperty("user.home") + "/.vosk/vosk-model-en-us-0.22-lgraph"  // Big US English model with dynamic graph
@@ -32,7 +35,7 @@ class VoskAsr : AsrProvider {
 
     override fun activate() {
         recognizer = Recognizer(Model(modelPath), 16000f)
-//        recognizer.setMaxAlternatives(alternatives)
+        recognizer.setMaxAlternatives(alternatives)
 
         microphone = service()
         microphone.open()
@@ -66,23 +69,39 @@ class VoskAsr : AsrProvider {
     }
 
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
-    override fun waitForUtterance(): String {
+    override fun waitForSpeech(): NlpRequest? {
         var nbytes: Int
         val b = ByteArray(4096)
 
         while (microphone.stream.read(b).also { nbytes = it } >= 0) {
             if (recognizer.acceptWaveForm(b, nbytes)) {
-                val text = parseResult(recognizer.result)
-                if (text.isNotEmpty()) {
-                    return text
+                val nlpRequest = tryParseResult(recognizer.result)
+
+                if (nlpRequest != null) {
+                    return nlpRequest
                 }
             }
         }
 
-        return parseResult(recognizer.finalResult)
+        return tryParseResult(recognizer.finalResult)
     }
 
     private fun parsePartialResult(json: String) = JsonIterator.deserialize(json).get("partial").toString()
+
+    private fun tryParseResult(json: String): NlpRequest? {
+        if (alternatives == 0) {
+            val utterance = parseResult(json)
+            if (utterance.isNotEmpty()) {
+                return NlpRequest(listOf(utterance))
+            }
+        } else {
+            val alternatives = parseAlternatives(json)
+//            if (alternatives.isNotEmpty() && alternatives[0])
+            return NlpRequest(alternatives)
+        }
+
+        return null
+    }
 
     private fun parseResult(json: String) = JsonIterator.deserialize(json).get("text").toString()
 

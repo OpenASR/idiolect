@@ -15,7 +15,7 @@ class CodeHandler : UtteranceHandler {
             utterance == Commands.SHOW_USAGES -> IdeService.invokeAction("ShowUsages")
 
             // "surround with not null check"
-            "check" in utterance -> ActionRoutines.routineCheck(utterance)
+//            "check" in utterance -> ActionRoutines.routineCheck(utterance)
             else -> return false
         }
 

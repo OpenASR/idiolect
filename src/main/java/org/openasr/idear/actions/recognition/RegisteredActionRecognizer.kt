@@ -2,6 +2,9 @@ package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.DataContext
+import org.openasr.idear.nlp.NlpGrammar
+import org.openasr.idear.nlp.NlpRequest
+import org.openasr.idear.utils.ActionUtils
 import org.openasr.idear.utils.toUpperCamelCase
 
 /**
@@ -9,20 +12,30 @@ import org.openasr.idear.utils.toUpperCamelCase
  *
  * @see com.intellij.openapi.actionSystem.IdeActions
  */
-open class RegisteredActionRecognizer : MultiSentenceActionRecognizer {
+open class RegisteredActionRecognizer : ActionRecognizer {
+    private val grammars = ActionUtils.buildGrammar()
+    private val actionManager = ActionManager.getInstance()
 
-    override fun getHandler(utterance: String): SpeechActionHandler? {
-        val actionId = getActionIdForUtterance(utterance)
-        val action = if (ActionManager.getInstance().isGroup(actionId)) null
-                        else ActionManager.getInstance().getAction(actionId)
+    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? {
+        return object : NlpGrammar("Anonymous") {
+            override fun tryMatchRequest(utterance: String, dataContext: DataContext): ActionCallInfo? {
+                val actionId = getActionIdForUtterance(utterance)
+                val action = if (actionManager.isGroup(actionId))
+                    null
+                else
+                    actionManager.getAction(actionId)
 
-        if (action != null) {
-            println("exectuting registered action $actionId")
-            return getHandlerForActionId(actionId)
-        }
+                if (action != null) {
+                    return ActionCallInfo(actionId)
+                }
 
-        return null
+                return null
+            }
+        }.tryMatchRequest(nlpRequest, dataContext)
     }
+
+    /** Not used by tryMatchRequest(), but provided for documentation */
+    override fun getGrammars() = grammars
 
     protected open fun getActionIdForUtterance(utterance: String): String {
         return mapOf(
@@ -30,10 +43,5 @@ open class RegisteredActionRecognizer : MultiSentenceActionRecognizer {
                 "git" to "cvs",
                 "change" to "diff"
         ).getOrDefault(utterance, utterance).toUpperCamelCase()
-    }
-
-    protected open fun getHandlerForActionId(actionId: String): SpeechActionHandler {
-        val actionCall = ActionCallInfo(actionId)
-        return { _: String, _: DataContext -> actionCall }
     }
 }

@@ -1,8 +1,9 @@
 package org.openasr.idear.actions
 
 import com.intellij.openapi.actionSystem.AnActionEvent
-import org.openasr.idear.actions.recognition.TextToActionConverter
+import org.openasr.idear.actions.recognition.ActionRecognizerManager
 import org.openasr.idear.ide.IdeService
+import org.openasr.idear.nlp.NlpRequest
 
 /**
  * A debugging aid to use one of the ActionRecognizer extension classes configured in `plugin.xml` to generate
@@ -17,6 +18,8 @@ object ExecuteActionFromPredefinedText : ExecuteActionByCommandText() {
         val text = "idea rename to my super test"
         // String text = "idea inline";
 
-        TextToActionConverter(e.dataContext).extractAction(text)?.let { runInEditor(editor, it) }
+        ActionRecognizerManager(e.dataContext).handleNlpRequest(NlpRequest(listOf(text)))?.let {
+            runInEditor(editor, it)
+        }
     }
 }

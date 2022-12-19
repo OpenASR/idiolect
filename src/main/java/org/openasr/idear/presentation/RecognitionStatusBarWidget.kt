@@ -4,6 +4,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
+import org.openasr.idear.actions.recognition.ActionCallInfo
+import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.nlp.NlpResultListener
 
 class RecognitionStatusBarWidget(private val project: Project) : NlpResultListener, StatusBarWidget, StatusBarWidget.MultipleTextValuesPresentation {
@@ -37,13 +39,14 @@ class RecognitionStatusBarWidget(private val project: Project) : NlpResultListen
         updateStatus(if (listening) "Listening..." else null)
     }
 
-    override fun onRecognition(utterance: String) {
+    override fun onRecognition(nlpRequest: NlpRequest) {
+        var utterance = nlpRequest.utterance
         tooltip = "Last heard: '$utterance'"
         updateStatus("\uD83C\uDFA4 $utterance")
     }
 
-    override fun onFulfilled(intentName: String, slots: MutableMap<String, out String>?, sessionAttributes: MutableMap<String, out String>?) {
-        updateStatus("Action: $intentName")
+    override fun onFulfilled(actionCallInfo: ActionCallInfo) {
+        updateStatus("Action: ${actionCallInfo.actionId}")
     }
 
     override fun onFailure(message: String) {

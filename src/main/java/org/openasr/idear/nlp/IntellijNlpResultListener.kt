@@ -1,9 +1,6 @@
 package org.openasr.idear.nlp
 
-import com.intellij.util.messages.MessageBusConnection
-import com.intellij.util.messages.Topic
-import org.openasr.idear.actions.ActionRoutines
-import org.openasr.idear.ide.IdeService
+import org.openasr.idear.actions.recognition.ActionCallInfo
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
 import org.openasr.idear.tts.TTSService
 
@@ -14,26 +11,24 @@ class IntellijNlpResultListener(private var verbosity: Verbosity = Verbosity.INF
 
     }
 
-    override fun onRecognition(utterance: String) {
+    override fun onRecognition(nlpRequest: NlpRequest) {
 
     }
 
-    override fun onFulfilled(intentName: String,
-                             slots: MutableMap<String, out String>?,
-                             sessionAttributes: MutableMap<String, out String>?) {
-        sessionAttributes?.forEach { (key, value) ->
-            //                var remove = true
-            when (key) {
-                "invokeAction" -> IdeService.invokeAction(value)
-                "pressKeystroke" -> value.split(",").forEach { keyStroke -> IdeService.type(keyStroke.toInt()) }
-                "routineGoto" -> ActionRoutines.routineGoto(value)
-                "routinePress" -> ActionRoutines.routinePress(value)
-            }
-
-//                if (remove) {
-//                    params.remove(key)
-//                }
-        }
+    override fun onFulfilled(actionCallInfo: ActionCallInfo) {
+//        sessionAttributes?.forEach { (key, value) ->
+//            //                var remove = true
+//            when (key) {
+//                "invokeAction" -> IdeService.invokeAction(value)
+//                "pressKeystroke" -> value.split(",").forEach { keyStroke -> IdeService.type(keyStroke.toInt()) }
+//                "routineGoto" -> ActionRoutines.routineGoto(value)
+//                "routinePress" -> ActionRoutines.routinePress(value)
+//            }
+//
+////                if (remove) {
+////                    params.remove(key)
+////                }
+//        }
     }
 
     override fun onFailure(message: String) = TTSService.say(message)

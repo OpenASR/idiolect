@@ -2,6 +2,7 @@ package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.impl.EditorComponentImpl
+import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.utils.toUpperCamelCase
 import java.awt.Component
 
@@ -13,6 +14,12 @@ import java.awt.Component
 open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
     override fun isSupported(dataContext: DataContext, component: Component?): Boolean {
         return component is EditorComponentImpl
+    }
+
+    override fun getGrammars(): List<NlpGrammar> {
+        return listOf(
+                NlpGrammar("Undo").withExamples("undo", "whoops"),
+        )
     }
 
     override fun getActionIdForUtterance(utterance: String): String {

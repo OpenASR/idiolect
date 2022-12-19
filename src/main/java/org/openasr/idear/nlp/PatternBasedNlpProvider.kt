@@ -29,19 +29,13 @@ class PatternBasedNlpProvider : NlpProvider {
     /**
      * @param utterance - the command as spoken
      */
-    override fun processUtterance(utterance: String) {
-        when {
-            utterance.startsWith("speech pause") -> pauseSpeech()
+    override fun processNlpRequest(nlpRequest: NlpRequest) {
+//        for (handler in handlers) {
+//            if (handler.processUtterance(utterance)) {
+//                return
+//            }
+//        }
 
-            else -> {
-                for (handler in handlers) {
-                    if (handler.processUtterance(utterance)) {
-                        return
-                    }
-                }
-
-                IdeService.invokeAction(ExecuteVoiceCommandAction, utterance)
-            }
-        }
+        IdeService.invokeAction(ExecuteVoiceCommandAction, nlpRequest)
     }
 }

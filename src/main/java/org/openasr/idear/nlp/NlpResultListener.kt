@@ -1,6 +1,7 @@
 package org.openasr.idear.nlp
 
 import com.intellij.util.messages.Topic
+import org.openasr.idear.actions.recognition.ActionCallInfo
 
 interface NlpResultListener {
     companion object {
@@ -19,11 +20,9 @@ interface NlpResultListener {
 
     fun onListening(listening: Boolean) {}
 
-    fun onRecognition(utterance: String)
+    fun onRecognition(nlpRequest: NlpRequest)
 
-    fun onFulfilled(intentName: String,
-                    slots: MutableMap<String, out String>?,
-                    sessionAttributes: MutableMap<String, out String>?)
+    fun onFulfilled(actionCallInfo: ActionCallInfo)
 
     /**
      * Display/read a failure message to the user.

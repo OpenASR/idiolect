@@ -1,6 +1,7 @@
 package org.openasr.idear.asr
 
 import org.openasr.idear.nlp.NlpProvider
+import org.openasr.idear.nlp.NlpRequest
 
 /**
  * Processes audio input, recognises speech to text and executes actions
@@ -23,7 +24,7 @@ interface AsrSystem {
      */
     fun stopRecognition()
 
-    /** Blocks until a we recognise something from the user. Called from [AsrControlLoop.run] */
+    /** Blocks until we recognise something from the user. Called from [AsrControlLoop.run] */
     fun waitForUtterance(): String
 
     fun setGrammar(grammar: Array<String>) {}
