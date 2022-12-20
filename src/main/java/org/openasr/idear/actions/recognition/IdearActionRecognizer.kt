@@ -6,8 +6,8 @@ import org.openasr.idear.asr.GrammarService
 import org.openasr.idear.nlp.NlpGrammar
 import java.awt.Component
 
-class IdearActionRecognizer : ActionRecognizer {
-    private val grammars = listOf(
+class IdearActionRecognizer : ActionRecognizer("Idear Commands", 0) {
+    override val grammars = listOf(
             object : NlpGrammar("Idear.Pause") {
                 override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
                     ActionRoutines.pauseSpeech()
@@ -29,8 +29,6 @@ class IdearActionRecognizer : ActionRecognizer {
                 }
             }.withExample("dictation mode"),
     )
-
-    override fun getGrammars(): List<NlpGrammar> = grammars
 
     override fun isSupported(dataContext: DataContext, component: Component?) = true
 }

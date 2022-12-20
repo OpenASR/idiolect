@@ -6,14 +6,16 @@ import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.nlp.NlpResponse
 import java.awt.Component
 
-interface ActionRecognizer {
+abstract class ActionRecognizer(open val displayName: String, open val order: Int = Int.MAX_VALUE / 2) {
+    abstract val grammars: List<NlpGrammar>
+
     /**
      * dataContext.getData(PlatformCoreDataKeys.FILE_EDITOR).file.fileType
      *
      * @param dataContext could be used to determine code language etc
      * @param component is TerminalDisplay | EditorComponentImpl | ProjectViewPanel | ChangesViewPanel
      */
-    fun isSupported(dataContext: DataContext, component: Component?) = true
+    open fun isSupported(dataContext: DataContext, component: Component?) = true
 
 //    /**
 //     * Subclasses must implement `isMatching()` to return true, and `getActionInfo()`
@@ -30,11 +32,11 @@ interface ActionRecognizer {
 //            ::getActionInfo
 //            else null
 
-    /** Called by tryResolveIntent() */
-    fun getGrammars(): List<NlpGrammar>
+//    /** Called by tryResolveIntent() */
+//    open fun getGrammars(): List<NlpGrammar> = grammars
 
-    fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? {
-        for (grammar in getGrammars()) {
+    open fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? {
+        for (grammar in grammars) {
             val info = grammar.tryMatchRequest(nlpRequest, dataContext)
             if (info != null) {
                 return info

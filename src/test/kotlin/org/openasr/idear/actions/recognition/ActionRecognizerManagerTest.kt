@@ -9,14 +9,14 @@ import java.io.File
 
 class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatformTestCase() {
     @Test
-    fun testListGrammarExamples() {
+    fun testDocumentGrammars() {
         // Given
         val manager = object : ActionRecognizerManager(TestContext()) {
             override fun getExtensions(): Array<ActionRecognizer> {
                 return Reflections("org.openasr.idear.actions.recognition").getSubTypesOf(ActionRecognizer::class.java)
 //                        .filter { it != RegisteredActionRecognizer::class.java && it != RegisteredEditorActionRecognizer::class.java }
                         .map { clazz ->
-//                            println(clazz.name)
+                            println(clazz.name)
                             clazz.constructors.first().newInstance() as ActionRecognizer
                         }
                         .toTypedArray()
@@ -24,13 +24,12 @@ class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatform
         }
 
         // When
-        val examples = manager.listGrammarExamples()
+        val examples = manager.documentGrammars()
 
         // Then
         assertNotNull(examples)
 
-        var path = File("docs/example").absolutePath
         assertEqualsToFile("Examples", File("docs/example-phrases.md"),
-                examples.joinToString("\n- ", "# Example Phrases\n\n- " ))
+                examples.joinToString("\n", "# Example Phrases\n" ))
     }
 }

@@ -10,8 +10,8 @@ import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.nlp.NlpRegexGrammar
 import java.awt.Component
 
-class JavaActionRecognizer : ActionRecognizer {
-    private val grammars = listOf(
+class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
+    override val grammars = listOf(
             object : NlpGrammar("Java.Main") {
                 override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
                     ActionRoutines.routinePsvm()
@@ -36,8 +36,6 @@ class JavaActionRecognizer : ActionRecognizer {
                 }
             }.withExamples("new class", "create new class 'my demo'"),
     )
-
-    override fun getGrammars(): List<NlpGrammar> = grammars
 
     override fun isSupported(dataContext: DataContext, component: Component?): Boolean {
         return (component is EditorComponentImpl

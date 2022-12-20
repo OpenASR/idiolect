@@ -13,10 +13,8 @@ import java.awt.Component
 import java.util.*
 
 /** https://www.jetbrains.com/help/idea/extract-field.html */
-class ExtractActionRecognizer : ActionRecognizer {
-    private val actions = ContainerUtil.newHashSet("extract")
-
-    private val grammar = listOf(
+class ExtractActionRecognizer : ActionRecognizer("Extract Field or Variable", 500) {
+    override val grammars = listOf(
             object : NlpRegexGrammar("Idear.Extract", "extract(?: to)? (variable|field) ?(.*)") {
                 private val actionIds = mapOf(
                         "variable" to "IntroduceVariable",
@@ -37,8 +35,6 @@ class ExtractActionRecognizer : ActionRecognizer {
                     "extract to field"
             )
     )
-
-    override fun getGrammars(): List<NlpGrammar> = grammar
 
     override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
 }

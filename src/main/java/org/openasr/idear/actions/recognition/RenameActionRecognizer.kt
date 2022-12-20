@@ -10,8 +10,8 @@ import java.awt.Component
 /**
  * "rename"
  */
-class RenameActionRecognizer : ActionRecognizer {
-    val grammar = listOf(
+class RenameActionRecognizer : ActionRecognizer("Rename", 500) {
+    override val grammars = listOf(
             object : NlpRegexGrammar(IdeActions.ACTION_RENAME, "rename(?: to|as)? ?(.*)?") {
                 override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
                     return ActionCallInfo(intentName).apply {
@@ -30,6 +30,4 @@ class RenameActionRecognizer : ActionRecognizer {
     )
 
     override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
-
-    override fun getGrammars() = grammar
 }

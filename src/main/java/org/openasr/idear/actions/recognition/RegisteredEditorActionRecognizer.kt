@@ -12,14 +12,14 @@ import java.awt.Component
  * @see com.intellij.openapi.actionSystem.IdeActions - ACTION_EDITOR_*
  */
 open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
+    override val displayName = "Editor Actions"
+    override val order = Int.MAX_VALUE - 1
+    override fun buildGrammars() = listOf(
+            NlpGrammar("Undo").withExamples("undo", "whoops"),
+    )
+
     override fun isSupported(dataContext: DataContext, component: Component?): Boolean {
         return component is EditorComponentImpl
-    }
-
-    override fun getGrammars(): List<NlpGrammar> {
-        return listOf(
-                NlpGrammar("Undo").withExamples("undo", "whoops"),
-        )
     }
 
     override fun getActionIdForUtterance(utterance: String): String {

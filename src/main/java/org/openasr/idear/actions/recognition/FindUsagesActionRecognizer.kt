@@ -15,8 +15,8 @@ import org.openasr.idear.tts.TTSService
 import org.openasr.idear.utils.toCamelCase
 import java.awt.Component
 
-class FindUsagesActionRecognizer : ActionRecognizer {
-    private val grammar = listOf(
+class FindUsagesActionRecognizer : ActionRecognizer("Find Usages", 500) {
+    override val grammars = listOf(
             object : NlpRegexGrammar(IdeActions.ACTION_FIND_USAGES, "find usages of (field|method) ?(.*)?") {
                 override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
                     val info = ActionCallInfo(IdeActions.ACTION_FIND_USAGES)
@@ -53,8 +53,6 @@ class FindUsagesActionRecognizer : ActionRecognizer {
                     "find usages of method 'my method'"
             )
     )
-
-    override fun getGrammars(): List<NlpGrammar> = grammar
 
     override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
 //    override fun isMatching(utterance: String) = "find" in utterance

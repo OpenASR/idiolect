@@ -12,9 +12,11 @@ import org.openasr.idear.utils.toUpperCamelCase
  *
  * @see com.intellij.openapi.actionSystem.IdeActions
  */
-open class RegisteredActionRecognizer : ActionRecognizer {
-    private val grammars = ActionUtils.buildGrammar()
+open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", Int.MAX_VALUE) {
+    override val grammars = buildGrammars()
     private val actionManager = ActionManager.getInstance()
+
+    protected open fun buildGrammars() = ActionUtils.buildGrammar()
 
     override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? {
         return object : NlpGrammar("Anonymous") {
@@ -33,9 +35,6 @@ open class RegisteredActionRecognizer : ActionRecognizer {
             }
         }.tryMatchRequest(nlpRequest, dataContext)
     }
-
-    /** Not used by tryMatchRequest(), but provided for documentation */
-    override fun getGrammars() = grammars
 
     protected open fun getActionIdForUtterance(utterance: String): String {
         return mapOf(

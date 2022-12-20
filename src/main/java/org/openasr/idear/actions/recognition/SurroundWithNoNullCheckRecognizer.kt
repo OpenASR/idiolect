@@ -15,8 +15,8 @@ import org.openasr.idear.nlp.NlpGrammar
 import java.awt.Component
 import java.util.*
 
-class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
-    var grammar = listOf(
+class SurroundWithNoNullCheckRecognizer : ActionRecognizer("Surround with Not-Null Check", 600) {
+    override val grammars = listOf(
             object : NlpGrammar("Idear.SurroundWithNullCheck") {
                 override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
                     surroundWithNullCheck(dataContext)
@@ -24,8 +24,6 @@ class SurroundWithNoNullCheckRecognizer : ActionRecognizer {
                 }
             }.withExample("surround with not null check"),
     )
-
-    override fun getGrammars(): List<NlpGrammar> = grammar
 
     override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
 

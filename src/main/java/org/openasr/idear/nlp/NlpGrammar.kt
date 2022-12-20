@@ -3,7 +3,7 @@ package org.openasr.idear.nlp
 import com.intellij.openapi.actionSystem.DataContext
 import org.openasr.idear.actions.recognition.ActionCallInfo
 
-open class NlpGrammar(val intentName: String) {
+open class NlpGrammar(val intentName: String, val rank: Int = Int.MAX_VALUE) {
     lateinit var examples: Array<out String>
 
     fun withExample(example: String): NlpGrammar {
