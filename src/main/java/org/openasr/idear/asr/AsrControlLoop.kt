@@ -22,7 +22,9 @@ class AsrControlLoop : AsrSystem, Runnable {
 
     override fun start() {
         startRecognition()
-        speechThread.start()
+        if (!speechThread.isAlive) {
+            speechThread.start()
+        }
     }
 
     override fun startRecognition() {
@@ -70,6 +72,7 @@ class AsrControlLoop : AsrSystem, Runnable {
                 break
             } catch (ex: Exception) {
                 log.warn("Failed to process utterance: ${ex.message}")
+                break
             }
         }
     }

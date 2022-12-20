@@ -1,7 +1,0 @@
-{
-  "description": "Lex might need to respond with ElicitSlot to request jump marker",
-  "sampleUtterances": [
-    "focus {FocusTarget}",
-    "switch to {FocusTarget}"
-  ]
-}
