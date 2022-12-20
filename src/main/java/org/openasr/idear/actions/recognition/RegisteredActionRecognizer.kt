@@ -40,7 +40,8 @@ open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", 
         return mapOf(
                 "go to" to "goto",
                 "git" to "cvs",
-                "change" to "diff"
+                "change" to "diff",
+                "look and feel" to "laf"
         ).getOrDefault(utterance, utterance).toUpperCamelCase()
     }
 }

@@ -32,5 +32,9 @@ class StringUtilsTest {
         assertArrayEquals(arrayOf("split", "camel"), "SplitCamel".splitCamelCase().toList().toTypedArray())
         assertArrayEquals(arrayOf("split", "camel", "case"), "splitCamelCase".splitCamelCase().toList().toTypedArray())
         assertArrayEquals(arrayOf("split", "camel", "case"), "SplitCamelCase".splitCamelCase().toList().toTypedArray())
+        assertArrayEquals(arrayOf("camel", "c"), "CamelC".splitCamelCase().toList().toTypedArray())
+        assertArrayEquals(arrayOf("camel", "1"), "Camel1".splitCamelCase().toList().toTypedArray())
+        assertArrayEquals(arrayOf("go", "to", "tab", "9"), "GoToTab9".splitCamelCase().toList().toTypedArray())
+        assertArrayEquals(arrayOf("disable", "pce"), "disablePCE".splitCamelCase().toList().toTypedArray())
     }
 }

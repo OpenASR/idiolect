@@ -20,8 +20,6 @@ object ActionUtils {
     fun buildGrammar(): List<NlpGrammar> {
         val actionManager = ActionManager.getInstance()
 
-        println("---- ${actionManager.getActionIdList("").size} total actions")
-
         return actionManager.getActionIdList("")
                 .filter { !actionManager.isGroup(it) }
                 .filter { filterSpeakableActionId(it) }
@@ -32,10 +30,10 @@ object ActionUtils {
     fun filterSpeakableActionId(actionId: String): Boolean {
         return !actionId.contains("Uast")
                 && !actionId.startsWith("Ace")
+                && !actionId.endsWith("DebugAction")
                 && !actionId.contains(Regex("[$.-]"))   // TODO - implement these elsewhere
                 && !arrayOf(
                         // Remove some silly examples
-                        "UsageGrouping.FlattenModules",
                         "SegmentedVcsControlAction",
                         "ExpandCollapseToggleAction",
                         "RefreshAllProjects",
@@ -54,19 +52,21 @@ object ActionUtils {
                 // Only make changes here that we can un-do when converting utterance to actionId
                 .replace("Goto", "GoTo")
                 .replace("Cvs", "Git")
+                .replace("Laf", "LookAndFeel")
                 .replace(Regex("^Editor"), "")
 //                                    .replace("$", "")
 //                                    .replace(".", "")
 //                                    .replace("-", " ")
-                .replace("1", " one")
-                .replace("2", " two")
-                .replace("3", " three")
-                .replace("4", " four")
-                .replace("5", " five")
-                .replace("6", " six")
-                .replace("7", " seven")
-                .replace("8", " eight")
-                .replace("9", " nine")
+                .replace("0", "Zero")
+                .replace("1", "One")
+                .replace("2", "Two")
+                .replace("3", "Three")
+                .replace("4", "Four")
+                .replace("5", "Five")
+                .replace("6", "Six")
+                .replace("7", "Seven")
+                .replace("8", "Eight")
+                .replace("9", "Nine")
                 .expandCamelCase()
     }
 
@@ -74,11 +74,6 @@ object ActionUtils {
         return when {
             actionId.startsWith("Editor") -> 5
             arrayOf("Back").contains(actionId) -> 10
-            arrayOf("").contains(actionId) -> 0
-            arrayOf("").contains(actionId) -> 0
-            arrayOf("").contains(actionId) -> 0
-            arrayOf("").contains(actionId) -> 0
-            arrayOf("").contains(actionId) -> 0
             arrayOf("CallHierarchy").contains(actionId) -> 20
             arrayOf("AutoIndentLines").contains(actionId) -> 25
             arrayOf("AnonymousToInner").contains(actionId) -> 30

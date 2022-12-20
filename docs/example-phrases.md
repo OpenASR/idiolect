@@ -115,7 +115,7 @@
  - page up
  - page up with selection
  - paste
- - paste fromX one one
+ - paste from xne one
  - paste simple
  - previous word
  - previous word in different humps mode
@@ -187,7 +187,7 @@
  - change file encoding action
  - change inspection profile
  - change keymap
- - change laf
+ - change look and feel
  - change signature
  - change split orientation
  - change template data language
@@ -212,7 +212,7 @@
  - convert schema action
  - debug mig layout action
  - dump focusable component hierarchy action
- - dumpI element types action
+ - dump ilement types action
  - dump loaded inspections action
  - dump run debug action state action
  - edit test scheme action
@@ -231,8 +231,6 @@
  - open statistics event log action
  - override file type action
  - play saved macros action
- - plugin manager filters configure reset trust debug action
- - plugin manager filters configure trust only jet brains debug action
  - position tracker test action
  - progress icon showcase action
  - reload project action
@@ -356,7 +354,7 @@
  - compile file
  - compile project
  - completion quality stats
- - computeVF statistics
+ - compute vtatistics
  - configure default size
  - configure editor tabs
  - configure soft wraps
@@ -379,7 +377,7 @@
  - copy reference
  - copy settings path
  - copy source root path
- - copyTBX reference
+ - copy teference
  - copy ui label
  - copy url
  - coverage
@@ -389,7 +387,7 @@
  - create library from file
  - create new run configuration
  - create run configuration
- - customizeUI
+ - customize u
  - data sharing options
  - debug
  - debug build process
@@ -402,7 +400,7 @@
  - delete old app dirs
  - delete recent files
  - disable inspection
- - disablePCE
+ - disable p
  - dock pinned mode
  - dock tool window
  - dock unpinned mode
@@ -469,7 +467,7 @@
  - export settings
  - export test results
  - export threads
- - export toHTML
+ - export to h
  - export to text file
  - expression statistics
  - expression type info
@@ -493,7 +491,7 @@
  - find used test data
  - fix doc comment
  - fix line separators
- - fixWSL firewall
+ - fix wirewall
  - float mode
  - focus debugger
  - focus editor
@@ -511,8 +509,8 @@
  - generate before class method
  - generate constructor
  - generate coverage report
- - generate createUI
- - generateDTD
+ - generate create u
+ - generate d
  - generate data method
  - generate equals
  - generate events scheme
@@ -541,7 +539,7 @@
  - go to tab seven
  - go to tab eight
  - go to tab nine
- - go to bookmark0
+ - go to bookmark zero
  - go to bookmark one
  - go to bookmark two
  - go to bookmark three
@@ -551,32 +549,32 @@
  - go to bookmark seven
  - go to bookmark eight
  - go to bookmark nine
- - go to bookmarkA
- - go to bookmarkB
- - go to bookmarkC
- - go to bookmarkD
- - go to bookmarkE
- - go to bookmarkF
- - go to bookmarkG
- - go to bookmarkH
- - go to bookmarkI
- - go to bookmarkJ
- - go to bookmarkK
- - go to bookmarkL
- - go to bookmarkM
- - go to bookmarkN
- - go to bookmarkO
- - go to bookmarkP
- - go to bookmarkQ
- - go to bookmarkR
- - go to bookmarkS
- - go to bookmarkT
- - go to bookmarkU
- - go to bookmarkV
- - go to bookmarkW
- - go to bookmarkX
- - go to bookmarkY
- - go to bookmarkZ
+ - go to bookmark a
+ - go to bookmark b
+ - go to bookmark c
+ - go to bookmark d
+ - go to bookmark e
+ - go to bookmark f
+ - go to bookmark g
+ - go to bookmark h
+ - go to bookmark i
+ - go to bookmark j
+ - go to bookmark k
+ - go to bookmark l
+ - go to bookmark m
+ - go to bookmark n
+ - go to bookmark o
+ - go to bookmark p
+ - go to bookmark q
+ - go to bookmark r
+ - go to bookmark s
+ - go to bookmark t
+ - go to bookmark u
+ - go to bookmark v
+ - go to bookmark w
+ - go to bookmark x
+ - go to bookmark y
+ - go to bookmark z
  - go to changed file
  - go to class
  - go to custom region
@@ -635,8 +633,8 @@
  - introduce variable
  - invalidate caches
  - invert boolean
- - jB cef osr measure fps
- - jB tabs demo
+ - j bef osr measure fps
+ - j babs demo
  - j tabbed pane demo
  - json copy pointer
  - jump to colors and fonts
@@ -649,7 +647,7 @@
  - light edit open file in project
  - list persistent state components
  - load all content
- - load allVFS content
+ - load all vontent
  - load unload modules
  - log debug configure
  - log focus requests
@@ -733,7 +731,7 @@
  - paste multiple
  - pause
  - pause output
- - performGC
+ - perform g
  - pin active editor tab
  - pin active tab
  - pin active tab toggle
@@ -782,7 +780,7 @@
  - replace in path
  - replace method with method object
  - report problem
- - report settings toFUS
+ - report settings to f
  - rerun
  - rerun tests
  - reset got it tooltips
@@ -826,7 +824,7 @@
  - select in project view
  - select next occurrence
  - select virtual template element
- - sendEOF
+ - send e
  - send event log statistics
  - send feedback
  - settings entry point
@@ -932,7 +930,7 @@
  - todo view group by show modules
  - todo view group by show packages
  - toggle bookmark
- - toggle bookmark0
+ - toggle bookmark zero
  - toggle bookmark one
  - toggle bookmark two
  - toggle bookmark three
@@ -942,33 +940,33 @@
  - toggle bookmark seven
  - toggle bookmark eight
  - toggle bookmark nine
- - toggle bookmarkA
- - toggle bookmarkB
- - toggle bookmarkC
- - toggle bookmarkD
- - toggle bookmarkE
- - toggle bookmarkF
- - toggle bookmarkG
- - toggle bookmarkH
- - toggle bookmarkI
- - toggle bookmarkJ
- - toggle bookmarkK
- - toggle bookmarkL
- - toggle bookmarkM
- - toggle bookmarkN
- - toggle bookmarkO
- - toggle bookmarkP
- - toggle bookmarkQ
- - toggle bookmarkR
- - toggle bookmarkS
- - toggle bookmarkT
- - toggle bookmarkU
- - toggle bookmarkV
- - toggle bookmarkW
+ - toggle bookmark a
+ - toggle bookmark b
+ - toggle bookmark c
+ - toggle bookmark d
+ - toggle bookmark e
+ - toggle bookmark f
+ - toggle bookmark g
+ - toggle bookmark h
+ - toggle bookmark i
+ - toggle bookmark j
+ - toggle bookmark k
+ - toggle bookmark l
+ - toggle bookmark m
+ - toggle bookmark n
+ - toggle bookmark o
+ - toggle bookmark p
+ - toggle bookmark q
+ - toggle bookmark r
+ - toggle bookmark s
+ - toggle bookmark t
+ - toggle bookmark u
+ - toggle bookmark v
+ - toggle bookmark w
  - toggle bookmark with mnemonic
- - toggle bookmarkX
- - toggle bookmarkY
- - toggle bookmarkZ
+ - toggle bookmark x
+ - toggle bookmark y
+ - toggle bookmark z
  - toggle breakpoint enabled
  - toggle content ui type mode
  - toggle distraction free mode
@@ -1001,8 +999,8 @@
  - turn refs to super
  - type hierarchy
  - typing latency report
- - uI defaults
- - uI freeze
+ - u iefaults
+ - u ireeze
  - ui debugger
  - ui inspector
  - undock mode
@@ -1037,7 +1035,7 @@
  - web browser
  - window mode
  - write action under progress
- - xSD two document
+ - x swo document
  - zoom current window
  - edit run configurations
  - open assert equals diff
