@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.PlatformCoreDataKeys
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.psi.impl.file.PsiJavaDirectoryImpl
 import org.openasr.idear.actions.ActionRoutines
+import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.nlp.NlpRegexGrammar
 import java.awt.Component
@@ -29,12 +30,38 @@ class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
             // "create new class (optional name)"
             object : NlpRegexGrammar("Java.NewClass", ".*new class ?(.*)?") {
                 override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
-                    ActionRoutines.routinePsvm()
-                    return ActionCallInfo(intentName, true).apply {
-                        ActionRoutines.routineAddNewClass(values[1])
-                    }
+                    ActionRoutines.routineAddNewClass(values[1])
+                    return ActionCallInfo(intentName, true)
                 }
             }.withExamples("new class", "create new class 'my demo'"),
+
+            // TODO: convert to live template
+            // https://www.jetbrains.com/help/idea/template-variables.html#pdtv
+            // https://stackoverflow.com/a/50236952/1225993
+//            object : NlpRegexGrammar("Java.NewMethod",
+//                ".*(private|protected|public|package) ?(.*)? (?:method|function) ?(.*)?") {
+//                override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
+//                    val visibility = values[1]
+//                    var type = values[2]
+//                    var name = values[3]
+//
+//                    if (visibility != "package") {
+//                        IdeService.type("$visibility ")
+//                    }
+//
+//                    if (type.isEmpty()) {
+//                        type = ActionRoutines.promptForReturnType()
+//                    }
+//                    IdeService.type("$type ")
+//
+//                    if (name.isEmpty()) {
+//                        name = ActionRoutines.promptForName()
+//                    }
+//                    IdeService.type("$name() {\n}")
+//
+//                    return ActionCallInfo(intentName, true)
+//                }
+//            }.withExamples("public method", "create private int function 'my demo'"),
     )
 
     override fun isSupported(dataContext: DataContext, component: Component?): Boolean {

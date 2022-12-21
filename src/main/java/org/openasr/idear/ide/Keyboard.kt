@@ -124,9 +124,13 @@ object Keyboard {
     private fun doType(keyCodes: IntArray, offset: Int, length: Int) {
         if (length == 0) return
 
-        robot.keyPress(keyCodes[offset])
-        doType(keyCodes, offset + 1, length - 1)
-        robot.keyRelease(keyCodes[offset])
+        try {
+            robot.keyPress(keyCodes[offset])
+            doType(keyCodes, offset + 1, length - 1)
+            robot.keyRelease(keyCodes[offset])
+        } catch (ex: Exception) {
+            println("can not type: $keyCodes, ${ex.message}")
+        }
     }
 
     fun pressShift() = robot.keyPress(VK_SHIFT)

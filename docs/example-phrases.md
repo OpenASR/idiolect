@@ -27,6 +27,8 @@
  - print line
  - create new class 'my demo'
  - new class
+ - create private int function 'my demo'
+ - public method
 
 ## Editor Actions
  - add caret per selected line

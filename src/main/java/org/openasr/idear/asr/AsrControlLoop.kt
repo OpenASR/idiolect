@@ -36,6 +36,32 @@ class AsrControlLoop : AsrSystem, Runnable {
         return speech?.utterance ?: ""
     }
 
+    override fun waitForUtterance(grammar: Array<String>,
+                                  escapeWords: Array<String>): String {
+        val effectiveGrammar = grammar.plus(escapeWords)
+        asrProvider.setGrammar(effectiveGrammar)
+        var response = ""
+
+        while (null == response) {
+            val speech = asrProvider.waitForSpeech() ?: break
+
+            for (alternative in speech.alternatives) {
+                for (expected in grammar) {
+                    if (alternative.contains(expected)) {
+                        response = expected
+                        break
+                    }
+                }
+                if (escapeWords.contains(alternative)) {
+                    break
+                }
+            }
+        }
+
+        GrammarService.useDictationGrammar()
+        return response
+    }
+
     override fun setGrammar(grammar: Array<String>) {
         asrProvider.setGrammar(grammar)
     }
@@ -72,7 +98,7 @@ class AsrControlLoop : AsrSystem, Runnable {
                 break
             } catch (ex: Exception) {
                 log.warn("Failed to process utterance: ${ex.message}")
-                break
+//                break
             }
         }
     }

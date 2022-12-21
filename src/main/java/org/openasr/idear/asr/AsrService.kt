@@ -35,6 +35,8 @@ object AsrService {
 
     fun waitForUtterance() = asrSystem.waitForUtterance()
 
+    fun waitForUtterance(grammar: Array<String>) = asrSystem.waitForUtterance(grammar)
+
     fun setGrammar(grammar: Array<String>) {
         asrSystem.setGrammar(grammar)
     }

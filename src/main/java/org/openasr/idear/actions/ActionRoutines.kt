@@ -76,6 +76,21 @@ object ActionRoutines {
         }
     }
 
+    fun promptForVisibility(grammar: Array<String>): String? {
+        TTSService.say("with what visibility?")
+        return AsrService.waitForUtterance(grammar)
+    }
+
+    fun promptForReturnType(): String {
+        TTSService.say("what will it return?")
+        return AsrService.waitForUtterance()
+    }
+
+    fun promptForName(): String {
+        TTSService.say("what shall we call it?")
+        return AsrService.waitForUtterance()
+    }
+
     fun routineAbout() {
         val ai = ApplicationInfo.getInstance()
 
