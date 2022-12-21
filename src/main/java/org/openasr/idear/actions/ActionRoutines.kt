@@ -234,7 +234,7 @@ object ActionRoutines {
             try {
                 val clip = AudioSystem.getClip()
                 val inputStream = AudioSystem.getAudioInputStream(
-                        ASRService.javaClass.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
+                        ASRService.javaClass.getResourceAsStream("/org/openasr/idear/sounds/beep.wav"))
                 clip.open(inputStream)
                 clip.start()
             } catch (e: Exception) {

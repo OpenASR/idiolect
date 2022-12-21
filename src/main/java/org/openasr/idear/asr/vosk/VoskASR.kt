@@ -6,21 +6,44 @@ import org.openasr.idear.asr.AsrProvider
 import org.openasr.idear.recognizer.CustomMicrophone
 import org.vosk.Model
 import org.vosk.Recognizer
+import java.io.File
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 
 
 class VoskASR : AsrProvider {
     private var recognizer: Recognizer? = null
-    private var modelPath: String? = defaultModel()
+    private var modelPath: String? = defaultModel().also { println("Path to model: $it") }
 
     override fun displayName() = "Vosk"
 
-    override fun defaultModel() =
-      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-us-0.15"
-//      System.getProperty("user.home") +
-//            "\\.vosk\\vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
-            //    vosk-model-small-en-gb-0.15
+    override fun defaultModel(): String = unpackModelAndReturnPath("vosk-model-small-en-us-0.15.zip")
 
-    /** @see https://alphacephei.com/vosk/models/model-list.json */
+    private fun unpackModelAndReturnPath(model: String): String {
+        val modelZip = javaClass.getResourceAsStream("/$model")
+        val modelDir = System.getProperty("user.home") + "/.idear"
+        val modelPath = "$modelDir/${model.substringBefore(".zip")}"
+        val modelFile = File(modelPath)
+        if (!modelFile.exists()) {
+            println("Unzipping model to $modelDir")
+            modelFile.parentFile.mkdirs()
+            modelZip.use { zip ->
+                ZipInputStream(zip).use { zis ->
+                    var entry: ZipEntry? = zis.nextEntry
+                    while (entry != null) {
+                        val file = File(modelDir, entry.name)
+                        if (entry.isDirectory) file.mkdirs()
+                        else file.outputStream().use { fos -> zis.copyTo(fos) }
+                        entry = zis.nextEntry
+                    }
+                }
+            }
+        }
+
+      return modelPath
+    }
+
+    // https://alphacephei.com/vosk/models/model-list.json
     override fun setModel(model: String) {
         if (model.isNotEmpty()) this.modelPath = model
     }

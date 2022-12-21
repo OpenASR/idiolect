@@ -1,33 +1,14 @@
 <idea-plugin>
     <id>org.openasr.idear</id>
     <name>idear</name>
-    <vendor email="idear@ndan.co" url="http://github.com/OpenASR/idear">OpenASR</vendor>
+    <vendor email="idear@ndan.co" url="https://github.com/OpenASR/idear">OpenASR</vendor>
 
     <description>
-        <![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands and assists with simple actions like debugging, navigation, and refactoring. For a complete list of commands, please see the <a href="https://github.com/breandan/idear/blob/master/src/main/resources/org.openasr.idear/grammars/command.gram">command grammar</a>.]]></description>
-    <change-notes>
-        <![CDATA[
-        <html>
-        <dl>
-            <dt>1.3.4</dt>
-            <dd>Update AceJump version for cursor movement.</dd>
-            <dt>1.3.3</dt>
-            <dd>Fix for MaryTTS. Text to speech now works as intended.</dd>
-            <dt>1.3.2</dt>
-            <dd>Fix a LineUnavailableException issue affecting some users.</dd>
-            <dt>1.3.1</dt>
-            <dd>Fix an NPE on recent versions of the IntelliJ Platform.</dd>
-            <dt>1.3</dt>
-            <dd>Add AWS speech synthesis and recognition.</dd>
-            <dt>1.2.1</dt>
-            <dd>Add a dedicated Kotlin runtime to dependencies.</dd>
-            <dt>1.2</dt>
-            <dd>Introduces debugging and AceJump navigation.</dd>
-        </dl>
-        </html>
-        ]]>
-        <![CDATA[]]>
-    </change-notes>
+        <![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands
+        and assists with simple actions like debugging, navigation, and refactoring. For
+        a list of example phrases, please see the
+        <a href="https://github.com/OpenASR/idear/blob/feature/grammar-system/docs/example-phrases.md">documentation</a>.]]>
+    </description>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
@@ -39,8 +20,6 @@
         <extensionPoint name="asrProvider" interface="org.openasr.idear.asr.AsrProvider" dynamic="true"/>
         <extensionPoint name="ttsProvider" interface="org.openasr.idear.tts.TtsProvider" dynamic="true"/>
         <extensionPoint name="nlpProvider" interface="org.openasr.idear.nlp.NlpProvider" dynamic="true"/>
-                <!--<with attribute="" implements="" tag=""
-        </extensionPoint>-->
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -69,7 +48,7 @@
 
     <actions>
         <action id="Idear.Start" class="org.openasr.idear.VoiceRecordControllerAction" text="Voice control"
-                description="Start" icon="/org.openasr.idear/icons/start.svg">
+                description="Start" icon="/org/openasr/idear/icons/start.svg">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 
