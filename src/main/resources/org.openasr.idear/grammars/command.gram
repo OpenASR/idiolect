@@ -49,8 +49,6 @@ grammar dialog;
 
 <jump_command> = jump <number> | end of line | beginning of line;
 
-<search_command> = okay google;
-
 <code_command> = add new class | public static void main | print line | new string ;
 
 <speech_command> = speech (pause | resume);

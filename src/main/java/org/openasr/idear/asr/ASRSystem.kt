@@ -23,7 +23,7 @@ interface AsrSystem {
      */
     fun stopRecognition()
 
-    /** Blocks until a we recognise something from the user. Called from [ASRControlLoop.run] */
+    /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
     fun waitForUtterance(): String
 
     fun terminate()

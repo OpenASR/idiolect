@@ -14,7 +14,7 @@ To get started, press the <img src="src/main/resources/org.openasr.idear/icons/s
 
 ## Building
 
-For Linux or Mac OS users:
+For Linux or macOS users:
 
 `git clone https://github.com/OpenASR/idear && cd idear && ./gradlew runIde`
 

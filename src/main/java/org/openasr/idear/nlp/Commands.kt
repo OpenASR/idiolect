@@ -24,8 +24,6 @@ object Commands {
     const val METHOD = "method"
     const val PREVIOUS = "previous"
     const val INSPECT_CODE = "inspect code"
-    const val OKAY_GOOGLE = "okay google"
-    const val OK_GOOGLE = "ok google"
     const val OKAY_IDEA = "okay idea"
     const val OK_IDEA = "ok idea"
     const val HI_IDEA = "hi idea"
