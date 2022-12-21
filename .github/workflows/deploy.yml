@@ -94,7 +94,8 @@ jobs:
           path: openfst
       - name: Build openfst
         run: |
-          sudo apt-get update && apt-get install -y --no-install-recommends ca-certificates g++ bzip2 unzip make wget zlib1g-dev patch cmake xz-utils automake autoconf libtool pkg-config g++-mingw-w64-i686 g++-mingw-w64-x86-64
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ca-certificates g++ bzip2 unzip make wget zlib1g-dev patch cmake xz-utils automake autoconf libtool pkg-config g++-mingw-w64-i686 g++-mingw-w64-x86-64
           mkdir kaldi          
           cd openfst
           autoreconf -i
