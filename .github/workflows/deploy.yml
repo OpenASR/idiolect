@@ -36,7 +36,6 @@ jobs:
           ref: v3.2.1
       - name: Build OpenBLAS
         run: |
-#          apt update && apt install -y devtoolset-8-libatomic-devel automake autoconf libtool cmake libffi-devel
           cd kaldi/tools/
           mkdir -p clapack/BUILD && cd clapack/BUILD && cmake .. && make -j 10 && find . -name "*.a" | xargs cp -t ../../OpenBLAS/install/lib
 
@@ -47,7 +46,6 @@ jobs:
           path: kaldi/tools/openfst
       - name: Build openfst
         run: |
-#          apt update && apt install -y devtoolset-8-libatomic-devel automake autoconf libtool cmake libffi-devel
           autoreconf -i
           CFLAGS="-g -O3" ./configure --prefix=$GITHUB_WORKSPACE/kaldi/tools/openfst --enable-static --enable-shared --enable-far --enable-ngram-fsts --enable-lookahead-fsts --with-pic --disable-bin
           make -j 10 && make install
@@ -68,9 +66,6 @@ jobs:
 
 
   # Needed until Vosk provide a new release to fix Windows issues
-#  build-vosk:
-#    runs-on: ubuntu-latest
-#    steps:
       - name: Checkout vosk-api
         uses: actions/checkout@v3
         with:
@@ -79,11 +74,9 @@ jobs:
           path: vosk-api
       - name: Build vosk-api linux
         run: |
-#          apt update && apt install -y devtoolset-8-libatomic-devel automake autoconf libtool cmake libffi-devel
           cd vosk-api/src
           KALDI_ROOT=$GITHUB_WORKSPACE/kaldi OPENFST_ROOT=$GITHUB_WORKSPACE/kaldi/tools/openfst OPENBLAS_ROOT=$GITHUB_WORKSPACE/kaldi/tools/OpenBLAS/install make
           mkdir -p $GITHUB_WORKSPACE/vosk-linux-x86_64
-#          cp ../vosk-api/src/*.so /opt/vosk-api/src/vosk_api.h /io/wheelhouse/vosk-linux-x86_64
       - uses: actions/upload-artifact@v3
         with:
           name: vosk-linux-x86_64
