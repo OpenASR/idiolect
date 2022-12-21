@@ -34,10 +34,10 @@ jobs:
           repository: alphacep/clapack
           path: kaldi/tools/clapack
           ref: v3.2.1
-      - name: Build OpenBLAS
+      - name: Build clapack
         run: |
           cd kaldi/tools/
-          mkdir -p clapack/BUILD && cd clapack/BUILD && cmake .. && make -j 10 && find . -name "*.a" | xargs cp -t ../../OpenBLAS/install/lib
+          mkdir -p clapack/BUILD && cd clapack/BUILD && cmake .. && make && find . -name "*.a" | xargs cp -t ../../OpenBLAS/install/lib
 
       - name: Checkout openfst
         uses: actions/checkout@v3
@@ -64,8 +64,6 @@ jobs:
           make -j $(nproc) online2 lm rnnlm
           find $GITHUB_WORKSPACE/kaldi -name "*.o" -exec rm {}      
 
-
-  # Needed until Vosk provide a new release to fix Windows issues
       - name: Checkout vosk-api
         uses: actions/checkout@v3
         with:
@@ -120,7 +118,7 @@ jobs:
           repository: alphacep/clapack
           path: kaldi/clapack
           ref: v3.2.1
-      - name: Build OpenBLAS
+      - name: Build clapack
         run: |
           cd kaldi/
           mkdir -p clapack/BUILD && cd clapack/BUILD
