@@ -33,7 +33,7 @@ jobs:
         with:
           repository: alphacep/clapack
           path: kaldi/tools/clapack
-          # ref: v3.2.1
+          ref: v3.2.1
       - name: Build OpenBLAS
         run: |
           cd kaldi/tools/
@@ -94,10 +94,11 @@ jobs:
           path: openfst
       - name: Build openfst
         run: |
-          apt update && apt install -y --no-install-recommends ca-certificates g++ bzip2 unzip make wget git python3 python3-pip python3-wheel python3-setuptools python3-cffi zlib1g-dev patch cmake xz-utils automake autoconf libtool pkg-config sudo g++-mingw-w64-i686 g++-mingw-w64-x86-64
-          mk kaldi          
+          sudo apt-get update && apt-get install -y --no-install-recommends ca-certificates g++ bzip2 unzip make wget zlib1g-dev patch cmake xz-utils automake autoconf libtool pkg-config g++-mingw-w64-i686 g++-mingw-w64-x86-64
+          mkdir kaldi          
           cd openfst
-          autoreconf -i && CXX=x86_64-w64-mingw32-g++-posix CXXFLAGS="-O3 -ftree-vectorize -DFST_NO_DYNAMIC_LINKING" ./configure --prefix=$GITHUB_WORKSPACE/kaldi/local --enable-shared --enable-static --with-pic --disable-bin --enable-lookahead-fsts --enable-ngram-fsts --host=x86_64-w64-mingw32
+          autoreconf -i
+          CXX=x86_64-w64-mingw32-g++-posix CXXFLAGS="-O3 -ftree-vectorize -DFST_NO_DYNAMIC_LINKING" ./configure --prefix=$GITHUB_WORKSPACE/kaldi/local --enable-shared --enable-static --with-pic --disable-bin --enable-lookahead-fsts --enable-ngram-fsts --host=x86_64-w64-mingw32
           make && make install
 
       - name: Checkout OpenBLAS
