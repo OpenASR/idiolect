@@ -3,10 +3,10 @@ name: Deploy
 on:
   push:
     branches: [ master ]
-    paths:
-      - '**.kt'
-      - '**.kts'
-      - '**.tidy'
+#    paths:
+#      - '**.kt'
+#      - '**.kts'
+#      - '**.tidy'
   pull_request:
     branches: [ master ]
 
