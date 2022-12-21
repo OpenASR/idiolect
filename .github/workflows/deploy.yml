@@ -33,7 +33,7 @@ jobs:
         with:
           repository: alphacep/clapack
           path: kaldi/tools/clapack
-          ref: v3.2.1
+          # ref: v3.2.1
       - name: Build OpenBLAS
         run: |
           cd kaldi/tools/
