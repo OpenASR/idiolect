@@ -20,6 +20,10 @@ intellij {
 }
 
 tasks {
+  changelog {
+    groups.set(listOf("Added", "Changed", "Removed", "Fixed"))
+  }
+
   patchPluginXml {
     version.set("${project.version}")
     sinceBuild.set("222.*")

@@ -47,12 +47,17 @@ jobs:
         gradle publishToMavenLocal
 
     - name: Build
-      run: ./gradlew patchChangelog buildPlugin
+      run: |
+        ./gradlew patchChangelog 
+        ./gradlew getChangelog > CHANGELOG-release.md
+        ./gradlew buildPlugin
 
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
+        body_path: CHANGELOG-release.md
+        generate_release_notes: true
         files: |
           CHANGELOG.md
           build/distributions/*.zip
