@@ -1,4 +1,6 @@
-name: Deploy
+name: Publish to MarketPlace
+# All commits to `master` will result in an attempt to publish to Marketplace, but will fail if the version is not updated
+# Tagging `v*.*.*` on release/ or main branch will update the version and create a GitHub release - see release.yml
 
 env:
   INTELLIJ_PUBLISH_TOKEN: ${{ secrets.INTELLIJ_PUBLISH_TOKEN }}
@@ -10,9 +12,8 @@ on:
   push:
     branches: [ master ]
 #    paths:
-#      - '**.kt'
-#      - '**.kts'
-#      - '**.tidy'
+#      - build.gradle.kts
+#      - CHANGELOG.md
   pull_request:
     branches: [ master ]
 
@@ -46,7 +47,6 @@ jobs:
           sed -i '10d;21,25d' build.gradle
           gradle publishToMavenLocal
 
-      # Build idear
-      - name: Build
+      - name: Publish Idea
         run: |
-          ./gradlew test buildPlugin --stacktrace
+          ./gradlew publishPlugin --stacktrace

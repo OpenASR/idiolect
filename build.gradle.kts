@@ -23,7 +23,7 @@ tasks {
   patchPluginXml {
     version.set("${project.version}")
     sinceBuild.set("222.*")
-    untilBuild.set("223.*")
+//    untilBuild.set("223.*")
 
     changeNotes.set(provider {
       changelog.renderItem(changelog.getAll().values.first(), HTML)
@@ -49,8 +49,11 @@ tasks {
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
   }
 
-  if (System.getenv("GITHUB_REF_NAME") == "master"
-    && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty()) {
+  if ((  System.getenv("GITHUB_REF_NAME") == "master"
+      || System.getenv("GITHUB_REF_NAME").startsWith("release/")
+      )
+      && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty())
+  {
     signPlugin {
       certificateChain.set(System.getenv("INTELLIJ_CERTIFICATE_CHAIN"))
       privateKey.set(System.getenv("INTELLIJ_PRIVATE_KEY"))
@@ -58,6 +61,13 @@ tasks {
     }
 
     publishPlugin {
+      if (System.getenv("GITHUB_REF_NAME") != "master") {
+        // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/canary/list
+        // https://www.jetbrains.com/help/idea/managing-plugins.html#repos
+        channels.set(listOf("canary"))
+        // ...could also add updatePlugins.xml to github site
+        // https://plugins.jetbrains.com/docs/intellij/custom-plugin-repository.html#describing-your-plugins-in-updatepluginsxml-file
+      }
       token.set(System.getenv("INTELLIJ_PUBLISH_TOKEN"))
     }
   }
