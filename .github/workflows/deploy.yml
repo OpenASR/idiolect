@@ -34,11 +34,11 @@ jobs:
       - name: Download working native libraries
         run: |
           cd vosk-api/java/lib/src/main/resources
-          wget https://repo1.maven.org/maven2/com/alphacephei/vosk/0.3.38/vosk-0.3.38.jar
+          wget -q https://repo1.maven.org/maven2/com/alphacephei/vosk/0.3.38/vosk-0.3.38.jar
           unzip -n vosk-0.3.38.jar
           rm -rf META-INF org
           rm vosk-0.3.38.jar
-          cd ../../..
+          cd ../../../..
           ./gradlew publishToMavenLocal  
 
       # Build idear
