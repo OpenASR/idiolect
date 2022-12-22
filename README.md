@@ -1,4 +1,4 @@
-# ![idear icon](src%2Fmain%2Fresources%2Forg.openasr.idear%2Ficons%2FpluginIcon.svg) idear 
+# ![idear icon](src%2Fmain%2Fresources%2Forg/openasr/idear%2Ficons%2FpluginIcon.svg) idear 
 
 [![][jetbrains-team-svg]][jetbrains-team-page]
 [![Deploy](https://github.com/OpenASR/idear/workflows/Deploy/badge.svg)](https://github.com/OpenASR/idear/actions?query=workflow%3ABuild)
