@@ -52,7 +52,7 @@ object TemplateParser {
         var toReformat = "true" == parser.getAttributeValue(null, "toReformat")
         var toShortenFQNames = "true" == parser.getAttributeValue(null, "toShortenFQNames")
 
-        val template = Template(name, value, description, toReformat, toShortenFQNames)
+        val template = Template(name, value, description, "", toReformat, toShortenFQNames)
 
 //        while (parser.next() != XmlPullParser.END_TAG) {
 //            if (parser.eventType != XmlPullParser.START_TAG) {
