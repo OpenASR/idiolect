@@ -47,7 +47,7 @@ jobs:
         gradle publishToMavenLocal
 
     - name: Build
-      run: ./gradlew buildPlugin
+      run: ./gradlew patchChangelog buildPlugin
 
     - name: Release
       uses: softprops/action-gh-release@v1
