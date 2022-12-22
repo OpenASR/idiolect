@@ -1,5 +1,8 @@
 name: Deploy
 
+env:
+  ORG_GRADLE_PROJECT_intellijPublishToken: ${{ secrets.INTELLIJ_PUBLISH_TOKEN }}
+
 on:
   push:
     branches: [ master ]
@@ -35,8 +38,6 @@ jobs:
           unzip -n vosk-0.3.38.jar
           rm -rf META-INF org
           rm vosk-0.3.38.jar
-          ls -al win-32-x86-64
-          ls -al darwin
           cd ../../..
           ./gradlew publishToMavenLocal  
 
