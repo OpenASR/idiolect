@@ -15,6 +15,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
       # Needed until Vosk provide a new release to fix Windows issues
       - name: Checkout vosk-api
         uses: actions/checkout@v3
@@ -35,12 +41,6 @@ jobs:
           ./gradlew publishToMavenLocal  
 
       # Build idear
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
-
-      - name: Build with Gradle
+      - name: Build
         run: |
           ./gradlew test buildPlugin --stacktrace
