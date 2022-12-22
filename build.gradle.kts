@@ -48,6 +48,16 @@ tasks {
     dependsOn("test")
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
   }
+
+  signPlugin {
+    certificateChain.set(System.getenv("INTELLIJ_CERTIFICATE_CHAIN"))
+    privateKey.set(System.getenv("INTELLIJ_PRIVATE_KEY"))
+    password.set(System.getenv("INTELLIJ_PRIVATE_KEY_PASSWORD"))
+  }
+
+  publishPlugin {
+    token.set(System.getenv("INTELLIJ_PUBLISH_TOKEN"))
+  }
 }
 
 repositories {
