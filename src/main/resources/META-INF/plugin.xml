@@ -14,6 +14,11 @@
     <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
     <depends>AceJump</depends>
 
+    <applicationListeners>
+        <listener topic="org.openasr.idear.nlp.NlpResultListener" class="org.openasr.idear.nlp.IntellijNlpResultListener"/>
+        <listener topic="org.openasr.idear.nlp.NlpResultListener" class="org.openasr.idear.nlp.LoggingNlpResultListener"/>
+    </applicationListeners>
+
     <extensionPoints>
         <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer" dynamic="true"/>
         <extensionPoint name="asrSystem" interface="org.openasr.idear.asr.AsrSystem" dynamic="true"/>
@@ -26,39 +31,36 @@
         <applicationService serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
         <applicationConfigurable groupId="tools" displayName="Idear" id="preferences.IdearConfiguration"
                                  instance="org.openasr.idear.settings.IdearConfiguration" dynamic="true"/>
+        <statusBarWidgetFactory implementation="org.openasr.idear.presentation.RecognitionStatusBarWidgetFactory"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idear">
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.IdearActionRecognizer" order="first"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.InlineActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RunActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.DebugActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.JavaActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RegisteredEditorActionRecognizer"
+                          order="before RegisteredActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RegisteredActionRecognizer"
+                          id="RegisteredActionRecognizer"
+                          order="last"/>
 
-        <asrSystem implementation="org.openasr.idear.asr.ASRControlLoop" order="last"/>
-
-        <asrProvider implementation="org.openasr.idear.asr.vosk.VoskASR" order="first"/>
-
-        <ttsProvider implementation="org.openasr.idear.tts.MaryTTS" order="first"/>
-
-        <nlpProvider implementation="org.openasr.idear.nlp.PatternBasedNlpProvider" order="first"/>
+        <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop"/>
+        <asrProvider implementation="org.openasr.idear.asr.vosk.VoskAsr"/>
+        <ttsProvider implementation="org.openasr.idear.tts.MaryTTS"/>
+        <nlpProvider implementation="org.openasr.idear.nlp.PatternBasedNlpProvider"/>
     </extensions>
 
     <actions>
-        <action id="Idear.Start" class="org.openasr.idear.VoiceRecordControllerAction" text="Voice control"
-                description="Start" icon="/org/openasr/idear/icons/start.svg">
+        <action id="Idear.Start" text="Voice control" description="Start"
+                class="org.openasr.idear.actions.VoiceRecordControllerAction"
+                icon="/org/openasr/idear/icons/start.svg">
             <add-to-group group-id="ToolbarRunGroup" anchor="first"/>
         </action>
 
-        <action id="Idear.SpeechStuff" text="Invoke by speech"
-                class="org.openasr.idear.actions.ExecuteActionFromPredefinedText"/>
         <action id="Idear.VoiceAction" text="Invoke by voice-command"
                 class="org.openasr.idear.actions.ExecuteVoiceCommandAction"/>
-
-        <!-- Home-grown actions -->
-
-        <action id="Idear.WhereAmI" text="Name the place you are" class="org.openasr.idear.actions.WhereAmIAction"/>
     </actions>
 </idea-plugin>

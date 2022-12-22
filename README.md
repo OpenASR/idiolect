@@ -63,6 +63,27 @@ There are many Actions (classes which extend `AnAction`) provided by IDEA:
   - [PlatformActions](https://upsource.jetbrains.com/idea-ce/file/idea-ce-1d111593d9e5208b6783f381b507e34866587ec8/platform/platform-resources/src/idea/PlatformActions.xml)
   - [VcsActions](https://upsource.jetbrains.com/idea-ce/file/idea-ce-1d111593d9e5208b6783f381b507e34866587ec8/platform/platform-resources/src/idea/VcsActions.xml)
 
+### ActionRecognizer
+
+#### [`ExtractActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/ExtractActionRecognizer.kt)
+"extract variable|field (to) (new Name)" 
+
+#### [`InlineActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/InlineActionRecognizer.kt)
+"inline"
+
+#### [`RunActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/RunActionRecognizer.kt)
+"run"
+
+#### [`DebugActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/DebugActionRecognizer.kt)
+"debug"
+
+#### [`FindUsagesActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/FindUsagesActionRecognizer.kt)
+"find (field|method)"
+
+#### [`RenameActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/RenameActionRecognizer.kt)
+"rename"
+
+
 ### ASRControlLoop
 
 When [`ASRControlLoop`][ASRControlLoop] detects an utterance, it invokes 

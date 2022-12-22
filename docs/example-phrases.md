@@ -1,0 +1,1043 @@
+# Example Phrases
+
+## Idear Commands
+ - stop listening
+ - command mode
+ - dictation mode
+
+## Extract Field or Variable
+ - extract to field
+ - extract variable 'sum'
+
+## Find Usages
+ - find usages
+ - find usages of field 'my field'
+ - find usages of method 'my method'
+
+## Rename
+ - rename
+ - rename as 'something better'
+ - rename to 'example'
+
+## Surround with Not-Null Check
+ - surround with not null check
+
+## Java Shortcuts
+ - public static void main
+ - print line
+ - create new class 'my demo'
+ - new class
+ - create private int function 'my demo'
+ - public method
+
+## Editor Actions
+ - add caret per selected line
+ - add or remove caret
+ - add rectangular selection on mouse drag
+ - back space
+ - backward paragraph
+ - backward paragraph with selection
+ - breadcrumbs hide both
+ - breadcrumbs show above
+ - breadcrumbs show below
+ - choose lookup item
+ - choose lookup item complete statement
+ - choose lookup item dot
+ - choose lookup item replace
+ - clone caret above
+ - clone caret below
+ - code block end
+ - code block end with selection
+ - code block start
+ - code block start with selection
+ - complete statement
+ - context info
+ - copy
+ - create rectangular selection
+ - create rectangular selection on mouse drag
+ - cut
+ - cut line backward
+ - cut line end
+ - decrease font size
+ - decrease font size global
+ - delete
+ - delete line
+ - delete to line end
+ - delete to line start
+ - delete to word end
+ - delete to word end in different humps mode
+ - delete to word start
+ - delete to word start in different humps mode
+ - down
+ - down with selection
+ - duplicate
+ - duplicate lines
+ - enter
+ - escape
+ - focus gutter
+ - forward paragraph
+ - forward paragraph with selection
+ - gutter toggle global indent lines
+ - gutter toggle global line numbers
+ - hungry back space
+ - increase font size
+ - increase font size global
+ - indent line or selection
+ - indent selection
+ - join lines
+ - kill region
+ - kill ring save
+ - kill to word end
+ - kill to word start
+ - left
+ - left with selection
+ - line end
+ - line end with selection
+ - line start
+ - line start with selection
+ - lookup down
+ - lookup selection down
+ - lookup selection up
+ - lookup up
+ - match brace
+ - move down and scroll
+ - move down and scroll with selection
+ - move to page bottom
+ - move to page bottom with selection
+ - move to page top
+ - move to page top with selection
+ - move up and scroll
+ - move up and scroll with selection
+ - next word
+ - next word in different humps mode
+ - next word in different humps mode with selection
+ - next word with selection
+ - page down
+ - page down with selection
+ - page up
+ - page up with selection
+ - paste
+ - paste from xne one
+ - paste simple
+ - previous word
+ - previous word in different humps mode
+ - previous word in different humps mode with selection
+ - previous word with selection
+ - rendering benchmark action
+ - reset font size
+ - reverse lines
+ - right
+ - right with selection
+ - scroll bottom
+ - scroll down
+ - scroll down and move
+ - scroll left
+ - scroll right
+ - scroll to center
+ - scroll top
+ - scroll up
+ - scroll up and move
+ - select line
+ - select single line at caret
+ - select word
+ - set content based bidi text direction
+ - set ltr bidi text direction
+ - set rtl bidi text direction
+ - show gutter icon tooltip
+ - sort lines
+ - split line
+ - start new line
+ - start new line before
+ - swap selection boundaries
+ - tab
+ - text end
+ - text end with selection
+ - text start
+ - text start with selection
+ - toggle case
+ - toggle column mode
+ - toggle insert state
+ - toggle show breadcrumbs
+ - toggle show gutter icons
+ - toggle show indent lines
+ - toggle show line numbers
+ - toggle show whitespaces
+ - toggle sticky selection
+ - toggle use soft wraps
+ - toggle use soft wraps in preview
+ - transpose
+ - un select word
+ - unindent selection
+ - up
+ - up with selection
+ - undo
+ - whoops
+
+## Idea Native Actions
+ - back
+ - call hierarchy
+ - auto indent lines
+ - anonymous to inner
+ - build artifact
+ - find prev word at caret
+ - find word at caret
+ - go to next element under caret usage
+ - go to prev element under caret usage
+ - set caret visual attributes internal action
+ - change code style scheme
+ - change color scheme
+ - change file encoding action
+ - change inspection profile
+ - change keymap
+ - change look and feel
+ - change signature
+ - change split orientation
+ - change template data language
+ - change type signature
+ - change view
+ - activate commit tool window
+ - activate debug tool window
+ - activate find tool window
+ - activate hierarchy tool window
+ - activate nav bar
+ - activate run tool window
+ - action updates benchmark action
+ - add group to test scheme action
+ - add inlay internal action
+ - add random names test process action
+ - add test process action
+ - animation panel test action
+ - animator test action
+ - cleanup events test scheme action
+ - component panel test action
+ - configure events scheme file action
+ - convert schema action
+ - debug mig layout action
+ - dump focusable component hierarchy action
+ - dump ilement types action
+ - dump loaded inspections action
+ - dump run debug action state action
+ - edit test scheme action
+ - go to action
+ - grid layout test action
+ - j editor pane demo action
+ - json path evaluate action
+ - json path export evaluate result action
+ - label size demo action
+ - maintenance action
+ - merge all windows action
+ - notification test action
+ - online doc action
+ - open events scheme file action
+ - open events test scheme file action
+ - open statistics event log action
+ - override file type action
+ - play saved macros action
+ - position tracker test action
+ - progress icon showcase action
+ - reload project action
+ - reverte override file type action
+ - run toolbar edit configuration action
+ - run toolbar hot swap action
+ - run toolbar main multiple stop action
+ - run toolbar main run configurations action
+ - run toolbar main slot info action
+ - run toolbar move to top action
+ - run toolbar pause action
+ - run toolbar process started action
+ - run toolbar remove slot action
+ - run toolbar rerun action
+ - run toolbar resume action
+ - run toolbar run configurations action
+ - run toolbar show hide popup action
+ - run toolbar stop action
+ - run toolbar widget action
+ - scan source comments action
+ - search everywhere new toolbar action
+ - set shortcut action
+ - show about popup in debug mode action
+ - show control flow action
+ - show notification icons dialog action
+ - show progress test dialog action
+ - show south panel test dialog action
+ - show update dialog action
+ - status text mode action
+ - switch file based index storage action
+ - test dnd action
+ - test gesture action
+ - test message box action
+ - test parse events scheme action
+ - test text field action
+ - test tooltips action
+ - text search action
+ - toggle completion hints action
+ - toggle inlay hints globally action
+ - toggle inline hints action
+ - transfer settings demo action
+ - turn on off cached value profiler action
+ - ui dsl showcase action
+ - vcs toolbar label action
+ - view new toolbar action
+ - view obsolete nav bar action
+ - view obsolete toolbar action
+ - whats new action
+ - wsl sync action
+ - add bom
+ - remove bom
+ - about
+ - add another bookmark
+ - add breakpoint
+ - add conditional breakpoint
+ - add framework support
+ - add many test processes
+ - analyze heap dump snapshot
+ - analyze plugin startup performance
+ - annotate
+ - apply fixed window size
+ - associate with file type
+ - attach project
+ - auto show process window
+ - bookmark open tabs
+ - brace or quote out
+ - browse web
+ - call saul
+ - check for update
+ - check ignored and not excluded directories
+ - check status for files
+ - check suggested plugins
+ - check vfs sanity
+ - checkin files
+ - checkin project
+ - choose debug configuration
+ - choose run configuration
+ - choose runtime
+ - class name completion
+ - clear all notifications
+ - click link
+ - close active tab
+ - close all editors
+ - close all editors but active
+ - close all notifications
+ - close all projects
+ - close all readonly
+ - close all to the left
+ - close all to the right
+ - close all unmodified editors
+ - close all unpinned editors
+ - close content
+ - close editor
+ - close first notification
+ - close got it tooltip
+ - close other projects
+ - close project
+ - code cleanup
+ - code completion
+ - collapse all
+ - collapse all regions
+ - collapse block
+ - collapse doc comments
+ - collapse expandable component
+ - collapse region
+ - collapse region recursively
+ - collapse selection
+ - collapse tree node
+ - collect troubleshooting information
+ - collect zipped logs
+ - color blindness test
+ - comment by block comment
+ - comment by line comment
+ - compare clipboard with selection
+ - compare dirs
+ - compare file with editor
+ - compare keymaps
+ - compare two files
+ - compile
+ - compile dirty
+ - compile file
+ - compile project
+ - completion quality stats
+ - compute vtatistics
+ - configure default size
+ - configure editor tabs
+ - configure soft wraps
+ - context help
+ - convert indents to spaces
+ - convert indents to tabs
+ - convert module groups to qualified names
+ - convert to instance method
+ - convert to mac line separators
+ - convert to unix line separators
+ - convert to windows line separators
+ - copy absolute path
+ - copy as plain text
+ - copy as rich text
+ - copy content root path
+ - copy element
+ - copy file name
+ - copy path with line number
+ - copy paths
+ - copy reference
+ - copy settings path
+ - copy source root path
+ - copy teference
+ - copy ui label
+ - copy url
+ - coverage
+ - create all services and extensions
+ - create desktop entry
+ - create launcher script
+ - create library from file
+ - create new run configuration
+ - create run configuration
+ - customize u
+ - data sharing options
+ - debug
+ - debug build process
+ - debug listen
+ - decrement window height
+ - decrement window width
+ - default bundle index
+ - delegate methods
+ - delete mnemonic from bookmark
+ - delete old app dirs
+ - delete recent files
+ - disable inspection
+ - disable p
+ - dock pinned mode
+ - dock tool window
+ - dock unpinned mode
+ - drop an error
+ - drop an error with attachments
+ - drop an out of memory error
+ - drop plugin error
+ - dumb mode
+ - dump configuration types
+ - dump directory index
+ - dump extensions
+ - dump features and tips
+ - dump formatting model
+ - dump inspection descriptions
+ - dump intentions descriptions
+ - dump invalid tips of the day
+ - dump library usage statistics
+ - dump lookup element weights
+ - dump screen configuration
+ - dump threads
+ - dump vfs info for excluded files
+ - dump watched roots
+ - edit bookmark
+ - edit breakpoint
+ - edit custom properties
+ - edit custom vm options
+ - edit inspection settings
+ - edit macros
+ - edit source
+ - edit source in new window
+ - edit source not in editor
+ - emacs style indent
+ - emmet next edit point
+ - emmet preview
+ - emmet previous edit point
+ - emmet update tag
+ - emoji and symbols
+ - enable metal rendering
+ - encapsulate fields
+ - escape entities
+ - evaluate expression
+ - exclude from validation
+ - execution targets
+ - exit
+ - expand all
+ - expand all regions
+ - expand all to level one
+ - expand all to level two
+ - expand all to level three
+ - expand all to level four
+ - expand all to level five
+ - expand doc comments
+ - expand expandable component
+ - expand live template by tab
+ - expand live template custom
+ - expand region
+ - expand region recursively
+ - expand to level one
+ - expand to level two
+ - expand to level three
+ - expand to level four
+ - expand to level five
+ - expand tree node
+ - export settings
+ - export test results
+ - export threads
+ - export to h
+ - export to text file
+ - expression statistics
+ - expression type info
+ - external java doc
+ - extract class
+ - extract include
+ - extract interface
+ - extract method
+ - extract module
+ - extract module from package
+ - extract superclass
+ - file structure popup
+ - fill paragraph
+ - find
+ - find in path
+ - find next
+ - find previous
+ - find selection in path
+ - find usages
+ - find usages in file
+ - find used test data
+ - fix doc comment
+ - fix line separators
+ - fix wirewall
+ - float mode
+ - focus debugger
+ - focus editor
+ - focus tracer
+ - force index rebuild
+ - force index rescanning
+ - force refresh
+ - force run to cursor
+ - force step into
+ - force step over
+ - forward
+ - fully expand tree node
+ - generate
+ - generate after class method
+ - generate before class method
+ - generate constructor
+ - generate coverage report
+ - generate create u
+ - generate d
+ - generate data method
+ - generate equals
+ - generate events scheme
+ - generate getter
+ - generate getter and setter
+ - generate javadoc
+ - generate module descriptors
+ - generate set up method
+ - generate setter
+ - generate super method call
+ - generate tear down method
+ - generate test data path files
+ - generate test data path methods
+ - generate test method
+ - generate visitor by hierarchy
+ - generate xml tag
+ - generify
+ - go to last tab
+ - go to link target
+ - go to tab one
+ - go to tab two
+ - go to tab three
+ - go to tab four
+ - go to tab five
+ - go to tab six
+ - go to tab seven
+ - go to tab eight
+ - go to tab nine
+ - go to bookmark zero
+ - go to bookmark one
+ - go to bookmark two
+ - go to bookmark three
+ - go to bookmark four
+ - go to bookmark five
+ - go to bookmark six
+ - go to bookmark seven
+ - go to bookmark eight
+ - go to bookmark nine
+ - go to bookmark a
+ - go to bookmark b
+ - go to bookmark c
+ - go to bookmark d
+ - go to bookmark e
+ - go to bookmark f
+ - go to bookmark g
+ - go to bookmark h
+ - go to bookmark i
+ - go to bookmark j
+ - go to bookmark k
+ - go to bookmark l
+ - go to bookmark m
+ - go to bookmark n
+ - go to bookmark o
+ - go to bookmark p
+ - go to bookmark q
+ - go to bookmark r
+ - go to bookmark s
+ - go to bookmark t
+ - go to bookmark u
+ - go to bookmark v
+ - go to bookmark w
+ - go to bookmark x
+ - go to bookmark y
+ - go to bookmark z
+ - go to changed file
+ - go to class
+ - go to custom region
+ - go to declaration
+ - go to declaration only
+ - go to file
+ - go to implementation
+ - go to line
+ - go to next bookmark
+ - go to next bookmark in editor
+ - go to next error
+ - go to previous bookmark
+ - go to previous bookmark in editor
+ - go to previous error
+ - go to related
+ - go to super method
+ - go to symbol
+ - go to test
+ - go to type declaration
+ - gray filter config
+ - help topics
+ - hide active window
+ - hide all windows
+ - hide coverage
+ - hide side windows
+ - hidpi info
+ - highlight usages in file
+ - hippie backward completion
+ - hippie completion
+ - hotswap
+ - icons load time
+ - ide scripting console
+ - image duplicates
+ - implement methods
+ - import module
+ - import module from iml file
+ - import project
+ - import settings
+ - import tests
+ - import tests from file
+ - increment window height
+ - increment window width
+ - incremental search
+ - infer nullity
+ - inheritance to delegation
+ - inline
+ - insert live template
+ - inspect code
+ - integrate files
+ - introduce constant
+ - introduce field
+ - introduce functional parameter
+ - introduce functional variable
+ - introduce parameter
+ - introduce parameter object
+ - introduce variable
+ - invalidate caches
+ - invert boolean
+ - j bef osr measure fps
+ - j babs demo
+ - j tabbed pane demo
+ - json copy pointer
+ - jump to colors and fonts
+ - jump to last change
+ - jump to last window
+ - jump to next change
+ - keymap to csv
+ - lagging mode
+ - library usage statistics
+ - light edit open file in project
+ - list persistent state components
+ - load all content
+ - load all vontent
+ - load unload modules
+ - log debug configure
+ - log focus requests
+ - mac messages test
+ - make module
+ - make static
+ - manage recent projects
+ - manage targets
+ - mark file dirty
+ - mark notifications as read
+ - maximize active dialog
+ - maximize editor in split
+ - maximize tool window
+ - member push down
+ - members pull up
+ - merge three files
+ - method down
+ - method duplicates
+ - method hierarchy
+ - method overload switch down
+ - method overload switch up
+ - method up
+ - minimap filter
+ - minimize current window
+ - module settings
+ - more run toolbar actions
+ - move
+ - move editor to opposite tab group
+ - move element left
+ - move element right
+ - move line down
+ - move line up
+ - move minimap
+ - move statement down
+ - move statement up
+ - move tab down
+ - move tab right
+ - nav bar location bottom
+ - nav bar location hide
+ - nav bar location top
+ - new class
+ - new dir
+ - new dummy project
+ - new element same place
+ - new file
+ - new from template
+ - new html file
+ - new migration
+ - new module
+ - new module in group
+ - new module info
+ - new package info
+ - new project
+ - new scratch buffer
+ - new scratch file
+ - next diff
+ - next editor tab
+ - next occurence
+ - next parameter
+ - next project window
+ - next splitter
+ - next tab
+ - next template parameter
+ - next template variable
+ - next window
+ - open blank editor in blank diff window
+ - open editor in opposite tab group
+ - open element in new window
+ - open file
+ - open file editor in blank diff window
+ - open in browser
+ - open in right split
+ - open log
+ - open minimap settings
+ - open module settings
+ - open mouse wheel smooth scroll settings
+ - optimize imports
+ - override methods
+ - package file
+ - parameter info
+ - paste multiple
+ - pause
+ - pause output
+ - perform g
+ - pin active editor tab
+ - pin active tab
+ - pin active tab toggle
+ - pin toolwindow tab
+ - playback last macro
+ - popup hector
+ - prev parameter
+ - prev splitter
+ - prev template parameter
+ - previous diff
+ - previous editor tab
+ - previous occurence
+ - previous project window
+ - previous tab
+ - previous template variable
+ - previous window
+ - print
+ - productivity guide
+ - project from version control
+ - project view edit source
+ - prune empty directories
+ - quick action popup
+ - quick change scheme
+ - quick doc copy
+ - quick evaluate expression
+ - quick fixes
+ - quick implementations
+ - quick java doc
+ - quick preview
+ - quick type definition
+ - rearrange code
+ - recent changed files
+ - recent changes
+ - recent files
+ - recent locations
+ - record state collectors
+ - redesigned run configuration selector
+ - redesigned run toolbar wrapper
+ - reformat code
+ - refresh
+ - reload yaml profile
+ - rename element
+ - rename file
+ - reopen closed tab
+ - replace
+ - replace in path
+ - replace method with method object
+ - report problem
+ - report settings to f
+ - rerun
+ - rerun tests
+ - reset got it tooltips
+ - reset windows defender notification
+ - resize tool window down
+ - resize tool window left
+ - resize tool window right
+ - resize tool window up
+ - restart ide
+ - restore default extension scripts
+ - restore default layout
+ - restore default settings
+ - resume
+ - retype file
+ - reveal in
+ - rotate selections backwards
+ - rotate selections forward
+ - ruler guide
+ - run
+ - run anything
+ - run configuration
+ - run configuration templates for new projects
+ - run inspection
+ - run inspection on
+ - run to cursor
+ - run toolbar main slot active
+ - run toolbar rollback to previous
+ - run toolbar show tool window tab
+ - run with drop down
+ - safe delete
+ - save all
+ - save as new format
+ - save as template
+ - save document
+ - save file as template
+ - scroll tree to center
+ - search everywhere
+ - select all occurrences
+ - select and dump invalid tips of the day
+ - select in
+ - select in project view
+ - select next occurrence
+ - select virtual template element
+ - send e
+ - send event log statistics
+ - send feedback
+ - settings entry point
+ - severity editor dialog
+ - show backward package deps
+ - show blank diff window
+ - show bookmarks
+ - show color picker
+ - show content
+ - show dependencies on target
+ - show discovered tests
+ - show editor highlighter tokens
+ - show error description
+ - show execution point
+ - show experiments
+ - show file path
+ - show filter popup
+ - show fonts used by editor
+ - show gutter icons settings
+ - show intention actions
+ - show live run configurations
+ - show log
+ - show main menu
+ - show members in navigation bar
+ - show modules dependencies
+ - show nav bar
+ - show non retina images
+ - show package cycles
+ - show package deps
+ - show parameter hints settings
+ - show popup menu
+ - show powered progress
+ - show process window
+ - show project structure settings
+ - show recent tests
+ - show reformat file dialog
+ - show registry
+ - show search history
+ - show settings
+ - show settings and find usages
+ - show settings with added pattern
+ - show siblings
+ - show splash
+ - show tips
+ - show type bookmarks
+ - show usage features
+ - show usages
+ - silent code cleanup
+ - silent heap dump snapshot
+ - slice backward
+ - slice forward
+ - smart select
+ - smart step into
+ - smart type completion
+ - smart un select
+ - split chooser
+ - split horizontally
+ - split vertically
+ - start stop macro recording
+ - static icon fields
+ - step into
+ - step out
+ - step over
+ - stop
+ - stop background processes
+ - stop with drop down
+ - store default layout
+ - stretch split to bottom
+ - stretch split to left
+ - stretch split to right
+ - stretch split to top
+ - suppress fixes
+ - surround with
+ - surround with emmet
+ - surround with live template
+ - swap sides in diff window
+ - swap three way color mode in diff window
+ - switch coverage
+ - switcher
+ - switcher backward
+ - switcher forward
+ - switcher iterate items
+ - switcher next problem
+ - switcher previous problem
+ - switcher recent edited changed toggle check box
+ - synchronize
+ - synchronize current file
+ - tab list
+ - technical support
+ - template project properties
+ - template project structure
+ - terminal decrease font size
+ - terminal increase font size
+ - terminal reset font size
+ - test compiler reference service find usages
+ - test compiler reference service functional expression search
+ - test compiler reference service inheritance
+ - test coroutine progress
+ - test icon mappings
+ - test progress window
+ - text gray filter config
+ - todo view group by flatten package
+ - todo view group by show modules
+ - todo view group by show packages
+ - toggle bookmark
+ - toggle bookmark zero
+ - toggle bookmark one
+ - toggle bookmark two
+ - toggle bookmark three
+ - toggle bookmark four
+ - toggle bookmark five
+ - toggle bookmark six
+ - toggle bookmark seven
+ - toggle bookmark eight
+ - toggle bookmark nine
+ - toggle bookmark a
+ - toggle bookmark b
+ - toggle bookmark c
+ - toggle bookmark d
+ - toggle bookmark e
+ - toggle bookmark f
+ - toggle bookmark g
+ - toggle bookmark h
+ - toggle bookmark i
+ - toggle bookmark j
+ - toggle bookmark k
+ - toggle bookmark l
+ - toggle bookmark m
+ - toggle bookmark n
+ - toggle bookmark o
+ - toggle bookmark p
+ - toggle bookmark q
+ - toggle bookmark r
+ - toggle bookmark s
+ - toggle bookmark t
+ - toggle bookmark u
+ - toggle bookmark v
+ - toggle bookmark w
+ - toggle bookmark with mnemonic
+ - toggle bookmark x
+ - toggle bookmark y
+ - toggle bookmark z
+ - toggle breakpoint enabled
+ - toggle content ui type mode
+ - toggle distraction free mode
+ - toggle dock mode
+ - toggle field breakpoint
+ - toggle find in selection
+ - toggle floating mode
+ - toggle focus mode
+ - toggle full screen
+ - toggle line breakpoint
+ - toggle method breakpoint
+ - toggle minimap
+ - toggle pinned mode
+ - toggle popup hints
+ - toggle power save
+ - toggle presentation mode
+ - toggle read only attribute
+ - toggle rendered doc presentation
+ - toggle rendered doc presentation for all
+ - toggle side mode
+ - toggle temporary line breakpoint
+ - toggle three side in blank diff window
+ - toggle ui inspector hierarchy trace
+ - toggle windowed mode
+ - toggle zen mode
+ - toolwindow switcher
+ - tree expand all
+ - trigger low memory notification
+ - trust project
+ - turn refs to super
+ - type hierarchy
+ - typing latency report
+ - u iefaults
+ - u ireeze
+ - ui debugger
+ - ui inspector
+ - undock mode
+ - unscramble
+ - unselect previous occurrence
+ - unsplit
+ - unsplit all
+ - untrust project
+ - unwrap
+ - update files
+ - update running application
+ - used icons listing
+ - user invoked full analysis
+ - validate local history
+ - validate xml
+ - validation test
+ - vcs show current change marker
+ - vcs show next change marker
+ - vcs show prev change marker
+ - view breakpoints
+ - view import popups
+ - view inplace comments
+ - view main menu
+ - view members in navigation bar
+ - view navigation bar
+ - view offline inspection
+ - view source
+ - view status bar
+ - view tool bar
+ - view tool buttons
+ - virtual file info
+ - web browser
+ - window mode
+ - write action under progress
+ - x swo document
+ - zoom current window
+ - edit run configurations
+ - open assert equals diff

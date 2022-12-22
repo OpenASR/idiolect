@@ -1,6 +1,5 @@
 package org.openasr.idear.recognizer
 
-import com.intellij.openapi.diagnostic.Logger
 import java.io.IOException
 import java.lang.Byte.*
 import javax.sound.sampled.*
@@ -8,7 +7,6 @@ import javax.sound.sampled.*
 class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLine) : AudioInputStream(line) {
     private val DEFAULT_MASTER_GAIN = 1.0
     private val DEFAULT_NOISE_LEVEL = 0.0
-    private val logger = Logger.getInstance(javaClass)
     private var masterGain = DEFAULT_MASTER_GAIN
     private var noiseLevel = DEFAULT_NOISE_LEVEL
 
@@ -31,7 +29,6 @@ class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLi
             if (i != off + len - 1)
                 sb.append(", ")
         }
-        logger.info(sb.toString())
     }
 
     @Throws(IOException::class)

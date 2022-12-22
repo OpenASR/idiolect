@@ -7,6 +7,7 @@ import com.intellij.openapi.extensions.PluginDescriptor
 import com.intellij.openapi.options.Configurable
 import org.openasr.idear.asr.AsrSystem
 import org.openasr.idear.asr.AsrProvider
+import org.openasr.idear.asr.AsrService
 import org.openasr.idear.nlp.*
 import org.openasr.idear.tts.*
 import java.util.concurrent.atomic.AtomicReference
@@ -33,7 +34,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         private var settings = Settings()
 
         /** Called by AsrService */
-        fun getASRSystem(): AsrSystem {
+        fun getAsrSystem(): AsrSystem {
             val asrProvider = getAsrProvider()
             val nlpProvider = getNlpProvider()
 
@@ -47,7 +48,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         // TODO: allow user to select voice
         fun getTtsProvider() = getExtension(ttsSelector, settings.ttsService, ttsProvider, null)
 
-        private fun getAsrProvider() = getExtension(asrSelector, settings.asrService, asrProvider) { asrProvider ->
+        private fun getAsrProvider() = getExtension(asrSelector, settings.AsrService, asrProvider) { asrProvider ->
             asrProvider.setModel(settings.asrModelPath)
         }
 
@@ -72,40 +73,57 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
     override fun getDisplayName() = "Idear"
 
     override fun getState() = settings
+
+    /**
+     * This method is called when new component state is loaded.
+     * The method can and will be called several times, if config files were externally changed while IDE was running.
+     */
     override fun loadState(state: Settings) {
         settings = state
     }
 
     private var gui = RecognitionSettingsForm()
 
-    data class Settings(var asrService: String = "",
+    data class Settings(var AsrService: String = "",
                         var asrModelPath: String = "",
                         var nlpService: String = "",
                         var ttsService: String = "")
 
-    override fun isModified() = gui.asrService != settings.asrService ||
-            gui.asrModelPath != settings.asrModelPath ||
-            gui.nlpService != settings.nlpService ||
-            gui.ttsService != settings.ttsService
+    override fun isModified(): Boolean {
+        return gui.AsrService != settings.AsrService ||
+                gui.asrModelPath != settings.asrModelPath ||
+                gui.nlpService != settings.nlpService ||
+                gui.ttsService != settings.ttsService
+    }
 
 
     override fun createComponent() = RecognitionSettingsForm().apply { gui = this }.rootPanel
 
+    /**
+     * Stores the settings from the Swing form to the configurable component.
+     * This method is called on EDT upon user's request.
+     */
     override fun apply() {
         if (isModified) {
-            settings.asrService = gui.asrService
+            settings.AsrService = gui.AsrService
             settings.nlpService = gui.nlpService
             settings.ttsService = gui.ttsService
             settings.asrModelPath = gui.asrModelPath
+
+            AsrService.setAsrSystem(getAsrSystem())
         }
     }
 
+    /**
+     * Loads the settings from the configurable component to the Swing form.
+     * This method is called on EDT immediately after the form creation or later upon user's request.
+     */
     override fun reset() {
         gui.setAsrOptions(asrEp.extensionList.map { e -> e.displayName() })
         gui.setNlpOptions(nlpEp.extensionList.map { e -> e.displayName() })
         gui.setTtsOptions(ttsEp.extensionList.map { e -> e.displayName() })
 
-        gui.asrService = settings.asrService
+        gui.AsrService = settings.AsrService
         gui.nlpService = settings.nlpService
         gui.ttsService = settings.ttsService
 

@@ -1,57 +1,40 @@
 package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.openapi.util.Pair
 import com.intellij.util.containers.ContainerUtil
+import org.openasr.idear.nlp.NlpGrammar
+import org.openasr.idear.nlp.NlpRegexGrammar
+import org.openasr.idear.nlp.NlpRequest
+import org.openasr.idear.nlp.NlpResponse
+import org.openasr.idear.utils.toCamelCase
+import java.awt.Component
 import java.util.*
 
-class ExtractActionRecognizer : ActionRecognizer {
-    private val actions = ContainerUtil.newHashSet("extract")
+/** https://www.jetbrains.com/help/idea/extract-field.html */
+class ExtractActionRecognizer : ActionRecognizer("Extract Field or Variable", 500) {
+    override val grammars = listOf(
+            object : NlpRegexGrammar("Idear.Extract", "extract(?: to)? (variable|field) ?(.*)") {
+                private val actionIds = mapOf(
+                        "variable" to "IntroduceVariable",
+                        "field" to "IntroduceField")
 
-    override fun isMatching(sentence: String) =
-            !actions.firstOrNull { it in sentence }.isNullOrEmpty()
+                override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
+                    return ActionCallInfo(actionIds[values[1]]!!).apply {
+                        val name = values[2]
+                        if (name.isNotEmpty()) {
+                            typeAfter = name.toCamelCase()
+                            hitTabAfter = true
+                        }
+                    }
+                }
+            }.withExamples(
+                    // NlpRegexGrammar does not use the examples, but they could be used in documentation
+                    "extract variable 'sum'",
+                    "extract to field"
+            )
+    )
 
-    override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
-        if (!isMatching(sentence)) return null
-
-        val words = sentence.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val data = getActionId(words) ?: return null
-
-        val info = ActionCallInfo(data.first)
-        val index = data.second
-
-        val newName = StringBuilder()
-        val newNameStartIndex =
-                if (index + 1 < words.size && words[index + 1] == "to")
-                    index + 2
-                else
-                    index + 1
-
-        var first = true
-        for (i in newNameStartIndex until words.size) {
-            val word = if (first) words[i] else words[i].replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-            newName.append(word)
-            first = false
-        }
-
-        if (newName.isNotEmpty()) {
-            info.typeAfter = newName.toString()
-            info.hitTabAfter = true
-        }
-
-        return info
-    }
-
-    private fun getActionId(words: Array<String>): Pair<String, Int>? {
-        for (i in words.indices) {
-            val word = words[i]
-            if ("variable" in word) {
-                return Pair.create("IntroduceVariable", i)
-            } else if ("field" in word) {
-                return Pair.create("IntroduceField", i)
-            }
-        }
-        return null
-    }
-
+    override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
 }

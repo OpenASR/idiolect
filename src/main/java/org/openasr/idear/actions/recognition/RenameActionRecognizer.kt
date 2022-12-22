@@ -1,30 +1,33 @@
 package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.actionSystem.IdeActions
+import com.intellij.openapi.editor.impl.EditorComponentImpl
+import org.openasr.idear.nlp.NlpRegexGrammar
+import org.openasr.idear.utils.toCamelCase
+import java.awt.Component
 
-class RenameActionRecognizer : ActionRecognizer {
-    override fun isMatching(sentence: String) = "rename" in sentence
+/**
+ * "rename"
+ */
+class RenameActionRecognizer : ActionRecognizer("Rename", 500) {
+    override val grammars = listOf(
+            object : NlpRegexGrammar(IdeActions.ACTION_RENAME, "rename(?: to|as)? ?(.*)?") {
+                override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
+                    return ActionCallInfo(intentName).apply {
+                        val name = values[1]
+                        if (name.isNotEmpty()) {
+                            typeAfter = name.toCamelCase()
+                            hitTabAfter = true
+                        }
+                    }
+                }
+            }.withExamples(
+                    "rename",
+                    "rename to 'example'",
+                    "rename as 'something better'"
+            )
+    )
 
-    override fun getActionInfo(sentence: String, dataContext: DataContext): ActionCallInfo? {
-        if (!isMatching(sentence)) return null
-
-        val words = sentence.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val renameIndex = words.indices.firstOrNull { "rename" in words[it] } ?: 0
-
-        val newName = StringBuilder()
-        var first = true
-        for (i in renameIndex + 2 until words.size) {
-            val word = if (first) words[i] else words[i].uppercase()
-            newName.append(word)
-            first = false
-        }
-
-        val info = ActionCallInfo("RenameElement")
-        if (newName.isNotEmpty()) {
-            info.typeAfter = newName.toString()
-            info.hitTabAfter = true
-        }
-
-        return info
-    }
+    override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
 }

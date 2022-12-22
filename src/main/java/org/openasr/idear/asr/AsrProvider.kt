@@ -1,5 +1,6 @@
 package org.openasr.idear.asr
 
+import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.recognizer.SpeechRecognizer
 import org.openasr.idear.settings.ConfigurableExtension
 
@@ -16,8 +17,10 @@ interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
      */
     override fun stopRecognition()
 
-    /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
-    fun waitForUtterance(): String
+    /** Blocks until we recognise something from the user. Called from [AsrControlLoop.run] */
+    fun waitForSpeech(): NlpRequest?
+
+    fun setGrammar(grammar: Array<String>) {}
 
     fun defaultModel() = ""
 
