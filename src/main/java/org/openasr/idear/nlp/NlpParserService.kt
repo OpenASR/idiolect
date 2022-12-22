@@ -11,7 +11,7 @@ import java.io.*
 class NlpParserService @TestOnly constructor(path: String?) : ParserService() {
     private lateinit var parser: Parser
     private val logger = Logger.getInstance(javaClass)
-    private val plugin by lazy { PluginManagerCore.getPlugin(PluginId.getId("com.jetbrains.idear"))!! }
+    private val plugin by lazy { PluginManagerCore.getPlugin(PluginId.getId("org.openasr.idear"))!! }
 
     private val modelInputStream: InputStream =
             if (path != null) FileInputStream(path)

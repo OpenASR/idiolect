@@ -1,11 +1,14 @@
+import org.jetbrains.changelog.Changelog.OutputType.HTML
+
 plugins {
-  kotlin("jvm") version "1.8.0-Beta"
+  kotlin("jvm") version "1.8.0-RC2"
   id("org.jetbrains.intellij") version "1.11.0"
   id("com.github.ben-manes.versions") version "0.44.0"
+  id("org.jetbrains.changelog") version "2.0.0"
 }
 
 group = "org.openasr"
-version = "1.3.5"
+version = "1.4.0"
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
@@ -20,7 +23,11 @@ tasks {
   patchPluginXml {
     version.set("${project.version}")
     sinceBuild.set("222.*")
-    untilBuild.set("223.*")
+//    untilBuild.set("223.*")
+
+    changeNotes.set(provider {
+      changelog.renderItem(changelog.getAll().values.first(), HTML)
+    })
   }
 
   val jvmTarget = "17"
@@ -40,6 +47,29 @@ tasks {
   runIde {
     dependsOn("test")
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
+  }
+
+  if ((  System.getenv("GITHUB_REF_NAME") == "master"
+      || System.getenv("GITHUB_REF_NAME").startsWith("release/")
+      )
+      && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty())
+  {
+    signPlugin {
+      certificateChain.set(System.getenv("INTELLIJ_CERTIFICATE_CHAIN"))
+      privateKey.set(System.getenv("INTELLIJ_PRIVATE_KEY"))
+      password.set(System.getenv("INTELLIJ_PRIVATE_KEY_PASSWORD"))
+    }
+
+    publishPlugin {
+      if (System.getenv("GITHUB_REF_NAME") != "master") {
+        // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/canary/list
+        // https://www.jetbrains.com/help/idea/managing-plugins.html#repos
+        channels.set(listOf("canary"))
+        // ...could also add updatePlugins.xml to github site
+        // https://plugins.jetbrains.com/docs/intellij/custom-plugin-repository.html#describing-your-plugins-in-updatepluginsxml-file
+      }
+      token.set(System.getenv("INTELLIJ_PUBLISH_TOKEN"))
+    }
   }
 }
 

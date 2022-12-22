@@ -65,7 +65,7 @@ class VoskAsr : AsrProvider {
      */
     override fun setGrammar(grammar: Array<String>) {
         recognizer.reset()
-        recognizer.setGrammar(grammar.joinToString("\",\"", "[\"", "\"]"))
+//        recognizer.setGrammar(grammar.joinToString("\",\"", "[\"", "\"]"))
     }
 
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */

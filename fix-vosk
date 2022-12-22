@@ -1,0 +1,16 @@
+#!/bin/bash
+
+mkdir build/vosk
+cd build
+#git clone https://github.com/alphacep/vosk-api.git
+git clone git@github.com:OpenASR/idear.git
+cd vosk-api/java/lib/src/main/resources
+wget -q https://repo1.maven.org/maven2/com/alphacephei/vosk/0.3.38/vosk-0.3.38.jar
+unzip -nq vosk-0.3.38.jar
+rm -rf META-INF org
+rm vosk-0.3.38.jar
+cd ../../..
+echo 'rootProject.name = "vosk"' > settings.gradle.kts
+sed -i '10d;21,25d' build.gradle
+gradle publishToMavenLocal
+cd ../..
