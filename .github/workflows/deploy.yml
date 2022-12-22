@@ -39,6 +39,7 @@ jobs:
           rm -rf META-INF org
           rm vosk-0.3.38.jar
           cd ../../..
+          echo 'rootProject.name = "vosk"' > settings.gradle.kts
           gradle publishToMavenLocal  
 
       # Build idear
