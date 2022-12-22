@@ -43,6 +43,7 @@ jobs:
           rm vosk-0.3.38.jar
           cd ../../..
           echo 'rootProject.name = "vosk"' > settings.gradle.kts
+          echo 'gradle.taskGraph.whenReady { taskGraph -> tasks.signMavenJavaPublication.onlyIf { taskGraph.hasTask tasks.publish } }' >> build.gradle
           gradle publishToMavenLocal
 
       # Build idear
