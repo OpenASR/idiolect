@@ -38,7 +38,7 @@ jobs:
           unzip -n vosk-0.3.38.jar
           rm -rf META-INF org
           rm vosk-0.3.38.jar
-          cd ../../../..
+          cd ../../..
           pwd 
           ls -al
           ./gradlew publishToMavenLocal  
