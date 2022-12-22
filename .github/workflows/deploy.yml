@@ -31,7 +31,7 @@ jobs:
           repository: alphacep/vosk-api
           ref: fff40ce1a1f1b921272a184acfd0c21350750789
           path: vosk-api
-      - name: Download working native libraries
+      - name: Build & install Vosk with working native libraries
         run: |
           cd vosk-api/java/lib/src/main/resources
           wget -q https://repo1.maven.org/maven2/com/alphacephei/vosk/0.3.38/vosk-0.3.38.jar
@@ -39,9 +39,7 @@ jobs:
           rm -rf META-INF org
           rm vosk-0.3.38.jar
           cd ../../..
-          pwd 
-          ls -al
-          ./gradlew publishToMavenLocal  
+          gradle publishToMavenLocal  
 
       # Build idear
       - name: Build
