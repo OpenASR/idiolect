@@ -39,6 +39,8 @@ jobs:
           rm -rf META-INF org
           rm vosk-0.3.38.jar
           cd ../../../..
+          pwd 
+          ls -al
           ./gradlew publishToMavenLocal  
 
       # Build idear
