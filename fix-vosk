@@ -1,9 +1,9 @@
 #!/bin/bash
 
-mkdir build/vosk
+mkdir build
 cd build
 #git clone https://github.com/alphacep/vosk-api.git
-git clone git@github.com:OpenASR/idear.git
+git clone git@github.com:alphacep/vosk-api.git
 cd vosk-api/java/lib/src/main/resources
 wget -q https://repo1.maven.org/maven2/com/alphacephei/vosk/0.3.38/vosk-0.3.38.jar
 unzip -nq vosk-0.3.38.jar
