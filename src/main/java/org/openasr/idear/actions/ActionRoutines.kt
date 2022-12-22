@@ -1,21 +1,16 @@
 package org.openasr.idear.actions
 
-import com.intellij.ide.DataManager
-import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.IdeActions.*
 import com.intellij.openapi.application.ApplicationInfo
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.SystemInfo
 import org.openasr.idear.utils.WordToNumberConverter
-import org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer
 import org.openasr.idear.asr.AsrService
 import org.openasr.idear.asr.ListeningState
 import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.Commands
 import org.openasr.idear.tts.TTSService
 import org.openasr.idear.utils.toUpperCamelCase
-import java.awt.EventQueue
 import java.awt.event.KeyEvent.*
 import java.text.SimpleDateFormat
 import javax.sound.sampled.AudioSystem
@@ -128,11 +123,6 @@ object ActionRoutines {
         }
     }
 
-//    fun routineOkIdea() {
-//        beep()
-//        fireVoiceCommand()
-//    }
-
     fun routineExtract(c: String) {
         if (c.endsWith("method")) {
             IdeService.invokeAction("ExtractMethod")
@@ -235,46 +225,6 @@ object ActionRoutines {
         TTSService.say("It is me, Jah java va va, va, va. Open up already!")
     }
 
-//    fun fireVoiceCommand() {
-//        try {
-//            val commandTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(COMMAND_DURATION))
-//
-//            if (commandTuple == null || commandTuple.first.isEmpty() /* || searchQuery.second < CONFIDENCE_LEVEL_THRESHOLD */)
-//                return
-//
-//            // Notify of successful proceed
-//            beep()
-//
-//            ExecuteVoiceCommandAction.invoke()
-//        } catch (e: IOException) {
-//            logger.error("Panic! Failed to dump WAV", e)
-//        }
-//    }
-
-//    fun fireGoogleSearch() {
-//        val searchQueryTuple = webSpeechResult ?: return
-//        TTSService.say("I think you said " + searchQueryTuple.first + ", searching Google now")
-//
-//        GoogleHelper.searchGoogle(searchQueryTuple.first)
-//    }
-
-//    private val webSpeechResult: Pair<String, Double>?
-//        get() {
-//            var searchQueryTuple: Pair<String, Double>? = null
-//            beep()
-//            try {
-//                searchQueryTuple = GoogleHelper.getBestTextForUtterance(CustomMicrophone.recordFromMic(GOOGLE_QUERY_DURATION))
-//            } catch (e: IOException) {
-//                logger.error("Panic! Failed to dump WAV", e)
-//            }
-//
-//            if (searchQueryTuple == null || searchQueryTuple.first.isEmpty())
-//                return null
-//
-//            beep()
-//            return searchQueryTuple
-//        }
-
     fun pauseSpeech() {
         beep()
         while (ListeningState.isActive) {
@@ -305,7 +255,7 @@ object ActionRoutines {
             try {
                 val clip = AudioSystem.getClip()
                 val inputStream = AudioSystem.getAudioInputStream(
-                        AsrService.javaClass.getResourceAsStream("/org.openasr.idear/sounds/beep.wav"))
+                        AsrService.javaClass.getResourceAsStream("/org/openasr/idear/sounds/beep.wav"))
                 clip.open(inputStream)
                 clip.start()
             } catch (e: Exception) {
