@@ -51,6 +51,7 @@ tasks {
 }
 
 repositories {
+  mavenLocal()
   mavenCentral()
   maven("https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local")
 }
