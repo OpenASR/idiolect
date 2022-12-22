@@ -8,6 +8,7 @@ import org.openasr.idear.utils.WordToNumberConverter
 import org.openasr.idear.asr.AsrService
 import org.openasr.idear.asr.ListeningState
 import org.openasr.idear.ide.IdeService
+import org.openasr.idear.nlp.Commands
 import org.openasr.idear.tts.TTSService
 import org.openasr.idear.utils.toUpperCamelCase
 import java.awt.event.KeyEvent.*
