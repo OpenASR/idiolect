@@ -11,8 +11,7 @@ on:
     branches: [ master ]
 
 jobs:
-  Publish:
-    needs: [vosk-api]
+  'Build and Publish':
     runs-on: ubuntu-latest
 
     steps:
