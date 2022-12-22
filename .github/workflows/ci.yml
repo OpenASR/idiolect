@@ -2,13 +2,13 @@ name: Build & Test
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, "release/*" ]
     paths:
       - '**.kt'
       - '**.kts'
       - '**.tidy'
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, "release/*" ]
 
 jobs:
   build:
