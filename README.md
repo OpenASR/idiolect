@@ -40,8 +40,8 @@ Idear is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.org
 
 #### [`VoiceRecordControllerAction`](src/main/java/org/openasr/idear/VoiceRecordControllerAction.kt)
   This action is invoked when the user clicks on the <img src="src/main/resources/org/openasr/idear/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar.
-  This simply tells [`ASRService`](src/main/java/org/openasr/idear/asr/ASRService.kt) to activate or standby.
-  When the `ASRService` is active, the [`ASRSystem`](src/main/java/org/openasr/idear/asr/ASRSystem.kt), 
+  This simply tells [`AsrService`](src/main/java/org/openasr/idear/asr/AsrService.kt) to activate or standby.
+  When the `AsrService` is active, the [`ASRSystem`](src/main/java/org/openasr/idear/asr/ASRSystem.kt), 
   by default [`ASRControlLoop`][ASRControlLoop] [(see below)](#ASRControlLoop).
 
 #### [`ExecuteActionFromPredefinedText`](src/main/java/org/openasr/idear/actions/ExecuteActionFromPredefinedText.kt)

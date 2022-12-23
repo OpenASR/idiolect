@@ -11,6 +11,6 @@ rm -rf META-INF org
 rm vosk-0.3.38.jar
 cd ../../..
 echo 'rootProject.name = "vosk"' > settings.gradle.kts
-sed -i '10d;21,25d' build.gradle
+sed -i '' '10d;21,25d' build.gradle
 gradle publishToMavenLocal
 cd ../..

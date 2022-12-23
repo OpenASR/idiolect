@@ -12,7 +12,7 @@
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-pronouncer.xml">com.intellij.modules.java</depends>
-    <depends>AceJump</depends>
+<!--    <depends>AceJump</depends>-->
 
     <applicationListeners>
         <listener topic="org.openasr.idear.nlp.NlpResultListener" class="org.openasr.idear.nlp.IntellijNlpResultListener"/>

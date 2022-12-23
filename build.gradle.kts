@@ -16,7 +16,7 @@ intellij {
   version.set("2022.3")
   pluginName.set("idear")
   updateSinceUntilBuild.set(false)
-  plugins.set(listOf("AceJump:3.6.2", "java"))
+  plugins.set(listOf("java"))
 }
 
 tasks {
