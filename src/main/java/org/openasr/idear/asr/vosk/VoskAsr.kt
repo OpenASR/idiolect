@@ -7,26 +7,45 @@ import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.recognizer.CustomMicrophone
 import org.vosk.Model
 import org.vosk.Recognizer
+import java.io.File
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 
 
 class VoskAsr : AsrProvider {
     private lateinit var recognizer: Recognizer
-    private var modelPath: String? = defaultModel()
-    private val alternatives = 4;
+    private var modelPath: String? = defaultModel().also { println("Path to model: $it") }
+    private val alternatives = 4
 
     override fun displayName() = "Vosk"
 
-    /**
-     * @see https://alphacephei.com/vosk/models/model-list.json
-     * check "type" field. "small" and "big-lgraph" support grammar, "big" doesn't
-     */
-    override fun defaultModel() =
-//      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
-//    System.getProperty("user.home") + "/.vosk/vosk-model-en-us-0.22-lgraph"  // Big US English model with dynamic graph
-      System.getProperty("user.home") + "/.vosk/vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
+    override fun defaultModel(): String = unpackModelAndReturnPath("vosk-model-small-en-us-0.15.zip")
 
+    private fun unpackModelAndReturnPath(model: String): String {
+        val modelZip = javaClass.getResourceAsStream("/$model")
+        val modelDir = System.getProperty("user.home") + "/.idear"
+        val modelPath = "$modelDir/${model.substringBefore(".zip")}"
+        val modelFile = File(modelPath)
+        if (!modelFile.exists()) {
+            println("Unzipping model to $modelDir")
+            modelFile.parentFile.mkdirs()
+            modelZip.use { zip ->
+                ZipInputStream(zip).use { zis ->
+                    var entry: ZipEntry? = zis.nextEntry
+                    while (entry != null) {
+                        val file = File(modelDir, entry.name)
+                        if (entry.isDirectory) file.mkdirs()
+                        else file.outputStream().use { fos -> zis.copyTo(fos) }
+                        entry = zis.nextEntry
+                    }
+                }
+            }
+        }
 
-    /** @see https://alphacephei.com/vosk/models/model-list.json */
+        return modelPath
+    }
+
+    // https://alphacephei.com/vosk/models/model-list.json
     override fun setModel(model: String) {
         if (model.isNotEmpty()) this.modelPath = model
     }
