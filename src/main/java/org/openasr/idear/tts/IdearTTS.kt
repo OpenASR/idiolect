@@ -1,14 +1,13 @@
 package org.openasr.idear.tts
 
-import com.intellij.openapi.diagnostic.Logger
 import marytts.*
 import marytts.exceptions.MaryConfigurationException
 import marytts.modules.synthesis.Voice
 import marytts.util.data.audio.AudioPlayer
 import java.util.*
 
-object MaryTTS : TtsProvider {
-//    val logger = Logger.getInstance(javaClass)
+object IdearTTS : TtsProvider {
+    //    val logger = Logger.getInstance(javaClass)
     private lateinit var voice: Voice
     private lateinit var maryTTS: MaryInterface
 
@@ -37,25 +36,32 @@ object MaryTTS : TtsProvider {
     }
 
     @Synchronized
-    override fun say(utterance: String): Boolean {
+    override fun say(utterance: String): Boolean =
+        // macSay if Mac or jvmSay otherwise
+        if (System.getProperty("os.name").lowercase().contains("mac")) {
+            macSay(utterance)
+        } else {
+            jvmSay(utterance)
+        }
+
+    fun jvmSay(utterance: String): Boolean {
         if (utterance.isEmpty()) return false
 
         try {
             AudioPlayer(maryTTS.generateAudio(utterance)).start()
         } catch (e: Exception) {
-//            logger.error("Sorry! Could not pronounce $utterance", e)
+//          logger.error("Sorry! Could not pronounce $utterance", e)
             return false
         }
 
         return true
     }
 
+    fun macSay(utterance: String) =
+        try { Runtime.getRuntime().exec("say \"$utterance\""); true } catch (e: Exception) { false }
+
     override fun dispose() = Unit
 }
 
 fun main() =
-        with(Scanner(System.`in`)) {
-            do {
-                print("Text to speak: ")
-            } while (MaryTTS.say(nextLine()))
-        }
+    with(Scanner(System.`in`)) { do { print("Text to speak: ") } while (IdearTTS.say(nextLine())) }

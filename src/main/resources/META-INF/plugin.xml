@@ -49,7 +49,7 @@
 
         <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop"/>
         <asrProvider implementation="org.openasr.idear.asr.vosk.VoskAsr"/>
-        <ttsProvider implementation="org.openasr.idear.tts.MaryTTS"/>
+        <ttsProvider implementation="org.openasr.idear.tts.IdearTTS"/>
         <nlpProvider implementation="org.openasr.idear.nlp.PatternBasedNlpProvider"/>
     </extensions>
 
