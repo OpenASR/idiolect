@@ -32,7 +32,6 @@ object GrammarService : AnActionListener {
                                        anActionEvent: AnActionEvent) {
         val actionId = ActionManager.getInstance().getId(anAction)
 
-
         if ("someaction" == actionId) {
             log.info("Swapping in grammar for action: $anAction")
             //swap in a context aware grammar
