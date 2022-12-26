@@ -10,6 +10,7 @@ object AsrService {
     private val log = logger<AsrService>()
     private val messageBus = ApplicationManager.getApplication().messageBus
     private lateinit var asrSystem: AsrSystem
+    @Volatile private var isListening = false
 
     init {
         System.setProperty("jna.nounpack", "false")
@@ -39,6 +40,24 @@ object AsrService {
 
     fun setGrammar(grammar: Array<String>) {
         asrSystem.setGrammar(grammar)
+    }
+
+    fun toggleListening() {
+//      val settings = ApplicationManager.getApplication().getService(AceConfig::class.java).state
+//      val aceJumpDefaults = settings.allowedChars
+        if (isListening) {
+            isListening = false
+//            settings.allowedChars = aceJumpDefaults
+            deactivate()
+        } else {
+            activate()
+            isListening = true
+//            settings.allowedChars = "1234567890"
+        }
+
+        messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onListening(
+            isListening
+        )
     }
 
     /** Called from AsrService when the user presses the start button. */

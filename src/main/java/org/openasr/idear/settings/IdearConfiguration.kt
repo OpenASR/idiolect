@@ -5,11 +5,14 @@ import com.intellij.openapi.extensions.ExtensionPointListener
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.extensions.PluginDescriptor
 import com.intellij.openapi.options.Configurable
-import org.openasr.idear.asr.AsrSystem
+import com.intellij.ui.GotItTooltip
 import org.openasr.idear.asr.AsrProvider
 import org.openasr.idear.asr.AsrService
+import org.openasr.idear.asr.AsrSystem
 import org.openasr.idear.nlp.*
+import org.openasr.idear.presentation.RecognitionStatusBarWidgetFactory
 import org.openasr.idear.tts.*
+import java.net.URL
 import java.util.concurrent.atomic.AtomicReference
 
 /*
@@ -72,6 +75,15 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
     override fun getDisplayName() = "Idear"
 
+//    override fun initializeComponent() {
+////        if (!state.onboarded) {
+//            GotItTooltip("org.openasr.idear.onboarding", "Click here to get started with voice control", null)
+//                .show(RecognitionStatusBarWidgetFactory.widget, GotItTooltip.TOP_MIDDLE)
+////            .withBrowserLink("Vosk Models", URL("https://alphacephei.com/vosk/models"))
+//            //.withLink("Disable for all files", this::actionMethodReference)
+////        }
+//    }
+
     override fun getState() = settings
 
     /**
@@ -126,7 +138,9 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         gui.nlpService = settings.nlpService
         gui.ttsService = settings.ttsService
 
-        gui.asrModelPath = settings.asrModelPath //settings.asrModelPath.ifEmpty { getAsrProvider().defaultModel() }
+        if (!settings.asrModelPath.isNullOrEmpty()) {
+            gui.asrModelPath = settings.asrModelPath
+        }
     }
 }
 
