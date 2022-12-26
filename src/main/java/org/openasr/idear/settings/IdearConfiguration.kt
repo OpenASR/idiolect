@@ -82,8 +82,6 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         settings = state
     }
 
-    private var gui = RecognitionSettingsForm()
-
     data class Settings(var AsrService: String = "",
                         var asrModelPath: String = "",
                         var nlpService: String = "",
@@ -96,8 +94,9 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
                 gui.ttsService != settings.ttsService
     }
 
+    private val gui by lazy(::RecognitionSettingsForm)
 
-    override fun createComponent() = RecognitionSettingsForm().apply { gui = this }.rootPanel
+    override fun createComponent() = gui.rootPanel
 
     /**
      * Stores the settings from the Swing form to the configurable component.
@@ -127,10 +126,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         gui.nlpService = settings.nlpService
         gui.ttsService = settings.ttsService
 
-        gui.asrModelPath = if (settings.asrModelPath.isNullOrEmpty())
-            getAsrProvider().defaultModel()
-        else
-            settings.asrModelPath
+        gui.asrModelPath = settings.asrModelPath //settings.asrModelPath.ifEmpty { getAsrProvider().defaultModel() }
     }
 }
 
