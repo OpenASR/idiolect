@@ -7,20 +7,19 @@ import org.openasr.idear.testing.TestContext
 import org.reflections.Reflections
 import java.io.File
 
-class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatformTestCase() {
+class ActionRecognizerManagerTest : HeavyPlatformTestCase() {
     @Test
     fun testDocumentGrammars() {
         // Given
         val manager = object : ActionRecognizerManager(TestContext()) {
-            override fun getExtensions(): Array<ActionRecognizer> {
-                return Reflections("org.openasr.idear.actions.recognition").getSubTypesOf(ActionRecognizer::class.java)
-//                        .filter { it != RegisteredActionRecognizer::class.java && it != RegisteredEditorActionRecognizer::class.java }
-                        .map { clazz ->
-                            println(clazz.name)
-                            clazz.constructors.first().newInstance() as ActionRecognizer
-                        }
-                        .toTypedArray()
-            }
+            override fun getExtensions(): Array<ActionRecognizer> =
+                Reflections("org.openasr.idear.actions.recognition").getSubTypesOf(ActionRecognizer::class.java)
+//                  .filter { it != RegisteredActionRecognizer::class.java && it != RegisteredEditorActionRecognizer::class.java }
+                    .map { clazz ->
+                        println(clazz.name)
+                        clazz.constructors.first().newInstance() as ActionRecognizer
+                    }
+                    .toTypedArray()
         }
 
         // When
@@ -30,6 +29,6 @@ class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatform
         assertNotNull(examples)
 
         assertEqualsToFile("Examples", File("docs/example-phrases.md"),
-                examples.joinToString("\n", "# Example Phrases\n" ))
+                examples.joinToString("\n", "# Example Phrases\n"))
     }
 }

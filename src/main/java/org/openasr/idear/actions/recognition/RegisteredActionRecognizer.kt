@@ -13,8 +13,8 @@ import org.openasr.idear.utils.toUpperCamelCase
  * @see com.intellij.openapi.actionSystem.IdeActions
  */
 open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", Int.MAX_VALUE) {
-    override val grammars = buildGrammars()
-    private val actionManager = ActionManager.getInstance()
+    override val grammars by lazy { buildGrammars() }
+    private val actionManager by lazy { ActionManager.getInstance() }
 
     protected open fun buildGrammars() = ActionUtils.buildGrammar()
 
@@ -22,10 +22,8 @@ open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", 
         return object : NlpGrammar("Anonymous") {
             override fun tryMatchRequest(utterance: String, dataContext: DataContext): ActionCallInfo? {
                 val actionId = getActionIdForUtterance(utterance)
-                val action = if (actionManager.isGroup(actionId))
-                    null
-                else
-                    actionManager.getAction(actionId)
+                val action = if (actionManager.isGroup(actionId)) null
+                    else actionManager.getAction(actionId)
 
                 if (action != null) {
                     return ActionCallInfo(actionId)

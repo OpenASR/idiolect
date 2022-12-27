@@ -11,7 +11,7 @@ abstract class ActionRecognizer(open val displayName: String, open val order: In
 
     /**
      * dataContext.getData(PlatformCoreDataKeys.FILE_EDITOR).file.fileType
-     *
+     * Wrong context / file type, will not see the phrase
      * @param dataContext could be used to determine code language etc
      * @param component is TerminalDisplay | EditorComponentImpl | ProjectViewPanel | ChangesViewPanel
      */
@@ -35,16 +35,8 @@ abstract class ActionRecognizer(open val displayName: String, open val order: In
 //    /** Called by tryResolveIntent() */
 //    open fun getGrammars(): List<NlpGrammar> = grammars
 
-    open fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? {
-        for (grammar in grammars) {
-            val info = grammar.tryMatchRequest(nlpRequest, dataContext)
-            if (info != null) {
-                return info
-            }
-        }
-
-        return null
-    }
+    open fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? =
+        grammars.firstNotNullOfOrNull { it.tryMatchRequest(nlpRequest, dataContext) }
 
 //    /** Called by tryResolveIntent() */
 //    fun fulfillIntent(nlpResponse: NlpResponse)

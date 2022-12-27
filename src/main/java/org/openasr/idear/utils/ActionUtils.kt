@@ -22,12 +22,12 @@ object ActionUtils {
 
         return actionManager.getActionIdList("")
                 .filter { !actionManager.isGroup(it) }
-                .filter { filterSpeakableActionId(it) }
+                .filter { filterPronouncableActionId(it) }
                 .sorted()
                 .map { NlpGrammar(it, scoreActionId(it)).withExample(formatSpeakableActionId(it)) }
     }
 
-    fun filterSpeakableActionId(actionId: String): Boolean {
+    fun filterPronouncableActionId(actionId: String): Boolean {
         return !actionId.contains("Uast")
                 && !actionId.startsWith("Ace")
                 && !actionId.endsWith("DebugAction")

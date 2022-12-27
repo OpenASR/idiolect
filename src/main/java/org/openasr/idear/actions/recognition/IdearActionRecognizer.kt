@@ -9,24 +9,18 @@ import java.awt.Component
 class IdearActionRecognizer : ActionRecognizer("Idear Commands", 0) {
     override val grammars = listOf(
             object : NlpGrammar("Idear.Pause") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
-                    ActionRoutines.pauseSpeech()
-                    return ActionCallInfo(intentName, true)
-                }
+                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                    ActionCallInfo(intentName, true).also { ActionRoutines.pauseSpeech() }
             }.withExample("stop listening"),
 
             object : NlpGrammar("Idear.Command") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
-                    GrammarService.useCommandGrammar()
-                    return ActionCallInfo(intentName, true)
-                }
+                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                    ActionCallInfo(intentName, true).also { GrammarService.useCommandGrammar() }
             }.withExample("command mode"),
 
             object : NlpGrammar("Idear.Dictation") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
-                    GrammarService.useDictationGrammar()
-                    return ActionCallInfo(intentName, true)
-                }
+                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                    ActionCallInfo(intentName, true).also { GrammarService.useDictationGrammar() }
             }.withExample("dictation mode"),
     )
 

@@ -7,6 +7,7 @@ import com.intellij.openapi.extensions.ExtensionPointName
 import io.ktor.util.reflect.*
 import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.nlp.NlpRequest
+import javax.script.ScriptEngineManager
 
 
 open class ActionRecognizerManager(private val dataContext: DataContext) {
@@ -24,10 +25,9 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
         var ideaGrammars = ideaActionRecognizer.grammars
         val editorGrammars = ideaGrammars
                 .filter { it.intentName.startsWith("Editor") }
-                .plus( editorActionRecognizer.grammars )
+                .plus(editorActionRecognizer.grammars)
 
-        ideaGrammars = ideaGrammars
-                .filter { !it.intentName.startsWith("Editor") }
+        ideaGrammars = ideaGrammars.filter { !it.intentName.startsWith("Editor") }
 
         return extensions
                 .sortedBy { it.order }

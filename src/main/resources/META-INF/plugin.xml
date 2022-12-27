@@ -38,6 +38,7 @@
 
     <extensions defaultExtensionNs="org.openasr.idear">
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.IdearActionRecognizer" order="first"/>
+        <actionRecognizer implementation="org.openasr.idear.actions.recognition.PropertiesFileActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
         <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
