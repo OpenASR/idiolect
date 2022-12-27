@@ -54,12 +54,9 @@ object ActionRoutines {
     }
 
     fun routineAddNewClass(name: String) {
-        var className: String
-        if (name.isNullOrEmpty()) {
+        val className: String = name.ifEmpty {
             TTSService.say("what shall we call it?")
-            className = AsrService.waitForUtterance()
-        } else {
-            className = name
+            AsrService.waitForUtterance()
         }
 
         IdeService.invokeAction(ACTION_NEW_ELEMENT)

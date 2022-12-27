@@ -42,7 +42,7 @@ class RecognitionStatusBarWidget() :
         this.statusBar = statusBar
         Disposer.register(statusBar, this)
 
-        GotItTooltip("org.openasr.idear.intro", "Click here to get started with voice control", this)
+        GotItTooltip("org.openasr.idear.intro", "Click <b><a href=\"\">here</a></b> to get started with voice control", this)
             .show(this, GotItTooltip.TOP_MIDDLE)
 
         StatusBarWidgetClickListener(clickConsumer).installOn(this, true)
@@ -52,15 +52,10 @@ class RecognitionStatusBarWidget() :
 
     override fun getPresentation() = this
 
-    override fun getComponent(): JComponent {
-        return this
-    }
+    override fun getComponent(): JComponent = this
 
-    override fun getClickConsumer(): Consumer<MouseEvent> {
-        return Consumer {
-            AsrService.toggleListening()
-        }
-    }
+    override fun getClickConsumer(): Consumer<MouseEvent> =
+        Consumer { AsrService.toggleListening() }
 
     override fun onListening(listening: Boolean) {
         isListening = listening

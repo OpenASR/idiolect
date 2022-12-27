@@ -1,22 +1,16 @@
 package org.openasr.idear.asr.vosk
 
-import com.intellij.notification.NotificationAction
-import com.intellij.notification.NotificationGroupManager
-import com.intellij.notification.NotificationType
-import com.intellij.openapi.actionSystem.AnAction
+import com.google.gson.JsonParser.*
+import com.intellij.notification.*
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.ShowSettingsUtil
-import com.jsoniter.JsonIterator
 import org.openasr.idear.asr.AsrProvider
-import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.recognizer.CustomMicrophone
 import org.openasr.idear.settings.IdearConfiguration
-import org.vosk.Model
-import org.vosk.Recognizer
+import org.vosk.*
 import java.io.File
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
+import java.util.zip.*
 
 
 class VoskAsr : AsrProvider {
@@ -136,28 +130,16 @@ class VoskAsr : AsrProvider {
         return tryParseResult(recognizer.finalResult)
     }
 
-    private fun parsePartialResult(json: String) = JsonIterator.deserialize(json).get("partial").toString()
+//    private fun parsePartialResult(json: String) = JsonIterator.deserialize(json).get("partial").toString()
 
-    private fun tryParseResult(json: String): NlpRequest? {
-        if (alternatives == 0) {
-            val utterance = parseResult(json)
-            if (utterance.isNotEmpty()) {
-                return NlpRequest(listOf(utterance))
-            }
-        } else {
-            val alternatives = parseAlternatives(json)
-//            if (alternatives.isNotEmpty() && alternatives[0])
-            return NlpRequest(alternatives)
-        }
-
-        return null
-    }
-
-    private fun parseResult(json: String) = JsonIterator.deserialize(json).get("text").toString()
+    private fun tryParseResult(json: String): NlpRequest = NlpRequest(parseVosk(json))
 
     /** Use this instead of parseResult if alternatives > 0 */
-    private fun parseAlternatives(json: String): List<String> {
-        return JsonIterator.deserialize(json).get("alternatives", '*', "text")
-                .asList().map { it.toString() }
-    }
+    private fun parseVosk(json: String): List<String> =
+        parseString(json).asJsonObject.let { jo ->
+            jo.get("alternatives").run {
+                if (isJsonNull) listOf(jo.get("text").toString())
+                else asJsonArray.map { it.asJsonObject.get("text").asString }
+            }
+        }
 }

@@ -34,7 +34,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         private var ttsProvider = AtomicReference<TtsProvider?>()
         private var nlpProvider = AtomicReference<NlpProvider?>()
 
-        private var settings = Settings()
+        var settings = Settings()
 
         /** Called by AsrService */
         fun getAsrSystem(): AsrSystem {
@@ -137,10 +137,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         gui.AsrService = settings.AsrService
         gui.nlpService = settings.nlpService
         gui.ttsService = settings.ttsService
-
-        if (!settings.asrModelPath.isNullOrEmpty()) {
-            gui.asrModelPath = settings.asrModelPath
-        }
+        gui.asrModelPath = settings.asrModelPath
     }
 }
 
@@ -169,8 +166,7 @@ private class ExtensionSelector<T : ConfigurableExtension>(
     }
 
     override fun extensionAdded(extension: T, pluginDescriptor: PluginDescriptor) {
-        val option = ExtensionOption(extension)
-        options[extension.displayName()] = option
+        options[extension.displayName()] = ExtensionOption(extension)
     }
 
     override fun extensionRemoved(extension: T, pluginDescriptor: PluginDescriptor) {

@@ -31,10 +31,8 @@ class AsrControlLoop : AsrSystem, Runnable {
         asrProvider.startRecognition()
     }
 
-    override fun waitForUtterance(): String {
-        val speech = asrProvider.waitForSpeech()
-        return speech?.utterance ?: ""
-    }
+    override fun waitForUtterance(): String =
+        asrProvider.waitForSpeech()?.utterance ?: ""
 
     override fun waitForUtterance(grammar: Array<String>,
                                   escapeWords: Array<String>): String {

@@ -18,9 +18,8 @@ open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
             NlpGrammar("Undo").withExamples("undo", "whoops"),
     )
 
-    override fun isSupported(dataContext: DataContext, component: Component?): Boolean {
-        return component is EditorComponentImpl
-    }
+    override fun isSupported(dataContext: DataContext, component: Component?): Boolean =
+        component is EditorComponentImpl
 
     override fun getActionIdForUtterance(utterance: String): String {
         val actionId = mapOf(

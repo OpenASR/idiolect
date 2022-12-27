@@ -34,7 +34,7 @@ abstract class ExecuteActionByCommandText : IdearAction() {
     }
 
     private fun typeText(editor: Editor, type: String, context: DataContext) {
-      type.forEach { TypedAction.getInstance().actionPerformed(editor, it, context) }
+        type.forEach { TypedAction.getInstance().actionPerformed(editor, it, context) }
     }
 
     private fun buildActionEvent(info: ActionCallInfo, action: AnAction, context: DataContext): AnActionEvent =

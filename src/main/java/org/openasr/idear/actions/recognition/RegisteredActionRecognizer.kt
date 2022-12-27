@@ -36,12 +36,11 @@ open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", 
         }.tryMatchRequest(nlpRequest, dataContext)
     }
 
-    protected open fun getActionIdForUtterance(utterance: String): String {
-        return mapOf(
-                "go to" to "goto",
-                "git" to "cvs",
-                "change" to "diff",
-                "look and feel" to "laf"
+    protected open fun getActionIdForUtterance(utterance: String): String =
+        mapOf(
+            "go to" to "goto",
+            "git" to "cvs",
+            "change" to "diff",
+            "look and feel" to "laf"
         ).getOrDefault(utterance, utterance).toUpperCamelCase()
-    }
 }

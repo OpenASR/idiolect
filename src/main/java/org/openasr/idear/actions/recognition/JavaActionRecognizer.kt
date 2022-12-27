@@ -2,13 +2,11 @@ package org.openasr.idear.actions.recognition
 
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.actionSystem.PlatformCoreDataKeys
+import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.*
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.psi.impl.file.PsiJavaDirectoryImpl
 import org.openasr.idear.actions.ActionRoutines
-import org.openasr.idear.ide.IdeService
-import org.openasr.idear.nlp.NlpGrammar
-import org.openasr.idear.nlp.NlpRegexGrammar
+import org.openasr.idear.nlp.*
 import java.awt.Component
 
 class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
@@ -66,8 +64,8 @@ class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
 
     override fun isSupported(dataContext: DataContext, component: Component?): Boolean {
         return (component is EditorComponentImpl
-                && dataContext.getData(PlatformCoreDataKeys.FILE_EDITOR)?.file?.fileType is JavaFileType)
+                && dataContext.getData(FILE_EDITOR)?.file?.fileType is JavaFileType)
                 // or allow "new class" when a package is selected
-                || dataContext.getData(PlatformCoreDataKeys.SELECTED_ITEMS)?.get(0) is PsiJavaDirectoryImpl
+                || dataContext.getData(SELECTED_ITEMS)?.get(0) is PsiJavaDirectoryImpl
     }
 }
