@@ -60,14 +60,10 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         private fun <T : ConfigurableExtension> activateExtension(extensionSelector: ExtensionSelector<T>,
                                                                   displayName: String,
                                                                   ref: AtomicReference<T?>,
-                                                                  configure: ((extension: T) -> Unit)?): T {
+                                                                  configure: (T.() -> Unit)?): T {
             val extension = extensionSelector.getExtensionByName(displayName)
 
             val current = ref.get()
-
-            if (configure != null) {
-                println("ASR Extension changing from ${current?.displayName()} to ${extension.displayName()}")
-            }
 
             if (current != extension) {
                 current?.deactivate()
