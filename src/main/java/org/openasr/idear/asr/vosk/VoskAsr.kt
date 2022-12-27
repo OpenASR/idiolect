@@ -27,7 +27,7 @@ import java.util.zip.ZipInputStream
 
 
 class VoskAsr : AsrProvider {
-    private val messageBus = ApplicationManager.getApplication().messageBus
+    private val messageBus = ApplicationManager.getApplication()?.messageBus
     private val httpClient = HttpClient.newBuilder().build()
     private lateinit var recognizer: Recognizer
     private val alternatives = 4
@@ -35,18 +35,17 @@ class VoskAsr : AsrProvider {
     override fun displayName() = "Vosk"
 
     /** check "type" field. "small" and "big-lgraph" support grammar, "big" doesn't */
-    fun listModels() {
-        val modelUri = "https://alphacephei.com/vosk/models/model-list.json"
-        val request = HttpRequest.newBuilder().uri(URI.create(modelUri)).build()
+    fun listModels(): List<ModelInfo> {
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create("https://alphacephei.com/vosk/models/model-list.json"))
+            .build()
         val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
-        println("model response: ${response.body()}")
-//            val models = JsonIterator.parse(response.entity.content.readAllBytes()).read(Array<ModelInfo>::class.java)
-//            println("models: $models"
+        return parseModels(response.body())
     }
 
     private fun installModel(url: String) {
-        messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
+        messageBus!!.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
 
         val modelZip = downloadModel(url)
         val modelPath = unpackModelAndReturnPath(url.substringAfterLast('/'), modelZip)
@@ -61,11 +60,6 @@ class VoskAsr : AsrProvider {
             HttpRequest.newBuilder().uri(URI.create(url)).build(),
             HttpResponse.BodyHandlers.ofInputStream()
         ).body()
-
-//    override fun defaultModel() =
-////      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
-////    System.getProperty("user.home") + "/.vosk/vosk-model-en-us-0.22-lgraph"  // Big US English model with dynamic graph
-//      System.getProperty("user.home") + "/.vosk/vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
 
     private fun unpackModelAndReturnPath(modelName: String, modelZip: InputStream): String {
         val modelDir = System.getProperty("user.home") + "/.idear"
@@ -171,6 +165,26 @@ class VoskAsr : AsrProvider {
                 else asJsonArray.map { it.asJsonObject.get("text").asString }
             }
         }
+
+    private fun parseModels(json: String): List<ModelInfo> {
+        return parseString(json).asJsonArray
+            .map { it.asJsonObject }
+            .filter {
+                // "small" and "big-lgraph" support grammar, "big" doesn't
+                it.get("type").asString != "big"
+                    && it.get("obsolete").asString != "true"
+            }
+            .map {
+                ModelInfo(
+                    it.get("lang").asString,
+                    it.get("lang_text").asString,
+                    it.get("name").asString,
+                    it.get("url").asString,
+                    it.get("size").asInt,
+                    it.get("size_text").asString
+                )
+            }
+    }
 
     private fun showNotificationForModel() {
         NotificationGroupManager.getInstance()
