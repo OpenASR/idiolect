@@ -12,7 +12,7 @@ import java.awt.Component
  */
 class RenameActionRecognizer : ActionRecognizer("Rename", 500) {
     override val grammars = listOf(
-            object : NlpRegexGrammar(IdeActions.ACTION_RENAME, "rename(?: to|as)? ?(.*)?") {
+            object : NlpRegexGrammar("Rename", "rename(?: to|as)? ?(.*)?") {
                 override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
                     return ActionCallInfo(intentName).apply {
                         val name = values[1]

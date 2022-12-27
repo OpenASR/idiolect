@@ -16,7 +16,7 @@ object AsrService {
         System.setProperty("jna.nounpack", "false")
         System.setProperty("jna.noclasspath", "false")
 
-        initialiseAsrSystem()
+//        initialiseAsrSystem()
     }
 
     fun setAsrSystem(asrSystem: AsrSystem) {
@@ -41,6 +41,7 @@ object AsrService {
     fun setGrammar(grammar: Array<String>) = asrSystem.setGrammar(grammar)
 
     fun toggleListening() {
+
 //      val settings = ApplicationManager.getApplication().getService(AceConfig::class.java).state
 //      val aceJumpDefaults = settings.allowedChars
         if (isListening) {
@@ -56,7 +57,7 @@ object AsrService {
         messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onListening(isListening)
     }
 
-    /** Called from AsrService when the user presses the start button. */
+    /** Called when the user presses the start button. */
     fun activate() {
         ListeningState.activate()
 
@@ -66,7 +67,7 @@ object AsrService {
         asrSystem.startRecognition()
     }
 
-    /** Called from AsrService when the user presses the stop button. */
+    /** Called when the user presses the stop button. */
     fun deactivate() {
         ListeningState.standBy()
         asrSystem.stopRecognition()
@@ -86,14 +87,20 @@ object AsrService {
 
     private fun initialiseAsrSystem() {
         try {
-            asrSystem = IdearConfiguration.getAsrSystem()
+            val asrSystem = IdearConfiguration.initialiseAsrSystem()
             asrSystem.start()
+            this.asrSystem = asrSystem
         } catch (e: LineUnavailableException) {
             log.error("Couldn't initialize microphone", e)
             messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onFailure("Could not open microphone")
+            throw e
+        } catch (e: ModelNotAvailableException) {
+            log.info(e.message)
+            throw e
         } catch (e: Exception) {
             log.error("Couldn't initialize speech asrProvider", e)
             messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onFailure("Failed to initialise speech service")
+            throw e
         }
     }
 }

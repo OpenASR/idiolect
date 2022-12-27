@@ -38,7 +38,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         }
 
         /** Called by AsrService */
-        fun getAsrSystem(): AsrSystem {
+        fun initialiseAsrSystem(): AsrSystem {
             val asrProvider = getAsrProvider()
             val nlpProvider = getNlpProvider()
 
@@ -48,24 +48,32 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
-        fun getTtsProvider() = getExtension(ttsSelector, settings.ttsService, ttsProvider, null)
+        fun getTtsProvider() = activateExtension(ttsSelector, settings.ttsService, ttsProvider, null)
 
         private fun getAsrProvider() =
-            getExtension(asrSelector, settings.AsrService, asrProvider) { setModel(settings.asrModelPath) }
+            activateExtension(asrSelector, settings.AsrService, asrProvider) { setModel(settings.asrModelPath) }
 
-        private fun getNlpProvider() = getExtension(nlpSelector, settings.nlpService, nlpProvider, null)
 
-        private fun <T : ConfigurableExtension> getExtension(extensionSelector: ExtensionSelector<T>,
-                                                             displayName: String,
-                                                             ref: AtomicReference<T?>,
-                                                             configure: (T.() -> Unit)?): T {
+        private fun getNlpProvider() = activateExtension(nlpSelector, settings.nlpService, nlpProvider, null)
+
+
+        private fun <T : ConfigurableExtension> activateExtension(extensionSelector: ExtensionSelector<T>,
+                                                                  displayName: String,
+                                                                  ref: AtomicReference<T?>,
+                                                                  configure: ((extension: T) -> Unit)?): T {
             val extension = extensionSelector.getExtensionByName(displayName)
 
-            val current = ref.getAndSet(extension)
+            val current = ref.get()
+
+            if (configure != null) {
+                println("ASR Extension changing from ${current?.displayName()} to ${extension.displayName()}")
+            }
+
             if (current != extension) {
                 current?.deactivate()
                 configure?.invoke(extension)
                 extension.activate()
+                ref.set(extension)
             }
             return extension
         }
@@ -110,7 +118,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
             settings.ttsService = gui.ttsService
             settings.asrModelPath = gui.asrModelPath
 
-            AsrService.setAsrSystem(getAsrSystem())
+            AsrService.setAsrSystem(initialiseAsrSystem())
         }
     }
 

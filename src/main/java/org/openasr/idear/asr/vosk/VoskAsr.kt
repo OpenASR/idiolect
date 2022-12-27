@@ -6,8 +6,11 @@ import com.intellij.ide.actions.OpenFileAction
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType.INFORMATION
 import com.intellij.notification.NotificationGroupManager
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.ShowSettingsUtil
 import org.openasr.idear.asr.AsrProvider
+import org.openasr.idear.asr.AsrSystemStateListener
+import org.openasr.idear.asr.ModelNotAvailableException
 import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.recognizer.CustomMicrophone
 import org.openasr.idear.settings.IdearConfiguration
@@ -24,7 +27,8 @@ import java.util.zip.ZipInputStream
 
 
 class VoskAsr : AsrProvider {
-    private val client = HttpClient.newBuilder().build()
+    private val messageBus = ApplicationManager.getApplication().messageBus
+    private val httpClient = HttpClient.newBuilder().build()
     private lateinit var recognizer: Recognizer
     private var modelPath: String? = null // defaultModel().also { println("Path to model: $it") }
     private val alternatives = 4
@@ -38,7 +42,7 @@ class VoskAsr : AsrProvider {
         val request = HttpRequest.newBuilder()
             .uri(URI.create("https://alphacephei.com/vosk/models/model-list.json"))
             .build()
-        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
         println("model response: ${response.body()}")
 //            val models = JsonIterator.parse(response.entity.content.readAllBytes()).read(Array<ModelInfo>::class.java)
@@ -46,18 +50,23 @@ class VoskAsr : AsrProvider {
     }
 
     private fun installModel(url: String) {
+        messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC)
+            .onAsrStatus("Installing model...")
+
         val modelZip = downloadModel(url)
-        val modelName = url.substringAfterLast('/')
-        val modelPath = unpackModelAndReturnPath(modelName, modelZip)
+        val modelPath = unpackModelAndReturnPath(url.substringAfterLast('/'), modelZip)
         IdearConfiguration.saveModelPath(modelPath)
         setModel(modelPath)
+
+        messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC)
+            .onAsrReady("Model has been installed")
     }
 
     private fun downloadModel(url: String): InputStream {
         val request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .build()
-        val response = client.send(request, HttpResponse.BodyHandlers.ofInputStream())
+        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream())
         return response.body()
     }
 
@@ -112,30 +121,9 @@ class VoskAsr : AsrProvider {
 
     override fun activate() {
         if (modelPath.isNullOrEmpty()) {
-            NotificationGroupManager.getInstance()
-                .getNotificationGroup("Idear")
-                .createNotification("Speech model not configured",
-                    """
-                    <p>Download and configure the path to your Vosk speech model.</p>
-                    <p><a href="https://alphacephei.com/vosk/models">https://alphacephei.com/vosk/models</a></p>
-                """.trimIndent(), INFORMATION)
+            showNotificationForModel()
 
-                .addAction(NotificationAction.create("Download Default Model") { _ ->
-                    installModel("https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip")
-                })
-
-                .addAction(NotificationAction.create("Edit Configuration") { _ ->
-                    ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
-                })
-
-                .addAction(
-                    NotificationAction.create("Open properties file ($pathToPropertiesFile)") { e ->
-                        OpenFileAction.openFile(pathToPropertiesFile, e.project!!)
-                    }
-                )
-                .notify(null)
-
-            throw IllegalStateException("Model not available")
+            throw ModelNotAvailableException()
         }
 
         microphone = service()
@@ -190,4 +178,27 @@ class VoskAsr : AsrProvider {
                 else asJsonArray.map { it.asJsonObject.get("text").asString }
             }
         }
+
+    private fun showNotificationForModel() {
+        NotificationGroupManager.getInstance()
+            .getNotificationGroup("Idear")
+            .createNotification("Speech model not configured",
+                """
+                    <p>Download and configure the path to your Vosk speech model.<p>
+                    <p><a href="https://alphacephei.com/vosk/models">https://alphacephei.com/vosk/models</a></p>
+                """.trimIndent(), INFORMATION)
+
+            .addAction(NotificationAction.create("Download Default Model") { _ ->
+                installModel("https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip")
+            })
+            .addAction(NotificationAction.create("Edit Configuration") { _ ->
+                ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
+            })
+            .addAction(
+                NotificationAction.create("Open properties file ($pathToPropertiesFile)") { e ->
+                    OpenFileAction.openFile(pathToPropertiesFile, e.project!!)
+                }
+            )
+            .notify(null)
+    }
 }

@@ -1,10 +1,8 @@
 package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.actionSystem.PlatformCoreDataKeys
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.*
 import com.intellij.openapi.extensions.ExtensionPointName
-import io.ktor.util.reflect.*
 import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.nlp.NlpRequest
 
@@ -12,12 +10,7 @@ import org.openasr.idear.nlp.NlpRequest
 open class ActionRecognizerManager(private val dataContext: DataContext) {
     private var EP_NAME = ExtensionPointName<ActionRecognizer>("org.openasr.idear.actionRecognizer")
 
-    fun listGrammarExamples(): List<String> =
-        getExtensions().flatMap { recognizer ->
-            recognizer.grammars.flatMap { it.examples.toList() }
-        }
-
-    fun documentGrammars(): List<String> {
+    fun documentGrammars(formatter: (recognizer: ActionRecognizer, List<NlpGrammar>) -> List<String>): List<String> {
         val extensions = getExtensions()
         val ideaActionRecognizer = extensions.find { it.javaClass == RegisteredActionRecognizer::class.java }!!
         val editorActionRecognizer = extensions.find { it.javaClass == RegisteredEditorActionRecognizer::class.java }!!
@@ -37,9 +30,7 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
                         is RegisteredActionRecognizer -> ideaGrammars
                         else -> recognizer.grammars
                     }
-
-                    listOf( "\n## ${recognizer.displayName}")
-                            .plus(presentExamples(grammars))
+                    formatter.invoke(recognizer, grammars)
                 }
     }
 
@@ -48,9 +39,4 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
             .firstNotNullOfOrNull { it.tryResolveIntent(nlpRequest, dataContext) }
 
     protected open fun getExtensions() = EP_NAME.extensions
-
-    private fun presentExamples(grammars: List<NlpGrammar>): List<String> =
-        grammars.sortedBy { it.rank }.flatMap { grammar ->
-            grammar.examples.sorted().map { " - $it" }
-        }
 }

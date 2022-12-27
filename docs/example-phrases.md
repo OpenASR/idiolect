@@ -1,9 +1,9 @@
 # Example Phrases
 
 ## Idear Commands
+ - hi idea
+ - tell me about yourself
  - stop listening
- - command mode
- - dictation mode
 
 ## Extract Field or Variable
  - extract to field
