@@ -1,5 +1,6 @@
 package org.openasr.idear.presentation
 
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.CustomStatusBarWidget
 import com.intellij.openapi.wm.StatusBar
@@ -11,6 +12,7 @@ import com.intellij.util.Consumer
 import com.intellij.util.application
 import org.openasr.idear.actions.recognition.ActionCallInfo
 import org.openasr.idear.asr.AsrService
+import org.openasr.idear.asr.AsrSystemStateListener
 import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.nlp.NlpResultListener
 import java.awt.event.MouseEvent
@@ -18,14 +20,16 @@ import javax.swing.JComponent
 
 class RecognitionStatusBarWidget() :
     TextPanel.WithIconAndArrows(),
-    NlpResultListener,
     CustomStatusBarWidget,
-    WidgetPresentation
-//    StatusBarWidget.MultipleTextValuesPresentation
+    WidgetPresentation,
+    NlpResultListener,
+    AsrSystemStateListener
 {
     companion object {
         const val RECOGNITION_STATUS = "org.openasr.idear.Status"
     }
+
+    private val log = logger<RecognitionStatusBarWidget>()
     private var statusBar: StatusBar? = null
     private var isListening: Boolean = false
 
@@ -37,7 +41,10 @@ class RecognitionStatusBarWidget() :
     }
 
     override fun install(statusBar: StatusBar) {
-        application.messageBus.connect(this).subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
+        application.messageBus.connect(this).let {
+            it.subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
+            it.subscribe(AsrSystemStateListener.ASR_STATE_TOPIC, this)
+        }
 
         this.statusBar = statusBar
         Disposer.register(statusBar, this)
@@ -48,13 +55,31 @@ class RecognitionStatusBarWidget() :
         StatusBarWidgetClickListener(clickConsumer).installOn(this, true)
     }
 
+    override fun onAsrStatus(message: String) {
+        updateStatus(message)
+    }
+
+    override fun onAsrReady(message: String) {
+        GotItTooltip("org.openasr.idear.AsrReady", message, this)
+            .show(this, GotItTooltip.TOP_MIDDLE)
+        updateStatus("")
+    }
+
     override fun getTooltipText() = toolTipText
 
     override fun getPresentation() = this
 
     override fun getComponent(): JComponent = this
 
-    override fun getClickConsumer() = Consumer<MouseEvent> { AsrService.toggleListening() }
+    override fun getClickConsumer(): Consumer<MouseEvent> {
+        return Consumer {
+            try {
+                AsrService.toggleListening()
+            } catch (e: Exception) {
+                log.info("Failed to toggle listening: ${e.message}")
+            }
+        }
+    }
 
     override fun onListening(listening: Boolean) {
         isListening = listening

@@ -1,42 +1,86 @@
 package org.openasr.idear.asr.vosk
 
 import com.google.gson.JsonParser.*
-import com.intellij.ide.actions.OpenFileAction
-import com.intellij.notification.*
-import com.intellij.notification.NotificationType.INFORMATION
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
+import com.intellij.ide.actions.OpenFileAction
+import com.intellij.notification.NotificationAction
+import com.intellij.notification.NotificationType.INFORMATION
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.ShowSettingsUtil
 import org.openasr.idear.asr.AsrProvider
+import org.openasr.idear.asr.AsrSystemStateListener
+import org.openasr.idear.asr.ModelNotAvailableException
 import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.recognizer.CustomMicrophone
 import org.openasr.idear.settings.IdearConfiguration
-import org.vosk.*
 import java.io.File
-import java.util.zip.*
+import org.vosk.Model
+import org.vosk.Recognizer
+import java.io.InputStream
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 
 
 class VoskAsr : AsrProvider {
+    private val messageBus = ApplicationManager.getApplication().messageBus
+    private val httpClient = HttpClient.newBuilder().build()
     private lateinit var recognizer: Recognizer
-    private var modelPath: String? = defaultModel().also { println("Path to model: $it") }
+    private var modelPath: String? = null // defaultModel().also { println("Path to model: $it") }
     private val alternatives = 4
 
     override fun displayName() = "Vosk"
 
-    override fun defaultModel(): String = unpackModelAndReturnPath("vosk-model-small-en-us-0.15.zip")
+//    override fun defaultModel(): String = unpackModelAndReturnPath("vosk-model-small-en-us-0.15.zip")
+
+    /** check "type" field. "small" and "big-lgraph" support grammar, "big" doesn't */
+    fun listModels() {
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create("https://alphacephei.com/vosk/models/model-list.json"))
+            .build()
+        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
+
+        println("model response: ${response.body()}")
+//            val models = JsonIterator.parse(response.entity.content.readAllBytes()).read(Array<ModelInfo>::class.java)
+//            println("models: $models"
+    }
+
+    private fun installModel(url: String) {
+        messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC)
+            .onAsrStatus("Installing model...")
+
+        val modelZip = downloadModel(url)
+        val modelPath = unpackModelAndReturnPath(url.substringAfterLast('/'), modelZip)
+        IdearConfiguration.saveModelPath(modelPath)
+        setModel(modelPath)
+
+        messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC)
+            .onAsrReady("Model has been installed")
+    }
+
+    private fun downloadModel(url: String): InputStream {
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .build()
+        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream())
+        return response.body()
+    }
 
 //    /**
-//     * @see https://alphacephei.com/vosk/models/model-list.json
-//     * check "type" field. "small" and "big-lgraph" support grammar, "big" doesn't
+//     * @see
+//     *
 //     */
 //    override fun defaultModel() =
 ////      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
 ////    System.getProperty("user.home") + "/.vosk/vosk-model-en-us-0.22-lgraph"  // Big US English model with dynamic graph
 //      System.getProperty("user.home") + "/.vosk/vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
-    private fun unpackModelAndReturnPath(model: String): String {
-        val modelZip = javaClass.getResourceAsStream("/$model")
+    private fun unpackModelAndReturnPath(modelName: String, modelZip: InputStream): String {
         val modelDir = System.getProperty("user.home") + "/.idear"
-        val modelPath = "$modelDir/${model.substringBefore(".zip")}"
+        val modelPath = "$modelDir/${modelName.substringBefore(".zip")}"
         val modelFile = File(modelPath)
         if (!modelFile.exists()) {
             println("Unzipping model to $modelDir")
@@ -76,24 +120,11 @@ class VoskAsr : AsrProvider {
     }
 
     override fun activate() {
-        if (modelPath.isNullOrEmpty())
-            NotificationGroupManager.getInstance()
-                .getNotificationGroup("Idear")
-                .createNotification("Speech model not configured",
-                    """
-                    <p>Download and configure the path to your Vosk speech model.</p>
-                    <p><a href="https://alphacephei.com/vosk/models">https://alphacephei.com/vosk/models</a></p>
-                    <p>Customize phrase bindings/</p>
-                """.trimIndent(), INFORMATION)
-                .addAction(NotificationAction.create("Edit Configuration") { _ ->
-                    ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
-                })
-                .addAction(
-                    NotificationAction.create("Open properties file ($pathToPropertiesFile)") { e ->
-                        OpenFileAction.openFile(pathToPropertiesFile, e.project!!)
-                    }
-                )
-                .notify(null)
+        if (modelPath.isNullOrEmpty()) {
+            showNotificationForModel()
+
+            throw ModelNotAvailableException()
+        }
 
         microphone = service()
         microphone.open()
@@ -137,8 +168,6 @@ class VoskAsr : AsrProvider {
         return tryParseResult(recognizer.finalResult)
     }
 
-//    private fun parsePartialResult(json: String) = JsonIterator.deserialize(json).get("partial").toString()
-
     private fun tryParseResult(json: String): NlpRequest = NlpRequest(parseVosk(json))
 
     /** Use this instead of parseResult if alternatives > 0 */
@@ -149,4 +178,27 @@ class VoskAsr : AsrProvider {
                 else asJsonArray.map { it.asJsonObject.get("text").asString }
             }
         }
+
+    private fun showNotificationForModel() {
+        NotificationGroupManager.getInstance()
+            .getNotificationGroup("Idear")
+            .createNotification("Speech model not configured",
+                """
+                    <p>Download and configure the path to your Vosk speech model.<p>
+                    <p><a href="https://alphacephei.com/vosk/models">https://alphacephei.com/vosk/models</a></p>
+                """.trimIndent(), INFORMATION)
+
+            .addAction(NotificationAction.create("Download Default Model") { _ ->
+                installModel("https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip")
+            })
+            .addAction(NotificationAction.create("Edit Configuration") { _ ->
+                ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
+            })
+            .addAction(
+                NotificationAction.create("Open properties file ($pathToPropertiesFile)") { e ->
+                    OpenFileAction.openFile(pathToPropertiesFile, e.project!!)
+                }
+            )
+            .notify(null)
+    }
 }

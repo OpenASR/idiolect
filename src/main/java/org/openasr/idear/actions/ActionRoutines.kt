@@ -225,7 +225,7 @@ object ActionRoutines {
     fun pauseSpeech() {
         beep()
         while (ListeningState.isActive) {
-            val result = AsrService.waitForUtterance()
+            val result = AsrService.waitForUtterance(arrayOf("resume", "listening"))
 
             if (result == "resume listening") {
                 beep()

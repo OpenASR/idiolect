@@ -5,14 +5,11 @@ import com.intellij.openapi.extensions.ExtensionPointListener
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.extensions.PluginDescriptor
 import com.intellij.openapi.options.Configurable
-import com.intellij.ui.GotItTooltip
 import org.openasr.idear.asr.AsrProvider
 import org.openasr.idear.asr.AsrService
 import org.openasr.idear.asr.AsrSystem
 import org.openasr.idear.nlp.*
-import org.openasr.idear.presentation.RecognitionStatusBarWidgetFactory
 import org.openasr.idear.tts.*
-import java.net.URL
 import java.util.concurrent.atomic.AtomicReference
 
 /*
@@ -36,8 +33,12 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
         var settings = Settings()
 
+        fun saveModelPath(modelPath: String) {
+            settings.asrModelPath = modelPath
+        }
+
         /** Called by AsrService */
-        fun getAsrSystem(): AsrSystem {
+        fun initialiseAsrSystem(): AsrSystem {
             val asrProvider = getAsrProvider()
             val nlpProvider = getNlpProvider()
 
@@ -47,24 +48,28 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
-        fun getTtsProvider() = getExtension(ttsSelector, settings.ttsService, ttsProvider, null)
+        fun getTtsProvider() = activateExtension(ttsSelector, settings.ttsService, ttsProvider, null)
 
         private fun getAsrProvider() =
-            getExtension(asrSelector, settings.AsrService, asrProvider) { setModel(settings.asrModelPath) }
+            activateExtension(asrSelector, settings.AsrService, asrProvider) { setModel(settings.asrModelPath) }
 
-        private fun getNlpProvider() = getExtension(nlpSelector, settings.nlpService, nlpProvider, null)
 
-        private fun <T : ConfigurableExtension> getExtension(extensionSelector: ExtensionSelector<T>,
-                                                             displayName: String,
-                                                             ref: AtomicReference<T?>,
-                                                             configure: (T.() -> Unit)?): T {
+        private fun getNlpProvider() = activateExtension(nlpSelector, settings.nlpService, nlpProvider, null)
+
+
+        private fun <T : ConfigurableExtension> activateExtension(extensionSelector: ExtensionSelector<T>,
+                                                                  displayName: String,
+                                                                  ref: AtomicReference<T?>,
+                                                                  configure: (T.() -> Unit)?): T {
             val extension = extensionSelector.getExtensionByName(displayName)
 
-            val current = ref.getAndSet(extension)
+            val current = ref.get()
+
             if (current != extension) {
                 current?.deactivate()
                 configure?.invoke(extension)
                 extension.activate()
+                ref.set(extension)
             }
             return extension
         }
@@ -72,14 +77,6 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
     override fun getDisplayName() = "Idear"
 
-//    override fun initializeComponent() {
-////        if (!state.onboarded) {
-//            GotItTooltip("org.openasr.idear.onboarding", "Click here to get started with voice control", null)
-//                .show(RecognitionStatusBarWidgetFactory.widget, GotItTooltip.TOP_MIDDLE)
-////            .withBrowserLink("Vosk Models", URL("https://alphacephei.com/vosk/models"))
-//            //.withLink("Disable for all files", this::actionMethodReference)
-////        }
-//    }
 
     override fun getState() = settings
 
@@ -117,7 +114,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
             settings.ttsService = gui.ttsService
             settings.asrModelPath = gui.asrModelPath
 
-            AsrService.setAsrSystem(getAsrSystem())
+            AsrService.setAsrSystem(initialiseAsrSystem())
         }
     }
 

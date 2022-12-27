@@ -17,7 +17,7 @@ import java.awt.Component
 
 class FindUsagesActionRecognizer : ActionRecognizer("Find Usages", 500) {
     override val grammars = listOf(
-            object : NlpRegexGrammar(IdeActions.ACTION_FIND_USAGES, "find usages of (field|method) ?(.*)?") {
+            object : NlpRegexGrammar("Idear.FindUsages", "find usages of (field|method) ?(.*)?") {
                 override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
                     val info = ActionCallInfo(IdeActions.ACTION_FIND_USAGES)
                     val editor = IdeService.getEditor(dataContext)
