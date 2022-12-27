@@ -36,17 +36,9 @@ internal class RecognitionSettingsForm {
     internal var nlpService by nlpProviderCombo
     internal var AsrService by asrProviderCombo
 
-    fun setAsrOptions(options: List<String>) {
-        setOptions(asrProviderCombo, options)
-    }
-
-    fun setNlpOptions(options: List<String>) {
-        setOptions(nlpProviderCombo, options)
-    }
-
-    fun setTtsOptions(options: List<String>) {
-        setOptions(ttsProviderCombo, options)
-    }
+    fun setAsrOptions(options: List<String>) = setOptions(asrProviderCombo, options)
+    fun setNlpOptions(options: List<String>) = setOptions(nlpProviderCombo, options)
+    fun setTtsOptions(options: List<String>) = setOptions(ttsProviderCombo, options)
 
     private fun setOptions(comboBox: ComboBox<String>, options: List<String>) {
         comboBox.removeAllItems()

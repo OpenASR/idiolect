@@ -12,7 +12,6 @@ object GrammarService : AnActionListener {
 
     fun init(bus: MessageBus) = bus.connect().subscribe(AnActionListener.TOPIC, this)
 
-
     fun useCommandGrammar() {
         val grammar = HashSet<String>()
 

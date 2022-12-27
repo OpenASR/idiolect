@@ -24,7 +24,7 @@ class RecognitionStatusBarWidget() :
 //    StatusBarWidget.MultipleTextValuesPresentation
 {
     companion object {
-        val RECOGNITION_STATUS = "org.openasr.idear.Status"
+        const val RECOGNITION_STATUS = "org.openasr.idear.Status"
     }
     private var statusBar: StatusBar? = null
     private var isListening: Boolean = false
@@ -54,8 +54,7 @@ class RecognitionStatusBarWidget() :
 
     override fun getComponent(): JComponent = this
 
-    override fun getClickConsumer(): Consumer<MouseEvent> =
-        Consumer { AsrService.toggleListening() }
+    override fun getClickConsumer() = Consumer<MouseEvent> { AsrService.toggleListening() }
 
     override fun onListening(listening: Boolean) {
         isListening = listening
@@ -71,21 +70,15 @@ class RecognitionStatusBarWidget() :
         updateStatus("\uD83C\uDFA4 $utterance")
     }
 
-    override fun onFulfilled(actionCallInfo: ActionCallInfo) {
+    override fun onFulfilled(actionCallInfo: ActionCallInfo) =
         updateStatus("Action: ${actionCallInfo.actionId}")
-    }
 
-    override fun onFailure(message: String) {
-        updateStatus("Error: $message")
-    }
+    override fun onFailure(message: String) = updateStatus("Error: $message")
 
-    override fun onMessage(message: String, verbosity: NlpResultListener.Companion.Verbosity) {
+    override fun onMessage(message: String, verbosity: NlpResultListener.Companion.Verbosity) =
         updateStatus("Idear: $message")
-    }
 
-    override fun dispose() {
-        statusBar = null
-    }
+    override fun dispose() { statusBar = null }
 
     private fun updateStatus(text: String?) {
 //        UIUtil.invokeLaterIfNeeded {

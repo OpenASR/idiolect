@@ -6,8 +6,11 @@ import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.NlpRequest
 
 /**
- * A debugging aid to use one of the ActionRecognizer extension classes configured in `plugin.xml` to generate
- * an ActionCallInfo which is then #runInEditor() ExecuteActionByCommandText
+ * A debugging aid to use one of the
+ * [org.openasr.idear.actions.recognition.ActionRecognizer]
+ * extension classes configured in plugin.xml to generate
+ * an [org.openasr.idear.actions.recognition.ActionCallInfo] which is then
+ * [org.openasr.idear.actions.ExecuteActionByCommandText.runInEditor]
  */
 object ExecuteActionFromPredefinedText : ExecuteActionByCommandText() {
     override fun actionPerformed(e: AnActionEvent) {
@@ -18,8 +21,7 @@ object ExecuteActionFromPredefinedText : ExecuteActionByCommandText() {
         val text = "idea rename to my super test"
         // String text = "idea inline";
 
-        ActionRecognizerManager(e.dataContext).handleNlpRequest(NlpRequest(listOf(text)))?.let {
-            runInEditor(editor, it)
-        }
+        ActionRecognizerManager(e.dataContext).handleNlpRequest(NlpRequest(listOf(text)))
+            ?.let { runInEditor(editor, it) }
     }
 }

@@ -1,7 +1,10 @@
 package org.openasr.idear.asr.vosk
 
 import com.google.gson.JsonParser.*
+import com.intellij.ide.actions.OpenFileAction
 import com.intellij.notification.*
+import com.intellij.notification.NotificationType.INFORMATION
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.ShowSettingsUtil
 import org.openasr.idear.asr.AsrProvider
@@ -66,51 +69,55 @@ class VoskAsr : AsrProvider {
 
     private lateinit var microphone: CustomMicrophone
 
+    val pathToPropertiesFile by lazy {
+        File(System.getProperty("user.home") + "/.idear")
+            .apply { if (!exists()) createNewFile() }
+            .absolutePath
+    }
+
     override fun activate() {
-        if (modelPath.isNullOrEmpty()) {
+        if (modelPath.isNullOrEmpty())
             NotificationGroupManager.getInstance()
                 .getNotificationGroup("Idear")
                 .createNotification("Speech model not configured",
                     """
-                    <p>Download and configure the path to your Vosk speech model.<p>
+                    <p>Download and configure the path to your Vosk speech model.</p>
                     <p><a href="https://alphacephei.com/vosk/models">https://alphacephei.com/vosk/models</a></p>
-                """.trimIndent(), NotificationType.INFORMATION)
+                    <p>Customize phrase bindings/</p>
+                """.trimIndent(), INFORMATION)
                 .addAction(NotificationAction.create("Edit Configuration") { _ ->
                     ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
                 })
+                .addAction(
+                    NotificationAction.create("Open properties file ($pathToPropertiesFile)") { e ->
+                        OpenFileAction.openFile(pathToPropertiesFile, e.project!!)
+                    }
+                )
                 .notify(null)
-        }
 
         microphone = service()
         microphone.open()
     }
 
-    override fun deactivate() {
-        microphone.close()
-    }
+    override fun deactivate() = microphone.close()
 
     /**
      * Starts recognition process.
      */
-    override fun startRecognition() {
-        microphone.startRecording()
-    }
+    override fun startRecognition() = microphone.startRecording()
 
     /**
      * Stops recognition process.
      * Recognition process is paused until the next call to startRecognition.
      */
-    override fun stopRecognition() {
-        microphone.stopRecording()
-    }
+    override fun stopRecognition() = microphone.stopRecording()
 
     /**
      * @param grammar eg: ["hello", "world", "[unk]"]
      */
-    override fun setGrammar(grammar: Array<String>) {
-        recognizer.reset()
-//        recognizer.setGrammar(grammar.joinToString("\",\"", "[\"", "\"]"))
-    }
+    override fun setGrammar(grammar: Array<String>) =
+        recognizer//.apply { setGrammar(grammar.joinToString("\",\"", "[\"", "\"]")) }
+            .reset()
 
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
     override fun waitForSpeech(): NlpRequest? {

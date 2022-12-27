@@ -41,26 +41,23 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
             val asrProvider = getAsrProvider()
             val nlpProvider = getNlpProvider()
 
-            val extension = asrSystemEp.extensionList.first { e -> e.supportsAsrAndNlp(asrProvider, nlpProvider) }
-            extension.initialise(asrProvider, nlpProvider)
-
-            return extension
+            return asrSystemEp.extensionList.first { e -> e.supportsAsrAndNlp(asrProvider, nlpProvider) }
+                .apply { initialise(asrProvider, nlpProvider) }
         }
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
         fun getTtsProvider() = getExtension(ttsSelector, settings.ttsService, ttsProvider, null)
 
-        private fun getAsrProvider() = getExtension(asrSelector, settings.AsrService, asrProvider) { asrProvider ->
-            asrProvider.setModel(settings.asrModelPath)
-        }
+        private fun getAsrProvider() =
+            getExtension(asrSelector, settings.AsrService, asrProvider) { setModel(settings.asrModelPath) }
 
         private fun getNlpProvider() = getExtension(nlpSelector, settings.nlpService, nlpProvider, null)
 
         private fun <T : ConfigurableExtension> getExtension(extensionSelector: ExtensionSelector<T>,
                                                              displayName: String,
                                                              ref: AtomicReference<T?>,
-                                                             configure: ((extension: T) -> Unit)?): T {
+                                                             configure: (T.() -> Unit)?): T {
             val extension = extensionSelector.getExtensionByName(displayName)
 
             val current = ref.getAndSet(extension)
@@ -99,12 +96,11 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
                         var nlpService: String = "",
                         var ttsService: String = "")
 
-    override fun isModified(): Boolean {
-        return gui.AsrService != settings.AsrService ||
-                gui.asrModelPath != settings.asrModelPath ||
-                gui.nlpService != settings.nlpService ||
-                gui.ttsService != settings.ttsService
-    }
+    override fun isModified(): Boolean =
+        gui.AsrService != settings.AsrService ||
+            gui.asrModelPath != settings.asrModelPath ||
+            gui.nlpService != settings.nlpService ||
+            gui.ttsService != settings.ttsService
 
     private val gui by lazy(::RecognitionSettingsForm)
 
@@ -144,26 +140,15 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 private class ExtensionSelector<T : ConfigurableExtension>(
     val extensionPointName: ExtensionPointName<T>
 ) : ExtensionPointListener<T> {
-    private val options = HashMap<String, ExtensionOption<T>>()
+    private val options =
+        HashMap(extensionPointName.extensionList.associate { e -> e.displayName() to ExtensionOption(e) })
 
     init {
         extensionPointName.addExtensionPointListener(this, null)
-
-        for (extension in extensionPointName.extensionList) {
-            val option = ExtensionOption(extension)
-            options[extension.displayName()] = option
-        }
     }
 
-    fun getExtensionByName(displayName: String): T {
-        for (option in options.entries) {
-            if (option.key == displayName) {
-                return option.value.extension
-            }
-        }
-
-        return extensionPointName.extensions.first()
-    }
+    fun getExtensionByName(displayName: String): T =
+        options.entries.firstOrNull { it.key == displayName }?.value?.extension ?: extensionPointName.extensions.first()
 
     override fun extensionAdded(extension: T, pluginDescriptor: PluginDescriptor) {
         options[extension.displayName()] = ExtensionOption(extension)

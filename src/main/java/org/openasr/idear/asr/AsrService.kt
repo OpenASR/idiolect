@@ -38,9 +38,7 @@ object AsrService {
 
     fun waitForUtterance(grammar: Array<String>) = asrSystem.waitForUtterance(grammar)
 
-    fun setGrammar(grammar: Array<String>) {
-        asrSystem.setGrammar(grammar)
-    }
+    fun setGrammar(grammar: Array<String>) = asrSystem.setGrammar(grammar)
 
     fun toggleListening() {
 //      val settings = ApplicationManager.getApplication().getService(AceConfig::class.java).state
@@ -55,9 +53,7 @@ object AsrService {
 //            settings.allowedChars = "1234567890"
         }
 
-        messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onListening(
-            isListening
-        )
+        messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onListening(isListening)
     }
 
     /** Called from AsrService when the user presses the start button. */

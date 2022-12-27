@@ -5,7 +5,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import org.openasr.idear.actions.recognition.ActionRecognizerManager
 import org.openasr.idear.ide.IdeService
-import org.openasr.idear.nlp.NlpResultListener
+import org.openasr.idear.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
 
 /**
  * Similar to ExecuteActionFromPredefinedText but uses the `VoiceCommand.Text` data attached to the invoking `AnActionEvent`
@@ -24,7 +24,7 @@ object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
         val info = provider.handleNlpRequest((e.inputEvent as SpeechEvent).nlpRequest)
 
         if (info != null) {
-            messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onFulfilled(info)
+            messageBus.syncPublisher(NLP_RESULT_TOPIC).onFulfilled(info)
 
             if (!info.fullfilled) {
                 val editor = IdeService.getEditor(e.dataContext)

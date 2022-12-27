@@ -30,13 +30,8 @@ object ListeningState {
     val isActive: Boolean
         get() = getStatus() == ACTIVE
 
-    fun waitIfStandby() {
-        lock.withLock {
-            if (status.get() == STANDBY) {
-                condition.await()
-            }
-        }
-    }
+    fun waitIfStandby() =
+        lock.withLock { if (status.get() == STANDBY) condition.await() }
 
     fun standBy() = setStatus(STANDBY)
 

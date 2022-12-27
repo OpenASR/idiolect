@@ -38,24 +38,21 @@ object IdearTTS : TtsProvider {
     @Synchronized
     override fun say(utterance: String): Boolean =
         // macSay if Mac or jvmSay otherwise
-        if (System.getProperty("os.name").lowercase().contains("mac")) {
+        if ("mac" in System.getProperty("os.name").lowercase()) {
             macSay(utterance)
         } else {
             jvmSay(utterance)
         }
 
-    fun jvmSay(utterance: String): Boolean {
-        if (utterance.isEmpty()) return false
-
-        try {
+    private fun jvmSay(utterance: String): Boolean =
+        if (utterance.isEmpty()) false
+        else try {
             AudioPlayer(maryTTS.generateAudio(utterance)).start()
+            true
         } catch (e: Exception) {
 //          logger.error("Sorry! Could not pronounce $utterance", e)
-            return false
+            false
         }
-
-        return true
-    }
 
     fun macSay(utterance: String) =
         try { Runtime.getRuntime().exec("say \"$utterance\""); true } catch (e: Exception) { false }

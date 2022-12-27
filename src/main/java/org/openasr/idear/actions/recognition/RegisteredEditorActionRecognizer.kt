@@ -29,11 +29,9 @@ open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
                 .getOrDefault(utterance, utterance)
                 .toUpperCamelCase()
 
-        if (arrayOf(//"Copy", "Cut", "Delete", "Paste",
-                        "SelectAll",
-                        "Undo", "Redo").contains(actionId)) {
-            return "$$actionId"
-        }
-        return "Editor$actionId"
+        return if (actionId in setOf(//"Copy", "Cut", "Delete", "Paste",
+                        "SelectAll", "Undo", "Redo"))
+            "$$actionId"
+        else "Editor$actionId"
     }
 }

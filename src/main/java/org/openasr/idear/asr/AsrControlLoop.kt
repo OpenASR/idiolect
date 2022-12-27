@@ -27,9 +27,6 @@ class AsrControlLoop : AsrSystem, Runnable {
         }
     }
 
-    override fun startRecognition() {
-        asrProvider.startRecognition()
-    }
 
     override fun waitForUtterance(): String =
         asrProvider.waitForSpeech()?.utterance ?: ""
@@ -60,17 +57,13 @@ class AsrControlLoop : AsrSystem, Runnable {
         return response
     }
 
-    override fun setGrammar(grammar: Array<String>) {
-        asrProvider.setGrammar(grammar)
-    }
+    override fun setGrammar(grammar: Array<String>) = asrProvider.setGrammar(grammar)
 
-    override fun stopRecognition() {
-        asrProvider.stopRecognition()
-    }
+    override fun startRecognition() = asrProvider.startRecognition()
 
-    override fun terminate() {
-        asrProvider.stopRecognition()
-    }
+    override fun stopRecognition() = asrProvider.stopRecognition()
+
+    override fun terminate() = asrProvider.stopRecognition()
 
     override fun run() {
         while (!ListeningState.isTerminated) {

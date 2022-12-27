@@ -40,9 +40,7 @@ class CustomMicrophone : Closeable, Disposable {
         stream = AudioInputStreamWithAdjustableGain(line)
     }
 
-    override fun close() {
-        dispose()
-    }
+    override fun close() = dispose()
 
     override fun dispose() {
         stopRecording()

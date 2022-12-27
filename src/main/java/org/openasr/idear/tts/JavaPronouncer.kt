@@ -21,10 +21,8 @@ class JavaPronouncer : IntentionAction {
     override fun invoke(project: Project, editor: Editor, psiFile: PsiFile) {
         val start = editor.selectionModel.selectionStart
         val end = editor.selectionModel.selectionEnd
-        var range: TextRange? = null
-        if (end > start) range = TextRange(start, end)
-        val caretOffset = editor.caretModel.offset
-        val converter = CodeToTextConverter(psiFile, range, caretOffset)
+        val range = if (start < end) TextRange(start, end) else null
+        val converter = CodeToTextConverter(psiFile, range, editor.caretModel.offset)
 
         TTSService.say(converter.toText())
     }
