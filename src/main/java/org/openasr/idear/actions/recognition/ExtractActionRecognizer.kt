@@ -20,15 +20,14 @@ class ExtractActionRecognizer : ActionRecognizer("Extract Field or Variable", 50
                     "variable" to "IntroduceVariable",
                     "field" to "IntroduceField")
 
-            override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
-                return ActionCallInfo(actionIds[values[1]]!!).apply {
+            override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo =
+                ActionCallInfo(actionIds[values[1]]!!).apply {
                     val name = values[2]
                     if (name.isNotEmpty()) {
                         typeAfter = name.toCamelCase()
                         hitTabAfter = true
                     }
                 }
-            }
         }.withExamples(
                 // NlpRegexGrammar does not use the examples, but they could be used in documentation
                 "extract variable 'sum'",

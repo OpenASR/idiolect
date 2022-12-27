@@ -8,9 +8,7 @@ import org.openasr.idear.tts.TTSService
 
 object WhereAmIAction : IdearAction() {
     override fun actionPerformed(e: AnActionEvent) {
-        val editor = IdeService.getEditor(e.dataContext)
-
-        editor?.findElementUnderCaret()?.let {
+        IdeService.getEditor(e.dataContext)?.findElementUnderCaret()?.let {
             TTSService.say("You are in " + it.firstNamedParent())
         }
     }

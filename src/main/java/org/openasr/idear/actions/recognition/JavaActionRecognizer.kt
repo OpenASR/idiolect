@@ -12,25 +12,19 @@ import java.awt.Component
 class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
     override val grammars = listOf(
             object : NlpGrammar("Java.Main") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
-                    ActionRoutines.routinePsvm()
-                    return ActionCallInfo(intentName, true)
-                }
+                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                    ActionCallInfo(intentName, true).also { ActionRoutines.routinePsvm() }
             }.withExample("public static void main"),
 
             object : NlpGrammar("Java.PrintLine") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
-                    ActionRoutines.routinePrintln()
-                    return ActionCallInfo(intentName, true)
-                }
+                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                    ActionCallInfo(intentName, true).also { ActionRoutines.routinePrintln() }
             }.withExample("print line"),
 
             // "create new class (optional name)"
             object : NlpRegexGrammar("Java.NewClass", ".*new class ?(.*)?") {
-                override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
-                    ActionRoutines.routineAddNewClass(values[1])
-                    return ActionCallInfo(intentName, true)
-                }
+                override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo =
+                    ActionCallInfo(intentName, true).also { ActionRoutines.routineAddNewClass(values[1]) }
             }.withExamples("new class", "create new class 'my demo'"),
 
             // TODO: convert to live template
