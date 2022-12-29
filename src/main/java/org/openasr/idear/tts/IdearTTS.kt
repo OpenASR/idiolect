@@ -2,7 +2,7 @@ package org.openasr.idear.tts
 
 import com.intellij.openapi.diagnostic.Logger
 import io.github.jonelo.jAdapterForNativeTTS.engines.*
-import org.openasr.idear.settings.IdearConfiguration
+import org.openasr.idear.settings.IdearConfig
 import java.util.*
 
 object IdearTTS : TtsProvider {
