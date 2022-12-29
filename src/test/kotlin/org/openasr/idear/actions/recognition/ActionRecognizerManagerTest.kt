@@ -59,7 +59,7 @@ class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatform
         // Then
         assertNotNull(examples)
 
-//        assertEqualsToFile("Examples", File("src/main/resources/org/openasr/idear/settings/phrases.example.properties"),
+//        assertEqualsToFile("Examples", File("src/main/resources/phrases.example.properties"),
 //            examples.joinToString("\n", "# Example Phrases\n" ))
     }
 

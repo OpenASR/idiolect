@@ -37,16 +37,6 @@ class VoskAsr : AsrProvider {
         private lateinit var recognizer: Recognizer
 
         private val alternatives = 4
-        val propertiesFile by lazy { File(System.getProperty("user.home"), ".idear.properties")
-            .apply { if (exists()) readText() else defaultPropertiesFileContents.also { writeText(it) } } }
-
-        val defaultPropertiesFileContents = """
-            # This file may be used to bind custom utterances to actions.
-            # The first action with a matching utterance will be invoked.
-            # For a list of potential actions that could be rebound, see:
-            # https://github.com/OpenASR/idear/blob/master/src/main/resources/phrases.example.properties
-        """.trimIndent()
-
         val defaultModelURL = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
 
         init {
@@ -126,13 +116,12 @@ class VoskAsr : AsrProvider {
 
         internal fun pathForModelUrl(url: String): String {
             val modelName = url.substringAfterLast('/')
-            val modelDir = System.getProperty("user.home") + "/.idear"
+            val modelDir = IdearConfiguration.idearHomePath
             return "$modelDir/${modelName.substringBefore(".zip")}"
         }
 
         fun setModel(model: String) {
             if (model.isNotEmpty()) {
-                IdearConfiguration.saveModelPath(model)
                 VoskConfiguration.saveModelPath(model)
 
                 recognizer = Recognizer(Model(model), 16000f)
@@ -152,10 +141,12 @@ class VoskAsr : AsrProvider {
     }
 
     override fun activate() {
-        if (IdearConfiguration.settings.asrModelPath.isEmpty()) {
+        if (VoskConfiguration.settings.modelPath.isEmpty()) {
             showNotificationForModel()
 
             throw ModelNotAvailableException()
+        } else {
+            setModel(VoskConfiguration.settings.modelPath)
         }
 
         microphone = service()
@@ -220,9 +211,6 @@ class VoskAsr : AsrProvider {
             })
             .addAction(NotificationAction.create("Edit Configuration") { _ ->
                 ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
-            })
-            .addAction(NotificationAction.create("Open properties file (~/${propertiesFile.name})") { e ->
-                OpenFileAction.openFile(propertiesFile.absolutePath, e.project!!)
             })
             .notify(null)
     }

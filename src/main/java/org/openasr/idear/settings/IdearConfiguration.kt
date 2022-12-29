@@ -32,10 +32,8 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         private var nlpProvider = AtomicReference<NlpProvider?>()
 
         var settings = Settings()
+        val idearHomePath = System.getProperty("user.home") + "/.idear"
 
-        fun saveModelPath(modelPath: String) {
-            settings.asrModelPath = modelPath
-        }
 
         /** Called by AsrService */
         fun initialiseAsrSystem(): AsrSystem {
@@ -48,19 +46,19 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
-        fun getTtsProvider() = activateExtension(ttsSelector, settings.ttsService, ttsProvider, null)
+        fun getTtsProvider() = activateExtension(ttsSelector, settings.ttsService, ttsProvider)
 
         private fun getAsrProvider() =
-            activateExtension(asrSelector, settings.AsrService, asrProvider) { setModel(settings.asrModelPath) }
+            activateExtension(asrSelector, settings.AsrService, asrProvider)
 
 
-        private fun getNlpProvider() = activateExtension(nlpSelector, settings.nlpService, nlpProvider, null)
+        private fun getNlpProvider() = activateExtension(nlpSelector, settings.nlpService, nlpProvider)
 
 
         private fun <T : ConfigurableExtension> activateExtension(extensionSelector: ExtensionSelector<T>,
                                                                   displayName: String,
                                                                   ref: AtomicReference<T?>,
-                                                                  configure: (T.() -> Unit)?): T {
+                                                                  configure: (T.() -> Unit)? = null): T {
             val extension = extensionSelector.getExtensionByName(displayName)
 
             val current = ref.get()
@@ -89,13 +87,11 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
     }
 
     data class Settings(var AsrService: String = "",
-                        var asrModelPath: String = "",
                         var nlpService: String = "",
                         var ttsService: String = "")
 
     override fun isModified(): Boolean =
         gui.AsrService != settings.AsrService ||
-            gui.asrModelPath != settings.asrModelPath ||
             gui.nlpService != settings.nlpService ||
             gui.ttsService != settings.ttsService
 
@@ -115,7 +111,6 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
             }
             settings.nlpService = gui.nlpService
             settings.ttsService = gui.ttsService
-            settings.asrModelPath = gui.asrModelPath
         }
     }
 
@@ -131,7 +126,6 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
         gui.AsrService = settings.AsrService
         gui.nlpService = settings.nlpService
         gui.ttsService = settings.ttsService
-        gui.asrModelPath = settings.asrModelPath
     }
 }
 

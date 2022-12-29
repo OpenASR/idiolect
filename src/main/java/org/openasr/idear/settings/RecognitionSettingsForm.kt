@@ -1,37 +1,31 @@
 package org.openasr.idear.settings
 
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.ui.ComboBox
-import com.intellij.ui.dsl.builder.COLUMNS_LARGE
 import com.intellij.ui.dsl.builder.COLUMNS_SHORT
 import com.intellij.ui.dsl.builder.columns
 import com.intellij.ui.dsl.builder.panel
-import org.openasr.idear.asr.AsrService
-import java.awt.Font
+import org.openasr.idear.actions.recognition.CustomUtteranceActionRecognizer
 import javax.swing.JPanel
-import javax.swing.JTextField
 import javax.swing.text.JTextComponent
 import kotlin.reflect.KProperty
 
 internal class RecognitionSettingsForm {
     private val ttsProviderCombo = ComboBox<String>()
     private val asrProviderCombo = ComboBox<String>()
-    private val asrModelPathEdit = JTextField()
     private val nlpProviderCombo = ComboBox<String>()
-
-    init {
-        asrModelPathEdit.apply { font = Font("monospaced", font.style, font.size) }
-    }
 
     internal val rootPanel: JPanel = panel {
         group("Providers") {
             row("Text-to-Speech Provider") { cell(ttsProviderCombo).columns(COLUMNS_SHORT) }
             row("Speech Recognition Provider") { cell(asrProviderCombo).columns(COLUMNS_SHORT) }
-            row("Speech Recognition Model") { cell(asrModelPathEdit).columns(COLUMNS_LARGE) }
             row("Natural Language Processor") { cell(nlpProviderCombo).columns(COLUMNS_SHORT) }
+            row { link("Custom phrases") { _ ->
+                CustomUtteranceActionRecognizer.openCustomPhrasesFile(ProjectManager.getInstance().defaultProject)
+            }}
         }
     }
 
-    internal var asrModelPath by asrModelPathEdit
     internal var ttsService by ttsProviderCombo
     internal var nlpService by nlpProviderCombo
     internal var AsrService by asrProviderCombo
