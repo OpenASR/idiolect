@@ -29,6 +29,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
+        <applicationService serviceImplementation="org.openasr.idear.asr.vosk.VoskConfiguration"/>
         <applicationConfigurable groupId="tools" displayName="Idear"
                                  id="preferences.IdearConfiguration"
                                  instance="org.openasr.idear.settings.IdearConfiguration" dynamic="true"/>

@@ -20,9 +20,10 @@ internal class RecognitionSettingsForm {
             row("Text-to-Speech Provider") { cell(ttsProviderCombo).columns(COLUMNS_SHORT) }
             row("Speech Recognition Provider") { cell(asrProviderCombo).columns(COLUMNS_SHORT) }
             row("Natural Language Processor") { cell(nlpProviderCombo).columns(COLUMNS_SHORT) }
-            row { link("Custom phrases") { _ ->
-                CustomUtteranceActionRecognizer.openCustomPhrasesFile(ProjectManager.getInstance().defaultProject)
-            }}
+// Nice-to-have, but throws NPE
+//            row { link("Custom phrases") { _ ->
+//                CustomUtteranceActionRecognizer.openCustomPhrasesFile(ProjectManager.getInstance().defaultProject)
+//            }}
         }
     }
 
