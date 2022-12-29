@@ -13,7 +13,7 @@ object IdearTTS : TtsProvider {
 
     @Synchronized
     override fun say(utterance: String) =
-        speechEngine.apply { setVoice(IdearConfiguration.settings.ttsService) }.say(utterance)
+        speechEngine.apply { setVoice(IdearConfig.settings.ttsService) }.say(utterance)
 
     fun sayWithVoice(utterance: String, voice: String) =
         speechEngine.apply { setVoice(voice) }.say(utterance)

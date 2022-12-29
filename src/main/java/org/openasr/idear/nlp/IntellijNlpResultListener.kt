@@ -2,7 +2,7 @@ package org.openasr.idear.nlp
 
 import org.openasr.idear.actions.recognition.ActionCallInfo
 import org.openasr.idear.nlp.NlpResultListener.Companion.Verbosity
-import org.openasr.idear.tts.TTSService
+import org.openasr.idear.tts.TtsService
 
 
 class IntellijNlpResultListener(private var verbosity: Verbosity = Verbosity.INFO) : NlpResultListener {
@@ -31,11 +31,11 @@ class IntellijNlpResultListener(private var verbosity: Verbosity = Verbosity.INF
 //        }
     }
 
-    override fun onFailure(message: String) = TTSService.say(message)
+    override fun onFailure(message: String) = TtsService.say(message)
 
     override fun onMessage(message: String, verbosity: Verbosity) {
         if (verbosity >= this.verbosity) {
-            TTSService.say(message)
+            TtsService.say(message)
         }
     }
 }

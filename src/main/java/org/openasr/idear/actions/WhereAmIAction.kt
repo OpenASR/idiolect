@@ -4,12 +4,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.psi.*
 import org.openasr.idear.ide.IdeService
 import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
-import org.openasr.idear.tts.TTSService
+import org.openasr.idear.tts.TtsService
 
 object WhereAmIAction : IdearAction() {
     override fun actionPerformed(e: AnActionEvent) {
         IdeService.getEditor(e.dataContext)?.findElementUnderCaret()?.let {
-            TTSService.say("You are in " + it.firstNamedParent())
+            TtsService.say("You are in " + it.firstNamedParent())
         }
     }
 

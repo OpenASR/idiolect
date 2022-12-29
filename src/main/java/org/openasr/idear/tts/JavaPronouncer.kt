@@ -24,7 +24,7 @@ class JavaPronouncer : IntentionAction {
         val range = if (start < end) TextRange(start, end) else null
         val converter = CodeToTextConverter(psiFile, range, editor.caretModel.offset)
 
-        TTSService.say(converter.toText())
+        TtsService.say(converter.toText())
     }
 
     override fun startInWriteAction() = false

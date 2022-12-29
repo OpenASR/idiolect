@@ -10,7 +10,7 @@ import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.NlpRegexGrammar
 import org.openasr.idear.psi.PsiUtil.findContainingClass
 import org.openasr.idear.psi.PsiUtil.findElementUnderCaret
-import org.openasr.idear.tts.TTSService
+import org.openasr.idear.tts.TtsService
 import org.openasr.idear.utils.toCamelCase
 import java.awt.Component
 
@@ -44,7 +44,7 @@ class FindUsagesActionRecognizer : ActionRecognizer("Find Usages", 500) {
                 )
 
                 // TODO(kudinkin): move it to appropriate place
-                TTSService.say("Looking for usages of the $subject $targetName")
+                TtsService.say("Looking for usages of the $subject $targetName")
 
                 return info
             }

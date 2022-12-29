@@ -35,7 +35,6 @@ tasks {
   }
 
   val jvmTarget = "17"
-
   compileKotlin { kotlinOptions.jvmTarget = jvmTarget }
 
   compileTestKotlin {

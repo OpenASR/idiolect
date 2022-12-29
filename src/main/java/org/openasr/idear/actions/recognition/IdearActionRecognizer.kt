@@ -4,14 +4,14 @@ import com.intellij.openapi.actionSystem.DataContext
 import org.openasr.idear.actions.ActionRoutines
 import org.openasr.idear.nlp.Commands
 import org.openasr.idear.nlp.NlpGrammar
-import org.openasr.idear.tts.TTSService
+import org.openasr.idear.tts.TtsService
 import java.awt.Component
 
 class IdearActionRecognizer : ActionRecognizer("Idear Commands", 0) {
     override val grammars = listOf(
         object : NlpGrammar("Idear.Hi") {
             override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
-                ActionCallInfo(intentName, true).also { TTSService.say("Hi!") }
+                ActionCallInfo(intentName, true).also { TtsService.say("Hi!") }
         }.withExample(Commands.HI_IDEA),
 
         object : NlpGrammar("Idear.About") {
