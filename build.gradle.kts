@@ -86,10 +86,6 @@ repositories {
 }
 
 dependencies {
-  implementation("de.dfki.mary:voice-cmu-slt-hsmm:5.2.1") {
-    exclude("com.twmacinta", "fast-md5")
-    exclude("gov.nist.math", "Jampack")
-  }
   implementation("net.java.dev.jna:jna:5.12.1")
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")

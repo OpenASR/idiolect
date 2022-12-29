@@ -9,7 +9,7 @@ interface TtsProvider : ConfigurableExtension {
      * @param utterance Text to speak
      * @returns True if the text could be spoken, otherwise False
      */
-    fun say(utterance: String): Boolean
+    fun say(utterance: String)
 
     fun dispose()
 }
