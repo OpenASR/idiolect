@@ -15,12 +15,11 @@ open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
     override val displayName = "Editor Actions"
     override val order = Int.MAX_VALUE - 1
     override fun buildGrammars() = listOf(
-            NlpGrammar("Undo").withExamples("undo", "whoops"),
+        NlpGrammar("Undo").withExamples("undo", "whoops"),
     )
 
-    override fun isSupported(dataContext: DataContext, component: Component?): Boolean {
-        return component is EditorComponentImpl
-    }
+    override fun isSupported(dataContext: DataContext, component: Component?): Boolean =
+        component is EditorComponentImpl
 
     override fun getActionIdForUtterance(utterance: String): String {
         val actionId = mapOf(
@@ -30,11 +29,9 @@ open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
                 .getOrDefault(utterance, utterance)
                 .toUpperCamelCase()
 
-        if (arrayOf(//"Copy", "Cut", "Delete", "Paste",
-                        "SelectAll",
-                        "Undo", "Redo").contains(actionId)) {
-            return "$$actionId"
-        }
-        return "Editor$actionId"
+        return if (actionId in setOf(//"Copy", "Cut", "Delete", "Paste",
+                        "SelectAll", "Undo", "Redo"))
+            "$$actionId"
+        else "Editor$actionId"
     }
 }

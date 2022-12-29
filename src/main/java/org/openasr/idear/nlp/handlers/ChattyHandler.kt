@@ -2,12 +2,12 @@ package org.openasr.idear.nlp.handlers
 
 import org.openasr.idear.actions.ActionRoutines
 import org.openasr.idear.nlp.Commands
-import org.openasr.idear.tts.TTSService
+import org.openasr.idear.tts.TtsService
 
 class ChattyHandler : UtteranceHandler {
     override fun processUtterance(utterance: String): Boolean {
         when {
-            utterance == Commands.HI_IDEA -> TTSService.say("Hi!")
+            utterance == Commands.HI_IDEA -> TtsService.say("Hi!")
             "tell me about yourself" in utterance -> ActionRoutines.routineAbout()
             utterance.startsWith("tell me a joke") -> ActionRoutines.tellJoke()
 //            u.startsWith(OKAY_IDEA) -> routineOkIdea()

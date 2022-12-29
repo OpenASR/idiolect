@@ -17,12 +17,10 @@ import java.util.*
 
 class SurroundWithNoNullCheckRecognizer : ActionRecognizer("Surround with Not-Null Check", 600) {
     override val grammars = listOf(
-            object : NlpGrammar("Idear.SurroundWithNullCheck") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo {
-                    surroundWithNullCheck(dataContext)
-                    return ActionCallInfo(intentName, true)
-                }
-            }.withExample("surround with not null check"),
+        object : NlpGrammar("Idear.SurroundWithNullCheck") {
+            override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                ActionCallInfo(intentName, true).also { surroundWithNullCheck(dataContext) }
+        }.withExample("surround with not null check"),
     )
 
     override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
@@ -56,9 +54,8 @@ class SurroundWithNoNullCheckRecognizer : ActionRecognizer("Surround with Not-Nu
         }
     }
 
-    private fun getFile(dataContext: DataContext, editor: Editor): PsiFile? {
-        return IdeService.getProject(dataContext)?.let { project ->
+    private fun getFile(dataContext: DataContext, editor: Editor): PsiFile? =
+        IdeService.getProject(dataContext)?.let { project ->
             PsiDocumentManager.getInstance(project).getPsiFile(editor.document)
         }
-    }
 }

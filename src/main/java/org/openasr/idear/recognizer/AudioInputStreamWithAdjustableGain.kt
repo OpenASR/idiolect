@@ -51,5 +51,5 @@ class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLi
     private fun adjust(b: Byte) = cut((b * masterGain).toInt().toByte())
 
     private fun cut(b: Byte) =
-            if (b < MAX_VALUE * noiseLevel && b > MIN_VALUE * noiseLevel) 0 else b
+        if (b < MAX_VALUE * noiseLevel && b > MIN_VALUE * noiseLevel) 0 else b
 }

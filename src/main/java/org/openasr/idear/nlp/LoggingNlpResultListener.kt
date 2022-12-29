@@ -8,7 +8,7 @@ object LoggingNlpResultListener : NlpResultListener {
     private val logger = Logger.getInstance(javaClass)
 
     override fun onRecognition(nlpRequest: NlpRequest) {
-        var utterance = nlpRequest.utterance
+        val utterance = nlpRequest.utterance
         logger.info("Listener Recognised: $utterance")
         println("Listener Recognized: $utterance")
     }

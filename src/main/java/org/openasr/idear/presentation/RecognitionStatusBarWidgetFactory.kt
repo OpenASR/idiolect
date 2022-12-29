@@ -7,12 +7,16 @@ import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.openapi.wm.StatusBarWidgetFactory
 
 class RecognitionStatusBarWidgetFactory : StatusBarWidgetFactory {
+    companion object {
+        var widget: RecognitionStatusBarWidget = RecognitionStatusBarWidget()
+    }
+
     override fun getId() = RecognitionStatusBarWidget.RECOGNITION_STATUS
     override fun getDisplayName() = "Idear"
 
     override fun isAvailable(project: Project) = true
 
-    override fun createWidget(project: Project) = RecognitionStatusBarWidget(project)
+    override fun createWidget(project: Project) = widget
 
     override fun disposeWidget(widget: StatusBarWidget) = Disposer.dispose(widget)
 

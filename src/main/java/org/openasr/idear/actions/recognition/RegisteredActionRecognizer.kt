@@ -13,35 +13,25 @@ import org.openasr.idear.utils.toUpperCamelCase
  * @see com.intellij.openapi.actionSystem.IdeActions
  */
 open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", Int.MAX_VALUE) {
-    override val grammars = buildGrammars()
-    private val actionManager = ActionManager.getInstance()
+    override val grammars by lazy { buildGrammars() }
+    private val actionManager by lazy { ActionManager.getInstance() }
 
     protected open fun buildGrammars() = ActionUtils.buildGrammar()
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? {
-        return object : NlpGrammar("Anonymous") {
+    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? =
+        object : NlpGrammar("Anonymous") {
             override fun tryMatchRequest(utterance: String, dataContext: DataContext): ActionCallInfo? {
                 val actionId = getActionIdForUtterance(utterance)
-                val action = if (actionManager.isGroup(actionId))
-                    null
-                else
-                    actionManager.getAction(actionId)
-
-                if (action != null) {
-                    return ActionCallInfo(actionId)
-                }
-
-                return null
+                val action = actionManager.run { if (isGroup(actionId)) null else getAction(actionId) }
+                return if (action != null) ActionCallInfo(actionId) else null
             }
         }.tryMatchRequest(nlpRequest, dataContext)
-    }
 
-    protected open fun getActionIdForUtterance(utterance: String): String {
-        return mapOf(
-                "go to" to "goto",
-                "git" to "cvs",
-                "change" to "diff",
-                "look and feel" to "laf"
+    protected open fun getActionIdForUtterance(utterance: String): String =
+        mapOf(
+            "go to" to "goto",
+            "git" to "cvs",
+            "change" to "diff",
+            "look and feel" to "laf"
         ).getOrDefault(utterance, utterance).toUpperCamelCase()
-    }
 }

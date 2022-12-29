@@ -1,7 +1,7 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
 
 plugins {
-  kotlin("jvm") version "1.8.0-RC2"
+  kotlin("jvm") version "1.8.0"
   id("org.jetbrains.intellij") version "1.11.0"
   id("com.github.ben-manes.versions") version "0.44.0"
   id("org.jetbrains.changelog") version "2.0.0"
@@ -13,10 +13,10 @@ version = "1.4.0"
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
-  version.set("2022.3")
+  version.set("2022.3.1")
   pluginName.set("idear")
   updateSinceUntilBuild.set(false)
-  plugins.set(listOf("AceJump:3.6.2", "java"))
+  plugins.set(listOf("java"))
 }
 
 tasks {
@@ -35,11 +35,10 @@ tasks {
   }
 
   val jvmTarget = "17"
-
   compileKotlin { kotlinOptions.jvmTarget = jvmTarget }
 
   compileTestKotlin {
-    exclude("**/windows/**")
+    exclude("**/windows/**", "**/ActionRecognizerManagerTest.kt")
     kotlinOptions.jvmTarget = jvmTarget
   }
 
@@ -82,16 +81,12 @@ repositories {
   mavenLocal()
   mavenCentral()
   maven("https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local")
+  maven("https://jitpack.io")
 }
 
 dependencies {
-  implementation("de.dfki.mary:voice-cmu-slt-hsmm:5.2.1") {
-    exclude("com.twmacinta", "fast-md5")
-    exclude("gov.nist.math", "Jampack")
-  }
   implementation("net.java.dev.jna:jna:5.12.1")
   implementation("com.alphacephei:vosk:0.3.45")
-  implementation("com.jsoniter:jsoniter:0.9.23")
-  testImplementation("junit:junit:4.13.2")
+  implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
   testImplementation("org.reflections:reflections:0.10.2")
 }

@@ -12,7 +12,6 @@ object GrammarService : AnActionListener {
 
     fun init(bus: MessageBus) = bus.connect().subscribe(AnActionListener.TOPIC, this)
 
-
     fun useCommandGrammar() {
         val grammar = HashSet<String>()
 
@@ -24,14 +23,11 @@ object GrammarService : AnActionListener {
 
     fun useDictationGrammar() = AsrService.setGrammar(emptyArray())
 
-    private fun addIdearGrammar(grammar: HashSet<String>) {
+    private fun addIdearGrammar(grammar: HashSet<String>) =
         grammar.addAll(arrayOf("command", "dictation", "mode"))
-    }
 
-    override fun beforeActionPerformed(anAction: AnAction,
-                                       anActionEvent: AnActionEvent) {
+    override fun beforeActionPerformed(anAction: AnAction, anActionEvent: AnActionEvent) {
         val actionId = ActionManager.getInstance().getId(anAction)
-
 
         if ("someaction" == actionId) {
             log.info("Swapping in grammar for action: $anAction")

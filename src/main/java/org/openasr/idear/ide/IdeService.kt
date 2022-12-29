@@ -16,35 +16,35 @@ object IdeService {
      * @param actionId - see [com.intellij.openapi.actionSystem.IdeActions]
      */
     fun invokeAction(actionId: String): ActionCallback =
-            with(ActionManager.getInstance()) {
-                var callback: ActionCallback? = null
-                ApplicationManager.getApplication().invokeAndWait {
-                    callback = tryToExecute(getAction(actionId),
-                            ActionCommand.getInputEvent(actionId), null, null, true)
-                }
-                return callback!!
+        with(ActionManager.getInstance()) {
+            var callback: ActionCallback? = null
+            ApplicationManager.getApplication().invokeAndWait {
+                callback = tryToExecute(getAction(actionId),
+                        ActionCommand.getInputEvent(actionId), null, null, true)
             }
+            return callback!!
+        }
 
     fun invokeAction(action: AnAction): ActionCallback =
-                with(ActionManager.getInstance()) {
-                    var callback: ActionCallback? = null
-                    ApplicationManager.getApplication().invokeAndWait {
-                        callback = tryToExecute(action,
-                                ActionCommand.getInputEvent(null), null, null, true)
-                    }
-                    return callback!!
-                }
+        with(ActionManager.getInstance()) {
+            var callback: ActionCallback? = null
+            ApplicationManager.getApplication().invokeAndWait {
+                callback = tryToExecute(action,
+                        ActionCommand.getInputEvent(null), null, null, true)
+            }
+            return callback!!
+        }
 
     fun invokeAction(action: AnAction, nlpRequest: NlpRequest): ActionCallback =
-            with(ActionManager.getInstance()) {
-                var callback: ActionCallback? = null
-                ApplicationManager.getApplication().invokeAndWait {
-                    callback = tryToExecute(action,
-                            SpeechEvent(JOptionPane.getRootFrame(), 0, System.currentTimeMillis(), nlpRequest),
-                            null, "microphone", true)
-                }
-                return callback!!
+        with(ActionManager.getInstance()) {
+            var callback: ActionCallback? = null
+            ApplicationManager.getApplication().invokeAndWait {
+                callback = tryToExecute(action,
+                        SpeechEvent(JOptionPane.getRootFrame(), 0, System.currentTimeMillis(), nlpRequest),
+                        null, "microphone", true)
             }
+            return callback!!
+        }
 
     fun type(vararg keys: Int) = Keyboard.type(*keys)
 
@@ -57,10 +57,10 @@ object IdeService {
     fun type(string: String) = Keyboard.type(string)
 
     fun getEditor(dataContext: DataContext? = null) =
-            if (dataContext != null) CommonDataKeys.EDITOR.getData(dataContext)
-            else FileEditorManager.getInstance(ProjectManager.getInstance().openProjects[0]).run {
-                selectedTextEditor ?: allEditors[0] as Editor
-            }
+        if (dataContext != null) CommonDataKeys.EDITOR.getData(dataContext)
+        else FileEditorManager.getInstance(ProjectManager.getInstance().openProjects[0]).run {
+            selectedTextEditor ?: allEditors[0] as Editor
+        }
 
     fun getProject(dataContext: DataContext? = null) = getEditor(dataContext)?.project
 }

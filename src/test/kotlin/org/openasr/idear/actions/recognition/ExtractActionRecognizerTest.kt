@@ -19,7 +19,7 @@ class ExtractActionRecognizerTest {
         assertEquals("IntroduceVariable", result!!.actionId)
         assertEquals("sum", result.typeAfter)
         assertTrue(result.hitTabAfter)
-        assertFalse(result.fullfilled)
+        assertFalse(result.fulfilled)
     }
 
     @Test
@@ -33,7 +33,7 @@ class ExtractActionRecognizerTest {
         assertEquals("IntroduceField", result!!.actionId)
         assertNull(result.typeAfter)
         assertFalse(result.hitTabAfter)
-        assertFalse(result.fullfilled)
+        assertFalse(result.fulfilled)
     }
 
     @Test

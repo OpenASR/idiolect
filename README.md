@@ -1,4 +1,4 @@
-# ![idear icon](src%2Fmain%2Fresources%2Forg.openasr.idear%2Ficons%2FpluginIcon.svg) idear 
+# ![idear icon](src%2Fmain%2Fresources%2FMETA-INF%2FpluginIcon.svg) idear 
 
 [![][jetbrains-team-svg]][jetbrains-team-page]
 [![Deploy](https://github.com/OpenASR/idear/workflows/Deploy/badge.svg)](https://github.com/OpenASR/idear/actions?query=workflow%3ABuild)
@@ -6,7 +6,8 @@
 [![][plugin-repo-svg]][plugin-repo-page]
 [![][plugin-download-svg]][plugin-repo-page]
 
-A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. Originally developed as part of a [JetBrains hackathon](https://blog.jetbrains.com/blog/2015/08/31/jetbrains-3rd-annual-hackathon-new-generation-debugger-grabs-1st-place/), it is now a community-supported project. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
+A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). 
+Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. Originally developed as part of a [JetBrains hackathon](https://blog.jetbrains.com/blog/2015/08/31/jetbrains-3rd-annual-hackathon-new-generation-debugger-grabs-1st-place/), it is now a community-supported project. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
 ## Usage
 
@@ -40,8 +41,8 @@ Idear is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.org
 
 #### [`VoiceRecordControllerAction`](src/main/java/org/openasr/idear/VoiceRecordControllerAction.kt)
   This action is invoked when the user clicks on the <img src="src/main/resources/org/openasr/idear/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar.
-  This simply tells [`ASRService`](src/main/java/org/openasr/idear/asr/ASRService.kt) to activate or standby.
-  When the `ASRService` is active, the [`ASRSystem`](src/main/java/org/openasr/idear/asr/ASRSystem.kt), 
+  This simply tells [`AsrService`](src/main/java/org/openasr/idear/asr/AsrService.kt) to activate or standby.
+  When the `AsrService` is active, the [`ASRSystem`](src/main/java/org/openasr/idear/asr/ASRSystem.kt), 
   by default [`ASRControlLoop`][ASRControlLoop] [(see below)](#ASRControlLoop).
 
 #### [`ExecuteActionFromPredefinedText`](src/main/java/org/openasr/idear/actions/ExecuteActionFromPredefinedText.kt)

@@ -1,65 +1,104 @@
 package org.openasr.idear.presentation
 
-import com.intellij.openapi.project.Project
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.wm.CustomStatusBarWidget
 import com.intellij.openapi.wm.StatusBar
-import com.intellij.openapi.wm.StatusBarWidget
+import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
+import com.intellij.openapi.wm.impl.status.TextPanel
+import com.intellij.openapi.wm.impl.status.widget.StatusBarWidgetWrapper.StatusBarWidgetClickListener
+import com.intellij.ui.GotItTooltip
+import com.intellij.util.Consumer
+import com.intellij.util.application
 import org.openasr.idear.actions.recognition.ActionCallInfo
+import org.openasr.idear.asr.AsrService
+import org.openasr.idear.asr.AsrSystemStateListener
 import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.nlp.NlpResultListener
+import java.awt.event.MouseEvent
+import javax.swing.JComponent
 
-class RecognitionStatusBarWidget(private val project: Project) : NlpResultListener, StatusBarWidget, StatusBarWidget.MultipleTextValuesPresentation {
+class RecognitionStatusBarWidget() :
+    TextPanel.WithIconAndArrows(),
+    CustomStatusBarWidget,
+    WidgetPresentation,
+    NlpResultListener,
+    AsrSystemStateListener
+{
     companion object {
-        val RECOGNITION_STATUS = "org.openasr.idear.Status"
+        const val RECOGNITION_STATUS = "org.openasr.idear.Status"
     }
+
+    private val log = logger<RecognitionStatusBarWidget>()
     private var statusBar: StatusBar? = null
-    var tooltip = "Idear"
-    var text: String? = null
+    private var isListening: Boolean = false
 
     override fun ID() = RECOGNITION_STATUS
 
+    init {
+        icon = Icons.RECORD_START
+        text = ""
+    }
+
     override fun install(statusBar: StatusBar) {
-        project.messageBus.connect(this).subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
+        application.messageBus.connect(this).let {
+            it.subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
+            it.subscribe(AsrSystemStateListener.ASR_STATE_TOPIC, this)
+        }
 
         this.statusBar = statusBar
         Disposer.register(statusBar, this)
+
+        GotItTooltip("org.openasr.idear.intro", "Click <b><a href=\"\">here</a></b> to get started with voice control", this)
+            .show(this, GotItTooltip.TOP_MIDDLE)
+
+        StatusBarWidgetClickListener(clickConsumer).installOn(this, true)
     }
+
+    override fun onAsrStatus(message: String) = updateStatus(message)
+
+    override fun onAsrReady(message: String) =
+        GotItTooltip("org.openasr.idear.AsrReady", message, this)
+            .show(this, GotItTooltip.TOP_MIDDLE)
+            .also { updateStatus("") }
+
+    override fun getTooltipText() = toolTipText
 
     override fun getPresentation() = this
 
-    override fun getTooltipText(): String? {
-        return tooltip
-    }
+    override fun getComponent(): JComponent = this
 
-    override fun getSelectedValue(): String? {
-        return text
+    override fun getClickConsumer() = Consumer<MouseEvent> {
+        try {
+            AsrService.toggleListening()
+        } catch (e: Exception) {
+            log.info("Failed to toggle listening: ${e.message}")
+        }
     }
 
     override fun onListening(listening: Boolean) {
+        isListening = listening
+        icon = if (listening) Icons.RECORD_END else Icons.RECORD_START
+
+        toolTipText = if (isListening) "Listening..." else "Click to activate voice control"
         updateStatus(if (listening) "Listening..." else null)
     }
 
     override fun onRecognition(nlpRequest: NlpRequest) {
-        var utterance = nlpRequest.utterance
-        tooltip = "Last heard: '$utterance'"
+        val utterance = nlpRequest.utterance
+        toolTipText = "Last heard: '$utterance'"
         updateStatus("\uD83C\uDFA4 $utterance")
     }
 
-    override fun onFulfilled(actionCallInfo: ActionCallInfo) {
+    override fun onFulfilled(actionCallInfo: ActionCallInfo) =
         updateStatus("Action: ${actionCallInfo.actionId}")
-    }
 
-    override fun onFailure(message: String) {
-        updateStatus("Error: $message")
-    }
+    override fun onFailure(message: String) = updateStatus("Error: $message")
 
-    override fun onMessage(message: String, verbosity: NlpResultListener.Companion.Verbosity) {
+    override fun onMessage(message: String, verbosity: NlpResultListener.Companion.Verbosity) =
         updateStatus("Idear: $message")
-    }
 
-    override fun dispose() {
-        statusBar = null
-    }
+    override fun dispose() { statusBar = null }
 
     private fun updateStatus(text: String?) {
 //        UIUtil.invokeLaterIfNeeded {

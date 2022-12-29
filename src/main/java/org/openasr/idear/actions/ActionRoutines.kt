@@ -9,7 +9,7 @@ import org.openasr.idear.asr.AsrService
 import org.openasr.idear.asr.ListeningState
 import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.Commands
-import org.openasr.idear.tts.TTSService
+import org.openasr.idear.tts.TtsService
 import org.openasr.idear.utils.toUpperCamelCase
 import java.awt.event.KeyEvent.*
 import java.text.SimpleDateFormat
@@ -54,12 +54,9 @@ object ActionRoutines {
     }
 
     fun routineAddNewClass(name: String) {
-        var className: String
-        if (name.isNullOrEmpty()) {
-            TTSService.say("what shall we call it?")
-            className = AsrService.waitForUtterance()
-        } else {
-            className = name
+        val className: String = name.ifEmpty {
+            TtsService.say("what shall we call it?")
+            AsrService.waitForUtterance()
         }
 
         IdeService.invokeAction(ACTION_NEW_ELEMENT)
@@ -72,17 +69,17 @@ object ActionRoutines {
     }
 
     fun promptForVisibility(grammar: Array<String>): String? {
-        TTSService.say("with what visibility?")
+        TtsService.say("with what visibility?")
         return AsrService.waitForUtterance(grammar)
     }
 
     fun promptForReturnType(): String {
-        TTSService.say("what will it return?")
+        TtsService.say("what will it return?")
         return AsrService.waitForUtterance()
     }
 
     fun promptForName(): String {
-        TTSService.say("what shall we call it?")
+        TtsService.say("what shall we call it?")
         return AsrService.waitForUtterance()
     }
 
@@ -92,7 +89,7 @@ object ActionRoutines {
         val cal = ai.buildDate
         val df = SimpleDateFormat("EEEE, MMMM dd, yyyy")
 
-        TTSService.say("My name is " + ai.versionName +
+        TtsService.say("My name is " + ai.versionName +
                 ", I was built on " + df.format(cal.time) +
                 ", I am running version " + ai.apiVersion +
                 " of the IntelliJ Platform, and I am registered to " + ai.companyName)
@@ -205,12 +202,12 @@ object ActionRoutines {
 //            }
 
     fun tellJoke() {
-        TTSService.say("knock, knock, knock, knock, knock")
+        TtsService.say("knock, knock, knock, knock, knock")
 
         var result: String? = null
         while ("who is there" != result) result = AsrService.waitForUtterance()
 
-        TTSService.say("Hang on, I will be right back")
+        TtsService.say("Hang on, I will be right back")
 
         try {
             Thread.sleep(3000)
@@ -218,17 +215,17 @@ object ActionRoutines {
             e.printStackTrace()
         }
 
-        TTSService.say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va")
+        TtsService.say("Jah, jah, jav, jav, jav, a, a, a, va, va, va, va, va")
 
         while ("who" !in result!!) result = AsrService.waitForUtterance()
 
-        TTSService.say("It is me, Jah java va va, va, va. Open up already!")
+        TtsService.say("It is me, Jah java va va, va, va. Open up already!")
     }
 
     fun pauseSpeech() {
         beep()
         while (ListeningState.isActive) {
-            val result = AsrService.waitForUtterance()
+            val result = AsrService.waitForUtterance(arrayOf("resume", "listening"))
 
             if (result == "resume listening") {
                 beep()

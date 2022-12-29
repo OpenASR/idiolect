@@ -22,7 +22,5 @@ interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
 
     fun setGrammar(grammar: Array<String>) {}
 
-    fun defaultModel() = ""
-
     fun setModel(model: String) {}
 }

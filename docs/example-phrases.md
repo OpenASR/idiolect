@@ -1,9 +1,8 @@
-# Example Phrases
 
 ## Idear Commands
+ - hi idea
+ - tell me about yourself
  - stop listening
- - command mode
- - dictation mode
 
 ## Extract Field or Variable
  - extract to field
@@ -13,6 +12,8 @@
  - find usages
  - find usages of field 'my field'
  - find usages of method 'my method'
+
+## Properties File Recognizer
 
 ## Rename
  - rename

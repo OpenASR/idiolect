@@ -114,10 +114,7 @@ object Keyboard {
         keys.forEach { robot.keyRelease(it) }
     }
 
-    fun type(vararg keys: Char) {
-        keys.forEach { robot.keyPress(it.code) }
-        keys.forEach { robot.keyRelease(it.code) }
-    }
+    fun type(vararg keys: Char)  = type(*keys.map { it.code }.toIntArray())
 
     private fun doType(vararg keyCodes: Int) = doType(keyCodes, 0, keyCodes.size)
 
