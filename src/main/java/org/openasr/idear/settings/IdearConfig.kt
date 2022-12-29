@@ -39,10 +39,10 @@ class IdearConfig : PersistentStateComponent<IdearConfig.Settings>  {
 
         // TODO: list voices by locale
         // TODO: allow user to select voice
-        fun getTtsProvider() = activateExtension(ExtensionManager.ttsSelector, settings.ttsService, IdearConfig.ttsProvider)
+        fun getTtsProvider() = activateExtension(ExtensionManager.ttsSelector, settings.ttsService, ttsProvider)
 
         private fun getAsrProvider() =
-            activateExtension(ExtensionManager.asrSelector, settings.asrService, IdearConfig.asrProvider)
+            activateExtension(ExtensionManager.asrSelector, settings.asrService, asrProvider)
 
         private fun getNlpProvider() = activateExtension(ExtensionManager.nlpSelector, settings.nlpService, nlpProvider)
 
