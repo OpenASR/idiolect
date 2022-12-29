@@ -30,7 +30,6 @@ class VoskAsr : AsrProvider {
     private val messageBus = ApplicationManager.getApplication().messageBus
     private val httpClient = HttpClient.newBuilder().build()
     private lateinit var recognizer: Recognizer
-    private var modelPath: String? = null // defaultModel().also { println("Path to model: $it") }
     private val alternatives = 4
 
     override fun displayName() = "Vosk"
@@ -98,9 +97,9 @@ class VoskAsr : AsrProvider {
     // https://alphacephei.com/vosk/models/model-list.json
     override fun setModel(model: String) {
         if (model.isNotEmpty()) {
-            this.modelPath = model
+            IdearConfiguration.settings.asrModelPath = model
 
-            recognizer = Recognizer(Model(modelPath), 16000f)
+            recognizer = Recognizer(Model(IdearConfiguration.settings.asrModelPath), 16000f)
             recognizer.setMaxAlternatives(alternatives)
         }
     }
@@ -120,7 +119,7 @@ class VoskAsr : AsrProvider {
     }
 
     override fun activate() {
-        if (modelPath.isNullOrEmpty()) {
+        if (IdearConfiguration.settings.asrModelPath.isEmpty()) {
             showNotificationForModel()
 
             throw ModelNotAvailableException()
@@ -151,7 +150,7 @@ class VoskAsr : AsrProvider {
             .reset()
 
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
-    override fun waitForSpeech(): NlpRequest? {
+    override fun waitForSpeech(): NlpRequest {
         var nbytes: Int
         val b = ByteArray(4096)
 

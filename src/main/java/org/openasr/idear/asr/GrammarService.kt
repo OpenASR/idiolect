@@ -26,8 +26,7 @@ object GrammarService : AnActionListener {
     private fun addIdearGrammar(grammar: HashSet<String>) =
         grammar.addAll(arrayOf("command", "dictation", "mode"))
 
-    override fun beforeActionPerformed(anAction: AnAction,
-                                       anActionEvent: AnActionEvent) {
+    override fun beforeActionPerformed(anAction: AnAction, anActionEvent: AnActionEvent) {
         val actionId = ActionManager.getInstance().getId(anAction)
 
         if ("someaction" == actionId) {

@@ -7,6 +7,7 @@ import org.openasr.idear.nlp.Commands
 import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.tts.TTSService
 import java.awt.Component
+import java.io.File
 
 class IdearActionRecognizer : ActionRecognizer("Idear Commands", 0) {
     override val grammars = listOf(

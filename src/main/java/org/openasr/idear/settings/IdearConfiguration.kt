@@ -109,12 +109,13 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
      */
     override fun apply() {
         if (isModified) {
-            settings.AsrService = gui.AsrService
+            if (settings.AsrService != gui.AsrService) {
+                AsrService.setAsrSystem(initialiseAsrSystem())
+                settings.AsrService = gui.AsrService
+            }
             settings.nlpService = gui.nlpService
             settings.ttsService = gui.ttsService
             settings.asrModelPath = gui.asrModelPath
-
-            AsrService.setAsrSystem(initialiseAsrSystem())
         }
     }
 

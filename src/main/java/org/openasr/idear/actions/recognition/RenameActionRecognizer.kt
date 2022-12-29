@@ -12,21 +12,20 @@ import java.awt.Component
  */
 class RenameActionRecognizer : ActionRecognizer("Rename", 500) {
     override val grammars = listOf(
-            object : NlpRegexGrammar("Rename", "rename(?: to|as)? ?(.*)?") {
-                override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
-                    return ActionCallInfo(intentName).apply {
-                        val name = values[1]
-                        if (name.isNotEmpty()) {
-                            typeAfter = name.toCamelCase()
-                            hitTabAfter = true
-                        }
+        object : NlpRegexGrammar("Rename", "rename(?: to|as)? ?(.*)?") {
+            override fun createActionCallInfo(values: List<String>, dataContext: DataContext) =
+                ActionCallInfo(intentName).apply {
+                    val name = values[1]
+                    if (name.isNotEmpty()) {
+                        typeAfter = name.toCamelCase()
+                        hitTabAfter = true
                     }
                 }
-            }.withExamples(
-                    "rename",
-                    "rename to 'example'",
-                    "rename as 'something better'"
-            )
+        }.withExamples(
+            "rename",
+            "rename to 'example'",
+            "rename as 'something better'"
+        )
     )
 
     override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl

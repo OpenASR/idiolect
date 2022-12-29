@@ -22,14 +22,8 @@ open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", 
         object : NlpGrammar("Anonymous") {
             override fun tryMatchRequest(utterance: String, dataContext: DataContext): ActionCallInfo? {
                 val actionId = getActionIdForUtterance(utterance)
-                val action = if (actionManager.isGroup(actionId)) null
-                    else actionManager.getAction(actionId)
-
-                if (action != null) {
-                    return ActionCallInfo(actionId)
-                }
-
-                return null
+                val action = actionManager.run { if (isGroup(actionId)) null else getAction(actionId) }
+                return if (action != null) ActionCallInfo(actionId) else null
             }
         }.tryMatchRequest(nlpRequest, dataContext)
 

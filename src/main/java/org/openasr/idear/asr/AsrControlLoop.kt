@@ -20,16 +20,10 @@ class AsrControlLoop : AsrSystem, Runnable {
         this.nlpProvder = nlpProvider
     }
 
-    override fun start() {
-        startRecognition()
-        if (!speechThread.isAlive) {
-            speechThread.start()
-        }
-    }
+    override fun start() =
+        startRecognition().also { if (!speechThread.isAlive) speechThread.start() }
 
-
-    override fun waitForUtterance(): String =
-        asrProvider.waitForSpeech()?.utterance ?: ""
+    override fun waitForUtterance(): String = asrProvider.waitForSpeech()?.utterance ?: ""
 
     override fun waitForUtterance(grammar: Array<String>,
                                   escapeWords: Array<String>): String {
@@ -48,9 +42,7 @@ class AsrControlLoop : AsrSystem, Runnable {
                         break
                     }
                 }
-                if (escapeWords.contains(alternative)) {
-                    break
-                }
+                if (alternative in escapeWords) break
             }
         }
 

@@ -17,10 +17,10 @@ import java.util.*
 
 class SurroundWithNoNullCheckRecognizer : ActionRecognizer("Surround with Not-Null Check", 600) {
     override val grammars = listOf(
-            object : NlpGrammar("Idear.SurroundWithNullCheck") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
-                    ActionCallInfo(intentName, true).also { surroundWithNullCheck(dataContext) }
-            }.withExample("surround with not null check"),
+        object : NlpGrammar("Idear.SurroundWithNullCheck") {
+            override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                ActionCallInfo(intentName, true).also { surroundWithNullCheck(dataContext) }
+        }.withExample("surround with not null check"),
     )
 
     override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
