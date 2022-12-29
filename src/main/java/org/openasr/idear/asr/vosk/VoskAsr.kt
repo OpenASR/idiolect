@@ -27,76 +27,15 @@ import java.util.zip.ZipInputStream
 
 
 class VoskAsr : AsrProvider {
-    private val messageBus = ApplicationManager.getApplication()?.messageBus
-    private val httpClient = HttpClient.newBuilder().build()
-    private lateinit var recognizer: Recognizer
-    private val alternatives = 4
+    private lateinit var microphone: CustomMicrophone
 
     override fun displayName() = "Vosk"
 
-    /** check "type" field. "small" and "big-lgraph" support grammar, "big" doesn't */
-    fun listModels(): List<ModelInfo> {
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create("https://alphacephei.com/vosk/models/model-list.json"))
-            .build()
-        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
-
-        return parseModels(response.body())
-    }
-
-    private fun installModel(url: String) {
-        messageBus!!.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
-
-        val modelZip = downloadModel(url)
-        val modelPath = unpackModelAndReturnPath(url.substringAfterLast('/'), modelZip)
-        IdearConfiguration.saveModelPath(modelPath)
-        setModel(modelPath)
-
-        messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been installed")
-    }
-
-    private fun downloadModel(url: String): InputStream =
-        httpClient.send(
-            HttpRequest.newBuilder().uri(URI.create(url)).build(),
-            HttpResponse.BodyHandlers.ofInputStream()
-        ).body()
-
-    private fun unpackModelAndReturnPath(modelName: String, modelZip: InputStream): String {
-        val modelDir = System.getProperty("user.home") + "/.idear"
-        val modelPath = "$modelDir/${modelName.substringBefore(".zip")}"
-        val modelFile = File(modelPath)
-        if (!modelFile.exists()) {
-            println("Unzipping model to $modelDir")
-            modelFile.parentFile.mkdirs()
-            modelZip.use { zip ->
-                ZipInputStream(zip).use { zis ->
-                    var entry: ZipEntry? = zis.nextEntry
-                    while (entry != null) {
-                        val file = File(modelDir, entry.name)
-                        if (entry.isDirectory) file.mkdirs()
-                        else file.outputStream().use { fos -> zis.copyTo(fos) }
-                        entry = zis.nextEntry
-                    }
-                }
-            }
-        }
-
-        return modelPath
-    }
-
-    // https://alphacephei.com/vosk/models/model-list.json
-    override fun setModel(model: String) {
-        if (model.isNotEmpty()) {
-            IdearConfiguration.settings.asrModelPath = model
-
-            recognizer = Recognizer(Model(IdearConfiguration.settings.asrModelPath), 16000f)
-            recognizer.setMaxAlternatives(alternatives)
-        }
-    }
-
-    private lateinit var microphone: CustomMicrophone
-
     companion object {
+        private val messageBus = ApplicationManager.getApplication()?.messageBus
+        private val httpClient = HttpClient.newBuilder().build()
+        private lateinit var recognizer: Recognizer
+        private val alternatives = 4
         val propertiesFile by lazy { File(System.getProperty("user.home"), ".idear.properties")
             .apply { if (exists()) readText() else defaultPropertiesFileContents.also { writeText(it) } } }
 
@@ -108,6 +47,103 @@ class VoskAsr : AsrProvider {
         """.trimIndent()
 
         val defaultModelURL = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+
+        init {
+            System.setProperty("jna.nounpack", "false")
+            System.setProperty("jna.noclasspath", "false")
+        }
+
+        fun listModels(): List<ModelInfo> {
+            val request = HttpRequest.newBuilder()
+                .uri(URI.create("https://alphacephei.com/vosk/models/model-list.json"))
+                .build()
+            val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
+
+            return parseModels(response.body())
+        }
+
+        private fun parseModels(json: String): List<ModelInfo> {
+            return parseString(json).asJsonArray
+                .map { it.asJsonObject }
+                .filter {
+                    // "small" and "big-lgraph" support grammar, "big" doesn't
+//                    it.get("type").asString != "big"
+                        it.get("obsolete").asString != "true"
+                }
+                .map {
+                    ModelInfo(
+                        it.get("lang").asString,
+                        it.get("lang_text").asString,
+                        it.get("name").asString,
+                        it.get("url").asString,
+                        it.get("size").asInt,
+                        it.get("size_text").asString,
+                        it.get("type").asString
+                    )
+                }
+                .sortedWith(ModelComparator())
+        }
+
+        internal fun installModel(url: String): String {
+            messageBus!!.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
+
+            val modelPath = pathForModelUrl(url)
+            if (!File(modelPath).exists()) {
+                val modelZip = downloadModel(url)
+                unpackModel(modelPath, modelZip)
+            }
+            setModel(modelPath)
+
+            messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been installed")
+
+            return modelPath
+        }
+
+        private fun downloadModel(url: String): InputStream {
+            val request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build()
+            val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream())
+            return response.body()
+        }
+
+        private fun unpackModel(modelPath: String, modelZip: InputStream) {
+            val modelDir = File(modelPath).parentFile
+            modelDir.mkdirs()
+
+            modelZip.use { zip ->
+                ZipInputStream(zip).use { zis ->
+                    var entry: ZipEntry? = zis.nextEntry
+
+                    while (entry != null) {
+                        val file = File(modelDir, entry.name)
+                        if (entry.isDirectory) file.mkdirs()
+                        else file.outputStream().use { fos -> zis.copyTo(fos) }
+                        entry = zis.nextEntry
+                    }
+                }
+            }
+        }
+
+        internal fun pathForModelUrl(url: String): String {
+            val modelName = url.substringAfterLast('/')
+            val modelDir = System.getProperty("user.home") + "/.idear"
+            return "$modelDir/${modelName.substringBefore(".zip")}"
+        }
+
+        fun setModel(model: String) {
+            if (model.isNotEmpty()) {
+                IdearConfiguration.saveModelPath(model)
+                VoskConfiguration.saveModelPath(model)
+
+                recognizer = Recognizer(Model(model), 16000f)
+                recognizer.setMaxAlternatives(alternatives)
+            }
+        }
+    }
+
+    override fun setModel(model: String) {
+        VoskAsr.setModel(model)
     }
 
     override fun activate() {
@@ -165,26 +201,6 @@ class VoskAsr : AsrProvider {
                 else asJsonArray.map { it.asJsonObject.get("text").asString }
             }
         }
-
-    private fun parseModels(json: String): List<ModelInfo> {
-        return parseString(json).asJsonArray
-            .map { it.asJsonObject }
-            .filter {
-                // "small" and "big-lgraph" support grammar, "big" doesn't
-                it.get("type").asString != "big"
-                    && it.get("obsolete").asString != "true"
-            }
-            .map {
-                ModelInfo(
-                    it.get("lang").asString,
-                    it.get("lang_text").asString,
-                    it.get("name").asString,
-                    it.get("url").asString,
-                    it.get("size").asInt,
-                    it.get("size_text").asString
-                )
-            }
-    }
 
     private fun showNotificationForModel() {
         NotificationGroupManager.getInstance()

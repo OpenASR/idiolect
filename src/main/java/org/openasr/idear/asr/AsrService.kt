@@ -15,8 +15,8 @@ object AsrService {
     @Volatile private var isListening = false
 
     init {
-        System.setProperty("jna.nounpack", "false")
-        System.setProperty("jna.noclasspath", "false")
+//        System.setProperty("jna.nounpack", "false")
+//        System.setProperty("jna.noclasspath", "false")
 
 //        initialiseAsrSystem()
     }
