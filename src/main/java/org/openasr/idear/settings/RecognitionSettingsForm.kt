@@ -1,17 +1,26 @@
 package org.openasr.idear.settings
 
+import com.intellij.openapi.observable.util.*
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.dsl.builder.COLUMNS_SHORT
 import com.intellij.ui.dsl.builder.columns
 import com.intellij.ui.dsl.builder.panel
 import org.openasr.idear.actions.recognition.CustomUtteranceActionRecognizer
+import org.openasr.idear.tts.IdearTTS
 import javax.swing.JPanel
 import javax.swing.text.JTextComponent
 import kotlin.reflect.KProperty
 
 internal class RecognitionSettingsForm {
     private val ttsProviderCombo = ComboBox<String>()
+        .apply {
+            whenItemSelectedFromUi {
+                IdearTTS.sayWithVoice("Hello, my name is $it!", it)
+                IdearConfiguration.settings.ttsService = it
+            }
+        }
+
     private val asrProviderCombo = ComboBox<String>()
     private val nlpProviderCombo = ComboBox<String>()
 

@@ -1,24 +1,22 @@
 package org.openasr.idear.tts
 
+import com.intellij.openapi.diagnostic.Logger
 import io.github.jonelo.jAdapterForNativeTTS.engines.*
+import org.openasr.idear.settings.IdearConfiguration
 import java.util.*
 
 object IdearTTS : TtsProvider {
-    //    val logger = Logger.getInstance(javaClass)
+    val logger = Logger.getInstance(javaClass)
     val speechEngine = SpeechEngineNative.getInstance()
-
-    private var voice: Voice? = null
 
     override fun displayName() = "Native TTS"
 
-    override fun activate() {
-        val voice = speechEngine.availableVoices.firstOrNull()
-
-        speechEngine.setVoice(voice?.name)
-    }
-
     @Synchronized
-    override fun say(utterance: String) = speechEngine.say(utterance)
+    override fun say(utterance: String) =
+        speechEngine.apply { setVoice(IdearConfiguration.settings.ttsService) }.say(utterance)
+
+    fun sayWithVoice(utterance: String, voice: String) =
+        speechEngine.apply { setVoice(voice) }.say(utterance)
 
     override fun dispose() = Unit
 }

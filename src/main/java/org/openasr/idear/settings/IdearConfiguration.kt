@@ -127,7 +127,7 @@ class IdearConfiguration : Configurable, PersistentStateComponent<IdearConfigura
     override fun reset() {
         gui.setAsrOptions(asrEp.extensionList.map { e -> e.displayName() })
         gui.setNlpOptions(nlpEp.extensionList.map { e -> e.displayName() })
-        gui.setTtsOptions(ttsEp.extensionList.map { e -> e.displayName() })
+        gui.setTtsOptions(IdearTTS.speechEngine.availableVoices.map { it.name })
 
         gui.AsrService = settings.AsrService
         gui.nlpService = settings.nlpService
