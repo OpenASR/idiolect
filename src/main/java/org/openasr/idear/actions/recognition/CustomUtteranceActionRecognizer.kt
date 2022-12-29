@@ -3,9 +3,8 @@ package org.openasr.idear.actions.recognition
 import com.intellij.openapi.actionSystem.*
 import org.openasr.idear.asr.vosk.VoskAsr.Companion.propertiesFile
 import org.openasr.idear.nlp.*
-import java.io.File
 
-class PropertiesFileActionRecognizer: ActionRecognizer("Properties File Recognizer", 500) {
+class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recognizer", 500) {
     override val grammars: List<NlpGrammar> by lazy { buildGrammars() }
 
     data class Binding(val name: String, val boundUtterances: List<String>)

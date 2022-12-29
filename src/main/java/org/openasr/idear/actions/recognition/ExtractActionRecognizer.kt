@@ -17,8 +17,9 @@ class ExtractActionRecognizer : ActionRecognizer("Extract Field or Variable", 50
     override val grammars = listOf(
         object : NlpRegexGrammar("Idear.Extract", "extract(?: to)? (variable|field) ?(.*)") {
             private val actionIds = mapOf(
-                    "variable" to "IntroduceVariable",
-                    "field" to "IntroduceField")
+                "variable" to "IntroduceVariable",
+                "field" to "IntroduceField"
+            )
 
             override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo =
                 ActionCallInfo(actionIds[values[1]]!!).apply {
@@ -29,9 +30,9 @@ class ExtractActionRecognizer : ActionRecognizer("Extract Field or Variable", 50
                     }
                 }
         }.withExamples(
-                // NlpRegexGrammar does not use the examples, but they could be used in documentation
-                "extract variable 'sum'",
-                "extract to field"
+            // NlpRegexGrammar does not use the examples, but they could be used in documentation
+            "extract variable 'sum'",
+            "extract to field"
         )
     )
 

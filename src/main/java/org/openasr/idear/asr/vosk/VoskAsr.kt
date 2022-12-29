@@ -9,7 +9,7 @@ import com.intellij.notification.NotificationGroupManager
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.ShowSettingsUtil
 import org.openasr.idear.asr.AsrProvider
-import org.openasr.idear.asr.AsrSystemStateListener
+import org.openasr.idear.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
 import org.openasr.idear.asr.ModelNotAvailableException
 import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.recognizer.CustomMicrophone
@@ -34,8 +34,6 @@ class VoskAsr : AsrProvider {
 
     override fun displayName() = "Vosk"
 
-//    override fun defaultModel(): String = unpackModelAndReturnPath("vosk-model-small-en-us-0.15.zip")
-
     /** check "type" field. "small" and "big-lgraph" support grammar, "big" doesn't */
     fun listModels() {
         val modelUri = "https://alphacephei.com/vosk/models/model-list.json"
@@ -48,23 +46,21 @@ class VoskAsr : AsrProvider {
     }
 
     private fun installModel(url: String) {
-        messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC)
-            .onAsrStatus("Installing model...")
+        messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
 
         val modelZip = downloadModel(url)
         val modelPath = unpackModelAndReturnPath(url.substringAfterLast('/'), modelZip)
         IdearConfiguration.saveModelPath(modelPath)
         setModel(modelPath)
 
-        messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC)
-            .onAsrReady("Model has been installed")
+        messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been installed")
     }
 
-    private fun downloadModel(url: String): InputStream {
-        val request = HttpRequest.newBuilder().uri(URI.create(url)).build()
-        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream())
-        return response.body()
-    }
+    private fun downloadModel(url: String): InputStream =
+        httpClient.send(
+            HttpRequest.newBuilder().uri(URI.create(url)).build(),
+            HttpResponse.BodyHandlers.ofInputStream()
+        ).body()
 
 //    override fun defaultModel() =
 ////      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
@@ -116,6 +112,8 @@ class VoskAsr : AsrProvider {
             # For a list of potential actions that could be rebound, see:
             # https://github.com/OpenASR/idear/blob/master/src/main/resources/phrases.example.properties
         """.trimIndent()
+
+        val defaultModelURL = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
     }
 
     override fun activate() {
@@ -182,18 +180,15 @@ class VoskAsr : AsrProvider {
                     <p>Download and configure the path to your Vosk speech model.<p>
                     <p><a href="https://alphacephei.com/vosk/models">https://alphacephei.com/vosk/models</a></p>
                 """.trimIndent(), INFORMATION)
-
             .addAction(NotificationAction.create("Download Default Model") { _ ->
-                installModel("https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip")
+                installModel(defaultModelURL)
             })
             .addAction(NotificationAction.create("Edit Configuration") { _ ->
                 ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
             })
-            .addAction(
-                NotificationAction.create("Open properties file (~/${propertiesFile.name})") { e ->
-                    OpenFileAction.openFile(propertiesFile.absolutePath, e.project!!)
-                }
-            )
+            .addAction(NotificationAction.create("Open properties file (~/${propertiesFile.name})") { e ->
+                OpenFileAction.openFile(propertiesFile.absolutePath, e.project!!)
+            })
             .notify(null)
     }
 }

@@ -11,25 +11,25 @@ import java.awt.Component
 
 class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
     override val grammars = listOf(
-            object : NlpGrammar("Java.Main") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
-                    ActionCallInfo(intentName, true).also { ActionRoutines.routinePsvm() }
-            }.withExample("public static void main"),
+        object : NlpGrammar("Java.Main") {
+            override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                ActionCallInfo(intentName, true).also { ActionRoutines.routinePsvm() }
+        }.withExample("public static void main"),
 
-            object : NlpGrammar("Java.PrintLine") {
-                override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
-                    ActionCallInfo(intentName, true).also { ActionRoutines.routinePrintln() }
-            }.withExample("print line"),
+        object : NlpGrammar("Java.PrintLine") {
+            override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
+                ActionCallInfo(intentName, true).also { ActionRoutines.routinePrintln() }
+        }.withExample("print line"),
 
-            // "create new class (optional name)"
-            object : NlpRegexGrammar("Java.NewClass", ".*new class ?(.*)?") {
-                override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo =
-                    ActionCallInfo(intentName, true).also { ActionRoutines.routineAddNewClass(values[1]) }
-            }.withExamples("new class", "create new class 'my demo'"),
+        // "create new class (optional name)"
+        object : NlpRegexGrammar("Java.NewClass", ".*new class ?(.*)?") {
+            override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo =
+                ActionCallInfo(intentName, true).also { ActionRoutines.routineAddNewClass(values[1]) }
+        }.withExamples("new class", "create new class 'my demo'"),
 
-            // TODO: convert to live template
-            // https://www.jetbrains.com/help/idea/template-variables.html#pdtv
-            // https://stackoverflow.com/a/50236952/1225993
+        // TODO: convert to live template
+        // https://www.jetbrains.com/help/idea/template-variables.html#pdtv
+        // https://stackoverflow.com/a/50236952/1225993
 //            object : NlpRegexGrammar("Java.NewMethod",
 //                ".*(private|protected|public|package) ?(.*)? (?:method|function) ?(.*)?") {
 //                override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo {
@@ -58,7 +58,7 @@ class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
 
     override fun isSupported(dataContext: DataContext, component: Component?): Boolean =
         (component is EditorComponentImpl
-                && dataContext.getData(FILE_EDITOR)?.file?.fileType is JavaFileType)
-                // or allow "new class" when a package is selected
-                || dataContext.getData(SELECTED_ITEMS)?.get(0) is PsiJavaDirectoryImpl
+            && dataContext.getData(FILE_EDITOR)?.file?.fileType is JavaFileType)
+            // or allow "new class" when a package is selected
+            || dataContext.getData(SELECTED_ITEMS)?.get(0) is PsiJavaDirectoryImpl
 }
