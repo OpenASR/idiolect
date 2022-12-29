@@ -23,7 +23,7 @@ object AsrService {
         val status = ListeningState.getStatus()
         var terminated = false
 
-        if (this.asrSystem != asrSystem) {
+        if (this::asrSystem.isInitialized && this.asrSystem != asrSystem) {
             terminate()
             terminated = true
         }

@@ -18,8 +18,8 @@ open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", 
 
     protected open fun buildGrammars() = ActionUtils.buildGrammar()
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? {
-        return object : NlpGrammar("Anonymous") {
+    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? =
+        object : NlpGrammar("Anonymous") {
             override fun tryMatchRequest(utterance: String, dataContext: DataContext): ActionCallInfo? {
                 val actionId = getActionIdForUtterance(utterance)
                 val action = if (actionManager.isGroup(actionId)) null
@@ -32,7 +32,6 @@ open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", 
                 return null
             }
         }.tryMatchRequest(nlpRequest, dataContext)
-    }
 
     protected open fun getActionIdForUtterance(utterance: String): String =
         mapOf(

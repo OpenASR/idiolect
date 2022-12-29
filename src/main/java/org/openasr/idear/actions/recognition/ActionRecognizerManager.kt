@@ -16,9 +16,8 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
         val ideaActionRecognizer = extensions.find { it.javaClass == RegisteredActionRecognizer::class.java }!!
         val editorActionRecognizer = extensions.find { it.javaClass == RegisteredEditorActionRecognizer::class.java }!!
         var ideaGrammars = ideaActionRecognizer.grammars
-        val editorGrammars = ideaGrammars
-                .filter { it.intentName.startsWith("Editor") }
-                .plus(editorActionRecognizer.grammars)
+        val editorGrammars =
+            ideaGrammars.filter { it.intentName.startsWith("Editor") } + editorActionRecognizer.grammars
 
         ideaGrammars = ideaGrammars.filter { !it.intentName.startsWith("Editor") }
 

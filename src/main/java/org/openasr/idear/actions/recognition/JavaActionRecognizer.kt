@@ -56,10 +56,9 @@ class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
 //            }.withExamples("public method", "create private int function 'my demo'"),
     )
 
-    override fun isSupported(dataContext: DataContext, component: Component?): Boolean {
-        return (component is EditorComponentImpl
+    override fun isSupported(dataContext: DataContext, component: Component?): Boolean =
+        (component is EditorComponentImpl
                 && dataContext.getData(FILE_EDITOR)?.file?.fileType is JavaFileType)
                 // or allow "new class" when a package is selected
                 || dataContext.getData(SELECTED_ITEMS)?.get(0) is PsiJavaDirectoryImpl
-    }
 }

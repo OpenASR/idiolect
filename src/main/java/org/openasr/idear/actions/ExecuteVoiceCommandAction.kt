@@ -26,14 +26,12 @@ object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
         if (info != null) {
             messageBus.syncPublisher(NLP_RESULT_TOPIC).onFulfilled(info)
 
-            if (!info.fullfilled) {
+            if (!info.fulfilled) {
                 val editor = IdeService.getEditor(e.dataContext)
                 if (editor == null) {
                     log.info("Invoking outside of editor: ${info.actionId}")
                     IdeService.invokeAction(info.actionId)
-                } else {
-                    runInEditor(editor, info)
-                }
+                } else runInEditor(editor, info)
             }
         } else {
             log.info("Command not recognized")

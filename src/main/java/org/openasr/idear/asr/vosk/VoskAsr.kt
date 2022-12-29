@@ -39,9 +39,8 @@ class VoskAsr : AsrProvider {
 
     /** check "type" field. "small" and "big-lgraph" support grammar, "big" doesn't */
     fun listModels() {
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create("https://alphacephei.com/vosk/models/model-list.json"))
-            .build()
+        val modelUri = "https://alphacephei.com/vosk/models/model-list.json"
+        val request = HttpRequest.newBuilder().uri(URI.create(modelUri)).build()
         val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
         println("model response: ${response.body()}")
@@ -63,21 +62,16 @@ class VoskAsr : AsrProvider {
     }
 
     private fun downloadModel(url: String): InputStream {
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .build()
+        val request = HttpRequest.newBuilder().uri(URI.create(url)).build()
         val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream())
         return response.body()
     }
 
-//    /**
-//     * @see
-//     *
-//     */
 //    override fun defaultModel() =
 ////      System.getProperty("user.home") + "/.vosk/vosk-model-small-en-gb-0.15" // Lightweight wideband model for Android and RPi
 ////    System.getProperty("user.home") + "/.vosk/vosk-model-en-us-0.22-lgraph"  // Big US English model with dynamic graph
 //      System.getProperty("user.home") + "/.vosk/vosk-model-en-us-daanzu-20200905-lgraph" // 129M Wideband model for dictation from Kaldi-active-grammar project with configurable graph
+
     private fun unpackModelAndReturnPath(modelName: String, modelZip: InputStream): String {
         val modelDir = System.getProperty("user.home") + "/.idear"
         val modelPath = "$modelDir/${modelName.substringBefore(".zip")}"
@@ -113,10 +107,16 @@ class VoskAsr : AsrProvider {
 
     private lateinit var microphone: CustomMicrophone
 
-    val pathToPropertiesFile by lazy {
-        File(System.getProperty("user.home") + "/.idear")
-            .apply { if (!exists()) createNewFile() }
-            .absolutePath
+    companion object {
+        val propertiesFile by lazy { File(System.getProperty("user.home"), ".idear.properties")
+            .apply { if (exists()) readText() else defaultPropertiesFileContents.also { writeText(it) } } }
+
+        val defaultPropertiesFileContents = """
+            # This file may be used to bind custom utterances to actions.
+            # The first action with a matching utterance will be invoked.
+            # For a list of potential actions that could be rebound, see:
+            # https://github.com/OpenASR/idear/blob/master/src/main/resources/phrases.example.properties
+        """.trimIndent()
     }
 
     override fun activate() {
@@ -157,11 +157,7 @@ class VoskAsr : AsrProvider {
 
         while (microphone.stream.read(b).also { nbytes = it } >= 0) {
             if (recognizer.acceptWaveForm(b, nbytes)) {
-                val nlpRequest = tryParseResult(recognizer.result)
-
-                if (nlpRequest != null) {
-                    return nlpRequest
-                }
+                return tryParseResult(recognizer.result)
             }
         }
 
@@ -195,8 +191,8 @@ class VoskAsr : AsrProvider {
                 ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
             })
             .addAction(
-                NotificationAction.create("Open properties file ($pathToPropertiesFile)") { e ->
-                    OpenFileAction.openFile(pathToPropertiesFile, e.project!!)
+                NotificationAction.create("Open properties file (~/${propertiesFile.name})") { e ->
+                    OpenFileAction.openFile(propertiesFile.absolutePath, e.project!!)
                 }
             )
             .notify(null)

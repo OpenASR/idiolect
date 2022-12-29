@@ -91,6 +91,5 @@ dependencies {
   }
   implementation("net.java.dev.jna:jna:5.12.1")
   implementation("com.alphacephei:vosk:0.3.45")
-  testImplementation("junit:junit:4.13.2")
   testImplementation("org.reflections:reflections:0.10.2")
 }

@@ -1,4 +1,3 @@
-# Example Phrases
 
 ## Idear Commands
  - hi idea
@@ -13,6 +12,8 @@
  - find usages
  - find usages of field 'my field'
  - find usages of method 'my method'
+
+## Properties File Recognizer
 
 ## Rename
  - rename

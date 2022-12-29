@@ -6,9 +6,9 @@ import org.openasr.idear.actions.recognition.ActionCallInfo
 open class NlpGrammar(val intentName: String, val rank: Int = Int.MAX_VALUE) {
     lateinit var examples: Array<out String>
 
-    fun withExample(example: String) = this.also { examples = arrayOf(example) }
+    fun withExample(example: String) = also { examples = arrayOf(example) }
 
-    fun withExamples(vararg examples: String) = this.also { this.examples = examples }
+    fun withExamples(vararg examples: String) = also { this.examples = examples }
 
     /**
      * Delegates to `tryMatchRequest(string)` for an exact match between the examples
