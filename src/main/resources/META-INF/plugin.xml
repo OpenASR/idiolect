@@ -28,15 +28,15 @@
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="org.openasr.idear.settings.IdearConfiguration"/>
-        <applicationService serviceImplementation="org.openasr.idear.asr.vosk.VoskConfiguration"/>
+        <applicationService serviceImplementation="org.openasr.idear.settings.IdearConfig"/>
+        <applicationService serviceImplementation="org.openasr.idear.asr.vosk.VoskConfig"/>
         <applicationConfigurable groupId="tools" displayName="Idear"
                                  id="preferences.IdearConfiguration"
-                                 instance="org.openasr.idear.settings.IdearConfiguration" dynamic="true"/>
+                                 instance="org.openasr.idear.settings.IdearConfigurable" dynamic="true"/>
         <applicationConfigurable groupId="tools" displayName="Vosk"
                                  id="preferences.VoskConfiguration"
                                  parentId="preferences.IdearConfiguration"
-                                 instance="org.openasr.idear.asr.vosk.VoskConfiguration" dynamic="true"/>
+                                 instance="org.openasr.idear.asr.vosk.VoskConfigurable" dynamic="true"/>
 
         <notificationGroup id="Idear" displayType="BALLOON"/>
         <statusBarWidgetFactory implementation="org.openasr.idear.presentation.RecognitionStatusBarWidgetFactory"/>

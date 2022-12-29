@@ -3,9 +3,9 @@ package org.openasr.idear.asr
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import org.openasr.idear.asr.ListeningState.Status.ACTIVE
-import org.openasr.idear.nlp.NlpResultListener
 import org.openasr.idear.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
-import org.openasr.idear.settings.IdearConfiguration
+import org.openasr.idear.settings.IdearConfig
+import org.openasr.idear.settings.IdearConfigurable
 import javax.sound.sampled.LineUnavailableException
 
 object AsrService {
@@ -82,7 +82,7 @@ object AsrService {
 
     private fun initialiseAsrSystem() {
         try {
-            val asrSystem = IdearConfiguration.initialiseAsrSystem()
+            val asrSystem = IdearConfig.initialiseAsrSystem()
             asrSystem.start()
             this.asrSystem = asrSystem
         } catch (e: LineUnavailableException) {

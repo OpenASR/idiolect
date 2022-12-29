@@ -7,7 +7,8 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.Project
 import org.openasr.idear.nlp.*
-import org.openasr.idear.settings.IdearConfiguration
+import org.openasr.idear.settings.IdearConfig
+import org.openasr.idear.settings.IdearConfigurable
 import java.io.File
 
 class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recognizer", 500) {
@@ -21,7 +22,7 @@ class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recogni
             # https://github.com/OpenASR/idear/blob/master/src/main/resources/phrases.example.properties
         """.trimIndent()
 
-        private val propertiesFile by lazy { File(IdearConfiguration.idearHomePath, "phrases.properties")
+        private val propertiesFile by lazy { File(IdearConfig.idearHomePath, "phrases.properties")
             .apply {
                 if (exists()) readText()
                 else {

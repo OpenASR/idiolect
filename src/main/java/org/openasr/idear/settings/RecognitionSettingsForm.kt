@@ -1,11 +1,9 @@
 package org.openasr.idear.settings
 
-import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.dsl.builder.COLUMNS_SHORT
 import com.intellij.ui.dsl.builder.columns
 import com.intellij.ui.dsl.builder.panel
-import org.openasr.idear.actions.recognition.CustomUtteranceActionRecognizer
 import javax.swing.JPanel
 import javax.swing.text.JTextComponent
 import kotlin.reflect.KProperty
@@ -29,7 +27,17 @@ internal class RecognitionSettingsForm {
 
     internal var ttsService by ttsProviderCombo
     internal var nlpService by nlpProviderCombo
-    internal var AsrService by asrProviderCombo
+    internal var asrService by asrProviderCombo
+
+    fun reset(settings: IdearConfig.Settings) {
+        setAsrOptions(ExtensionManager.asrEp.extensionList.map { e -> e.displayName() })
+        setNlpOptions(ExtensionManager.nlpEp.extensionList.map { e -> e.displayName() })
+        setTtsOptions(ExtensionManager.ttsEp.extensionList.map { e -> e.displayName() })
+
+        asrService = settings.asrService
+        nlpService = settings.nlpService
+        ttsService = settings.ttsService
+    }
 
     fun setAsrOptions(options: List<String>) = setOptions(asrProviderCombo, options)
     fun setNlpOptions(options: List<String>) = setOptions(nlpProviderCombo, options)

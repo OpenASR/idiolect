@@ -20,7 +20,9 @@ fun main() {
             voicePreferences.language = "en" //  ISO-639-1
             voicePreferences.country = "AU" // ISO 3166-1 Alpha-2 code
             voicePreferences.gender = VoicePreferences.Gender.MALE
-            var voice: Voice? = voices.first { "AU" in it.culture }
+            println("cultures: ${voices.map { it.culture }}")
+
+            var voice: Voice? = voices.first { "US" in it.culture }
             // simple fallback just in case our preferences didn't match any voice
             if (voice == null) {
                 System.out.printf("Warning: Voice has not been found by the voice preferences %s\n", voicePreferences)

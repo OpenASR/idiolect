@@ -12,7 +12,8 @@ import org.openasr.idear.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
 import org.openasr.idear.asr.ModelNotAvailableException
 import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.recognizer.CustomMicrophone
-import org.openasr.idear.settings.IdearConfiguration
+import org.openasr.idear.settings.IdearConfig
+import org.openasr.idear.settings.IdearConfigurable
 import java.io.File
 import org.vosk.Model
 import org.vosk.Recognizer
@@ -114,13 +115,13 @@ class VoskAsr : AsrProvider {
 
         internal fun pathForModelUrl(url: String): String {
             val modelName = url.substringAfterLast('/')
-            val modelDir = IdearConfiguration.idearHomePath
+            val modelDir = IdearConfig.idearHomePath
             return "$modelDir/${modelName.substringBefore(".zip")}"
         }
 
         fun setModel(model: String) {
             if (model.isNotEmpty()) {
-                VoskConfiguration.saveModelPath(model)
+                VoskConfig.saveModelPath(model)
 
                 recognizer = Recognizer(Model(model), 16000f)
                 recognizer.setMaxAlternatives(alternatives)
@@ -136,19 +137,13 @@ class VoskAsr : AsrProvider {
 
     override fun setModel(model: String) = VoskAsr.setModel(model)
 
-    val pathToPropertiesFile by lazy {
-        File(System.getProperty("user.home") + "/.idear")
-            .apply { if (!exists()) createNewFile() }
-            .absolutePath
-    }
-
     override fun activate() {
-        if (VoskConfiguration.settings.modelPath.isEmpty()) {
+        if (VoskConfig.settings.modelPath.isEmpty()) {
             showNotificationForModel()
 
             throw ModelNotAvailableException()
         } else {
-            setModel(VoskConfiguration.settings.modelPath)
+            setModel(VoskConfig.settings.modelPath)
         }
 
         microphone = service()
@@ -212,7 +207,7 @@ class VoskAsr : AsrProvider {
                 installModel(defaultModelURL)
             })
             .addAction(NotificationAction.create("Edit Configuration") { _ ->
-                ShowSettingsUtil.getInstance().showSettingsDialog(null, VoskConfiguration::class.java)
+                ShowSettingsUtil.getInstance().showSettingsDialog(null, VoskConfigurable::class.java)
             })
             .notify(null)
     }

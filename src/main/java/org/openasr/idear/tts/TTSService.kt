@@ -1,11 +1,12 @@
 package org.openasr.idear.tts
 
-import org.openasr.idear.settings.IdearConfiguration
+import org.openasr.idear.settings.IdearConfig
+import org.openasr.idear.settings.IdearConfigurable
 
 object TTSService {
     fun say(text: String) {
-        IdearConfiguration.getTtsProvider().say(text)
+        IdearConfig.getTtsProvider().say(text)
     }
 
-    fun dispose() = IdearConfiguration.getTtsProvider().dispose()
+    fun dispose() = IdearConfig.getTtsProvider().dispose()
 }

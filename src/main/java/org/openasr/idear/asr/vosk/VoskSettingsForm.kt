@@ -36,6 +36,11 @@ class VoskSettingsForm : TextBrowseFolderListener(FileChooserDescriptorFactory.c
         }
     }
 
+    fun reset(settings: VoskConfig.Settings) {
+        modelPathChooser.text = VoskConfig.settings.modelPath
+        languageCombo.selectedItem = VoskConfig.settings.language
+    }
+
     private fun onClickInstall() {
         installButton.isEnabled = false
         installButton.text = "Installing model..."
@@ -59,7 +64,7 @@ class VoskSettingsForm : TextBrowseFolderListener(FileChooserDescriptorFactory.c
             row { browserLink("https://alphacephei.com/vosk/models", "https://alphacephei.com/vosk/models") }
             row("Language") { cell(languageCombo).columns(COLUMNS_SHORT) }
             row("Install model") {
-                cell(modelInfoCombo).columns(COLUMNS_SHORT)
+                cell(modelInfoCombo).columns(COLUMNS_MEDIUM)
                 cell(installButton)
             }
             row("Model path") { cell(modelPathChooser).columns(COLUMNS_LARGE) }
