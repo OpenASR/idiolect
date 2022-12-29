@@ -52,27 +52,26 @@ class VoskAsr : AsrProvider {
             return parseModels(response.body())
         }
 
-        private fun parseModels(json: String): List<ModelInfo> {
-            return parseString(json).asJsonArray
-                .map { it.asJsonObject }
-                .filter {
-                    // "small" and "big-lgraph" support grammar, "big" doesn't
+        private fun parseModels(json: String): List<ModelInfo> =
+            parseString(json).asJsonArray
+            .map { it.asJsonObject }
+            .filter {
+                // "small" and "big-lgraph" support grammar, "big" doesn't
 //                    it.get("type").asString != "big"
-                        it.get("obsolete").asString != "true"
-                }
-                .map {
-                    ModelInfo(
-                        it.get("lang").asString,
-                        it.get("lang_text").asString,
-                        it.get("name").asString,
-                        it.get("url").asString,
-                        it.get("size").asInt,
-                        it.get("size_text").asString,
-                        it.get("type").asString
-                    )
-                }
-                .sortedWith(ModelComparator())
-        }
+                    it.get("obsolete").asString != "true"
+            }
+            .map {
+                ModelInfo(
+                    it.get("lang").asString,
+                    it.get("lang_text").asString,
+                    it.get("name").asString,
+                    it.get("url").asString,
+                    it.get("size").asInt,
+                    it.get("size_text").asString,
+                    it.get("type").asString
+                )
+            }
+            .sortedWith(ModelComparator())
 
         internal fun installModel(url: String) {
             messageBus!!.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
@@ -135,9 +134,7 @@ class VoskAsr : AsrProvider {
         instance = this
     }
 
-    override fun setModel(model: String) {
-        VoskAsr.setModel(model)
-    }
+    override fun setModel(model: String) = VoskAsr.setModel(model)
 
     val pathToPropertiesFile by lazy {
         File(System.getProperty("user.home") + "/.idear")

@@ -1,21 +1,11 @@
 package org.openasr.idear.asr.vosk
 
-import com.intellij.openapi.application.Application
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
-import com.intellij.openapi.ui.ComboBox
-import com.intellij.openapi.ui.TextBrowseFolderListener
-import com.intellij.openapi.ui.TextFieldWithBrowseButton
-import com.intellij.ui.dsl.builder.COLUMNS_LARGE
-import com.intellij.ui.dsl.builder.COLUMNS_SHORT
-import com.intellij.ui.dsl.builder.columns
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.util.ModalityUiUtil
-import com.intellij.util.ui.UIUtil
+import com.intellij.openapi.ui.*
+import com.intellij.ui.dsl.builder.*
 import java.awt.event.ItemEvent
-import javax.swing.JButton
-import javax.swing.JPanel
+import javax.swing.*
 
 class VoskSettingsForm : TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFolderDescriptor()) {
     internal val modelPathChooser = TextFieldWithBrowseButton()

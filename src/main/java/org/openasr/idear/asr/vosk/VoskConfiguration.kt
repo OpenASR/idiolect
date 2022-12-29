@@ -15,6 +15,7 @@ import com.intellij.util.application
 class VoskConfiguration : Configurable, PersistentStateComponent<VoskConfiguration.Settings> {
     var settings = Settings()
     private val gui by lazy(::VoskSettingsForm)
+    private var settings = Settings()
 
     override fun getDisplayName() = "Vosk"
 
