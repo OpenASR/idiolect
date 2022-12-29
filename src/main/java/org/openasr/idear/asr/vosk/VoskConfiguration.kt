@@ -4,16 +4,17 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.options.Configurable
-import org.openasr.idear.settings.IdearConfiguration
+import com.intellij.util.application
 
 @State(name = "VoskConfiguration", storages = [(Storage("recognition.vosk.xml"))])
 class VoskConfiguration : Configurable, PersistentStateComponent<VoskConfiguration.Settings> {
     private val gui by lazy(::VoskSettingsForm)
+    private var settings = Settings()
 
     data class Settings(var modelPath: String = "", var lang: String = "en-us")
 
     companion object {
-        var settings = Settings()
+        val settings get() = application.getService(VoskConfiguration::class.java).settings
 
         fun saveModelPath(modelPath: String) {
             settings.modelPath = modelPath

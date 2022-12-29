@@ -13,7 +13,7 @@ version = "1.4.0"
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
-  version.set("2022.3")
+  version.set("2022.3.1")
   pluginName.set("idear")
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))
@@ -82,6 +82,7 @@ repositories {
   mavenLocal()
   mavenCentral()
   maven("https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local")
+  maven("https://jitpack.io")
 }
 
 dependencies {
@@ -91,5 +92,6 @@ dependencies {
   }
   implementation("net.java.dev.jna:jna:5.12.1")
   implementation("com.alphacephei:vosk:0.3.45")
+  implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
   testImplementation("org.reflections:reflections:0.10.2")
 }
