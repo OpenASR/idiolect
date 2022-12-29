@@ -23,33 +23,42 @@ class CustomMicrophone : Closeable, Disposable {
         private const val TEMP_FILE = "/tmp/X.wav"
     }
 
-    private lateinit var line: TargetDataLine
+    private var line: TargetDataLine? = null
     lateinit var stream: AudioInputStream
 
     fun open() {
-        val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSize, 1, 2, sampleRate, bigEndian)
-        line = AudioSystem.getTargetDataLine(format)
-        line.open()
+        if (line == null) {
+            val format =
+                AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSize, 1, 2, sampleRate, bigEndian)
+            val line = AudioSystem.getTargetDataLine(format)
+            line.open()
 
-        if (line.isControlSupported(MASTER_GAIN))
-            log.info("Microphone: MASTER_GAIN supported")
-        else log.warn("Microphone: MASTER_GAIN NOT supported")
+            if (line.isControlSupported(MASTER_GAIN))
+                log.info("Microphone: MASTER_GAIN supported")
+            else log.warn("Microphone: MASTER_GAIN NOT supported")
 
-        //masterGainControl = findMGControl(line);
+            //masterGainControl = findMGControl(line);
 
-        stream = AudioInputStreamWithAdjustableGain(line)
+            stream = AudioInputStreamWithAdjustableGain(line)
+            this.line = line
+        }
     }
 
     override fun close() = dispose()
 
     override fun dispose() {
         stopRecording()
-        line.close()
+        line?.close()
         stream.close()
+        line = null
     }
 
-    fun startRecording() = line.start()
-    fun stopRecording() = line.stop()
+    fun startRecording() {
+        line?.start()
+    }
+    fun stopRecording() {
+        line?.stop()
+    }
 
     @Throws(IOException::class)
     fun recordFromMic(duration: Long): File {

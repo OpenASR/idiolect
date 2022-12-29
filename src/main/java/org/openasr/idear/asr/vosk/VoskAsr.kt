@@ -2,7 +2,6 @@ package org.openasr.idear.asr.vosk
 
 import com.google.gson.JsonParser.*
 import com.intellij.openapi.components.service
-import com.intellij.ide.actions.OpenFileAction
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType.INFORMATION
 import com.intellij.notification.NotificationGroupManager
@@ -37,7 +36,7 @@ class VoskAsr : AsrProvider {
         private lateinit var recognizer: Recognizer
 
         private val alternatives = 4
-        val defaultModelURL = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+        private const val defaultModelURL = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
 
         init {
             System.setProperty("jna.nounpack", "false")
@@ -128,6 +127,12 @@ class VoskAsr : AsrProvider {
                 recognizer.setMaxAlternatives(alternatives)
             }
         }
+
+        lateinit var instance: VoskAsr
+    }
+
+    init {
+        instance = this
     }
 
     override fun setModel(model: String) {
@@ -210,7 +215,7 @@ class VoskAsr : AsrProvider {
                 installModel(defaultModelURL)
             })
             .addAction(NotificationAction.create("Edit Configuration") { _ ->
-                ShowSettingsUtil.getInstance().showSettingsDialog(null, IdearConfiguration::class.java)
+                ShowSettingsUtil.getInstance().showSettingsDialog(null, VoskConfiguration::class.java)
             })
             .notify(null)
     }
