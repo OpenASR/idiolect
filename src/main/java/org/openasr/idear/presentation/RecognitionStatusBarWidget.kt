@@ -55,15 +55,12 @@ class RecognitionStatusBarWidget() :
         StatusBarWidgetClickListener(clickConsumer).installOn(this, true)
     }
 
-    override fun onAsrStatus(message: String) {
-        updateStatus(message)
-    }
+    override fun onAsrStatus(message: String) = updateStatus(message)
 
-    override fun onAsrReady(message: String) {
+    override fun onAsrReady(message: String) =
         GotItTooltip("org.openasr.idear.AsrReady", message, this)
             .show(this, GotItTooltip.TOP_MIDDLE)
-        updateStatus("")
-    }
+            .also { updateStatus("") }
 
     override fun getTooltipText() = toolTipText
 
@@ -71,13 +68,11 @@ class RecognitionStatusBarWidget() :
 
     override fun getComponent(): JComponent = this
 
-    override fun getClickConsumer(): Consumer<MouseEvent> {
-        return Consumer {
-            try {
-                AsrService.toggleListening()
-            } catch (e: Exception) {
-                log.info("Failed to toggle listening: ${e.message}")
-            }
+    override fun getClickConsumer() = Consumer<MouseEvent> {
+        try {
+            AsrService.toggleListening()
+        } catch (e: Exception) {
+            log.info("Failed to toggle listening: ${e.message}")
         }
     }
 
@@ -90,7 +85,7 @@ class RecognitionStatusBarWidget() :
     }
 
     override fun onRecognition(nlpRequest: NlpRequest) {
-        var utterance = nlpRequest.utterance
+        val utterance = nlpRequest.utterance
         toolTipText = "Last heard: '$utterance'"
         updateStatus("\uD83C\uDFA4 $utterance")
     }

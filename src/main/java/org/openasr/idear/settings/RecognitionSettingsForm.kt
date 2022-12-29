@@ -42,9 +42,7 @@ internal class RecognitionSettingsForm {
 
     private fun setOptions(comboBox: ComboBox<String>, options: List<String>) {
         comboBox.removeAllItems()
-        for (option in options) {
-            comboBox.addItem(option)
-        }
+        options.forEach { comboBox.addItem(it) }
     }
 
     private operator fun JTextComponent.getValue(a: RecognitionSettingsForm, p: KProperty<*>) = text

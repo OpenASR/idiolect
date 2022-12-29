@@ -21,14 +21,11 @@ object ListeningState {
 
     fun getStatus() = status.get()
 
-    val isTerminated: Boolean
-        get() = getStatus() == TERMINATED
+    val isTerminated get() = getStatus() == TERMINATED
 
-    val isInit: Boolean
-        get() = getStatus() == INIT
+    val isInit get() = getStatus() == INIT
 
-    val isActive: Boolean
-        get() = getStatus() == ACTIVE
+    val isActive get() = getStatus() == ACTIVE
 
     fun waitIfStandby() =
         lock.withLock { if (status.get() == STANDBY) condition.await() }

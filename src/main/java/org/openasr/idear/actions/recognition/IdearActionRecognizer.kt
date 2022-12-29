@@ -15,7 +15,6 @@ class IdearActionRecognizer : ActionRecognizer("Idear Commands", 0) {
                     ActionCallInfo(intentName, true).also { TTSService.say("Hi!") }
             }.withExample(Commands.HI_IDEA),
 
-
             object : NlpGrammar("Idear.About") {
                 override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
                     ActionCallInfo(intentName, true).also { ActionRoutines.routineAbout() }

@@ -26,14 +26,13 @@ fun String.expandCamelCase() =
         }
 
 fun String.splitCamelCase(): Sequence<String> =
-    fromCamelCaseRegex.findAll(capitalizeWord())
-        .map {
-            val word = StringBuilder(it.groups[2]!!.value)
-            if (!it.groups[1]?.value.isNullOrEmpty()) {
-                word.insert(0, it.groups[1]!!.value.lowercase())
-            }
-            word.toString()
+    fromCamelCaseRegex.findAll(capitalizeWord()).map {
+        val word = StringBuilder(it.groups[2]!!.value)
+        if (!it.groups[1]?.value.isNullOrEmpty()) {
+            word.insert(0, it.groups[1]!!.value.lowercase())
         }
+        word.toString()
+    }
 
 class SingleChar(private val char: Char) : CharSequence {
     override val length = 1

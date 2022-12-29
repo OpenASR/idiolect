@@ -8,7 +8,6 @@ interface AsrSystemStateListener {
         val ASR_STATE_TOPIC = Topic.create("ASR System State", AsrSystemStateListener::class.java)
     }
 
-
     fun onAsrStatus(message: String) {}
 
     fun onAsrReady(message: String) {}

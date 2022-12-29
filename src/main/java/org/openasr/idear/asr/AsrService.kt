@@ -2,7 +2,9 @@ package org.openasr.idear.asr
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
+import org.openasr.idear.asr.ListeningState.Status.ACTIVE
 import org.openasr.idear.nlp.NlpResultListener
+import org.openasr.idear.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
 import org.openasr.idear.settings.IdearConfiguration
 import javax.sound.sampled.LineUnavailableException
 
@@ -21,17 +23,14 @@ object AsrService {
 
     fun setAsrSystem(asrSystem: AsrSystem) {
         val status = ListeningState.getStatus()
-        var terminated = false
+        val terminated =
+            if (this::asrSystem.isInitialized && this.asrSystem != asrSystem) {
+                terminate()
+                true
+            } else false
 
-        if (this::asrSystem.isInitialized && this.asrSystem != asrSystem) {
-            terminate()
-            terminated = true
-        }
-
-        this.asrSystem = asrSystem
-        if (terminated && status == ListeningState.Status.ACTIVE) {
-            asrSystem.start()
-        }
+        // If last asrSystem was previously active but terminated then swap restart
+        this.asrSystem = asrSystem.apply { if (terminated && status == ACTIVE) start() }
     }
 
     fun waitForUtterance() = asrSystem.waitForUtterance()
@@ -41,7 +40,6 @@ object AsrService {
     fun setGrammar(grammar: Array<String>) = asrSystem.setGrammar(grammar)
 
     fun toggleListening() {
-
 //      val settings = ApplicationManager.getApplication().getService(AceConfig::class.java).state
 //      val aceJumpDefaults = settings.allowedChars
         if (isListening) {
@@ -54,16 +52,13 @@ object AsrService {
 //            settings.allowedChars = "1234567890"
         }
 
-        messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onListening(isListening)
+        messageBus.syncPublisher(NLP_RESULT_TOPIC).onListening(isListening)
     }
 
     /** Called when the user presses the start button. */
     fun activate() {
         ListeningState.activate()
-
-        if (!this::asrSystem.isInitialized) {
-            initialiseAsrSystem()
-        }
+        if (!this::asrSystem.isInitialized) initialiseAsrSystem()
         asrSystem.startRecognition()
     }
 
@@ -92,14 +87,14 @@ object AsrService {
             this.asrSystem = asrSystem
         } catch (e: LineUnavailableException) {
             log.error("Couldn't initialize microphone", e)
-            messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onFailure("Could not open microphone")
+            messageBus.syncPublisher(NLP_RESULT_TOPIC).onFailure("Could not open microphone")
             throw e
         } catch (e: ModelNotAvailableException) {
             log.info(e.message)
             throw e
         } catch (e: Exception) {
             log.error("Couldn't initialize speech asrProvider", e)
-            messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onFailure("Failed to initialise speech service")
+            messageBus.syncPublisher(NLP_RESULT_TOPIC).onFailure("Failed to initialise speech service")
             throw e
         }
     }

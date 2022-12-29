@@ -37,6 +37,7 @@ class AsrControlLoop : AsrSystem, Runnable {
         asrProvider.setGrammar(effectiveGrammar)
         var response = ""
 
+        // TODO: why is this loop necessary?
         while (null == response) {
             val speech = asrProvider.waitForSpeech() ?: break
 

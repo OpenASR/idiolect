@@ -23,9 +23,8 @@ object GrammarService : AnActionListener {
 
     fun useDictationGrammar() = AsrService.setGrammar(emptyArray())
 
-    private fun addIdearGrammar(grammar: HashSet<String>) {
+    private fun addIdearGrammar(grammar: HashSet<String>) =
         grammar.addAll(arrayOf("command", "dictation", "mode"))
-    }
 
     override fun beforeActionPerformed(anAction: AnAction,
                                        anActionEvent: AnActionEvent) {
