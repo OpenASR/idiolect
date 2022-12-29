@@ -35,6 +35,7 @@ class VoskAsr : AsrProvider {
         private val messageBus = ApplicationManager.getApplication()?.messageBus
         private val httpClient = HttpClient.newBuilder().build()
         private lateinit var recognizer: Recognizer
+
         private val alternatives = 4
         val propertiesFile by lazy { File(System.getProperty("user.home"), ".idear.properties")
             .apply { if (exists()) readText() else defaultPropertiesFileContents.also { writeText(it) } } }
@@ -84,7 +85,7 @@ class VoskAsr : AsrProvider {
                 .sortedWith(ModelComparator())
         }
 
-        internal fun installModel(url: String): String {
+        internal fun installModel(url: String) {
             messageBus!!.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
 
             val modelPath = pathForModelUrl(url)
@@ -95,8 +96,6 @@ class VoskAsr : AsrProvider {
             setModel(modelPath)
 
             messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been installed")
-
-            return modelPath
         }
 
         private fun downloadModel(url: String): InputStream {
@@ -144,6 +143,12 @@ class VoskAsr : AsrProvider {
 
     override fun setModel(model: String) {
         VoskAsr.setModel(model)
+    }
+
+    val pathToPropertiesFile by lazy {
+        File(System.getProperty("user.home") + "/.idear")
+            .apply { if (!exists()) createNewFile() }
+            .absolutePath
     }
 
     override fun activate() {

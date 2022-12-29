@@ -58,8 +58,6 @@ class VoskSettingsForm : TextBrowseFolderListener(FileChooserDescriptorFactory.c
             try {
                 VoskAsr.installModel(url)
                 installButton.text = "Install"
-
-
             } catch (e: Exception) {
                 installButton.text = "Installation failed"
             }
