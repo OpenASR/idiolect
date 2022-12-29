@@ -13,7 +13,6 @@ import com.intellij.util.application
     )],
     category = SettingsCategory.PLUGINS)
 class VoskConfiguration : Configurable, PersistentStateComponent<VoskConfiguration.Settings> {
-    var settings = Settings()
     private val gui by lazy(::VoskSettingsForm)
     private var settings = Settings()
 
