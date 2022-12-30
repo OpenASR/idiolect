@@ -15,6 +15,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout jAdapterForNativeTTS
+      uses: actions/checkout@v3
+      with:
+        repository: OpenASR/jAdapterForNativeTTS
+        ref: fff40ce1a1f1b921272a184acfd0c21350750789
+        path: jAdapterForNativeTTS
+    - name: Build jAdapterForNativeTTS
+      run: cd .jAdapterForNativeTTS && ./gradlew publishToMavenLocal
+
     - uses: actions/checkout@v3
     - name: Set up JDK 17
       uses: actions/setup-java@v1
