@@ -177,7 +177,10 @@ class VoskAsr : AsrProvider {
 
         while (microphone.stream.read(b).also { nbytes = it } >= 0) {
             if (recognizer.acceptWaveForm(b, nbytes)) {
-                return tryParseResult(recognizer.result)
+                val result = tryParseResult(recognizer.result)
+                if (result.alternatives.isNotEmpty()) {
+                    return result
+                }
             }
         }
 
@@ -193,7 +196,7 @@ class VoskAsr : AsrProvider {
                 if (isJsonNull) listOf(jo.get("text").toString())
                 else asJsonArray.map { it.asJsonObject.get("text").asString }
             }
-        }
+        }.filter { it.isNotEmpty() }
 
     private fun showNotificationForModel() {
         NotificationGroupManager.getInstance()

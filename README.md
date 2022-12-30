@@ -62,10 +62,29 @@ Some APIs such as AWS Lex implement the functionality of `AsrProvider` and `NlpP
 #### IntentResolver
 Processes an `NlpRequest` (utterance/alternatives) and resolves an `NlpResponse` with `intentName` and `slots`.
 `ActionRecognizerManager.handleNlpRequest()` iterates through the `IntentResolver`s until it finds a match.
+
+The Idear implementations use either exact-match or regular expressions on the recognized text.
+Alternative implementations may use AI to resolve the intent.
+
+##### CustomPhraseRecognizer
+Many of the auto-generated trigger phrases are not suitable for voice activation. You can add your own easier to 
+say and remember phrases in `~/.idea/phrases.properties`
  
 #### IntentHandler
 Fulfills an `NlpResponse` (intent + slots), performing desired actions.
 `ActionRecognizerManager.handleNlpRequest()` iterates through the `IntentHandler`s until the intent is actioned.
+
+##### TemplateIntentHandler
+Handles two flavours of intent prefix: 
+
+- `Template.id.${template.id}` eg: `Template.id.maven-dependency`
+- `Template.${template.groupName}.${template.key}` eg: `Template.Maven.dep`
+
+`template.id` is often null. 
+`template.key` is the "Abbreviation" that you would normally type before pressing `TAB`.
+
+The default trigger phrases are generated from the template description or key and are often not suitable for voice activation.
+You can add your own trigger phrase -> live template mapping in `~/.idea/phrases.properties` and it will be resolved by `CustomPhraseRecognizer`.
 
 #### ttsProvider
 Reads audio prompts/feedback to the user

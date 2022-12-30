@@ -5,7 +5,10 @@ import com.intellij.codeInsight.template.TemplateManager
 import com.intellij.codeInsight.template.impl.TemplateSettings
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
 import org.openasr.idear.actions.recognition.ActionCallInfo
+import org.openasr.idear.ide.IdeService
 import org.openasr.idear.nlp.NlpResponse
 
 class TemplateIntentHandler : IntentHandler {
@@ -16,7 +19,8 @@ class TemplateIntentHandler : IntentHandler {
             return null
         }
 
-        val templateManager = TemplateManager.getInstance(dataContext.getData(PlatformCoreDataKeys.PROJECT_CONTEXT))
+        val project = IdeService.getProject(dataContext)
+        val templateManager = TemplateManager.getInstance(project)
         val editor = dataContext.getData(PlatformCoreDataKeys.EDITOR)!!
 
         val template = intentRegex.matchEntire(response.intentName)?.let { match ->
@@ -28,7 +32,14 @@ class TemplateIntentHandler : IntentHandler {
             } else {
                 val file = dataContext.getData(PlatformCoreDataKeys.PSI_FILE)!!
                 val templateCallback = CustomTemplateCallback(editor, file)
-                templateCallback.findApplicableTemplate(key)
+
+                val element = file.findElementAt(templateCallback.offset)
+                if (element is PsiWhiteSpace) {
+                    // JavaCodeContextType won't let us insert code into white space
+                    TemplateSettings.getInstance().getTemplate(key, group)
+                } else {
+                    templateCallback.findApplicableTemplate(key)
+                }
             }
         }
 
