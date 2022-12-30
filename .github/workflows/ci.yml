@@ -28,10 +28,11 @@ jobs:
     - name: Build jAdapterForNativeTTS
       run: |-
         cd ./jAdapterForNativeTTS
-        gradle publishToMavenLocal
+        ./gradlew clean 
+        ./gradlew publishToMavenLocal
         ls -al /home/runner/.m2
-        ls -al /home/runner/.m2/repository/io/github
-        ls -al /home/runner/.m2/repository/io/github/jonelo/jAdapterForNativeTTS/0.9.9
+#        ls -al /home/runner/.m2/repository/io/github
+#        ls -al /home/runner/.m2/repository/io/github/jonelo/jAdapterForNativeTTS/0.9.9
 
     - uses: actions/checkout@v3
     - name: Build
