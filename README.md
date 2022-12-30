@@ -35,11 +35,56 @@ Contributors who have IntelliJ IDEA installed can simply open the project. Other
 
 Idear is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.org/intellij/sdk/docs/intro/welcome.html). For more information about the plugin architecture, please refer to [the wiki page](https://github.com/OpenASR/idear/wiki/Architecture).
 
+### Integration with Idear
+
+[plugin.xml](src/main/resources/META-INF/plugin.xml) defines a number of `<extensionPoint>`s which would allow other plugins to integrate with or extend/customise the capabilities of Idear.
+
+#### AsrProvider
+Listens for audio input, recognises speech to text and returns an `NlpRequest` with possible utterances.
+Does _not_ resolve the intent.
+
+Possible alternative implementations could:
+
+- integrate with Windows SAPI 5 Speech API
+- integrate with Dragon/Nuance API
+
+#### NlpProvider
+Processes an `NlpRequest`.
+The default implementation invokes `IdeService.invokeAction(ExecuteVoiceCommandAction, nlpRequest)`
+and the action is handled by `ExecuteVoiceCommandAction` and `ActionRecognizerManager.handleNlpRequest()`
+
+#### AsrSystem
+Processes audio input, recognises speech to text and executes actions.
+The default implementation `AsrControlLoop` uses the `AsrProvider` and `NlpProvider`.
+
+Some APIs such as AWS Lex implement the functionality of `AsrProvider` and `NlpProvider` in a single call.
+
+#### IntentResolver
+Processes an `NlpRequest` (utterance/alternatives) and resolves an `NlpResponse` with `intentName` and `slots`.
+`ActionRecognizerManager.handleNlpRequest()` iterates through the `IntentResolver`s until it finds a match.
+ 
+#### IntentHandler
+Fulfills an `NlpResponse` (intent + slots), performing desired actions.
+`ActionRecognizerManager.handleNlpRequest()` iterates through the `IntentHandler`s until the intent is actioned.
+
+#### ttsProvider
+Reads audio prompts/feedback to the user
+
+#### org.openasr.idear.nlp.NlpResultListener
+Any interfaces which are registered to the topic in plugin.xml under `<applicationListeners>` will be notified when
+
+- listening state changes
+- recognition is returned by the `AsrProvider`
+- request is fulfilled by an `IntentHandler`
+- there is a failure
+- a prompt/message is provided for the user  
+
+
 ### Plugin Actions
 
 [plugin.xml](src/main/resources/META-INF/plugin.xml) defines `<action>`s:
 
-#### [`VoiceRecordControllerAction`](src/main/java/org/openasr/idear/VoiceRecordControllerAction.kt)
+#### [`VoiceRecordControllerAction`](src/main/java/org/openasr/idear/actions/VoiceRecordControllerAction.kt)
   This action is invoked when the user clicks on the <img src="src/main/resources/org/openasr/idear/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar.
   This simply tells [`AsrService`](src/main/java/org/openasr/idear/asr/AsrService.kt) to activate or standby.
   When the `AsrService` is active, the [`ASRSystem`](src/main/java/org/openasr/idear/asr/ASRSystem.kt), 
@@ -53,7 +98,6 @@ Idear is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.org
 #### [`ExecuteVoiceCommandAction`](src/main/java/org/openasr/idear/actions/ExecuteVoiceCommandAction.kt)
   Similar to `ExecuteActionFromPredefinedText` but uses the `Idear.VoiceCommand.Text` data attached to the invoking `AnActionEvent`.
 
-#### [`WhereAmIAction`](src/main/java/org/openasr/idear/actions/WhereAmIAction.kt)
    
 #### IDEA Actions
 
@@ -64,32 +108,11 @@ There are many Actions (classes which extend `AnAction`) provided by IDEA:
   - [PlatformActions](https://upsource.jetbrains.com/idea-ce/file/idea-ce-1d111593d9e5208b6783f381b507e34866587ec8/platform/platform-resources/src/idea/PlatformActions.xml)
   - [VcsActions](https://upsource.jetbrains.com/idea-ce/file/idea-ce-1d111593d9e5208b6783f381b507e34866587ec8/platform/platform-resources/src/idea/VcsActions.xml)
 
-### ActionRecognizer
-
-#### [`ExtractActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/ExtractActionRecognizer.kt)
-"extract variable|field (to) (new Name)" 
-
-#### [`InlineActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/InlineActionRecognizer.kt)
-"inline"
-
-#### [`RunActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/RunActionRecognizer.kt)
-"run"
-
-#### [`DebugActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/DebugActionRecognizer.kt)
-"debug"
-
-#### [`FindUsagesActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/FindUsagesActionRecognizer.kt)
-"find (field|method)"
-
-#### [`RenameActionRecognizer`](src/main/java/org/openasr/idear/actions/recognition/RenameActionRecognizer.kt)
-"rename"
-
-
 ### ASRControlLoop
 
-When [`ASRControlLoop`][ASRControlLoop] detects an utterance, it invokes 
+When [`AsrControlLoop`][AsrControlLoop] detects an utterance, it invokes 
 [`PatternBasedNlpProvider.processUtterance()`](src/main/java/org/openasr/idear/nlp/PatternBasedNlpProvider.kt#L43)
-which typically calls `invokeAction()` and/or one or more of the methods of [`IDEService`](src/main/java/org/openasr/idear/ide/IDEService.kt)
+which typically calls `invokeAction()` and/or one or more of the methods of [`IdeService`](src/main/java/org/openasr/idear/ide/IdeService.kt)
 
 ## Programming By Voice
 
@@ -114,4 +137,4 @@ which typically calls `invokeAction()` and/or one or more of the methods of [`ID
 [plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/7910-idear.svg
 
 
-[ASRControlLoop]: src/main/java/org/openasr/idear/asr/ASRControlLoop.kt
+[AsrControlLoop]: src/main/java/org/openasr/idear/asr/AsrControlLoop.kt

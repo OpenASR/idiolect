@@ -54,7 +54,6 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
         val isSurrounding = false
         val templateContext = TemplateActionContext.create(file, editor, templateCallback.offset, templateCallback.offset, isSurrounding)
 
-
         val applicableTemplates = TemplateManagerImpl.listApplicableTemplates(templateContext)
             .filter {
                 nlpRequest.alternatives.contains(getExamplePhraseForTemplate(it, formatKey(it.key)))

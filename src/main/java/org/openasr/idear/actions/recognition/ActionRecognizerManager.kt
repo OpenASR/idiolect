@@ -35,23 +35,6 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
                 }
     }
 
-    /*
-     * TODO: Split ActionRecognizer in two
-     *
-     * NlpHandler
-     *   - DelegatingNlpHandler      .tryResultIntent -> NlpResponse?
-     *     - UserCustomNlpHandler                       { intentName: Idear.FindUsages, slots {type: method}
-     *     - IdearOfflineNlpHandler
-     *     - DialogFlowNlpHandler
-     *
-     * IntentHandler
-     *   - IdearIntentHandler if (intentName.startsWith("Idear.
-     *      - FindUsagesHandler ([Idear.FindUsages])
-     *   - TemplateHandler    if (intentName.startsWith("Template.") return ActionCallInfo(
-     *   - RegisteredActionHandler  // tries to match intentName as ActionId
-     */
-
-
     fun handleNlpRequest(nlpRequest: NlpRequest): ActionCallInfo? {
         val nlpResponse = getResolvers().filter { it.isSupported(dataContext, dataContext.getData(CONTEXT_COMPONENT)) }
             .firstNotNullOfOrNull { it.tryResolveIntent(nlpRequest, dataContext) }
