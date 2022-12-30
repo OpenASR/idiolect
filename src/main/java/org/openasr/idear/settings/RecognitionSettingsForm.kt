@@ -41,7 +41,7 @@ internal class RecognitionSettingsForm {
     fun reset(settings: IdearConfig.Settings) {
         setAsrOptions(ExtensionManager.asrEp.extensionList.map { e -> e.displayName() })
         setNlpOptions(ExtensionManager.nlpEp.extensionList.map { e -> e.displayName() })
-        setTtsOptions(IdearTTS.speechEngine.availableVoices.map { it.name })
+        setTtsOptions(IdearTTS.speechEngine.availableVoices?.map { it.name } ?: emptyList())
 
         asrService = settings.asrService
         nlpService = settings.nlpService
