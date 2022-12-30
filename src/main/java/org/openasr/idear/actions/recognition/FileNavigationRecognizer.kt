@@ -26,7 +26,7 @@ class FileNavigationRecognizer : IntentResolver("File Navigation", 800) {
                 }
             }.withExample("go to line 10"),
 
-            object : NlpRegexGrammar(INTENT_FOCUS, "focus (editor|project|symbols") {
+            object : NlpRegexGrammar(INTENT_FOCUS, "focus (editor|project|symbols)") {
                 override fun createNlpResponse(values: List<String>, dataContext: DataContext): NlpResponse {
                     return NlpResponse(intentName, mapOf("target" to values[1]))
                 }

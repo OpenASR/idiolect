@@ -30,8 +30,8 @@ class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatform
         // Then
         assertNotNull(examples)
 
-//        assertEqualsToFile("Documentation", File("docs/example-phrases.md"),
-//                examples.joinToString("\n"))
+        assertEqualsToFile("Documentation", File("docs/example-phrases.md"),
+                examples.joinToString("\n"))
     }
 
     @Test
@@ -44,8 +44,8 @@ class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatform
         // Then
         assertNotNull(examples)
 
-//        assertEqualsToFile("Examples", File("src/main/resources/phrases.example.properties"),
-//            examples.joinToString("\n", "# Example Phrases\n" ))
+        assertEqualsToFile("Examples", File("src/main/resources/phrases.example.properties"),
+            examples.joinToString("\n", "# Example Phrases\n" ))
     }
 
     private fun examplesToMarkdown(grammars: List<NlpGrammar>): List<String> =
