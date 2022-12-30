@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.openasr"
-version = "1.4.1"
+version = "1.4.5"
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
