@@ -27,7 +27,8 @@ jobs:
         path: jAdapterForNativeTTS
     - name: Build jAdapterForNativeTTS
       run: |-
-        cd ./jAdapterForNativeTTS && ./gradlew publishToMavenLocal
+        cd ./jAdapterForNativeTTS
+        gradle publishToMavenLocal
         ls -al /home/runner/.m2
         ls -al /home/runner/.m2/repository/io/github
         ls -al /home/runner/.m2/repository/io/github/jonelo/jAdapterForNativeTTS/0.9.9
