@@ -53,7 +53,7 @@ jobs:
           repository: OpenASR/jAdapterForNativeTTS
           path: jAdapterForNativeTTS
       - name: Build jAdapterForNativeTTS
-        run: cd .jAdapterForNativeTTS && ./gradlew publishToMavenLocal
+        run: cd ./jAdapterForNativeTTS && ./gradlew publishToMavenLocal
 
       - name: Publish Idea
         run: |

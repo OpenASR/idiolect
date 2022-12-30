@@ -21,7 +21,7 @@ jobs:
         repository: OpenASR/jAdapterForNativeTTS
         path: jAdapterForNativeTTS
     - name: Build jAdapterForNativeTTS
-      run: cd .jAdapterForNativeTTS && ./gradlew publishToMavenLocal
+      run: cd ./jAdapterForNativeTTS && ./gradlew publishToMavenLocal
 
     - uses: actions/checkout@v3
     - name: Set up JDK 17
