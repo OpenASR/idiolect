@@ -37,6 +37,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}
+        force: true
 
     # Needed until Vosk provide a new release to fix Windows issues
     - name: Checkout vosk-api
