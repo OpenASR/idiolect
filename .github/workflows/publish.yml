@@ -51,7 +51,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: OpenASR/jAdapterForNativeTTS
-          ref: fff40ce1a1f1b921272a184acfd0c21350750789
           path: jAdapterForNativeTTS
       - name: Build jAdapterForNativeTTS
         run: cd .jAdapterForNativeTTS && ./gradlew publishToMavenLocal
