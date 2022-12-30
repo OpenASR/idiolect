@@ -8,7 +8,7 @@ import java.io.InputStream
 
 // Template files are only required for user-created templates
 // Windows: %HOMEPATH%\AppData\Roaming\JetBrains\IntelliJIdea<version>\templates\
-// Linux:   ~IntelliJ IDEA<version>\config\templates
+// Linux:   ~IntelliJ IDEA<version>/config/templates
 // OS X:    ~/Library/Preferences/IntelliJ IDEA<version>/templates
 object TemplateParser {
     private val ns: String? = null
