@@ -10,40 +10,35 @@ class ExtractActionRecognizerTest {
 
     @Test
     fun testResolveIntroduceVariable() {
-        val recognizer = ExtractActionRecognizer()
+        val recognizer = ExtractFieldOrVariable()
 
         // When
         val result = recognizer.tryResolveIntent(NlpRequest(listOf("extract variable sum")), context)
 
         // Then
-        assertEquals("IntroduceVariable", result!!.actionId)
-        assertEquals("sum", result.typeAfter)
-        assertTrue(result.hitTabAfter)
-        assertFalse(result.fulfilled)
+        assertEquals("IntroduceVariable", result!!.slots!!["actionId"])
+        assertEquals("sum", result.slots!!["name"])
     }
 
     @Test
     fun testResolveIntroduceFieldWithoutName() {
-        val recognizer = ExtractActionRecognizer()
+        val recognizer = ExtractFieldOrVariable()
 
         // When
         val result = recognizer.tryResolveIntent(NlpRequest(listOf("extract to field")), context)
 
         // Then
-        assertEquals("IntroduceField", result!!.actionId)
-        assertNull(result.typeAfter)
-        assertFalse(result.hitTabAfter)
-        assertFalse(result.fulfilled)
+        assertEquals("IntroduceField", result!!.slots!!["actionId"])
     }
 
     @Test
     fun testResolveMultiWordName() {
-        val recognizer = ExtractActionRecognizer()
+        val recognizer = ExtractFieldOrVariable()
 
         // When
         val result = recognizer.tryResolveIntent(NlpRequest(listOf("extract to field my cool thing")), context)
 
         // Then
-        assertEquals("myCoolThing", result!!.typeAfter)
+        assertEquals("my cool thing", result!!.slots!!["name"])
     }
 }

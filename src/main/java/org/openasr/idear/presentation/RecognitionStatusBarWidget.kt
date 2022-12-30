@@ -1,5 +1,7 @@
 package org.openasr.idear.presentation
 
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.CustomStatusBarWidget
@@ -58,8 +60,13 @@ class RecognitionStatusBarWidget() :
     override fun onAsrStatus(message: String) = updateStatus(message)
 
     override fun onAsrReady(message: String) =
-        GotItTooltip("org.openasr.idear.AsrReady", message, this)
-            .show(this, GotItTooltip.TOP_MIDDLE)
+        NotificationGroupManager.getInstance()
+            .getNotificationGroup("Idear")
+            .createNotification("ASR is Ready",
+                message,
+                NotificationType.INFORMATION)
+            .notify(null)
+
             .also { updateStatus("") }
 
     override fun getTooltipText() = toolTipText

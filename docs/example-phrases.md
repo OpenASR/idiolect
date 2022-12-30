@@ -1,19 +1,21 @@
 
 ## Idear Commands
+ - hello
  - hi idea
  - tell me about yourself
  - stop listening
 
-## Extract Field or Variable
- - extract to field
- - extract variable 'sum'
+## Custom Phrases
 
 ## Find Usages
  - find usages
  - find usages of field 'my field'
  - find usages of method 'my method'
 
-## Properties File Recognizer
+## Extract Field or Variable
+ - extract this as a parameter
+ - extract to field
+ - extract variable 'sum'
 
 ## Rename
  - rename
@@ -22,6 +24,14 @@
 
 ## Surround with Not-Null Check
  - surround with not null check
+
+## File Navigation
+ - beginning of line
+ - end of line
+ - go to line 10
+ - focus editor
+ - focus project
+ - focus symbols
 
 ## Java Shortcuts
  - public static void main
@@ -715,6 +725,7 @@
  - next template variable
  - next window
  - open blank editor in blank diff window
+ - open bookmark group
  - open editor in opposite tab group
  - open element in new window
  - open file
