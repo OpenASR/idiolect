@@ -28,7 +28,11 @@ jobs:
         sed -i "s|version = \".*\"|version = \"${GITHUB_REF_NAME:1}\"|" build.gradle.kts
         git add build.gradle.kts
         git commit -m "updated version"
-        git push
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
 
     # Needed until Vosk provide a new release to fix Windows issues
     - name: Checkout vosk-api
