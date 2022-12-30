@@ -26,10 +26,8 @@ object Commands {
     const val INSPECT_CODE = "inspect code"
     const val OKAY_IDEA = "okay idea"
     const val OK_IDEA = "ok idea"
-    const val HI_IDEA = "hi idea"
     const val WHERE_AM_I = "where am i"
     const val NAVIGATE = "navigate"
     const val EXECUTE = "execute"
     const val GOTO = "goto line"
-    const val SHOW_USAGES = "show usages"
 }

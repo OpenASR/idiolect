@@ -7,11 +7,11 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.Project
 import org.openasr.idear.nlp.*
+import org.openasr.idear.nlp.intent.resolvers.IntentResolver
 import org.openasr.idear.settings.IdearConfig
-import org.openasr.idear.settings.IdearConfigurable
 import java.io.File
 
-class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recognizer", 500) {
+class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
     override val grammars: List<NlpGrammar> by lazy { buildGrammars() }
 
     companion object {
@@ -20,7 +20,13 @@ class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recogni
             # The first action with a matching utterance will be invoked.
             # For a list of potential actions that could be rebound, see:
             # https://github.com/OpenASR/idear/blob/master/src/main/resources/phrases.example.properties
-        """.trimIndent()
+            
+            FindInPath=find in project
+            MethodDown=next method
+            ActivateTerminalToolWindow=open terminal
+            Diff.FocusOppositePane=other pane
+            CodeInspection.OnEditor=inspect code
+            """.trimIndent()
 
         private val propertiesFile by lazy { File(IdearConfig.idearHomePath, "phrases.properties")
             .apply {
@@ -41,17 +47,16 @@ class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recogni
             }
         }
 
-        fun openCustomPhrasesFile(project: Project) {
+        private fun openCustomPhrasesFile(project: Project) {
             OpenFileAction.openFile(propertiesFile.absolutePath, project)
         }
     }
 
-    data class Binding(val name: String, val boundUtterances: List<String>)
-
+    data class Binding(val name: String, val boundPhrases: List<String>)
 
     override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext) =
-        properties.firstOrNull { it.boundUtterances.any { it in nlpRequest.alternatives } }
-            ?.let { ActionCallInfo(it.name) }
+        properties.firstOrNull { it.boundPhrases.any { phrase -> phrase in nlpRequest.alternatives } }
+            ?.let { NlpResponse(it.name) }
 
     var lastModified = 0L
 
@@ -66,18 +71,16 @@ class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recogni
     private val actionManager by lazy { ActionManager.getInstance() }
 
     private fun readBindingsFromPropertiesFile(): List<Binding> =
-        propertiesFile.readText().lines().filter { it.split("=").size == 2 } // Only take lines containing a single '='
-            .map { it.split("=").let { (k, v) -> Binding(k, v.split("|")) } }
+        propertiesFile.readText().lines()
+            .filter { it.split("=").size == 2 } // Only take lines containing a single '='
+            .map {
+                it.split("=").let { (k, v) -> Binding(k, v.split("|")) }
+            }
             // Check if name is a valid actionId
             .filter { actionManager.getAction(it.name) != null }
 
     private fun buildGrammars(): List<NlpGrammar> =
-        properties.flatMap { (actionId, boundUtterances) ->
-            boundUtterances.map { boundUtterance ->
-                object : NlpGrammar(boundUtterance) {
-                    override fun tryMatchRequest(utterance: String, dataContext: DataContext): ActionCallInfo? =
-                        if (utterance == boundUtterance) ActionCallInfo(actionId) else null
-                }
-            }
+        properties.map { (actionId, boundPhrases) ->
+            NlpGrammar(actionId).withExamples(boundPhrases)
         }
 }

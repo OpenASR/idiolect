@@ -20,8 +20,8 @@ object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
 //        val component = e.getData(PlatformCoreDataKeys.CONTEXT_COMPONENT)
 //        log.info("component: $component")
 
-        val provider = ActionRecognizerManager(e.dataContext)
-        val info = provider.handleNlpRequest((e.inputEvent as SpeechEvent).nlpRequest)
+        val manager = ActionRecognizerManager(e.dataContext)
+        val info = manager.handleNlpRequest((e.inputEvent as SpeechEvent).nlpRequest)
 
         if (info != null) {
             messageBus.syncPublisher(NLP_RESULT_TOPIC).onFulfilled(info)

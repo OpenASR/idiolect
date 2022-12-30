@@ -4,28 +4,21 @@ import com.intellij.testFramework.HeavyPlatformTestCase
 import com.intellij.testFramework.assertEqualsToFile
 import org.junit.Test
 import org.openasr.idear.nlp.NlpGrammar
+import org.openasr.idear.nlp.intent.resolvers.IntentResolver
 import org.openasr.idear.testing.TestContext
 import org.reflections.Reflections
 import java.io.File
 
 class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatformTestCase() {
     val manager = object : ActionRecognizerManager(TestContext()) {
-        override fun getExtensions(): Array<ActionRecognizer> =
-            Reflections("org.openasr.idear.actions.recognition").getSubTypesOf(ActionRecognizer::class.java)
-//                        .filter { it != RegisteredActionRecognizer::class.java && it != RegisteredEditorActionRecognizer::class.java }
+        override fun getResolvers(): Array<IntentResolver> =
+            Reflections("org.openasr.idear.actions.recognition").getSubTypesOf(IntentResolver::class.java)
                 .map { clazz ->
                     println(clazz.name)
-                    clazz.constructors.first().newInstance() as ActionRecognizer
+                    clazz.constructors.first().newInstance() as IntentResolver
                 }.toTypedArray()
     }
 
-//    @Test
-//    fun testRegenerateGrammars() {
-//        val examples = manager.documentGrammars { recognizer, grammars ->
-//            listOf("\n## ${recognizer.displayName}") + examplesToMarkdown(grammars)
-//        }
-//        File("docs/example-phrases.md").writeText(examples.joinToString("\n"))
-//    }
 
     @Test
     fun testDocumentGrammars() {
@@ -40,14 +33,6 @@ class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatform
 //        assertEqualsToFile("Documentation", File("docs/example-phrases.md"),
 //                examples.joinToString("\n"))
     }
-
-//    @Test
-//    fun testRegenerateProperties() {
-//        val examples = manager.documentGrammars { recognizer, grammars ->
-//            listOf("\n## ${recognizer.displayName}") + examplesToProperties(grammars)
-//        }
-//        File("src/main/resources/phrases.example.properties").writeText(examples.joinToString("\n"))
-//    }
 
     @Test
     fun testPhrasesExample() {

@@ -20,7 +20,8 @@
     </applicationListeners>
 
     <extensionPoints>
-        <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer" dynamic="true"/>
+        <extensionPoint name="intentResolver" interface="org.openasr.idear.nlp.intent.resolvers.IntentResolver" dynamic="true"/>
+        <extensionPoint name="intentHandler" interface="org.openasr.idear.nlp.intent.handlers.IntentHandler" dynamic="true"/>
         <extensionPoint name="asrSystem" interface="org.openasr.idear.asr.AsrSystem" dynamic="true"/>
         <extensionPoint name="asrProvider" interface="org.openasr.idear.asr.AsrProvider" dynamic="true"/>
         <extensionPoint name="ttsProvider" interface="org.openasr.idear.tts.TtsProvider" dynamic="true"/>
@@ -43,18 +44,29 @@
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idear">
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.IdearActionRecognizer" order="first"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.CustomUtteranceActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.JavaActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RegisteredEditorActionRecognizer"
+        <intentResolver implementation="org.openasr.idear.actions.recognition.IdearCommandRecognizer" order="first"
+                        id="IdearCommandRecognizer"
+        />
+        <intentResolver implementation="org.openasr.idear.actions.recognition.CustomPhraseRecognizer"
+                        after="IdearCommandRecognizer"
+                        id="CustomPhraseRecognizer"
+        />
+        <intentResolver implementation="org.openasr.idear.actions.recognition.ExtractFieldOrVariable"/>
+        <intentResolver implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
+        <intentResolver implementation="org.openasr.idear.actions.recognition.JavaActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idear.actions.recognition.RegisteredEditorActionRecognizer"
+                          id="RegisteredEditorActionRecognizer"
                           order="before RegisteredActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RegisteredActionRecognizer"
+        <intentResolver implementation="org.openasr.idear.actions.recognition.RegisteredActionRecognizer"
                           id="RegisteredActionRecognizer"
                           order="last"/>
+
+        <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.IdearCommandIntentHandler" order="first"/>
+        <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.IdearActionIntentHandler"/>
+        <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.JavaActionIntentHandler"/>
+        <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.IdearCommandIntentHandler" order="last"/>
 
         <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop"/>
         <asrProvider implementation="org.openasr.idear.asr.vosk.VoskAsr"/>

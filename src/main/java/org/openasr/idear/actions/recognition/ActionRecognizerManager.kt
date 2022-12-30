@@ -5,14 +5,16 @@ import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.*
 import com.intellij.openapi.extensions.ExtensionPointName
 import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.nlp.NlpRequest
-import javax.script.ScriptEngineManager
+import org.openasr.idear.nlp.intent.handlers.IntentHandler
+import org.openasr.idear.nlp.intent.resolvers.IntentResolver
 
 
 open class ActionRecognizerManager(private val dataContext: DataContext) {
-    private var EP_NAME = ExtensionPointName<ActionRecognizer>("org.openasr.idear.actionRecognizer")
+    private var RESOLVER_EP_NAME = ExtensionPointName<IntentResolver>("org.openasr.idear.intentResolver")
+    private var HANDLER_EP_NAME = ExtensionPointName<IntentHandler>("org.openasr.idear.intentHandler")
 
-    fun documentGrammars(formatter: (recognizer: ActionRecognizer, List<NlpGrammar>) -> List<String>): List<String> {
-        val extensions = getExtensions()
+    fun documentGrammars(formatter: (recognizer: IntentResolver, List<NlpGrammar>) -> List<String>): List<String> {
+        val extensions = getResolvers()
         val ideaActionRecognizer = extensions.find { it.javaClass == RegisteredActionRecognizer::class.java }!!
         val editorActionRecognizer = extensions.find { it.javaClass == RegisteredEditorActionRecognizer::class.java }!!
         var ideaGrammars = ideaActionRecognizer.grammars
@@ -50,9 +52,16 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
      */
 
 
-    fun handleNlpRequest(nlpRequest: NlpRequest): ActionCallInfo? =
-        getExtensions().filter { it.isSupported(dataContext, dataContext.getData(CONTEXT_COMPONENT)) }
+    fun handleNlpRequest(nlpRequest: NlpRequest): ActionCallInfo? {
+        val nlpResponse = getResolvers().filter { it.isSupported(dataContext, dataContext.getData(CONTEXT_COMPONENT)) }
             .firstNotNullOfOrNull { it.tryResolveIntent(nlpRequest, dataContext) }
 
-    protected open fun getExtensions() = EP_NAME.extensions
+        return if (nlpResponse == null) null else {
+            getHandlers().firstNotNullOfOrNull { it.tryFulfillIntent(nlpResponse, dataContext) }
+        }
+    }
+
+
+    protected open fun getResolvers() = RESOLVER_EP_NAME.extensions
+    protected open fun getHandlers() = HANDLER_EP_NAME.extensions
 }
