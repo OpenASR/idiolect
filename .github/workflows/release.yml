@@ -36,6 +36,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
         force: true
 
     # Needed until Vosk provide a new release to fix Windows issues
