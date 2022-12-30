@@ -24,6 +24,7 @@ jobs:
         java-version: 17
 
     - name: Update version number
+      if: startsWith(github.ref, 'refs/tags/')
       run: |
         sed -i "s|version = \".*\"|version = \"${GITHUB_REF_NAME:1}\"|" build.gradle.kts
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -32,6 +33,7 @@ jobs:
         git commit -m "updated version"
     - name: Push changes
       uses: ad-m/github-push-action@master
+      if: startsWith(github.ref, 'refs/tags/')
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}
