@@ -31,12 +31,12 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add build.gradle.kts
         git commit -m "updated version"
-#    - name: Push changes
-#      uses: ad-m/github-push-action@master
-#      if: startsWith(github.ref, 'refs/tags/')
-#      with:
-#        github_token: ${{ secrets.GITHUB_TOKEN }}
-#        branch: develop
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
 
     # Needed until Vosk provide a new release to fix Windows issues
     - name: Checkout vosk-api
