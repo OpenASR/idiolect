@@ -26,6 +26,8 @@ jobs:
     - name: Update version number
       run: |
         sed -i "s|version = \".*\"|version = \"${GITHUB_REF_NAME:1}\"|" build.gradle.kts
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add build.gradle.kts
         git commit -m "updated version"
     - name: Push changes
