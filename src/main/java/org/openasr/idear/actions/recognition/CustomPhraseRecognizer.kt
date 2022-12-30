@@ -55,8 +55,11 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
     data class Binding(val name: String, val boundPhrases: List<String>)
 
     override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext) =
-        properties.firstOrNull { it.boundPhrases.any { phrase -> phrase in nlpRequest.alternatives } }
-            ?.let { NlpResponse(it.name) }
+        properties.firstOrNull {
+            it.boundPhrases.any {
+                phrase -> phrase in nlpRequest.alternatives
+            }
+        }?.let { NlpResponse(it.name) }
 
     var lastModified = 0L
 
@@ -77,10 +80,15 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
                 it.split("=").let { (k, v) -> Binding(k, v.split("|")) }
             }
             // Check if name is a valid actionId
-            .filter { actionManager.getAction(it.name) != null }
+            .filter {
+                it.name.startsWith("Idear.")
+                    || it.name.startsWith("Template.")
+                    || it.name.endsWith("]")
+                    || actionManager.getAction(it.name) != null
+            }
 
     private fun buildGrammars(): List<NlpGrammar> =
         properties.map { (actionId, boundPhrases) ->
-            NlpGrammar(actionId).withExamples(boundPhrases)
+            NlpGrammar("Custom.$actionId").withExamples(boundPhrases)
         }
 }

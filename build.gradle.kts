@@ -40,7 +40,7 @@ tasks {
   compileTestKotlin {
     exclude(
       "**/windows/**",
-//      "**/ActionRecognizerManagerTest.kt"
+      "**/ActionRecognizerManagerTest.kt"
     )
     kotlinOptions.jvmTarget = jvmTarget
   }
