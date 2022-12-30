@@ -3,10 +3,10 @@ name: Build & Test
 on:
   push:
     branches: [ develop, "release/*" ]
-    paths:
-      - '**.kt'
-      - '**.kts'
-      - '**.tidy'
+#    paths:
+#      - '**.kt'
+#      - '**.kts'
+#      - '**.tidy'
   pull_request:
     branches: [ develop, "release/*" ]
 
