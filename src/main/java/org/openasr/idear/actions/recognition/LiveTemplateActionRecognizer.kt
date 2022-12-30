@@ -1,19 +1,14 @@
 package org.openasr.idear.actions.recognition
 
-import com.intellij.codeInsight.template.CustomLiveTemplate
 import com.intellij.codeInsight.template.CustomTemplateCallback
 import com.intellij.codeInsight.template.TemplateActionContext
 import com.intellij.codeInsight.template.TemplateManager
-import com.intellij.codeInsight.template.impl.TemplateContextTypes
 import com.intellij.codeInsight.template.impl.TemplateImpl
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl
 import com.intellij.codeInsight.template.impl.TemplateSettings
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys
 import com.intellij.openapi.editor.impl.EditorComponentImpl
-import com.intellij.util.containers.ContainerUtil
-import org.jetbrains.java.generate.template.TemplatesManager
-import org.openasr.idear.actions.templates.Template
 import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.nlp.NlpRequest
 import java.awt.Component
