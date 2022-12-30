@@ -33,6 +33,316 @@
  - focus project
  - focus symbols
 
+## Live Templates
+ - template surround with tag
+ - template surround with cdata section
+ - template doctype html
+ - template xml version 1 0 encoding utf 8
+ - template doctype html public w3c dtd html 4 01 transitional en http www w3 org tr html4 loose dtd
+ - template doctype html public w3c dtd html 4 01 en http www w3 org tr html4 strict dtd
+ - template doctype html public w3c dtd xhtml 1 0 transitional en http www w3 org tr xhtml1 dtd xhtml1 transitional dtd
+ - template doctype html public w3c dtd xhtml 1 0 strict en http www w3 org tr xhtml1 dtd xhtml1 strict dtd
+ - template doctype html public w3c dtd xhtml 1 1 en http www w3 org tr xhtml11 dtd xhtml11 dtd
+ - template 
+ - template cc:ie6
+ - template cc:ie
+ - template cc:noie
+ - template !
+ - template a href
+ - template a href http
+ - template a href mailto
+ - template a href tel
+ - template abbr title
+ - template acronym title
+ - template base href
+ - template basefont
+ - template br
+ - template frame
+ - template hr
+ - template bdo dir
+ - template bdo dir rtl
+ - template bdo dir ltr
+ - template col
+ - template link rel stylesheet href
+ - template link rel stylesheet href style css
+ - template link rel import href
+ - template link rel import href
+ - template link rel stylesheet href print css media print
+ - template link rel shortcut icon href favicon ico type image x icon
+ - template link rel apple touch icon href favicon png
+ - template link rel alternate href rss xml type application rss xml title rss
+ - template link rel alternate href atom xml type application atom xml title atom
+ - template meta
+ - template meta http equiv content type content text html charset utf 8
+ - template meta http equiv content type content text html charset win 1251
+ - template meta http equiv x ua compatible content ie edge
+ - template meta name viewport content width device width initial scale 1 0
+ - template meta http equiv x ua compatible content ie 7
+ - template meta http equiv refresh content 0 url http example com
+ - template style
+ - template script
+ - template script src
+ - template img src alt
+ - template img src alt srcset
+ - template img src alt srcset
+ - template img src alt sizes srcset
+ - template img src alt sizes srcset
+ - template picture
+ - template source
+ - template source src type
+ - template source src type
+ - template source srcset
+ - template source srcset
+ - template source media srcset
+ - template source media srcset
+ - template source srcset type
+ - template source srcset type
+ - template source sizes srcset
+ - template source sizes srcset
+ - template source media srcset type
+ - template source media srcset type
+ - template source media srcset sizes
+ - template source media srcset sizes
+ - template source sizes srcset type
+ - template source sizes srcset type
+ - template iframe src frameborder 0
+ - template embed src type
+ - template object data type
+ - template param name value
+ - template map name
+ - template area shape coords href alt
+ - template area shape default coords href alt
+ - template area shape circle coords href alt
+ - template area shape rect coords href alt
+ - template area shape poly coords href alt
+ - template form action
+ - template form action method get
+ - template form action method post
+ - template label for
+ - template input type
+ - template input type name id
+ - template input type hidden name
+ - template input type hidden name
+ - template input type text name id
+ - template input type text name id
+ - template input type search name id
+ - template input type email name id
+ - template input type url name id
+ - template input type password name id
+ - template input type password name id
+ - template input type datetime name id
+ - template input type date name id
+ - template input type datetime local name id
+ - template input type month name id
+ - template input type week name id
+ - template input type time name id
+ - template input type tel name id
+ - template input type number name id
+ - template input type color name id
+ - template input type checkbox name id
+ - template input type checkbox name id
+ - template input type radio name id
+ - template input type radio name id
+ - template input type range name id
+ - template input type file name id
+ - template input type file name id
+ - template input type submit value
+ - template input type submit value
+ - template input type image src alt
+ - template input type image src alt
+ - template input type button value
+ - template input type button value
+ - template isindex
+ - template input type reset value
+ - template select name id
+ - template select name id disabled
+ - template select name id disabled
+ - template option value
+ - template textarea name id cols 30 rows 10
+ - template marquee behavior direction
+ - template menu type context
+ - template menu type context
+ - template menu type toolbar
+ - template menu type toolbar
+ - template video src
+ - template audio src
+ - template html xmlns http www w3 org 1999 xhtml
+ - template keygen
+ - template command
+ - template button type submit
+ - template button type submit
+ - template button type reset
+ - template button type reset
+ - template button disabled
+ - template button disabled
+ - template fieldset disabled
+ - template fieldset disabled
+ - template blockquote
+ - template acronym title
+ - template figure
+ - template figcaption
+ - template picture
+ - template iframe src frameborder 0
+ - template embed src type
+ - template object data type
+ - template caption
+ - template colgroup
+ - template fieldset
+ - template fieldset disabled
+ - template button
+ - template button type button
+ - template button type reset
+ - template button type submit
+ - template button disabled
+ - template optgroup
+ - template option value
+ - template textarea name id cols 30 rows 10
+ - template legend
+ - template section
+ - template article
+ - template header
+ - template footer
+ - template address
+ - template dialog
+ - template strong
+ - template progress
+ - template main
+ - template sets lesser value to a variable
+ - template template
+ - template fieldset
+ - template fieldset disabled
+ - template datagrid
+ - template datalist
+ - template keygen
+ - template output
+ - template details
+ - template command
+ - template doc
+ - template doc4
+ - template img src alt srcset
+ - template img src alt srcset
+ - template img src alt sizes srcset
+ - template img src alt sizes srcset
+ - template picture source media srcset img src alt
+ - template picture source media srcset img src alt
+ - template picture source srcset type img src alt
+ - template picture source srcset type img src alt
+ - template html:4t
+ - template html:4s
+ - template html:xt
+ - template html:xs
+ - template html:xxs
+ - template html:5
+ - template ol+
+ - template ul+
+ - template dl+
+ - template map+
+ - template table+
+ - template colgroup+
+ - template colg+
+ - template tr+
+ - template select+
+ - template optgroup+
+ - template optg+
+ - template pic+
+ - template div
+ - template span
+ - template h1
+ - template h2
+ - template h3
+ - template h4
+ - template h5
+ - template h6
+ - template ol
+ - template ul
+ - template title
+ - template p
+ - template head
+ - template header
+ - template b
+ - template i
+ - template table
+ - template td
+ - template li
+ - template xsl template match mode
+ - template xsl template match mode
+ - template xsl param name
+ - template xsl param name select
+ - template xsl copy of select
+ - template xsl attribute name
+ - template xsl value of select
+ - template xsl when test
+ - template xsl for each select
+ - template xsl variable name
+ - template xsl when test
+ - template xsl apply templates select mode
+ - template xsl call template name
+ - template xsl choose
+ - template choose
+ - template xsl variable name select
+ - template xsl template name
+ - template xsl template name
+ - template xsl if test
+ - template xsl sort select order
+ - template xsl processing instruction name
+ - template xsl for each select
+ - template xsl strip space elements
+ - template xsl preserve space elements
+ - template namespace alias stylesheet prefix result prefix
+ - template xsl number value
+ - template xsl fallback
+ - template xsl message terminate no
+ - template xsl comment
+ - template xsl otherwise
+ - template xsl text
+ - template xsl apply imports
+ - template xsl copy select
+ - template xsl attribute set name
+ - template xsl element name
+ - template xsl include href
+ - template xsl import href
+ - template xsl
+ - template xsl key name match use
+ - template create iteration loop
+ - template add else if branch
+ - template iterate elements of array
+ - template iterate elements of java util collection
+ - template iterate java util enumeration
+ - template iterate java util iterator
+ - template iterate elements of java util list
+ - template iterate keys and values of java util map
+ - template iterate tokens from string
+ - template iterate elements of array in reverse order
+ - template iterate iterable or array
+ - template checks object type with instanceof and down casts it
+ - template fetches last element of an array
+ - template sets greater value to a variable
+ - template main method declaration
+ - template main method declaration
+ - template stores elements of java util collection into array
+ - template performs lazy initialization
+ - template inserts if not null statement
+ - template inserts if null statement
+ - template inserts singleton method getinstance
+ - template string
+ - template public static final
+ - template private static final
+ - template public static final int
+ - template public static final string
+ - template throw new
+ - template prints a string to system err
+ - template system err println
+ - template prints a string to system out
+ - template system out println
+ - template prints a formatted string to system out
+ - template prints current class and method names to system out
+ - template prints method parameter names and values to system out
+ - template prints a value to system out
+ - template surround with callable
+ - template surround with readwritelock readlock
+ - template surround with readwritelock writelock
+ - template iterate iterable or array
+
 ## Java Shortcuts
  - public static void main
  - print line
