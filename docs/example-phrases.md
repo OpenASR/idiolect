@@ -36,18 +36,18 @@
 ## Live Templates
  - template surround with tag
  - template surround with cdata section
- - template doctype html
+ - template bangdoctype html
  - template xml version 1 0 encoding utf 8
- - template doctype html public w3c dtd html 4 01 transitional en http www w3 org tr html4 loose dtd
- - template doctype html public w3c dtd html 4 01 en http www w3 org tr html4 strict dtd
- - template doctype html public w3c dtd xhtml 1 0 transitional en http www w3 org tr xhtml1 dtd xhtml1 transitional dtd
- - template doctype html public w3c dtd xhtml 1 0 strict en http www w3 org tr xhtml1 dtd xhtml1 strict dtd
- - template doctype html public w3c dtd xhtml 1 1 en http www w3 org tr xhtml11 dtd xhtml11 dtd
+ - template bangdoctype html public w3c dtd html 4 01 transitional en http www w3 org tr html4 loose dtd
+ - template bangdoctype html public w3c dtd html 4 01 en http www w3 org tr html4 strict dtd
+ - template bangdoctype html public w3c dtd xhtml 1 0 transitional en http www w3 org tr xhtml1 dtd xhtml1 transitional dtd
+ - template bangdoctype html public w3c dtd xhtml 1 0 strict en http www w3 org tr xhtml1 dtd xhtml1 strict dtd
+ - template bangdoctype html public w3c dtd xhtml 1 1 en http www w3 org tr xhtml11 dtd xhtml11 dtd
+ - template bang
+ - template cc ie6
+ - template cc ie
+ - template cc noie
  - template 
- - template cc:ie6
- - template cc:ie
- - template cc:noie
- - template !
  - template a href
  - template a href http
  - template a href mailto
@@ -227,24 +227,24 @@
  - template picture source media srcset img src alt
  - template picture source srcset type img src alt
  - template picture source srcset type img src alt
- - template html:4t
- - template html:4s
- - template html:xt
- - template html:xs
- - template html:xxs
- - template html:5
- - template ol+
- - template ul+
- - template dl+
- - template map+
- - template table+
- - template colgroup+
- - template colg+
- - template tr+
- - template select+
- - template optgroup+
- - template optg+
- - template pic+
+ - template html 4t
+ - template html 4s
+ - template html xt
+ - template html xs
+ - template html xxs
+ - template html 5
+ - template ol
+ - template ul
+ - template dl
+ - template map
+ - template table
+ - template colgroup
+ - template colg
+ - template tr
+ - template select
+ - template optgroup
+ - template optg
+ - template pic
  - template div
  - template span
  - template h1
