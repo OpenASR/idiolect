@@ -47,6 +47,15 @@ jobs:
           sed -i '10d;21,25d' build.gradle
           gradle publishToMavenLocal
 
+      - name: Checkout jAdapterForNativeTTS
+        uses: actions/checkout@v3
+        with:
+          repository: OpenASR/jAdapterForNativeTTS
+          ref: fff40ce1a1f1b921272a184acfd0c21350750789
+          path: jAdapterForNativeTTS
+      - name: Build jAdapterForNativeTTS
+        run: cd .jAdapterForNativeTTS && ./gradlew publishToMavenLocal
+
       - name: Publish Idea
         run: |
           ./gradlew publishPlugin --stacktrace
