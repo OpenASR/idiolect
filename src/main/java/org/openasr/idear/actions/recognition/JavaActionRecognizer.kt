@@ -34,8 +34,7 @@ class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
             override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
                 logUtteranceForIntent(utterance, intentName)
                 val className: String = values[1].ifEmpty {
-                    TtsService.say("what shall we call it?")
-                    AsrService.waitForUtterance()
+                    AsrService.promptForUtterance("what shall we call it?")
                 }
 
                 return NlpResponse(intentName, mapOf("className" to className))

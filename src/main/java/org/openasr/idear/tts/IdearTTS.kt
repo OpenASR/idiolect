@@ -1,7 +1,9 @@
 package org.openasr.idear.tts
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
 import io.github.jonelo.jAdapterForNativeTTS.engines.*
+import org.openasr.idear.recognizer.CustomMicrophone
 import org.openasr.idear.settings.IdearConfig
 import java.util.*
 
@@ -12,11 +14,15 @@ object IdearTTS : TtsProvider {
     override fun displayName() = "Native TTS"
 
     @Synchronized
-    override fun say(utterance: String) =
-        speechEngine.apply { setVoice(IdearConfig.settings.ttsService) }.say(utterance)
+    override fun say(utterance: String) {
+        sayWithVoice(utterance, IdearConfig.settings.ttsService)
+    }
 
-    fun sayWithVoice(utterance: String, voice: String) =
-        speechEngine.apply { setVoice(voice) }.say(utterance)
+    fun sayWithVoice(utterance: String, voice: String) {
+        speechEngine.apply { setVoice(voice) }
+            .say(utterance)
+            .waitFor()
+    }
 
     override fun dispose() = Unit
 }

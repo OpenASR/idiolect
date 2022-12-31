@@ -61,18 +61,15 @@ object ActionRoutines {
     }
 
     fun promptForVisibility(grammar: Array<String>): String? {
-        TtsService.say("with what visibility?")
-        return AsrService.waitForUtterance(grammar)
+        return AsrService.promptForUtterance("with what visibility?", grammar)
     }
 
     fun promptForReturnType(): String {
-        TtsService.say("what will it return?")
-        return AsrService.waitForUtterance()
+        return AsrService.promptForUtterance("what will it return?")
     }
 
     fun promptForName(): String {
-        TtsService.say("what shall we call it?")
-        return AsrService.waitForUtterance()
+        return AsrService.promptForUtterance("what shall we call it?")
     }
 
     fun routineAbout() {

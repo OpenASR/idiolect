@@ -25,6 +25,7 @@ class CustomMicrophone : Closeable, Disposable {
 
     private var line: TargetDataLine? = null
     lateinit var stream: AudioInputStream
+    private var isRecording: Boolean = false
 
     fun open() {
         if (line == null) {
@@ -54,11 +55,14 @@ class CustomMicrophone : Closeable, Disposable {
     }
 
     fun startRecording() {
-        line?.start()
+        line?.start().also { isRecording = true }
+
     }
     fun stopRecording() {
-        line?.stop()
+        line?.stop().also { isRecording = false }
     }
+
+    fun isRecording() = isRecording
 
     @Throws(IOException::class)
     fun recordFromMic(duration: Long): File {

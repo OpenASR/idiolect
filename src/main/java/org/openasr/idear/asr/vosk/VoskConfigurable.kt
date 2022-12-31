@@ -22,7 +22,7 @@ class VoskConfigurable : Configurable {
         if (gui.modelPathChooser.text != settings.modelPath) {
             settings.modelPath = gui.modelPathChooser.text
             VoskAsr.setModel(settings.modelPath)
-            VoskAsr.instance.activate()
+            VoskAsr.activate()
         }
 
         if (gui.languageCombo.selectedItem != settings.language) {

@@ -6,6 +6,7 @@ import org.openasr.idear.asr.ListeningState.Status.ACTIVE
 import org.openasr.idear.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
 import org.openasr.idear.settings.IdearConfig
 import org.openasr.idear.settings.IdearConfigurable
+import org.openasr.idear.tts.TtsService
 import javax.sound.sampled.LineUnavailableException
 
 object AsrService {
@@ -33,6 +34,25 @@ object AsrService {
         this.asrSystem = asrSystem.apply { if (terminated && status == ACTIVE) start() }
     }
 
+    fun promptForUtterance(prompt: String): String {
+        TtsService.say(prompt)
+        return waitForUtterance()
+    }
+
+    fun promptForUtterance(prompt: String, grammar: Array<String>): String {
+        TtsService.say(prompt)
+        return waitForUtterance(grammar)
+    }
+
+    fun sayWithMicOff(prompt: String) {
+        val wasListening = setListeningState(false)
+        TtsService.say(prompt)
+
+        if (wasListening) {
+            setListeningState(true)
+        }
+    }
+
     fun waitForUtterance() = asrSystem.waitForUtterance()
 
     fun waitForUtterance(grammar: Array<String>) = asrSystem.waitForUtterance(grammar)
@@ -40,19 +60,28 @@ object AsrService {
     fun setGrammar(grammar: Array<String>) = asrSystem.setGrammar(grammar)
 
     fun toggleListening() {
+        setListeningState(!isListening)
+    }
+
+    fun setListeningState(listening: Boolean): Boolean {
+        val wasListening = isListening
+        if (isListening != listening) {
 //      val settings = ApplicationManager.getApplication().getService(AceConfig::class.java).state
 //      val aceJumpDefaults = settings.allowedChars
-        if (isListening) {
-            isListening = false
-//            settings.allowedChars = aceJumpDefaults
-            deactivate()
-        } else {
-            activate()
-            isListening = true
+            if (listening) {
+                activate()
+                isListening = true
 //            settings.allowedChars = "1234567890"
+            } else {
+                isListening = false
+//            settings.allowedChars = aceJumpDefaults
+                deactivate()
+            }
+
+            messageBus.syncPublisher(NLP_RESULT_TOPIC).onListening(isListening)
         }
 
-        messageBus.syncPublisher(NLP_RESULT_TOPIC).onListening(isListening)
+        return wasListening
     }
 
     /** Called when the user presses the start button. */

@@ -32,6 +32,7 @@ class VoskAsr : AsrProvider {
     override fun displayName() = "Vosk"
 
     companion object {
+        private lateinit var instance: VoskAsr
         private val messageBus = ApplicationManager.getApplication()!!.messageBus
         private val httpClient = HttpClient.newBuilder().build()
         private lateinit var recognizer: Recognizer
@@ -131,7 +132,9 @@ class VoskAsr : AsrProvider {
             }
         }
 
-        lateinit var instance: VoskAsr
+        fun activate() {
+            instance.activate()
+        }
     }
 
     init {
