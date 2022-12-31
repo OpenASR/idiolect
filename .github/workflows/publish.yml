@@ -49,6 +49,7 @@ jobs:
           sed -i '' '218s/^/\/\//' src/main/java/org/vosk/Recognizer.java
           gradle publishToMavenLocal
 
+      # Needed until Breandan's PR is merged & published
       - name: Checkout jAdapterForNativeTTS
         uses: actions/checkout@v3
         with:
