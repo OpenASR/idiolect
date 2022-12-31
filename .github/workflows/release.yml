@@ -85,3 +85,7 @@ jobs:
         files: |
           CHANGELOG.md
           build/distributions/*.zip
+
+# TODO: manual step, publish artifact
+# gradlew publishPlugin -distributionFile=  ...somehow skip build
+# merge into master

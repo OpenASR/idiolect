@@ -71,6 +71,7 @@ tasks {
       if (System.getenv("GITHUB_REF_NAME") != "master") {
         // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/canary/list
         // https://www.jetbrains.com/help/idea/managing-plugins.html#repos
+        // alpha/beta/eap/canary
         channels.set(listOf("canary"))
         // ...could also add updatePlugins.xml to github site
         // https://plugins.jetbrains.com/docs/intellij/custom-plugin-repository.html#describing-your-plugins-in-updatepluginsxml-file

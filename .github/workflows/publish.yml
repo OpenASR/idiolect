@@ -61,3 +61,4 @@ jobs:
       - name: Publish Idea
         run: |
           ./gradlew publishPlugin --stacktrace
+#TODO: merge into release.yml
