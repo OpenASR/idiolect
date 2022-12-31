@@ -31,7 +31,8 @@ class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
 
         // "create new class (optional name)"
         object : NlpRegexGrammar(INTENT_NEW_CLASS, ".*new class ?(.*)?") {
-            override fun createNlpResponse(values: List<String>, dataContext: DataContext): NlpResponse {
+            override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+                logUtteranceForIntent(utterance, intentName)
                 val className: String = values[1].ifEmpty {
                     TtsService.say("what shall we call it?")
                     AsrService.waitForUtterance()

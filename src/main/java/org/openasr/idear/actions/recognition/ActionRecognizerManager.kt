@@ -2,6 +2,7 @@ package org.openasr.idear.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.*
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.extensions.ExtensionPointName
 import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.nlp.NlpRequest
@@ -10,6 +11,10 @@ import org.openasr.idear.nlp.intent.resolvers.IntentResolver
 
 
 open class ActionRecognizerManager(private val dataContext: DataContext) {
+    companion object {
+        private val log = logger<ActionRecognizerManager>()
+    }
+
     private var RESOLVER_EP_NAME = ExtensionPointName<IntentResolver>("org.openasr.idear.intentResolver")
     private var HANDLER_EP_NAME = ExtensionPointName<IntentHandler>("org.openasr.idear.intentHandler")
 
@@ -40,6 +45,7 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
             .firstNotNullOfOrNull { it.tryResolveIntent(nlpRequest, dataContext) }
 
         return if (nlpResponse == null) null else {
+            log.info("Intent: ${nlpResponse.intentName}")
             getHandlers().firstNotNullOfOrNull { it.tryFulfillIntent(nlpResponse, dataContext) }
         }
     }

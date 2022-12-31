@@ -17,8 +17,10 @@ class RenameActionRecognizer : IntentResolver("Rename", 500) {
 
     override val grammars = listOf(
         object : NlpRegexGrammar(INTENT_NAME, "rename(?: to|as)? ?(.*)?") {
-            override fun createNlpResponse(values: List<String>, dataContext: DataContext) =
-                NlpResponse(intentName, mapOf("name" to values[1]))
+            override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+                logUtteranceForIntent(utterance, intentName)
+                return NlpResponse(intentName, mapOf("name" to values[1]))
+            }
         }.withExamples(
             "rename",
             "rename to 'example'",

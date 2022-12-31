@@ -21,11 +21,13 @@ class ExtractFieldOrVariable : IntentResolver("Extract Field or Variable", 500) 
                 "parameter" to "IntroduceParameter",
             )
 
-            override fun createNlpResponse(values: List<String>, dataContext: DataContext): NlpResponse =
-                NlpResponse(intentName, mapOf(
+            override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+                logUtteranceForIntent(utterance, intentName)
+                return NlpResponse(intentName, mapOf(
                     "actionId" to actionIds[values[1]]!!,
                     "name" to values[2]
                 ))
+            }
         }.withExamples(
             // NlpRegexGrammar does not use the examples, but they could be used in documentation
             "extract variable 'sum'",

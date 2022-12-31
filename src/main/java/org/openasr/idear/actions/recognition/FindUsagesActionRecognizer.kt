@@ -14,9 +14,10 @@ class FindUsagesActionRecognizer : IntentResolver("Find Usages", 500) {
 
     override val grammars = listOf(
         object : NlpRegexGrammar(INTENT_NAME, "find usages of (field|method) ?(.*)?") {
-            override fun createNlpResponse(values: List<String>, dataContext: DataContext): NlpResponse {
+            override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+                logUtteranceForIntent(utterance, intentName)
                 return NlpResponse(INTENT_NAME, mapOf(
-                    "subject" to values[1]!!,
+                    "subject" to values[1],
                     "target" to values[2],
                 ))
             }
