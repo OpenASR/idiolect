@@ -8,6 +8,8 @@ import com.intellij.codeInsight.template.impl.TemplateSettings
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys
 import com.intellij.openapi.editor.impl.EditorComponentImpl
+import com.intellij.psi.PsiFile
+import org.openasr.idear.ide.PsiFileNoWhiteSpace
 import org.openasr.idear.nlp.NlpGrammar
 import org.openasr.idear.nlp.NlpRequest
 import org.openasr.idear.nlp.NlpResponse
@@ -34,7 +36,7 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
      */
     override val grammars = TemplateSettings.getInstance().templates.flatMap { template ->
         val key = formatKey(template.key)
-        val example = "template " + getExamplePhraseForTemplate(template, key)
+        val example = getExamplePhraseForTemplate(template, key)
         val group = template.groupName.replace(" ", "")
         val keyGrammar = NlpGrammar("Template.${group}.${key}").withExample(example)
 
@@ -45,14 +47,19 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
         }
     }
 
+
     override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): NlpResponse? {
         val editor = dataContext.getData(PlatformCoreDataKeys.EDITOR)!!
         val file = dataContext.getData(PlatformCoreDataKeys.PSI_FILE)!!
-
         val templateCallback = CustomTemplateCallback(editor, file)
 
         val isSurrounding = false
-        val templateContext = TemplateActionContext.create(file, editor, templateCallback.offset, templateCallback.offset, isSurrounding)
+        val templateContext = TemplateActionContext.create(
+            PsiFileNoWhiteSpace(file),
+            editor,
+            templateCallback.offset, templateCallback.offset,
+            isSurrounding
+        )
 
         val applicableTemplates = TemplateManagerImpl.listApplicableTemplates(templateContext)
             .filter {
@@ -84,6 +91,6 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
             example = key.replace("_", " ").trim()
         }
 
-        return example
+        return "template $example"
     }
 }
