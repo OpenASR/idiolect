@@ -44,9 +44,9 @@ jobs:
           rm vosk-0.3.38.jar
           cd ../../..
           echo 'rootProject.name = "vosk"' > settings.gradle.kts
-          sed -i '' '10d;21,25d' build.gradle
-          sed -i '' '80s/^/\/\//' src/main/java/org/vosk/LibVosk.java
-          sed -i '' '218s/^/\/\//' src/main/java/org/vosk/Recognizer.java
+          sed -i '10d;21,25d' build.gradle
+          sed -i '80s/^/\/\//' src/main/java/org/vosk/LibVosk.java
+          sed -i '218s/^/\/\//' src/main/java/org/vosk/Recognizer.java
           gradle publishToMavenLocal
 
       # Needed until Breandan's PR is merged & published
