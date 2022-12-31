@@ -68,7 +68,7 @@
         <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.IdearActionIntentHandler"/>
         <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.TemplateIntentHandler"/>
         <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.JavaActionIntentHandler"/>
-        <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.IdearCommandIntentHandler" order="last"/>
+        <intentHandler implementation="org.openasr.idear.nlp.intent.handlers.RegisteredActionHandler" order="last"/>
 
         <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop"/>
         <asrProvider implementation="org.openasr.idear.asr.vosk.VoskAsr"/>

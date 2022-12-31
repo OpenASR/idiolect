@@ -23,10 +23,10 @@ class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
     }
 
     override val grammars = listOf(
-        NlpGrammar("Template.psvm").withExample("public static void main"),
+        NlpGrammar("Template.Java.psvm").withExample("public static void main"),
 //                ActionCallInfo(intentName, true).also { ActionRoutines.routinePsvm() }
 
-        NlpGrammar("Template.sout").withExample("print line"),
+        NlpGrammar("Template.Java.sout").withExample("print line"),
 //                ActionCallInfo(intentName, true).also { ActionRoutines.routinePrintln() }
 
         // "create new class (optional name)"
