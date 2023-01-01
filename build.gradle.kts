@@ -58,8 +58,6 @@ tasks {
   if (System.getenv("GITHUB_REF_NAME") != null
       && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty())
   {
-    println("----------configuring signPlugin on ${System.getenv("GITHUB_REF_NAME")}")
-
     signPlugin {
       certificateChain.set(System.getenv("INTELLIJ_CERTIFICATE_CHAIN"))
       privateKey.set(System.getenv("INTELLIJ_PRIVATE_KEY"))
@@ -80,8 +78,6 @@ tasks {
       }
       token.set(System.getenv("INTELLIJ_PUBLISH_TOKEN"))
     }
-  } else {
-    println("-------------NOT configuring signPlugin on ${System.getenv("GITHUB_REF_NAME")}")
   }
 }
 

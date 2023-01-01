@@ -64,6 +64,33 @@ jobs:
         name: distribution
         path: './build/distributions/idear.zip'
 
+  publish-to-beta:
+    runs-on: ubuntu-latest
+    needs: build
+    # Requires approval - https://github.com/OpenASR/idear/settings/environments/788279606/edit
+    environment: beta
+    env:
+      INTELLIJ_CHANNEL: beta
+      INTELLIJ_PUBLISH_TOKEN: ${{ secrets.INTELLIJ_PUBLISH_TOKEN }}
+      INTELLIJ_CERTIFICATE_CHAIN: ${{ secrets.INTELLIJ_CERTIFICATE_CHAIN }}
+      INTELLIJ_PRIVATE_KEY: ${{ secrets.INTELLIJ_PRIVATE_KEY }}
+      INTELLIJ_PRIVATE_KEY_PASSWORD: ${{ secrets.INTELLIJ_PRIVATE_KEY_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: distribution
+          path: './build/distributions'
+
+      - name: Publish to eap Marketplace
+        run: |
+          pwd
+          ls -al build/distributions
+          ./gradlew publishPlugin -x buildPlugin -x verifyPlugin
+
   publish-to-eap:
     runs-on: ubuntu-latest
     needs: build
@@ -83,10 +110,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: distribution
-          path: './build/distributions/idear.zip'
+          path: './build/distributions'
 
       - name: Publish to eap Marketplace
         run: |
-          pwd
-          ls -al build/distributions
           ./gradlew publishPlugin -x buildPlugin -x verifyPlugin
