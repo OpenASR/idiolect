@@ -13,7 +13,7 @@ version = "1.4.5"
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
-  version.set("2022.3.1")
+  version.set("2022.3.1") // The version of the IntelliJ Platform IDE that will be used to build the plugin
   pluginName.set("idear")
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))
@@ -68,11 +68,12 @@ tasks {
     }
 
     publishPlugin {
+      distributionFile.set(File("./build/distributions/idear.zip"))
       if (System.getenv("GITHUB_REF_NAME") != "master") {
-        // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/canary/list
+        // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/eap/list
         // https://www.jetbrains.com/help/idea/managing-plugins.html#repos
         // alpha/beta/eap/canary
-        channels.set(listOf("canary"))
+        channels.set(listOf("eap"))
         // ...could also add updatePlugins.xml to github site
         // https://plugins.jetbrains.com/docs/intellij/custom-plugin-repository.html#describing-your-plugins-in-updatepluginsxml-file
       }
