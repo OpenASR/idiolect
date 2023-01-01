@@ -87,4 +87,6 @@ jobs:
 
       - name: Publish to eap Marketplace
         run: |
+          pwd
+          ls -al build/distributions
           ./gradlew publishPlugin -x buildPlugin -x verifyPlugin
