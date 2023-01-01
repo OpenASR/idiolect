@@ -1,5 +1,5 @@
 
-## Idear Commands
+## Idiolect Commands
  - hi idea
  - tell me about yourself
  - stop listening

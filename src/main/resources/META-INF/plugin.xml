@@ -1,13 +1,13 @@
 <idea-plugin>
-    <id>org.openasr.idear</id>
-    <name>idear</name>
-    <vendor email="idear@ndan.co" url="https://github.com/OpenASR/idear">OpenASR</vendor>
+    <id>org.openasr.idiolect</id>
+    <name>idiolect</name>
+    <vendor email="bre@ndan.co" url="https://github.com/OpenASR/idiolect">OpenASR</vendor>
 
     <description>
-        <![CDATA[Speech recognition for IntelliJ IDEA. Idear listens to voice commands
+        <![CDATA[Speech recognition for IntelliJ IDEA. Idiolect listens to voice commands
         and assists with simple actions like debugging, navigation, and refactoring. For
         a list of example phrases, please see the
-        <a href="https://github.com/OpenASR/idear/blob/feature/grammar-system/docs/example-phrases.md">documentation</a>.]]>
+        <a href="https://github.com/OpenASR/idiolect/blob/feature/grammar-system/docs/example-phrases.md">documentation</a>.]]>
     </description>
 
     <depends>com.intellij.modules.lang</depends>
@@ -15,55 +15,55 @@
 <!--    <depends>AceJump</depends>-->
 
     <applicationListeners>
-        <listener topic="org.openasr.idear.nlp.NlpResultListener" class="org.openasr.idear.nlp.IntellijNlpResultListener"/>
-        <listener topic="org.openasr.idear.nlp.NlpResultListener" class="org.openasr.idear.nlp.LoggingNlpResultListener"/>
+        <listener topic="org.openasr.idiolect.nlp.NlpResultListener" class="org.openasr.idiolect.nlp.IntellijNlpResultListener"/>
+        <listener topic="org.openasr.idiolect.nlp.NlpResultListener" class="org.openasr.idiolect.nlp.LoggingNlpResultListener"/>
     </applicationListeners>
 
     <extensionPoints>
-        <extensionPoint name="actionRecognizer" interface="org.openasr.idear.actions.recognition.ActionRecognizer" dynamic="true"/>
-        <extensionPoint name="asrSystem" interface="org.openasr.idear.asr.AsrSystem" dynamic="true"/>
-        <extensionPoint name="asrProvider" interface="org.openasr.idear.asr.AsrProvider" dynamic="true"/>
-        <extensionPoint name="ttsProvider" interface="org.openasr.idear.tts.TtsProvider" dynamic="true"/>
-        <extensionPoint name="nlpProvider" interface="org.openasr.idear.nlp.NlpProvider" dynamic="true"/>
+        <extensionPoint name="actionRecognizer" interface="org.openasr.idiolect.actions.recognition.ActionRecognizer" dynamic="true"/>
+        <extensionPoint name="asrSystem" interface="org.openasr.idiolect.asr.AsrSystem" dynamic="true"/>
+        <extensionPoint name="asrProvider" interface="org.openasr.idiolect.asr.AsrProvider" dynamic="true"/>
+        <extensionPoint name="ttsProvider" interface="org.openasr.idiolect.tts.TtsProvider" dynamic="true"/>
+        <extensionPoint name="nlpProvider" interface="org.openasr.idiolect.nlp.NlpProvider" dynamic="true"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="org.openasr.idear.settings.IdearConfig"/>
-        <applicationService serviceImplementation="org.openasr.idear.asr.vosk.VoskConfig"/>
-        <applicationConfigurable groupId="tools" displayName="Idear"
-                                 id="preferences.IdearConfiguration"
-                                 instance="org.openasr.idear.settings.IdearConfigurable" dynamic="true"/>
+        <applicationService serviceImplementation="org.openasr.idiolect.settings.IdiolectConfig"/>
+        <applicationService serviceImplementation="org.openasr.idiolect.asr.vosk.VoskConfig"/>
+        <applicationConfigurable groupId="tools" displayName="Idiolect"
+                                 id="preferences.IdiolectConfiguration"
+                                 instance="org.openasr.idiolect.settings.IdiolectConfigurable" dynamic="true"/>
         <applicationConfigurable groupId="tools" displayName="Vosk"
                                  id="preferences.VoskConfiguration"
-                                 parentId="preferences.IdearConfiguration"
-                                 instance="org.openasr.idear.asr.vosk.VoskConfigurable" dynamic="true"/>
+                                 parentId="preferences.IdiolectConfiguration"
+                                 instance="org.openasr.idiolect.asr.vosk.VoskConfigurable" dynamic="true"/>
 
-        <notificationGroup id="Idear" displayType="BALLOON"/>
-        <statusBarWidgetFactory implementation="org.openasr.idear.presentation.RecognitionStatusBarWidgetFactory"/>
+        <notificationGroup id="Idiolect" displayType="BALLOON"/>
+        <statusBarWidgetFactory implementation="org.openasr.idiolect.presentation.RecognitionStatusBarWidgetFactory"/>
     </extensions>
 
-    <extensions defaultExtensionNs="org.openasr.idear">
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.IdearActionRecognizer" order="first"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.CustomUtteranceActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.ExtractActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.FindUsagesActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RenameActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.JavaActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RegisteredEditorActionRecognizer"
+    <extensions defaultExtensionNs="org.openasr.idiolect">
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.IdiolectActionRecognizer" order="first"/>
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.CustomUtteranceActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.ExtractActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.FindUsagesActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.RenameActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.JavaActionRecognizer"/>
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.RegisteredEditorActionRecognizer"
                           order="before RegisteredActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idear.actions.recognition.RegisteredActionRecognizer"
+        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.RegisteredActionRecognizer"
                           id="RegisteredActionRecognizer"
                           order="last"/>
 
-        <asrSystem implementation="org.openasr.idear.asr.AsrControlLoop"/>
-        <asrProvider implementation="org.openasr.idear.asr.vosk.VoskAsr"/>
-        <ttsProvider implementation="org.openasr.idear.tts.IdearTTS"/>
-        <nlpProvider implementation="org.openasr.idear.nlp.PatternBasedNlpProvider"/>
+        <asrSystem implementation="org.openasr.idiolect.asr.AsrControlLoop"/>
+        <asrProvider implementation="org.openasr.idiolect.asr.vosk.VoskAsr"/>
+        <ttsProvider implementation="org.openasr.idiolect.tts.IdiolectTTS"/>
+        <nlpProvider implementation="org.openasr.idiolect.nlp.PatternBasedNlpProvider"/>
     </extensions>
 
     <actions>
-        <action id="Idear.VoiceAction" text="Invoke by voice-command"
-                class="org.openasr.idear.actions.ExecuteVoiceCommandAction"/>
+        <action id="Idiolect.VoiceAction" text="Invoke by voice-command"
+                class="org.openasr.idiolect.actions.ExecuteVoiceCommandAction"/>
     </actions>
 </idea-plugin>

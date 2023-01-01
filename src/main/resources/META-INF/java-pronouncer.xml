@@ -1,7 +1,7 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
         <intentionAction>
-            <className>org.openasr.idear.tts.JavaPronouncer</className>
+            <className>org.openasr.idiolect.tts.JavaPronouncer</className>
         </intentionAction>
     </extensions>
     <actions>

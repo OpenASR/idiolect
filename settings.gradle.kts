@@ -1,3 +1,3 @@
-rootProject.name = "idear"
+rootProject.name = "idiolect"
 
 includeBuild("jAdapterForNativeTTS")

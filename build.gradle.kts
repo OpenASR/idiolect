@@ -14,7 +14,7 @@ java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
   version.set("2022.3.1")
-  pluginName.set("idear")
+  pluginName.set("idiolect")
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))
 }
@@ -44,7 +44,7 @@ tasks {
 
   buildPlugin {
     dependsOn("test")
-    archiveFileName.set("idear.zip")
+    archiveFileName.set("idiolect.zip")
   }
 
   runIde {
