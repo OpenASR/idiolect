@@ -65,6 +65,7 @@ tasks {
       certificateChain.set(System.getenv("INTELLIJ_CERTIFICATE_CHAIN"))
       privateKey.set(System.getenv("INTELLIJ_PRIVATE_KEY"))
       password.set(System.getenv("INTELLIJ_PRIVATE_KEY_PASSWORD"))
+      inputArchiveFile.set(File("./build/distributions/idear.zip"))
       outputArchiveFile.set(File("./build/distributions/idear-signed.zip"))
     }
 
