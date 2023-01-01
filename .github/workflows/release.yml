@@ -81,6 +81,7 @@ jobs:
     - name: Build
       run: |
         ./gradlew buildPlugin
+        ./gradlew verifyPlugin
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
@@ -118,7 +119,7 @@ jobs:
 
     - name: Publish to Marketplace
       run: |
-        ./gradlew publishPlugin -x buildPlugin
+        ./gradlew publishPlugin -x buildPlugin -x verifyPlugin
 
     - name: Merge to master
       if: github.ref != 'master'

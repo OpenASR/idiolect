@@ -54,7 +54,9 @@ jobs:
       run: cd jAdapterForNativeTTS && mvn install
 
     - name: Build
-      run: ./gradlew buildPlugin
+      run: |
+        ./gradlew buildPlugin
+        ./gradlew verifyPlugin
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
@@ -81,4 +83,4 @@ jobs:
 
       - name: Publish to eap Marketplace
         run: |
-          ./gradlew publishPlugin -x buildPlugin -x prepareSandbox
+          ./gradlew publishPlugin -x buildPlugin -x verifyPlugin
