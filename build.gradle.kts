@@ -55,10 +55,7 @@ tasks {
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
   }
 
-  if (System.getenv("GITHUB_REF_NAME") != null &&
-      (  System.getenv("GITHUB_REF_NAME") == "master"
-      || System.getenv("GITHUB_REF_NAME").startsWith("release/")
-      )
+  if (System.getenv("GITHUB_REF_NAME") != null
       && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty())
   {
     signPlugin {
