@@ -104,6 +104,8 @@ jobs:
     needs: build-and-release
     # Requires approval - https://github.com/OpenASR/idear/settings/environments/788239124/edit
     environment: Stable
+    env:
+      INTELLIJ_CHANNEL: Stable
 
     steps:
     - uses: actions/checkout@v3

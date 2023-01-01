@@ -73,7 +73,7 @@ tasks {
         // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/eap/list
         // https://www.jetbrains.com/help/idea/managing-plugins.html#repos
         // alpha/beta/eap/canary
-        channels.set(listOf("eap"))
+        channels.set(listOf(System.getenv("INTELLIJ_CHANNEL")))
         // ...could also add updatePlugins.xml to github site
         // https://plugins.jetbrains.com/docs/intellij/custom-plugin-repository.html#describing-your-plugins-in-updatepluginsxml-file
       }

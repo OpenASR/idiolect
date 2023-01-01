@@ -67,6 +67,8 @@ jobs:
     needs: build
     # Requires approval - https://github.com/OpenASR/idear/settings/environments/788279606/edit
     environment: eap
+    env:
+      INTELLIJ_CHANNEL: eap
 
     steps:
       - uses: actions/checkout@v3
@@ -79,4 +81,4 @@ jobs:
 
       - name: Publish to eap Marketplace
         run: |
-          ./gradlew publishPlugin -x buildPlugin
+          ./gradlew publishPlugin -x buildPlugin -x prepareSandbox
