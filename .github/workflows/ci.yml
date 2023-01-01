@@ -71,6 +71,10 @@ jobs:
     environment: eap
     env:
       INTELLIJ_CHANNEL: eap
+      INTELLIJ_PUBLISH_TOKEN: ${{ secrets.INTELLIJ_PUBLISH_TOKEN }}
+      INTELLIJ_CERTIFICATE_CHAIN: ${{ secrets.INTELLIJ_CERTIFICATE_CHAIN }}
+      INTELLIJ_PRIVATE_KEY: ${{ secrets.INTELLIJ_PRIVATE_KEY }}
+      INTELLIJ_PRIVATE_KEY_PASSWORD: ${{ secrets.INTELLIJ_PRIVATE_KEY_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v3

@@ -3,12 +3,6 @@ name: Build, Release and Publish
 # Triggered by creating a "v1.2.3" tag on a release/ or main branch
 # Version number is updated as per the tag
 
-env:
-  INTELLIJ_PUBLISH_TOKEN: ${{ secrets.INTELLIJ_PUBLISH_TOKEN }}
-  INTELLIJ_CERTIFICATE_CHAIN: ${{ secrets.INTELLIJ_CERTIFICATE_CHAIN }}
-  INTELLIJ_PRIVATE_KEY: ${{ secrets.INTELLIJ_PRIVATE_KEY }}
-  INTELLIJ_PRIVATE_KEY_PASSWORD: ${{ secrets.INTELLIJ_PRIVATE_KEY_PASSWORD }}
-
 on:
   push:
     branches: [ "release/*", main ]
@@ -107,6 +101,10 @@ jobs:
     environment: Stable
     env:
       INTELLIJ_CHANNEL: Stable
+      INTELLIJ_PUBLISH_TOKEN: ${{ secrets.INTELLIJ_PUBLISH_TOKEN }}
+      INTELLIJ_CERTIFICATE_CHAIN: ${{ secrets.INTELLIJ_CERTIFICATE_CHAIN }}
+      INTELLIJ_PRIVATE_KEY: ${{ secrets.INTELLIJ_PRIVATE_KEY }}
+      INTELLIJ_PRIVATE_KEY_PASSWORD: ${{ secrets.INTELLIJ_PRIVATE_KEY_PASSWORD }}
 
     steps:
     - uses: actions/checkout@v3
