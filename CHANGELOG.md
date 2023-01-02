@@ -3,11 +3,14 @@
 ## Unreleased
 
 ### Added
+- Custom phrases.
+- Live Template support.
 - Added a lot more phrases.
+- Native TTS
 
 ### Changed
 - Switched to vosk-api for better speech recognition.
-
+- Improved config & onboarding experience.
 
 ## 1.3.4
 - Update AceJump version for cursor movement.

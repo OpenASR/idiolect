@@ -1,5 +1,5 @@
-name: Release to GitHub
-# Creates an internal Release in GitHub, but does not publish to IntelliJ Marketplace
+name: Build, Release and Publish
+# Creates an internal Release in GitHub, and on approval publishes to IntelliJ Marketplace
 # Triggered by creating a "v1.2.3" tag on a release/ or main branch
 # Version number is updated as per the tag
 
@@ -8,11 +8,11 @@ on:
     branches: [ "release/*", main ]
     tags:
       - "v*.*.*"
-#  pull_request:
-#    branches: [ release/* ]
+  pull_request:
+    branches: [ release/* ]
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,9 +23,24 @@ jobs:
       with:
         java-version: 17
 
-    - name: Update version number
+    - name: Update version number & changelog
+      if: startsWith(github.ref, 'refs/tags/')
       run: |
         sed -i "s|version = \".*\"|version = \"${GITHUB_REF_NAME:1}\"|" build.gradle.kts
+        ./gradlew patchChangelog 
+        ./gradlew getChangelog -q > CHANGELOG-release.md
+        
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add build.gradle.kts
+        git commit -m "updated version"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        force: true
 
     # Needed until Vosk provide a new release to fix Windows issues
     - name: Checkout vosk-api
@@ -44,13 +59,29 @@ jobs:
         cd ../../..
         echo 'rootProject.name = "vosk"' > settings.gradle.kts
         sed -i '10d;21,25d' build.gradle
+        sed -i '80s/^/\/\//' src/main/java/org/vosk/LibVosk.java
+        sed -i '218s/^/\/\//' src/main/java/org/vosk/Recognizer.java
         gradle publishToMavenLocal
+
+    # Needed until Breandan's PR is merged & published
+    - name: Checkout jAdapterForNativeTTS
+      uses: actions/checkout@v3
+      with:
+        repository: OpenASR/jAdapterForNativeTTS
+        path: jAdapterForNativeTTS
+    - name: Build jAdapterForNativeTTS
+      run: cd jAdapterForNativeTTS && mvn install
 
     - name: Build
       run: |
-        ./gradlew patchChangelog 
-        ./gradlew getChangelog > CHANGELOG-release.md
         ./gradlew buildPlugin
+        ./gradlew verifyPlugin
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: distribution
+        path: './build/distributions/idear.zip'
 
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -61,3 +92,38 @@ jobs:
         files: |
           CHANGELOG.md
           build/distributions/*.zip
+
+  publish-to-marketplace:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    needs: build-and-release
+    # Requires approval - https://github.com/OpenASR/idear/settings/environments/788239124/edit
+    environment: Stable
+    env:
+      INTELLIJ_CHANNEL: Stable
+      INTELLIJ_PUBLISH_TOKEN: ${{ secrets.INTELLIJ_PUBLISH_TOKEN }}
+      INTELLIJ_CERTIFICATE_CHAIN: ${{ secrets.INTELLIJ_CERTIFICATE_CHAIN }}
+      INTELLIJ_PRIVATE_KEY: ${{ secrets.INTELLIJ_PRIVATE_KEY }}
+      INTELLIJ_PRIVATE_KEY_PASSWORD: ${{ secrets.INTELLIJ_PRIVATE_KEY_PASSWORD }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: distribution
+        path: './build/distributions'
+
+    - name: Publish to Marketplace
+      run: |
+        ./gradlew publishPlugin -x buildPlugin -x verifyPlugin
+
+    - name: Merge to master
+      if: github.ref != 'master'
+      uses: devmasx/merge-branch@master
+      with:
+        type: now
+        from_branch: github.ref
+        target_branch: master
+        github_token: ${{ github.token }}

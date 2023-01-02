@@ -1,28 +1,39 @@
 package org.openasr.idiolect.actions.recognition
 
-import com.intellij.openapi.actionSystem.*
-import org.openasr.idiolect.nlp.*
-import org.openasr.idiolect.utils.*
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.diagnostic.logger
+import org.openasr.idiolect.nlp.NlpRequest
+import org.openasr.idiolect.nlp.NlpResponse
+import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import org.openasr.idiolect.utils.ActionUtils
+import org.openasr.idiolect.utils.toUpperCamelCase
 
 /**
  * As a last resort, attempt to match a registered Action ID
  *
  * @see com.intellij.openapi.actionSystem.IdeActions
  */
-open class RegisteredActionRecognizer : ActionRecognizer("Idea Native Actions", Int.MAX_VALUE) {
+open class RegisteredActionRecognizer : IntentResolver("Idea Native Actions", Int.MAX_VALUE) {
+    companion object {
+        private val log = logger<RegisteredActionRecognizer>()
+    }
+
     override val grammars by lazy { buildGrammars() }
     private val actionManager by lazy { ActionManager.getInstance() }
 
     protected open fun buildGrammars() = ActionUtils.buildGrammar()
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): ActionCallInfo? =
-        object : NlpGrammar("Anonymous") {
-            override fun tryMatchRequest(utterance: String, dataContext: DataContext): ActionCallInfo? {
-                val actionId = getActionIdForUtterance(utterance)
-                val action = actionManager.run { if (isGroup(actionId)) null else getAction(actionId) }
-                return if (action != null) ActionCallInfo(actionId) else null
-            }
-        }.tryMatchRequest(nlpRequest, dataContext)
+    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): NlpResponse? {
+        return nlpRequest.alternatives.firstNotNullOfOrNull { utterance ->
+            val actionId = getActionIdForUtterance(utterance)
+            val action = actionManager.run { if (isGroup(actionId)) null else getAction(actionId) }
+            return if (action != null) {
+                log.info("Matched actionId for '${utterance}': $actionId")
+                NlpResponse(actionId)
+            } else null
+        }
+    }
 
     protected open fun getActionIdForUtterance(utterance: String): String =
         mapOf(

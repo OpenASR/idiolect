@@ -1,6 +1,7 @@
 package org.openasr.idiolect.asr.vosk
 
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.*
 import com.intellij.ui.dsl.builder.*
@@ -8,11 +9,15 @@ import java.awt.event.ItemEvent
 import javax.swing.*
 
 class VoskSettingsForm : TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFolderDescriptor()) {
-    internal val modelPathChooser = TextFieldWithBrowseButton()
+    companion object {
+        private val log = logger<VoskSettingsForm>()
+    }
 
     internal val languageCombo = ComboBox<String>()
     private val modelInfoCombo = ComboBox<ModelInfo>()
     private val installButton = JButton("Install")
+    internal val modelPathChooser = TextFieldWithBrowseButton()
+
     private var modelInfoOptions: List<ModelInfo> = emptyList()
 
     init {
@@ -54,6 +59,7 @@ class VoskSettingsForm : TextBrowseFolderListener(FileChooserDescriptorFactory.c
                 VoskAsr.installModel(url)
                 installButton.text = "Install"
             } catch (e: Exception) {
+                log.error("Failed to install model", e)
                 installButton.text = "Installation failed"
             }
         }

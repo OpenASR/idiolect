@@ -8,12 +8,12 @@ plugins {
 }
 
 group = "org.openasr"
-version = "1.4.0"
+version = "1.4.6-SNAPSHOT"
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
-  version.set("2022.3.1")
+  version.set("2022.3.1") // The version of the IntelliJ Platform IDE that will be used to build the plugin
   pluginName.set("idiolect")
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))
@@ -38,7 +38,10 @@ tasks {
   compileKotlin { kotlinOptions.jvmTarget = jvmTarget }
 
   compileTestKotlin {
-    exclude("**/windows/**", "**/ActionRecognizerManagerTest.kt")
+    exclude(
+      "**/windows/**",
+      "**/ActionRecognizerManagerTest.kt"
+    )
     kotlinOptions.jvmTarget = jvmTarget
   }
 
@@ -52,23 +55,24 @@ tasks {
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
   }
 
-  if (System.getenv("GITHUB_REF_NAME") != null &&
-      (  System.getenv("GITHUB_REF_NAME") == "master"
-      || System.getenv("GITHUB_REF_NAME").startsWith("release/")
-      )
+  if (System.getenv("GITHUB_REF_NAME") != null
       && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty())
   {
     signPlugin {
       certificateChain.set(System.getenv("INTELLIJ_CERTIFICATE_CHAIN"))
       privateKey.set(System.getenv("INTELLIJ_PRIVATE_KEY"))
       password.set(System.getenv("INTELLIJ_PRIVATE_KEY_PASSWORD"))
+      inputArchiveFile.set(File("./build/distributions/idiolect.zip"))
+      outputArchiveFile.set(File("./build/distributions/idiolect-signed.zip"))
     }
 
     publishPlugin {
+      distributionFile.set(File("./build/distributions/idiolect-signed.zip"))
       if (System.getenv("GITHUB_REF_NAME") != "master") {
-        // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/canary/list
+        // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/eap/list
         // https://www.jetbrains.com/help/idea/managing-plugins.html#repos
-        channels.set(listOf("canary"))
+        // alpha/beta/eap/canary
+        channels.set(listOf(System.getenv("INTELLIJ_CHANNEL")))
         // ...could also add updatePlugins.xml to github site
         // https://plugins.jetbrains.com/docs/intellij/custom-plugin-repository.html#describing-your-plugins-in-updatepluginsxml-file
       }

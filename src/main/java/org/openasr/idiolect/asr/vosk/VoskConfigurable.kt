@@ -21,7 +21,8 @@ class VoskConfigurable : Configurable {
     override fun apply() {
         if (gui.modelPathChooser.text != settings.modelPath) {
             settings.modelPath = gui.modelPathChooser.text
-            VoskAsr.instance.activate()
+            VoskAsr.setModel(settings.modelPath)
+            VoskAsr.activate()
         }
 
         if (gui.languageCombo.selectedItem != settings.language) {

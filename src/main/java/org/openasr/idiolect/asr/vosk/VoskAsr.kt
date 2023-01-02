@@ -24,7 +24,8 @@ class VoskAsr : AsrProvider {
     override fun displayName() = "Vosk"
 
     companion object {
-        private val messageBus = ApplicationManager.getApplication()?.messageBus
+        private lateinit var instance: VoskAsr
+        private val messageBus = ApplicationManager.getApplication()!!.messageBus
         private val httpClient = HttpClient.newBuilder().build()
         private lateinit var recognizer: Recognizer
 
@@ -52,6 +53,7 @@ class VoskAsr : AsrProvider {
                 // "small" and "big-lgraph" support grammar, "big" doesn't
 //                    it.get("type").asString != "big"
                     it.get("obsolete").asString != "true"
+                        || it.get("version").asString.startsWith("daanzu-20200905")
             }
             .map {
                 ModelInfo(
@@ -66,17 +68,17 @@ class VoskAsr : AsrProvider {
             }
             .sortedWith(ModelComparator())
 
-        internal fun installModel(url: String) {
-            messageBus!!.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
+        internal fun installModel(url: String): String {
+            messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
 
             val modelPath = pathForModelUrl(url)
             if (!File(modelPath).exists()) {
                 val modelZip = downloadModel(url)
                 unpackModel(modelPath, modelZip)
             }
-            setModel(modelPath)
 
-            messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been installed")
+            messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Model installed")
+            return modelPath
         }
 
         private fun downloadModel(url: String): InputStream {
@@ -117,10 +119,14 @@ class VoskAsr : AsrProvider {
 
                 recognizer = Recognizer(Model(model), 16000f)
                 recognizer.setMaxAlternatives(alternatives)
+
+                messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been applied")
             }
         }
 
-        lateinit var instance: VoskAsr
+        fun activate() {
+            instance.activate()
+        }
     }
 
     init {
@@ -169,7 +175,10 @@ class VoskAsr : AsrProvider {
 
         while (microphone.stream.read(b).also { nbytes = it } >= 0) {
             if (recognizer.acceptWaveForm(b, nbytes)) {
-                return tryParseResult(recognizer.result)
+                val result = tryParseResult(recognizer.result)
+                if (result.alternatives.isNotEmpty()) {
+                    return result
+                }
             }
         }
 
@@ -185,7 +194,7 @@ class VoskAsr : AsrProvider {
                 if (isJsonNull) listOf(jo.get("text").toString())
                 else asJsonArray.map { it.asJsonObject.get("text").asString }
             }
-        }
+        }.filter { it.isNotEmpty() }
 
     private fun showNotificationForModel() {
         NotificationGroupManager.getInstance()
@@ -196,7 +205,8 @@ class VoskAsr : AsrProvider {
                     <p><a href="https://alphacephei.com/vosk/models">https://alphacephei.com/vosk/models</a></p>
                 """.trimIndent(), INFORMATION)
             .addAction(NotificationAction.create("Download Default Model") { _ ->
-                installModel(defaultModelURL)
+                val modelPath = installModel(defaultModelURL)
+                setModel(modelPath)
             })
             .addAction(NotificationAction.create("Edit Configuration") { _ ->
                 ShowSettingsUtil.getInstance().showSettingsDialog(null, VoskConfigurable::class.java)
