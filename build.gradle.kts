@@ -67,7 +67,7 @@ tasks {
     }
 
     publishPlugin {
-      distributionFile.set(File("./build/distributions/idear.zip"))
+      distributionFile.set(File("./build/distributions/idear-signed.zip"))
       if (System.getenv("GITHUB_REF_NAME") != "master") {
         // Users can configure a new custom plugin repository: https://plugins.jetbrains.com/plugins/eap/list
         // https://www.jetbrains.com/help/idea/managing-plugins.html#repos
