@@ -1,6 +1,5 @@
 # ![idiolect icon](src%2Fmain%2Fresources%2FMETA-INF%2FpluginIcon.svg) idiolect 
 
-[![][jetbrains-team-svg]][jetbrains-team-page]
 [![Deploy](https://github.com/OpenASR/idiolect/workflows/Deploy/badge.svg)](https://github.com/OpenASR/idiolect/actions?query=workflow%3ABuild)
 [![][plugin-repo-svg]][plugin-repo-page]
 [![][plugin-download-svg]][plugin-repo-page]
@@ -102,8 +101,6 @@ which typically calls `invokeAction()` and/or one or more of the methods of [`ID
 * [Nicholas Albion](https://github.com/nalbion)
 
 <!-- Badges -->
-[jetbrains-team-page]: https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub
-[jetbrains-team-svg]: http://jb.gg/badges/team.svg
 [travis-build-status]: https://travis-ci.com/OpenASR/idiolect
 [travis-status-svg]: https://travis-ci.com/OpenASR/idiolect.svg?branch=master
 [plugin-repo-page]: https://plugins.jetbrains.com/plugin/20776-idiolect
