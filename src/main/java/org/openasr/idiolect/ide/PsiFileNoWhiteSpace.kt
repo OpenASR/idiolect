@@ -1,9 +1,7 @@
-package org.openasr.idear.ide
+package org.openasr.idiolect.ide
 
 import com.intellij.openapi.util.Key
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
-import com.intellij.psi.impl.source.tree.CompositeElement
 import com.intellij.psi.impl.source.tree.java.PsiDeclarationStatementImpl
 import com.intellij.psi.scope.PsiScopeProcessor
 import com.intellij.psi.search.PsiElementProcessor
