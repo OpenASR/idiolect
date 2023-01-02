@@ -2,7 +2,6 @@
 
 [![][jetbrains-team-svg]][jetbrains-team-page]
 [![Deploy](https://github.com/OpenASR/idiolect/workflows/Deploy/badge.svg)](https://github.com/OpenASR/idiolect/actions?query=workflow%3ABuild)
-[![][teamcity-status-svg]][teamcity-build-status]
 [![][plugin-repo-svg]][plugin-repo-page]
 [![][plugin-download-svg]][plugin-repo-page]
 
@@ -107,8 +106,6 @@ which typically calls `invokeAction()` and/or one or more of the methods of [`ID
 [jetbrains-team-svg]: http://jb.gg/badges/team.svg
 [travis-build-status]: https://travis-ci.com/OpenASR/idiolect
 [travis-status-svg]: https://travis-ci.com/OpenASR/idiolect.svg?branch=master
-[teamcity-build-status]: https://teamcity.jetbrains.com/viewType.html?buildTypeId=idiolect_buildplugin&guest=1
-[teamcity-status-svg]: https://teamcity.jetbrains.com/app/rest/builds/buildType:idiolect_buildplugin/statusIcon.svg
 [plugin-repo-page]: https://plugins.jetbrains.com/plugin/20776-idiolect
 [plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/7910-idiolect.svg
 [plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/7910-idiolect.svg
