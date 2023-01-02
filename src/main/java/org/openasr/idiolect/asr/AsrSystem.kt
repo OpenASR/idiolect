@@ -1,7 +1,6 @@
 package org.openasr.idiolect.asr
 
 import org.openasr.idiolect.nlp.NlpProvider
-import org.openasr.idiolect.nlp.NlpRequest
 
 /**
  * Processes audio input, recognises speech to text and executes actions

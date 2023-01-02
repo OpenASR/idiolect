@@ -1,7 +1,6 @@
 package org.openasr.idiolect.nlp
 
 import com.intellij.openapi.actionSystem.ActionManager
-import org.openasr.idiolect.actions.ActionRoutines.pauseSpeech
 import org.openasr.idiolect.actions.ExecuteVoiceCommandAction
 import org.openasr.idiolect.ide.IdeService
 import org.openasr.idiolect.nlp.handlers.*

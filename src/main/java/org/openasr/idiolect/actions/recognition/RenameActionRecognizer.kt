@@ -1,7 +1,6 @@
 package org.openasr.idiolect.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.actionSystem.IdeActions
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import org.openasr.idiolect.nlp.NlpRegexGrammar
 import org.openasr.idiolect.utils.toCamelCase

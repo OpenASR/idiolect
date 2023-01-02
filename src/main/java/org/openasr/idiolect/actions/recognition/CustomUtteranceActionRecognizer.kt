@@ -1,14 +1,11 @@
 package org.openasr.idiolect.actions.recognition
 
 import com.intellij.ide.actions.OpenFileAction
-import com.intellij.notification.NotificationAction
-import com.intellij.notification.NotificationGroupManager
-import com.intellij.notification.NotificationType
+import com.intellij.notification.*
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.Project
 import org.openasr.idiolect.nlp.*
 import org.openasr.idiolect.settings.IdiolectConfig
-import org.openasr.idiolect.settings.IdiolectConfigurable
 import java.io.File
 
 class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recognizer", 500) {
@@ -41,9 +38,8 @@ class CustomUtteranceActionRecognizer: ActionRecognizer("Properties File Recogni
             }
         }
 
-        fun openCustomPhrasesFile(project: Project) {
+        fun openCustomPhrasesFile(project: Project): Unit =
             OpenFileAction.openFile(propertiesFile.absolutePath, project)
-        }
     }
 
     data class Binding(val name: String, val boundUtterances: List<String>)

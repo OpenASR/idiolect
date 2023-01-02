@@ -2,7 +2,6 @@ package org.openasr.idiolect.asr
 
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.ex.AnActionListener
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.util.messages.MessageBus
 import org.openasr.idiolect.utils.ActionUtils

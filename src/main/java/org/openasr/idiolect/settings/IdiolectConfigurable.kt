@@ -2,10 +2,10 @@ package org.openasr.idiolect.settings
 
 import com.intellij.openapi.components.*
 import com.intellij.openapi.options.Configurable
-import org.openasr.idiolect.settings.IdiolectConfig.Companion.settings
 import org.openasr.idiolect.asr.AsrService
 import org.openasr.idiolect.nlp.*
 import org.openasr.idiolect.settings.IdiolectConfig.Companion.initialiseAsrSystem
+import org.openasr.idiolect.settings.IdiolectConfig.Companion.settings
 import org.openasr.idiolect.tts.*
 
 /**

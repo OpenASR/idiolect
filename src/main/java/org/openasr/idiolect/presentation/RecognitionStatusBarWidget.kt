@@ -2,19 +2,15 @@ package org.openasr.idiolect.presentation
 
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.Disposer
-import com.intellij.openapi.wm.CustomStatusBarWidget
-import com.intellij.openapi.wm.StatusBar
+import com.intellij.openapi.wm.*
 import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
 import com.intellij.openapi.wm.impl.status.TextPanel
 import com.intellij.openapi.wm.impl.status.widget.StatusBarWidgetWrapper.StatusBarWidgetClickListener
 import com.intellij.ui.GotItTooltip
-import com.intellij.util.Consumer
-import com.intellij.util.application
+import com.intellij.util.*
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
-import org.openasr.idiolect.asr.AsrService
-import org.openasr.idiolect.asr.AsrSystemStateListener
-import org.openasr.idiolect.nlp.NlpRequest
-import org.openasr.idiolect.nlp.NlpResultListener
+import org.openasr.idiolect.asr.*
+import org.openasr.idiolect.nlp.*
 import java.awt.event.MouseEvent
 import javax.swing.JComponent
 

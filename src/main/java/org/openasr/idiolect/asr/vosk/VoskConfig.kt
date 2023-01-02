@@ -1,9 +1,6 @@
 package org.openasr.idiolect.asr.vosk
 
-import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.SettingsCategory
-import com.intellij.openapi.components.State
-import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.*
 import com.intellij.util.application
 
 /**

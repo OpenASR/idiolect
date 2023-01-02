@@ -1,9 +1,7 @@
 package org.openasr.idiolect.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
-import org.openasr.idiolect.nlp.NlpGrammar
-import org.openasr.idiolect.nlp.NlpRequest
-import org.openasr.idiolect.nlp.NlpResponse
+import org.openasr.idiolect.nlp.*
 import java.awt.Component
 
 abstract class ActionRecognizer(open val displayName: String, open val order: Int = Int.MAX_VALUE / 2) {

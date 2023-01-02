@@ -1,12 +1,8 @@
 package org.openasr.idiolect.settings
 
-import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.SettingsCategory
-import com.intellij.openapi.components.State
-import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.*
 import com.intellij.util.application
-import org.openasr.idiolect.asr.AsrProvider
-import org.openasr.idiolect.asr.AsrSystem
+import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.nlp.NlpProvider
 import org.openasr.idiolect.tts.TtsProvider
 import java.util.concurrent.atomic.AtomicReference

@@ -1,10 +1,8 @@
 package org.openasr.idiolect.settings
 
-import com.intellij.openapi.observable.util.*
+import com.intellij.openapi.observable.util.whenItemSelectedFromUi
 import com.intellij.openapi.ui.ComboBox
-import com.intellij.ui.dsl.builder.COLUMNS_SHORT
-import com.intellij.ui.dsl.builder.columns
-import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.*
 import org.openasr.idiolect.tts.IdiolectTTS
 import javax.swing.JPanel
 import javax.swing.text.JTextComponent

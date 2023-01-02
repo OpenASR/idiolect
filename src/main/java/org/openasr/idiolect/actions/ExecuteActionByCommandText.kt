@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_NEXT_TEMPLATE_
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.TypedAction
-import org.openasr.idiolect.actions.recognition.*
+import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.ide.*
 
 abstract class ExecuteActionByCommandText : IdiolectAction() {

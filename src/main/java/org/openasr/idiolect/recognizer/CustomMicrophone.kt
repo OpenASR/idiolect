@@ -2,7 +2,6 @@ package org.openasr.idiolect.recognizer
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.diagnostic.logger
 import java.io.*
 import javax.sound.sampled.*

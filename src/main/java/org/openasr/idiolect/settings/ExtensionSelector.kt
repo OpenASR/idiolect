@@ -1,8 +1,6 @@
 package org.openasr.idiolect.settings
 
-import com.intellij.openapi.extensions.ExtensionPointListener
-import com.intellij.openapi.extensions.ExtensionPointName
-import com.intellij.openapi.extensions.PluginDescriptor
+import com.intellij.openapi.extensions.*
 
 class ExtensionSelector<T : ConfigurableExtension>(
     val extensionPointName: ExtensionPointName<T>

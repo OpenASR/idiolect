@@ -1,7 +1,7 @@
 package org.openasr.idiolect.tts
 
 import com.intellij.openapi.diagnostic.Logger
-import io.github.jonelo.jAdapterForNativeTTS.engines.*
+import io.github.jonelo.jAdapterForNativeTTS.engines.SpeechEngineNative
 import org.openasr.idiolect.settings.IdiolectConfig
 import java.util.*
 

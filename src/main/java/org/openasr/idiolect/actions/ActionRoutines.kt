@@ -4,13 +4,11 @@ import com.intellij.openapi.actionSystem.IdeActions.*
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.SystemInfo
-import org.openasr.idiolect.utils.WordToNumberConverter
-import org.openasr.idiolect.asr.AsrService
-import org.openasr.idiolect.asr.ListeningState
+import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.ide.IdeService
 import org.openasr.idiolect.nlp.Commands
 import org.openasr.idiolect.tts.TtsService
-import org.openasr.idiolect.utils.toUpperCamelCase
+import org.openasr.idiolect.utils.*
 import java.awt.event.KeyEvent.*
 import java.text.SimpleDateFormat
 import javax.sound.sampled.AudioSystem

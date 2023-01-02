@@ -1,29 +1,21 @@
 package org.openasr.idiolect.asr.vosk
 
 import com.google.gson.JsonParser.*
-import com.intellij.openapi.components.service
-import com.intellij.notification.NotificationAction
+import com.intellij.notification.*
 import com.intellij.notification.NotificationType.INFORMATION
-import com.intellij.notification.NotificationGroupManager
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.options.ShowSettingsUtil
-import org.openasr.idiolect.asr.AsrProvider
+import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
-import org.openasr.idiolect.asr.ModelNotAvailableException
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.recognizer.CustomMicrophone
 import org.openasr.idiolect.settings.IdiolectConfig
-import org.openasr.idiolect.settings.IdiolectConfigurable
-import java.io.File
-import org.vosk.Model
-import org.vosk.Recognizer
-import java.io.InputStream
+import org.vosk.*
+import java.io.*
 import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
+import java.net.http.*
+import java.util.zip.*
 
 
 class VoskAsr : AsrProvider {

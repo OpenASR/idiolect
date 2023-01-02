@@ -2,8 +2,7 @@ package org.openasr.idiolect.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
 import org.openasr.idiolect.actions.ActionRoutines
-import org.openasr.idiolect.nlp.Commands
-import org.openasr.idiolect.nlp.NlpGrammar
+import org.openasr.idiolect.nlp.*
 import org.openasr.idiolect.tts.TtsService
 import java.awt.Component
 

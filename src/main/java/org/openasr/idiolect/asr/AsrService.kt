@@ -5,7 +5,6 @@ import com.intellij.openapi.diagnostic.logger
 import org.openasr.idiolect.asr.ListeningState.Status.ACTIVE
 import org.openasr.idiolect.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
 import org.openasr.idiolect.settings.IdiolectConfig
-import org.openasr.idiolect.settings.IdiolectConfigurable
 import javax.sound.sampled.LineUnavailableException
 
 object AsrService {

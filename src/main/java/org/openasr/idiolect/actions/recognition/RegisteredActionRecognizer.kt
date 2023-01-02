@@ -1,11 +1,8 @@
 package org.openasr.idiolect.actions.recognition
 
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.DataContext
-import org.openasr.idiolect.nlp.NlpGrammar
-import org.openasr.idiolect.nlp.NlpRequest
-import org.openasr.idiolect.utils.ActionUtils
-import org.openasr.idiolect.utils.toUpperCamelCase
+import com.intellij.openapi.actionSystem.*
+import org.openasr.idiolect.nlp.*
+import org.openasr.idiolect.utils.*
 
 /**
  * As a last resort, attempt to match a registered Action ID

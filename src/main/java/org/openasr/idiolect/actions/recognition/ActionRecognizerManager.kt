@@ -1,11 +1,9 @@
 package org.openasr.idiolect.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
-import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.*
+import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.CONTEXT_COMPONENT
 import com.intellij.openapi.extensions.ExtensionPointName
-import org.openasr.idiolect.nlp.NlpGrammar
-import org.openasr.idiolect.nlp.NlpRequest
-import javax.script.ScriptEngineManager
+import org.openasr.idiolect.nlp.*
 
 
 open class ActionRecognizerManager(private val dataContext: DataContext) {

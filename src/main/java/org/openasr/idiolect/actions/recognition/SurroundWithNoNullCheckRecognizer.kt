@@ -8,12 +8,10 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.openapi.util.Computable
-import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiFile
+import com.intellij.psi.*
 import org.openasr.idiolect.ide.IdeService
 import org.openasr.idiolect.nlp.NlpGrammar
 import java.awt.Component
-import java.util.*
 
 class SurroundWithNoNullCheckRecognizer : ActionRecognizer("Surround with Not-Null Check", 600) {
     override val grammars = listOf(

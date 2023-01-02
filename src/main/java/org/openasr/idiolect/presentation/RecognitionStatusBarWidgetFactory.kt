@@ -2,9 +2,7 @@ package org.openasr.idiolect.presentation
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
-import com.intellij.openapi.wm.StatusBar
-import com.intellij.openapi.wm.StatusBarWidget
-import com.intellij.openapi.wm.StatusBarWidgetFactory
+import com.intellij.openapi.wm.*
 
 class RecognitionStatusBarWidgetFactory : StatusBarWidgetFactory {
     companion object {

@@ -2,15 +2,9 @@ package org.openasr.idiolect.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.impl.EditorComponentImpl
-import com.intellij.openapi.util.Pair
-import com.intellij.util.containers.ContainerUtil
-import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRegexGrammar
-import org.openasr.idiolect.nlp.NlpRequest
-import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.utils.toCamelCase
 import java.awt.Component
-import java.util.*
 
 /** https://www.jetbrains.com/help/idea/extract-field.html */
 class ExtractActionRecognizer : ActionRecognizer("Extract Field or Variable", 500) {

@@ -1,6 +1,6 @@
 package org.openasr.idiolect.actions
 
-import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import org.openasr.idiolect.actions.recognition.ActionRecognizerManager
