@@ -34,9 +34,9 @@ class IdiolectCommandIntentHandler : IntentHandler {
         }
 
         when (intentName) {
-            idiolectCommandRecognizer.INTENT_HI -> TtsService.say("Hi!")
-            idiolectCommandRecognizer.INTENT_ABOUT -> ActionRoutines.routineAbout()
-            idiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
+            IdiolectCommandRecognizer.INTENT_HI -> TtsService.say("Hi!")
+            IdiolectCommandRecognizer.INTENT_ABOUT -> ActionRoutines.routineAbout()
+            IdiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
             SurroundWithNoNullCheckRecognizer.INTENT_NAME -> surroundWithNullCheck(dataContext)
             else -> return null
         }
