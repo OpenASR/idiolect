@@ -109,7 +109,7 @@ which typically calls `invokeAction()` and/or one or more of the methods of [`ID
 [travis-status-svg]: https://travis-ci.com/OpenASR/idiolect.svg?branch=master
 [teamcity-build-status]: https://teamcity.jetbrains.com/viewType.html?buildTypeId=idiolect_buildplugin&guest=1
 [teamcity-status-svg]: https://teamcity.jetbrains.com/app/rest/builds/buildType:idiolect_buildplugin/statusIcon.svg
-[plugin-repo-page]: https://plugins.jetbrains.com/plugin/7910-idiolect
+[plugin-repo-page]: https://plugins.jetbrains.com/plugin/20776-idiolect
 [plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/7910-idiolect.svg
 [plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/7910-idiolect.svg
 
