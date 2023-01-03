@@ -1,4 +1,5 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
+import org.jetbrains.kotlin.gradle.plugin.extraProperties
 
 plugins {
   kotlin("jvm") version "1.8.0"
@@ -85,11 +86,13 @@ repositories {
   mavenLocal()
   mavenCentral()
   maven("https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local")
+  maven( "https://azureai.azureedge.net/maven/")
 }
 
 dependencies {
   implementation("net.java.dev.jna:jna:5.12.1")
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
+  implementation(group = "com.microsoft.cognitiveservices.speech", name = "client-sdk", version = "1.24.2", ext = "jar")
   testImplementation("org.reflections:reflections:0.10.2")
 }

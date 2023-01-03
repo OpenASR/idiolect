@@ -31,6 +31,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="org.openasr.idiolect.settings.IdiolectConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.asr.vosk.VoskConfig"/>
+        <applicationService serviceImplementation="org.openasr.idiolect.asr.azure.AzureConfig"/>
         <applicationConfigurable groupId="tools" displayName="Idiolect"
                                  id="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.settings.IdiolectConfigurable" dynamic="true"/>
@@ -38,6 +39,10 @@
                                  id="preferences.VoskConfiguration"
                                  parentId="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.asr.vosk.VoskConfigurable" dynamic="true"/>
+        <applicationConfigurable groupId="tools" displayName="Azure"
+                                 id="preferences.AzureConfiguration"
+                                 parentId="preferences.IdiolectConfiguration"
+                                 instance="org.openasr.idiolect.asr.azure.AzureConfigurable" dynamic="true"/>
 
         <notificationGroup id="Idiolect" displayType="BALLOON"/>
         <statusBarWidgetFactory implementation="org.openasr.idiolect.presentation.RecognitionStatusBarWidgetFactory"/>
@@ -71,6 +76,7 @@
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.RegisteredActionHandler" order="last"/>
 
         <asrSystem implementation="org.openasr.idiolect.asr.AsrControlLoop"/>
+        <asrProvider implementation="org.openasr.idiolect.asr.azure.AzureAsr"/>
         <asrProvider implementation="org.openasr.idiolect.asr.vosk.VoskAsr"/>
         <ttsProvider implementation="org.openasr.idiolect.tts.IdiolectTTS"/>
         <nlpProvider implementation="org.openasr.idiolect.nlp.PatternBasedNlpProvider"/>
