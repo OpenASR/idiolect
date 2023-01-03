@@ -49,7 +49,7 @@
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idiolect">
-        <intentResolver implementation="org.openasr.idiolect.actions.recognition.idiolectCommandRecognizer" order="first"
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.IdiolectCommandRecognizer" order="first"
                         id="idiolectCommandRecognizer"
         />
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.CustomPhraseRecognizer"
