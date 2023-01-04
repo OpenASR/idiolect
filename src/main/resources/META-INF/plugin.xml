@@ -20,7 +20,8 @@
     </applicationListeners>
 
     <extensionPoints>
-        <extensionPoint name="actionRecognizer" interface="org.openasr.idiolect.actions.recognition.ActionRecognizer" dynamic="true"/>
+        <extensionPoint name="intentResolver" interface="org.openasr.idiolect.nlp.intent.resolvers.IntentResolver" dynamic="true"/>
+        <extensionPoint name="intentHandler" interface="org.openasr.idiolect.nlp.intent.handlers.IntentHandler" dynamic="true"/>
         <extensionPoint name="asrSystem" interface="org.openasr.idiolect.asr.AsrSystem" dynamic="true"/>
         <extensionPoint name="asrProvider" interface="org.openasr.idiolect.asr.AsrProvider" dynamic="true"/>
         <extensionPoint name="ttsProvider" interface="org.openasr.idiolect.tts.TtsProvider" dynamic="true"/>
@@ -43,18 +44,31 @@
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idiolect">
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.IdiolectActionRecognizer" order="first"/>
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.CustomUtteranceActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.ExtractActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.FindUsagesActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.RenameActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.JavaActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.RegisteredEditorActionRecognizer"
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.idiolectCommandRecognizer" order="first"
+                        id="idiolectCommandRecognizer"
+        />
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.CustomPhraseRecognizer"
+                        id="CustomPhraseRecognizer"
+                        order="after idiolectCommandRecognizer"
+        />
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.LiveTemplateActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.ExtractFieldOrVariable"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.FindUsagesActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.RenameActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.JavaActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.RegisteredEditorActionRecognizer"
+                          id="RegisteredEditorActionRecognizer"
                           order="before RegisteredActionRecognizer"/>
-        <actionRecognizer implementation="org.openasr.idiolect.actions.recognition.RegisteredActionRecognizer"
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.RegisteredActionRecognizer"
                           id="RegisteredActionRecognizer"
                           order="last"/>
+
+        <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.IdiolectCommandIntentHandler" order="first"/>
+        <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.IdiolectActionIntentHandler"/>
+        <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.TemplateIntentHandler"/>
+        <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.JavaActionIntentHandler"/>
+        <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.RegisteredActionHandler" order="last"/>
 
         <asrSystem implementation="org.openasr.idiolect.asr.AsrControlLoop"/>
         <asrProvider implementation="org.openasr.idiolect.asr.vosk.VoskAsr"/>

@@ -14,6 +14,7 @@ import java.awt.Component
 open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
     override val displayName = "Editor Actions"
     override val order = Int.MAX_VALUE - 1
+
     override fun buildGrammars() = listOf(
         NlpGrammar("Undo").withExamples("undo", "whoops"),
     )

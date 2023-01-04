@@ -12,11 +12,15 @@ object IdiolectTTS : TtsProvider {
     override fun displayName() = "Native TTS"
 
     @Synchronized
-    override fun say(utterance: String) =
-        speechEngine.apply { setVoice(IdiolectConfig.settings.ttsService) }.say(utterance)
+    override fun say(utterance: String) {
+        sayWithVoice(utterance, IdiolectConfig.settings.ttsService)
+    }
 
-    fun sayWithVoice(utterance: String, voice: String) =
-        speechEngine.apply { setVoice(voice) }.say(utterance)
+    fun sayWithVoice(utterance: String, voice: String) {
+        speechEngine.apply { setVoice(voice) }
+            .say(utterance)
+            .waitFor()
+    }
 
     override fun dispose() = Unit
 }

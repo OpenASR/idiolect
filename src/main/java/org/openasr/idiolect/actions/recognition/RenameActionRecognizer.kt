@@ -3,23 +3,24 @@ package org.openasr.idiolect.actions.recognition
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import org.openasr.idiolect.nlp.NlpRegexGrammar
-import org.openasr.idiolect.utils.toCamelCase
+import org.openasr.idiolect.nlp.NlpResponse
+import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import java.awt.Component
 
 /**
  * "rename"
  */
-class RenameActionRecognizer : ActionRecognizer("Rename", 500) {
+class RenameActionRecognizer : IntentResolver("Rename", 500) {
+    companion object {
+        val INTENT_NAME = "${INTENT_PREFIX_IDIOLECT_ACTION}Rename"
+    }
+
     override val grammars = listOf(
-        object : NlpRegexGrammar("Rename", "rename(?: to|as)? ?(.*)?") {
-            override fun createActionCallInfo(values: List<String>, dataContext: DataContext) =
-                ActionCallInfo(intentName).apply {
-                    val name = values[1]
-                    if (name.isNotEmpty()) {
-                        typeAfter = name.toCamelCase()
-                        hitTabAfter = true
-                    }
-                }
+        object : NlpRegexGrammar(INTENT_NAME, "rename(?: to|as)? ?(.*)?") {
+            override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+                logUtteranceForIntent(utterance, intentName)
+                return NlpResponse(intentName, mapOf("name" to values[1]))
+            }
         }.withExamples(
             "rename",
             "rename to 'example'",

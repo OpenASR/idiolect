@@ -48,10 +48,10 @@ server.log
 
 # Mac OS
 .DS_Store
+chain.crt
+private.pem
+private_encrypted.pem
 
-.idea
-out
-build
 **/.ipynb_checkpoints
 *.vhd
 *.ghw

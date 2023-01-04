@@ -5,26 +5,34 @@ import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.*
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.psi.impl.file.PsiJavaDirectoryImpl
-import org.openasr.idiolect.actions.ActionRoutines
 import org.openasr.idiolect.nlp.*
+import org.openasr.idiolect.asr.AsrService
+import org.openasr.idiolect.nlp.intent.handlers.JavaActionIntentHandler
+import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import java.awt.Component
 
-class JavaActionRecognizer : ActionRecognizer("Java Shortcuts", 1000) {
-    override val grammars = listOf(
-        object : NlpGrammar("Java.Main") {
-            override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
-                ActionCallInfo(intentName, true).also { ActionRoutines.routinePsvm() }
-        }.withExample("public static void main"),
+class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
+    companion object {
+        val INTENT_NEW_CLASS = "${JavaActionIntentHandler.INTENT_PREFIX}NewClass"
+    }
 
-        object : NlpGrammar("Java.PrintLine") {
-            override fun createActionCallInfo(dataContext: DataContext): ActionCallInfo =
-                ActionCallInfo(intentName, true).also { ActionRoutines.routinePrintln() }
-        }.withExample("print line"),
+    override val grammars = listOf(
+        NlpGrammar("Template.Java.psvm").withExample("public static void main"),
+//                ActionCallInfo(intentName, true).also { ActionRoutines.routinePsvm() }
+
+        NlpGrammar("Template.Java.sout").withExample("print line"),
+//                ActionCallInfo(intentName, true).also { ActionRoutines.routinePrintln() }
 
         // "create new class (optional name)"
-        object : NlpRegexGrammar("Java.NewClass", ".*new class ?(.*)?") {
-            override fun createActionCallInfo(values: List<String>, dataContext: DataContext): ActionCallInfo =
-                ActionCallInfo(intentName, true).also { ActionRoutines.routineAddNewClass(values[1]) }
+        object : NlpRegexGrammar(INTENT_NEW_CLASS, ".*new class ?(.*)?") {
+            override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+                logUtteranceForIntent(utterance, intentName)
+                val className: String = values[1].ifEmpty {
+                    AsrService.promptForUtterance("what shall we call it?")
+                }
+
+                return NlpResponse(intentName, mapOf("className" to className))
+            }
         }.withExamples("new class", "create new class 'my demo'"),
 
         // TODO: convert to live template

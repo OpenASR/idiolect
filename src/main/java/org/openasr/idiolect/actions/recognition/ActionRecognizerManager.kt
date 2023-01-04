@@ -2,15 +2,22 @@ package org.openasr.idiolect.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.CONTEXT_COMPONENT
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.extensions.ExtensionPointName
+import org.openasr.idiolect.nlp.intent.handlers.IntentHandler
+import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import org.openasr.idiolect.nlp.*
 
-
 open class ActionRecognizerManager(private val dataContext: DataContext) {
-    private var EP_NAME = ExtensionPointName<ActionRecognizer>("org.openasr.idiolect.actionRecognizer")
+    companion object {
+        private val log = logger<ActionRecognizerManager>()
+    }
 
-    fun documentGrammars(formatter: (recognizer: ActionRecognizer, List<NlpGrammar>) -> List<String>): List<String> {
-        val extensions = getExtensions()
+    private var RESOLVER_EP_NAME = ExtensionPointName<IntentResolver>("org.openasr.idiolect.intentResolver")
+    private var HANDLER_EP_NAME = ExtensionPointName<IntentHandler>("org.openasr.idiolect.intentHandler")
+
+    fun documentGrammars(formatter: (recognizer: IntentResolver, List<NlpGrammar>) -> List<String>): List<String> {
+        val extensions = getResolvers()
         val ideaActionRecognizer = extensions.find { it.javaClass == RegisteredActionRecognizer::class.java }!!
         val editorActionRecognizer = extensions.find { it.javaClass == RegisteredEditorActionRecognizer::class.java }!!
         var ideaGrammars = ideaActionRecognizer.grammars
@@ -31,26 +38,16 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
                 }
     }
 
-    /*
-     * TODO: Split ActionRecognizer in two
-     *
-     * NlpHandler
-     *   - DelegatingNlpHandler      .tryResultIntent -> NlpResponse?
-     *     - UserCustomNlpHandler                       { intentName: Idiolect.FindUsages, slots {type: method}
-     *     - IdiolectOfflineNlpHandler
-     *     - DialogFlowNlpHandler
-     *
-     * IntentHandler
-     *   - IdiolectIntentHandler if (intentName.startsWith("Idiolect.
-     *      - FindUsagesHandler ([Idiolect.FindUsages])
-     *   - TemplateHandler    if (intentName.startsWith("Template.") return ActionCallInfo(
-     *   - RegisteredActionHandler  // tries to match intentName as ActionId
-     */
-
-
-    fun handleNlpRequest(nlpRequest: NlpRequest): ActionCallInfo? =
-        getExtensions().filter { it.isSupported(dataContext, dataContext.getData(CONTEXT_COMPONENT)) }
+    fun handleNlpRequest(nlpRequest: NlpRequest): ActionCallInfo? {
+        val nlpResponse = getResolvers().filter { it.isSupported(dataContext, dataContext.getData(CONTEXT_COMPONENT)) }
             .firstNotNullOfOrNull { it.tryResolveIntent(nlpRequest, dataContext) }
 
-    protected open fun getExtensions() = EP_NAME.extensions
+        return if (nlpResponse == null) null else {
+            log.info("Intent: ${nlpResponse.intentName}")
+            getHandlers().firstNotNullOfOrNull { it.tryFulfillIntent(nlpResponse, dataContext) }
+        }
+    }
+
+    protected open fun getResolvers() = RESOLVER_EP_NAME.extensions
+    protected open fun getHandlers() = HANDLER_EP_NAME.extensions
 }
