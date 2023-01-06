@@ -41,27 +41,34 @@ This paper presents Idiolect, both an IDE plugin for voice coding and a novel ap
 
 \section{Introduction}
 
+
 Humans are able to learn new words and phrases, and apply them in a variety of contexts relatively quickly. This is currently not the case for chatbots, which are often limited to a set of static commands and phrases defined at compile-time. This is a burden to bot-developers as well, who must anticipate user intent and write bindings for each new use case. On both sides, this presents a time-consuming and expensive challenge, resulting in an impedence mismatch between author expectations and user intent.
 
-On the other end of the spectrum are general-purpose scripting and metaprogramming languages that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems are highly flexible, but require a high upfront investment from the user, who must design a language to define their own commands, and then learn the language itself, all whilst doing their daily job as a software engineer.
+%On the other end of the spectrum are general-purpose scripting and metaprogramming languages that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems are highly flexible, but require a high upfront investment from the user, who must design a language to define their own commands, and then learn the language itself, all whilst doing their daily job as a software engineer.
 
-However, there is a fecund middle ground between these two design choices, that allows users to quickly dictate their own commands and phrases without resorting to a Turing Complete language. For example, the user might say ``whenever I say \textit{open sesame}, open the settings menu'', and the system will learn this command and open the settings menu whenever the user says ``open sesame''. Or ``whenever I say \textit{redo thrice}, repeat the last action three times''. Or call a function in a scripting language, open a file, or anything else the user can think of.
+Voice coding allows users to quickly dictate their own commands and phrases without resorting to a Turing Complete language. For example, the user might say ``whenever I say \textit{open sesame}, open the settings menu'', and the system will learn this command and open the settings menu whenever the user says ``open sesame''. Or ``whenever I say \textit{redo thrice}, repeat the last action three times''. Or invoke a function in a scripting language, open a file, or other manually tedious chores.
 
-This flexibility addresses a common problem in the field of voice UX design, where users are unable to express their intent in a way that the system understands. For example, a user may want to open a specific file, but the system only understands the command ``open file''. The user must then learn the system's command vocabulary, and then rephrase their intent in a way the system understands. This experience can be a frustrating one, and often results in users abandoning the system altogether.
+This flexibility addresses a common usability voice UX design, where users are unable to express their intent in a way that the system understands. For example, a user may want to open a specific file, but the system only understands the command ``open file''. The user must then learn the system's command vocabulary, and then rephrase their intent in a way the system understands. This experience can be a frustrating one, and often results in users abandoning the system altogether.
 
-Idiolect defines a default lexicon of phrases, but does not force users to learn them. Instead, we allow users to define their own commands and phrases on-the-fly, and then incorporate them into the system immediately. This shifts the burden of learning from the user to the system, which can then learn the user's idiolect and adapt to their specific needs, freeing users to express their intent in a way that is most natural to them.
-
-In this paper, we describe Idiolect, a dynamically reconfigurable system that allows users to create their own commands and actions on the fly, by verbally expressing the desired behavior of the system. This imposes some natural constraints, because the user must be able to express their intent in a way that can be verbally communicated. By targeting IDEs, whose users are already familiar with programming, any action that requires complex instructions can be written programmatically, and then invoked on the fly with a keyword or phrase.
+Idiolect defines a default lexicon of phrases, but does not force users to learn them. Instead, we allow users to define their own commands and phrases on-the-fly, and then incorporate them into the system immediately. This shifts the burden of learning from the user to the system, which learns the user's idiolect, freeing users to express their intent in a way that is most natural to them.
 
 Primarily, Idiolect observes the following design principles: (1) be natural to use, (2) be easy to configure, (3) get out of the user's way as quickly as possible. We believe that these principles are important for a system that is intended for developer-use, who are busy people and more than capable of configuring the system themselves. We also support motor-impaired users who have difficulty typing, or prefer to use a voice interface.
 
+In this paper, we describe Idiolect, a dynamically reconfigurable system that allows users to teach the IDE new commands and actions on the fly, by either verbally or programmatically expressing the desired behavior. By targeting IDEs, whose users are already familiar with programming, commands that require complex instructions can be written programmatically, and then invoked on the fly with a keyword or phrase.
+
 \section{Prior Work}
 
-Prior work in this area has explored...
+Mary Shaw, in her 2022 SPLASH keynote called for programming languages to address the needs of ``vernacular developers''. Jin Guo has talked also talked about the need for programming in ``the people's langauge''. We take these proposals quite literally to mean that programs should be designed to be spoken, and not just written.
 
-\section{Action Binding}
+Early work in this area dates at least back twenty years to Leopold and Amber's (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite (2001), Begel and Graham's (2005) and others. These systems allow users to write code by speaking into a microphone. These systems are limited to a small set of phrases, and generally are not reconfigurable. They also do not consider IDE integration.
 
-The IntelliJ Platform has over $10^3$ possible actions. These actions are bound to keyboard shortcuts, menu items, and toolbar buttons. The user can also bind actions to voice commands. However, the user must first know the name of the action, and then bind it to a voice command. The default grammar was manually curated from this list, using the name to generate a description that is suitable for voice recognition.
+Another stream of work has explored teaching voice assistants to use custom phrases (Chkroun \& Azaria, 2019). This approach is similar to the one we take in Idiolect, but is limited to a single user, and does not consider more general forms of voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for this problem.
+
+\section{Speech Models}
+
+Speech recognition, the problem of translating an audio waveform containing speech to text, is essentially a solved problem. We can use one of the many existing speech recognition models, and they will work well enough for our purposes. However we also want a free and open source real-time offline speech recognition platform, which has only recently become available on commodity hardware.
+
+Idiolect integrates with Vosk, a state-of-the-art deep speech system with models for various languages. VoskAPI\footnote{https://github.com/alphacep/vosk-api} is open source system that can be used a Java library, which we use. For TTS, we use the built-in voices from the parent operating system, via the jAdapterForNativeTTS\footnote{https://github.com/jonelo/jAdapterForNativeTTS} library.
 
 \section{Command Prioritization}
 
@@ -73,19 +80,15 @@ Then the default commands from a plugin-wide grammar.
 
 The recognizer of last resort are ChatGPT commands. We can use a prompt "What action is the most likely for the phrase "..." out of these actions: ..." and it will select top action as the command.
 
-\section{Speech Models}
-
-Speech recognition, the problem of translating an audio waveform containing speech to text, is essentially a solved problem. We can use one of the many existing speech recognition models, and they will work well enough for our purposes. However we also want a free and open source real-time offline speech recognition platform, which has only recently become available on commodity hardware.
-
-Idiolect integrates with Vosk, a state-of-the-art deep speech system with models for various languages. VoskAPI\footnote{https://github.com/alphacep/vosk-api} is open source system that can be used a Java library, which we use. For TTS, we use the built-in voices from the parent operating system, via the jAdapterForNativeTTS\footnote{https://github.com/jonelo/jAdapterForNativeTTS} library.
-
 \section{Intent Recognition}
 
-Idiolect supports a variety of methods for acting on a user's utterance, which can be defined by string matching, a context-free grammar, and LLM prompting. This framework forms an extensible DSL for the creation of custom patterns to match against transcribed speech, which can be defined by an end-user via a simple configuration file, or programmatically by a plugin developer to handle more complex usage scenarios.
+The IntelliJ Platform has over $10^3$ possible actions. These actions are bound to keyboard shortcuts, menu items, and toolbar buttons. The user can also bind actions to voice commands. However, the user must first know the name of the action, and then bind it to a voice command. The default grammar was manually curated from this list, using the name to generate a description that is suitable for voice recognition.
+
+Idiolect supports a variety of methods for acting on a user's utterance, which can be defined by string matching, a context-free grammar, and LLM-prompting. This framework forms an extensible DSL for the creation of custom patterns to match against transcribed speech, which can be defined by an end-user via a simple configuration file, or programmatically by a plugin developer to handle more complex usage scenarios.
 
 The plugin first attempts to perform an exact lexical match, by attempting to resolve a given utterance against a predefined lexicon. This is the primary way to define and modify commands, and is typically most reliable way to match a command previously known to user. However, the user may not know or recall the phrase to which an action they wish to perform was bound.
 
-In this case, next attempts to match the speech against a grammar, which can be a regular expression that is matched against the utterance, and that may contain named capture groups, used to extract parameters from the utterance. For example, we can match more complex patterns, such as ``open the (?<file>.*) file in the (?<project>.*) project''. This is a powerful tool for developers, who can define their own grammars to match against user utterances, and extract parameters from the utterance.
+In this case, Idiolect next attempts to match the speech against a context-free grammar, which may contain named capture groups, used to extract parameters from the utterance. For example, we can match more complex patterns, such as ``open the (?<file>.*) file in the (?<project>.*) project''. This is a powerful tool for developers, who can define their own grammars to match against user utterances, and extract parameters from the utterance.
 
 Finally, if the utterance does not match any of the predefined lexicons or grammars, the plugin will attempt to match the utterance against a language model (LM). This is a probabilistic model of the language, which can be used to predict the most likely utterance given a sequence of words. For example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''.
 
@@ -93,9 +96,9 @@ Finally, if the utterance does not match any of the predefined lexicons or gramm
 
 Idiolect supports defining and recognizing context free grammars. In keeping with the design principles of ``parse, don't validate'', we allow users to define their own grammars, and then bind them to actions. However there are many domain-specific terms that can be difficult to parse directly.
 
-As a first line-of-defense, we incorporate Considine et al.'s (2022) work on Tidyparse. In short, if a given phrase ``open foo.java'' is uttered, but the word file is missing, we repair the string to ``open file foo.java''. This is done using a Levenshtein automata, which attempts to find the smallest edit transforming a string outside the language to a string inside the langauge. The algorithm is a form of error recovery, where we attempt to locate the most likely parse tree that approximately matches the user's utterance.
+We incorporate Considine et al.'s (2022) work on Tidyparse. In short, if a given phrase ``open foo.java'' is uttered, but the word file is missing, we repair the string to ``open file foo.java''. This is done using a Levenshtein automata, which attempts to find the smallest edit transforming a string outside the language to a string inside the langauge.
 
-We also support a form of error-recovery, where Vosk returns us a list of alternate utterances, and we attempt to match each of them against the lexicon and grammar. This is a form of error recovery, where we attempt to locate the most likely parse tree that approximately matches the user's utterance, given the list of alternate utterances.
+Vosk is also capable of returning a list of alternate utterances, alongside confidence score for each, which we also use to determine if the user's utterance is sufficiently close to some intended command.
 
 Finally, we can use a language model to rerank the most likely utterances, conditioned on a previous context of historical commands. This is a form of error recovery, where we attempt to locate the most intent that approximately matches the user's utterance, given the dictionary, context and a list of alternate utterances.
 
@@ -103,9 +106,36 @@ We describe each of these in more detail in the following sections.
 
 \section{Large Langauge Models}
 
+Recent progress in language modeling has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. We can use a large language model to predict the most likely utterance given a sequence of words. For example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''. While these models are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will soon be available on the edge, and can be used to perform intent recognition in real-time.
+
 \section{Plugin Extensions}
 
+In addition to end-user configurability, Idiolect is designed to be extensible by external plugin developers so-inclined, and can be used by other IntelliJ Platform plugins to define their own commands. We provide a simple message passing API for plugins to communicate with Idiolect, and a DSL for defining custom commands.
+
+\section{Build Automation}
+
+We setup an automated pipeline for building and deploying the plugin. We use GitHub Actions to build the plugin, and then upload the resulting JAR file to the JetBrains Plugin Repository. This allows us to automatically deploy new versions of the plugin, and to test the plugin on multiple platforms.
+
+\section{Evaluation}
+
+We evaluated the plugin on a variety of tasks, including opening files, creating new files, and running commands. We also evaluated the plugin on a variety of tasks that are not supported by the default grammar, such as creating new projects, and running Gradle tasks. Our primary means of evaluation was user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
+
+We then performed an intervention, by switching to a new voice recognition engine, and measuring the number of downloads of the new version the results of this experiment are ongoing.
+
+\section{Results}
+
+\includegraphics[width=0.50\textwidth]{downloads.png}
+
+Downloads of the plugin have decreased over time since the plugin's initial release. We conjecture this relates to the fact that the CMUSphinx speech recognizer was abandonded and the plugin was not updated for several years, and thus incompatible with the latest versions of IntelliJ Platform.
+
+\includegraphics[width=0.50\textwidth]{demographics.png}
+
+A careful inspection of demography indicates a large fraction of the plugin downloads originate from China, indicating a potentially unserved programming demographic. A careful analysis suggests the need to support Chinese language recognition, an omission that we hope to remedy in the future.
+
+
+
 \section{Conclusion}
+
 
 
 \begin{thebibliography}{00}
