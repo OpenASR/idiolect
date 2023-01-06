@@ -58,9 +58,9 @@ In this paper, we describe Idiolect, a dynamically reconfigurable system that al
 
 \section{Prior Work}
 
-Mary Shaw, in her 2022 SPLASH keynote called for programming languages to address the needs of ``vernacular developers''. Jin Guo has talked also talked about the need for programming in ``the people's langauge''. We take these proposals quite literally to mean that programs should be designed to be spoken, and not just written.
+Mary Shaw, in her 2022 SPLASH keynote called for programming languages to address the needs of ``vernacular developers''. Jin Guo has talked also talked about the need for programming in ``the people's langauge''. We take their proposals quite literally to mean that computers should be able to execute spoken programs, and not just written ones.
 
-Early work in this area dates at least back twenty years to Leopold and Amber's (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite (2001), Begel and Graham's (2005) and others. These systems allow users to write code by speaking into a microphone. These systems are limited to a small set of phrases, and generally are not reconfigurable. They also do not consider IDE integration.
+Early work in this area dates back at least twenty years to Leopold and Amber's (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite (2001), Begel and Graham's (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, do not consider IDE integration and or reconfigurability.
 
 Another stream of work has explored teaching voice assistants to use custom phrases (Chkroun \& Azaria, 2019). This approach is similar to the one we take in Idiolect, but is limited to a single user, and does not consider more general forms of voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for this problem.
 
@@ -82,25 +82,25 @@ The recognizer of last resort are ChatGPT commands. We can use a prompt "What ac
 
 \section{Intent Recognition}
 
-The IntelliJ Platform has over $10^3$ possible actions. These actions are bound to keyboard shortcuts, menu items, and toolbar buttons. The user can also bind actions to voice commands. However, the user must first know the name of the action, and then bind it to a voice command. The default grammar was manually curated from this list, using the name to generate a description that is suitable for voice recognition.
+Once speech is translated to text, we need to determine the intent of a particular sentence, and extract the relevant actions and entities. Furthermore, we may need to consider the context of a given utterance , i.e., the current state of the editor and previous command history to resolve potentially ambiguous commands. For example, the utterance ``open the plugin menu'' could refer to multiple different menus, depending on the context in which it was invoked.
+
+The IntelliJ Platform has over $10^3$ possible actions. These actions are bound to keyboard shortcuts, menu items, and toolbar buttons. The user can also bind actions to voice commands. However, to bind a new command, the user must first know the name of the action. Idiolect's default grammar was manually curated from this list, using the name to generate a suitable description for intent recognition.
 
 Idiolect supports a variety of methods for acting on a user's utterance, which can be defined by string matching, a context-free grammar, and LLM-prompting. This framework forms an extensible DSL for the creation of custom patterns to match against transcribed speech, which can be defined by an end-user via a simple configuration file, or programmatically by a plugin developer to handle more complex usage scenarios.
 
-The plugin first attempts to perform an exact lexical match, by attempting to resolve a given utterance against a predefined lexicon. This is the primary way to define and modify commands, and is typically most reliable way to match a command previously known to user. However, the user may not know or recall the phrase to which an action they wish to perform was bound.
+The plugin first attempts to perform an exact lexical match, by attempting to resolve a given utterance against a predefined lexicon of commands and phrases. Idiolect next attempts to match the speech against a context-free grammar, which may contain named capture groups, used to extract parameters from the utterance. For example, we can match more complex patterns, such as ``open the (?<file>.*) file in the (?<project>.*) project''. This is a powerful tool for developers, who can define their own grammars to match against user utterances, and extract parameters from the utterance.
 
-In this case, Idiolect next attempts to match the speech against a context-free grammar, which may contain named capture groups, used to extract parameters from the utterance. For example, we can match more complex patterns, such as ``open the (?<file>.*) file in the (?<project>.*) project''. This is a powerful tool for developers, who can define their own grammars to match against user utterances, and extract parameters from the utterance.
-
-Finally, if the utterance does not match any of the predefined lexicons or grammars, the plugin will attempt to match the utterance against a language model (LM). This is a probabilistic model of the language, which can be used to predict the most likely utterance given a sequence of words. For example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''.
+This is the primary way to define and modify commands, and is typically the most reliable way to match a user-defined command. However, the user may not know or recall the exact phrase a given action they wish to perform was bound. In this case, if the utterance does not match any of the predefined lexicons or grammars, the plugin will attempt to match the utterance against a language model (LM), a probabilistic model trained on a large corpus of text which can be used to perform simple reasoning tasks like predicting the most likely command to execute. For example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''.
 
 \section{Error Recovery}
 
-Idiolect supports defining and recognizing context free grammars. In keeping with the design principles of ``parse, don't validate'', we allow users to define their own grammars, and then bind them to actions. However there are many domain-specific terms that can be difficult to parse directly.
+Idiolect defining and recognizing context free grammars. In keeping with the design principles of ``parse, don't validate'', we allow users to define their own grammars, and then bind them to actions. In many cases however, there are out-of-vocabulary (OOV) terms that cannot be parsed directly, or which the user has misspoken. When the utterance is one or two tokens away from an unambigious command, we attempt some error recovery.
 
-We incorporate Considine et al.'s (2022) work on Tidyparse. In short, if a given phrase ``open foo.java'' is uttered, but the word file is missing, we repair the string to ``open file foo.java''. This is done using a Levenshtein automata, which attempts to find the smallest edit transforming a string outside the language to a string inside the langauge.
+We address the issue of recognition errors by incorporating Considine et al.'s (2022) work on Tidyparse. In short, if a given phrase ``open foo.java'' is uttered, but the word file is missing, we repair the string to ``open file foo.java''. This is done using a Levenshtein automata, which attempts to find the smallest edit transforming a string outside the language to a string inside the langauge.
 
 Vosk is also capable of returning a list of alternate utterances, alongside confidence score for each, which we also use to determine if the user's utterance is sufficiently close to some intended command.
 
-Finally, we can use a language model to rerank the most likely utterances, conditioned on a previous context of historical commands. This is a form of error recovery, where we attempt to locate the most intent that approximately matches the user's utterance, given the dictionary, context and a list of alternate utterances.
+Finally, we can use a language model to rerank the most likely utterances, conditioned on a previous context of historical commands. This is a form of error recovery, where we attempt to locate the most likely intent matching the user's utterance, given the dictionary, context and a list of alternate utterances.
 
 We describe each of these in more detail in the following sections.
 
@@ -114,7 +114,7 @@ In addition to end-user configurability, Idiolect is designed to be extensible b
 
 \section{Build Automation}
 
-We setup an automated pipeline for building and deploying the plugin. We use GitHub Actions to build the plugin, and then upload the resulting JAR file to the JetBrains Plugin Repository. This allows us to automatically deploy new versions of the plugin, and to test the plugin on multiple platforms.
+We setup an automated pipeline for building and deploying the plugin. We use GitHub Actions to build the plugin, and then upload the resulting artifact to the JetBrains Plugin Repository. This allows us to automatically deploy new versions and test the plugin on multiple platforms.
 
 \section{Evaluation}
 
@@ -126,17 +126,17 @@ We then performed an intervention, by switching to a new voice recognition engin
 
 \includegraphics[width=0.50\textwidth]{downloads.png}
 
-Downloads of the plugin have decreased over time since the plugin's initial release. We conjecture this relates to the fact that the CMUSphinx speech recognizer was abandonded and the plugin was not updated for several years, and thus incompatible with the latest versions of IntelliJ Platform.
+Downloads of the plugin have decreased over time since the plugin's initial release. We conjecture this relates to the fact that the CMUSphinx speech recognizer was abandonded, leading to the plugin not being updated for several years, and thus incompatible with the latest versions of IntelliJ Platform.
 
 \includegraphics[width=0.50\textwidth]{demographics.png}
 
-A careful inspection of demography indicates a large fraction of the plugin downloads originate from China, indicating a potentially unserved programming demographic. A careful analysis suggests the need to support Chinese language recognition, an omission that we hope to remedy in the future.
-
-
+A careful inspection of demography indicates a large fraction of the plugin downloads originate from China, indicating a potentially underserved programming demographic. A careful analysis suggests the need to support Chinese language recognition, an omission that we hope to remedy in a future release.
 
 \section{Conclusion}
 
+\section{Acknowledgements}
 
+The first author would like to acknowledge Alexey Kudinkin and Yaroslav Lepenkin, who contributed to the development of the plugin during the original JetBrains hackathon in 2015.
 
 \begin{thebibliography}{00}
 \bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
