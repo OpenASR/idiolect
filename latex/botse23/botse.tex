@@ -32,7 +32,7 @@ jguo@cs.mcgill.ca}
 \maketitle
 
 \begin{abstract}
-This paper presents Idiolect, both an IDE plugin for voice coding and a novel approach to building bots that allows for users to define custom commands on-the-fly. Unlike traditional chatbots, Idiolect does not pretend to be an omnicient virtual assistant but rather a reconfigurable voice programming system that empowers users to create their own commands and actions dynamically, without rebuilding or restarting the application. We present a case study of integrating Idiolect~\footnote{https://github.com/OpenASR/idiolect} with the IntelliJ Platform, illustrate some example use cases, and offer some lessons learned during the tool's development.
+This paper presents Idiolect, an IDE plugin for voice coding and a novel approach to building bots that allows for users to define custom commands on-the-fly. Unlike traditional chatbots, Idiolect does not pretend to be an omnicient virtual assistant but rather a reconfigurable voice programming system that empowers users to create their own commands and actions dynamically, without rebuilding or restarting the application. We present a case study of integrating Idiolect~\footnote{https://github.com/OpenASR/idiolect} with the IntelliJ Platform, illustrate some example use cases, and offer some lessons learned during the tool's development.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -58,15 +58,15 @@ In this paper, we describe Idiolect, a dynamically reconfigurable system that al
 
 \section{Prior Work}
 
-Mary Shaw, in her 2022 SPLASH keynote called for programming languages to address the needs of ``vernacular developers''. Jin Guo has talked also talked about the need for programming in ``the people's langauge''. We take their proposals quite literally to mean that computers should be able to interpret spoken programs, and not just written ones.
+Mary Shaw, during her 2022 SPLASH keynote called for programming languages to address the needs of ``vernacular developers''. Jin Guo has also talked about the need for programming in ``the people's langauge''. We take their proposals quite literally to mean that computers should be able to interpret spoken programs, and not just written ones.
 
 Early attempts to build voice programming systems can be traced back at least twenty years to Leopold and Amber's (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite (2001), Begel and Graham's (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, do not consider IDE integration and or reconfigurability.
 
-Another stream of work has explored teaching voice assistants to use custom phrases (Chkroun \& Azaria, 2019). This approach is similar to the one we take in Idiolect, but is limited to a single user, and does not consider more general forms of voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for this problem.
+Another stream of work has explored teaching voice assistants to use custom phrases (Chkroun \& Azaria, 2019). Their approach is similar to our own, but is limited to a single user, and does not consider more general forms of voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for this problem.
 
 \section{Speech Models}
 
-Today, speech recognition, the problem of translating an audio waveform containing speech to text, is essentially a solved problem - one of the many existing speech recognition models would work well enough for our purposes. However, we also wanted a solution with realtime offline speech recognition capabilities on an open source deep speech pipeline, which has only recently been available on commodity hardware.
+Today, speech recognition, the problem of translating an audio waveform containing speech to text, is essentially a solved problem - one of the many speech recognition models would work well enough for our purposes. However, we also wanted a solution with realtime offline speech recognition capabilities built on an open source deep speech pipeline, which has only recently been available on commodity hardware.
 
 Idiolect integrates with Vosk, a state-of-the-art deep speech system with realtime models for various languages. VoskAPI\footnote{https://github.com/alphacep/vosk-api} is open source system with a Java API, which we use. Initially, we distributed a default model for the English language inside the plugin, but at the request of JetBrains to reduce bandwidth, we instead provided a script to download the model from the Vosk website, and then prompt the user to download directly.
 
@@ -102,11 +102,9 @@ Idiolect supports defining and recognizing context-free and mildly context-sensi
 
 We address the issue of recognition errors by incorporating Considine et al.'s (2022) work on Tidyparse. In short, if a given phrase ``open foo.java'' is uttered, but the word file is missing, we repair the string to ``open file foo.java''. Tidyparse implements a novel approach to error correction based on the theory of context-free language reachability, finite field arithmetic, conjunctive grammars and Levenshtein automata. We use a SAT solver to find the smallest edit transforming a string outside the language to a string inside the langauge.
 
-Vosk is also capable of returning a list of alternate utterances, alongside confidence score for each, which we also use to determine if the user's utterance is sufficiently close to some intended command.
+Vosk is also capable of returning a list of alternate utterances, alongside a confidence score for each, which we use to determine if the user's utterance is sufficiently close to a known command.
 
 Finally, we can use a language model to rerank the most likely utterances, conditioned on a previous context of historical commands. This is a form of error recovery, where we attempt to locate the most likely intent matching the user's utterance, given the dictionary, context and a list of alternate utterances.
-
-We describe each of these in more detail in the following sections.
 
 \section{Large Langauge Models}
 
@@ -114,11 +112,11 @@ Recent progress in language modeling has enabled the use of large language model
 
 \section{User Onboarding}
 
-Upon first installing the plugin, the user is greeted and prompted to download the Vosk model for recognizing the natural language of choice, which defaults to their system locale. Once unpacked, the model is stored in the plugin configuration directory, ~/.idealect. The user is next prompted to configure the properties file, and to bind a few voice commands. This is a one-time process, and users may reconfigure the plugin by opening the settings dialog at any time.
+Upon first installing the plugin, the user is greeted and prompted to download the Vosk model for recognizing their natural language of choice, which defaults to the system locale. Once unpacked, the model is stored in the plugin configuration directory, ~/.idealect. The user is next prompted to configure the properties file, and to bind a few voice commands. This is a one-time process, and users may reconfigure the plugin by opening the settings dialog at any time.
 
 \section{Plugin Extensions}
 
-In addition to end-user configurability, Idiolect is designed to be extensible by external plugin developers so-inclined, and can be used by other IntelliJ Platform plugins to define their own commands. We provide a simple message passing API for plugins to communicate with Idiolect, and a DSL for defining custom commands.
+In addition to end-user configurability, Idiolect is designed to be extensible by external plugin developers and can be used by other IntelliJ Platform plugins to define their own commands. We provide a simple message passing API for plugins to communicate with Idiolect, and a DSL for defining custom commands.
 
 \section{Build Automation}
 
@@ -126,27 +124,35 @@ To streamline the development process, we set up an automated pipeline for build
 
 \section{Evaluation}
 
-We evaluated the plugin on a variety of tasks, including opening files, creating new files, and running commands. We also evaluated the plugin on a variety of tasks that are not supported by the default grammar, such as creating new projects, and running Gradle tasks. Our primary means of evaluation was user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
+We evaluated the plugin on a variety of tasks, including opening files, creating new files, and running commands. We also evaluated the plugin on tasks outside the default grammar, such as creating new projects, and running Gradle tasks. Our primary means of evaluation was user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
 
-We then performed an intervention, by switching to a new voice recognition engine, and are measuring the number of downloads of the new version -- the results of this experiment are ongoing.
+We then performed an intervention, by switching to a new voice recognition engine, and are collecting data on the number of downloads of the new version -- the results of this experiment are ongoing.
 
 \section{Results}
 
 \includegraphics[width=0.45\textwidth]{downloads.png}
 
-Downloads of the plugin have decreased over time since the plugin's initial release. We conjecture this relates to the fact that the CMUSphinx speech recognizer was abandonded, leading to the plugin not being updated for several years, and thus incompatible with the latest versions of IntelliJ Platform.
+Downloads of the plugin have decreased over time since the plugin's initial release. We conjecture this relates to the fact that plugin was not updated for several years, and thus incompatible with the latest versions of IntelliJ Platform.
 
 \includegraphics[width=0.50\textwidth]{demographics.png}
 
-A careful inspection of demography indicates a large fraction of the plugin downloads originate from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support Chinese language recognition, an omission that we hope to remedy in a future release.
+A careful inspection of demography indicates a large fraction of the plugin downloads originate from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support internationalization and localiation, an omission that we hope to remedy in a future release.
+
+\section{Future work}
+
+In the future, we plan to conduct a thorough user study to understand the sociolectic background of the plugin's users, and to gain a more complete understanding of its possible use cases. In particular, we hope to offer improved accessibility support to facilitate their development habits of visually and motor-impaired users, as well as broader support for other languages and dialects.
+
+We also plan to conduct an evaluation and analysis of the plugin's intent-recognition capability and to improve the support for personalization, such as speaker adaptation and user-specific language models. Finally we would like to provide a more user-friendly configuration interface, possibly using an embedded DSL for defining dialog trees.
+
+To prioritize the development of these features, it would be helpful to collect telemetry to guide the development of the plugin and address the needs of voice programmers.
 
 \section{Conclusion}
 
-In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE using voice commands. We described the design of the plugin, and the challenges we faced in implementing it. We also presented the results of our evaluation, and discussed future work.
+In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE using voice commands. We described the design of the plugin, and the challenges we faced while implementing it. We also presented the results of our evaluation, and discussed future work.
 
 \section{Acknowledgements}
 
-The first author wishes to thank his former colleagues Alexey Kudinkin and Yaroslav Lepenkin, who contributed to the plugin during the original JetBrains hackathon in 2015, and supervisor Hadi Hariri for his advice and encouragement.
+The first author thanks his former colleagues Alexey Kudinkin and Yaroslav Lepenkin, who contributed to the plugin during the original JetBrains hackathon in 2015, and former manager Hadi Hariri for his advice and encouragement.
 
 \begin{thebibliography}{00}
 \bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
