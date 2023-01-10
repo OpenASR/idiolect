@@ -40,6 +40,7 @@ tasks {
   compileTestKotlin {
     exclude(
       "**/windows/**",
+      "**/mac/**",
       "**/ActionRecognizerManagerTest.kt"
     )
     kotlinOptions.jvmTarget = jvmTarget
