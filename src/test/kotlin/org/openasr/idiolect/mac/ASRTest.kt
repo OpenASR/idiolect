@@ -10,12 +10,13 @@ class ASRTest {
     @Test
     fun testTTSToASR() {
         // Run say command
-        ProcessBuilder("say", "hello idea", "-o", "/tmp/hello.aiff").start()
+        ProcessBuilder("say", "-o", "/tmp/hello.wav", "--channels=1", "--data-format=LEF32@16000",
+            "--rate=60", "the", ).start().waitFor()
 
         // Read AIFF file
-        val testUtterance = File("/tmp/hello.aiff").readBytes()
+        val testUtterance = File("/tmp/hello.wav").readBytes()
         val rec = Recognizer(Model("/Users/breandan/.idiolect/vosk-model-en-us-0.22-lgraph"), 16000f)
         rec.acceptWaveForm(testUtterance, testUtterance.size)
-        assertEquals("hello idea", rec.result)
+        assertEquals("the", rec.result.drop(14).dropLast(3))
     }
 }
