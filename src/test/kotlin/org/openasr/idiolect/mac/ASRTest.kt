@@ -10,8 +10,8 @@ class ASRTest {
     @Test
     fun testTTSToASR() {
         // Run say command
-        ProcessBuilder("say", "-o", "/tmp/hello.wav", "--channels=1", "--data-format=LEF32@16000",
-            "--rate=60", "the", ).start().waitFor()
+        "say -o /tmp/hello.wav --channels=1 --data-format=LEF32@16000 --rate=60 the"
+            .let { ProcessBuilder(it.split(" ")).start().waitFor() }
 
         // Read AIFF file
         val testUtterance = File("/tmp/hello.wav").readBytes()
