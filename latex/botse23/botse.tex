@@ -23,10 +23,6 @@ nalbion@yahoo.com}
 \IEEEauthorblockN{Xujie Si}
 \IEEEauthorblockA{\textit{University of Toronto} \\
 xsi@cs.utoronto.ca}
-\and
-\IEEEauthorblockN{Jin Guo}
-\IEEEauthorblockA{\textit{McGill University} \\
-jguo@cs.mcgill.ca}
 }
 
 \maketitle
@@ -138,6 +134,8 @@ Downloads of the plugin have decreased over time since the plugin's initial rele
 \includegraphics[width=0.50\textwidth]{demographics.png}
 
 A careful inspection of demography indicates a large fraction of the plugin downloads originate from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support internationalization and localiation, an omission that we hope to remedy in a future release.
+
+In addition, we performed an experiment to evaluate the performance of artificial speech recognition. Using a set of English TTS voices (male and female) included in MacOS Ventura 13.1, we synthesize a set of utterances from the predefined command list, feed them to VoskAPI, and evaluate the end-to-end intent recognition accuracy across two pretrained models: \texttt{vosk-model-small-en-us-0.15}, and \texttt{vosk-model-en-us-0.22-lgraph}. Results are shown in Table \ref{tab:results}.
 
 \section{Future work}
 
