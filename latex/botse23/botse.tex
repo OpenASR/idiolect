@@ -77,17 +77,17 @@ Once a spoken utterance is decoded as text, Idiolect must determine the relevant
 
 The IntelliJ Platform has over $10^3$ possible actions. These actions are bound to keyboard shortcuts, menu items, and toolbar buttons. The user can also bind an action directly to voice commands, presuming the user already knows the action's identifier. Idiolect's default grammar was manually curated from the action list, using the CamelCase identifier to generate a suitable description for recognizing each intent.
 
-Idiolect can match a user's utterance in a variety of ways, namely (1) lexical string matching, (2) context-free language recognition, and (3) LLM-prompting. By providing an extensible DSL, users can define their own command patterns via a simple configuration file, or programmatically using the plugin API to handle more complex usage scenarios.
+In keeping with the principle of configurability, we allow users to define custom grammars and bind utterances to actions using a context-free grammar. By providing an extensible DSL, users can bind their own command patterns using either a simple configuration file, or programmatically via the plugin API to handle more complex usage scenarios.
 
-In some cases, the user may not know or recall the exact phrase to which an action they intend to perform was bound. Given an utterance which does not match any of the predefined grammars, the plugin will fall back to a language model (LM), a probabilistic model trained on a large corpus of text, which can be used to perform reasoning simple tasks like predicting the most likely intent from a list of alternatives. For example, the utterance ``I want to edit foo.java'' is more likely to match the command ``open foo.java'' than ``execute foo.java''.
+In some cases, the user may not know or recall the exact phrase to which an action they intend to perform was bound. Given an utterance that does not match any of the predefined grammars, the plugin will fall back to a language model (LM), a probabilistic model trained on a large corpus of text, which can be used to perform reasoning simple tasks like predicting the most likely intent from a list of alternatives. For example, the utterance ``I want to edit foo.java'' is more likely to match the command ``open foo.java'' than ``execute foo.java''.
 
 \subsection{Recognition Dispatch}
 
-Idiolect dispatches utterances to a series of recognizers using a priority system. This system gives each recognizer the chance to match or pass on each utterance. Once a command is matched, the command is consumed and no subsequent recognizer will receive the dispatch.
+Idiolect dispatches utterances to a series of recognizers using a tiered priority system. This system gives each recognizer the chance to match or pass on each utterance. Once a command is matched, the command is consumed and no subsequent recognizer will receive the dispatch.
 
 The plugin first attempts to resolve a spoken utterance using an exact lexical match against a lexicon of predefined commands. Highest priority are those which control the plugin itself, enabling and disabling speech recognition.
 
-User-defined commands are the next highest priority. These can be a lexical match, or more generally a sentence in a context-free language. Parsing parameters allows it to handle to more complex instructions, such as ``open the \textlangle filename\textrangle [in \textlangle project\_name\textrangle]'' or ``jump to the \textlangle nth\textrangle line''.
+User-defined commands are the next highest priority. These can be a lexical match, or more generally a sentence in a context-free language. Nonterminal parameters allow one to define to more complex instructions, such as ``open the \textlangle filename\textrangle [in \textlangle project\_name\textrangle]'' or ``jump to the \textlangle nth\textrangle line''.
 
 If there is no exact match, we attempt to repair the phrase using an error-correcting parser. We describe this in Sec.~\ref{sec:error}.
 
@@ -95,7 +95,7 @@ The recognizer of last resort is a large language model. Open ended commands whi
 
 \section{Barriers and Pathways to Usability}\label{sec:usability}
 
-In our experience as users and maintainers of the plugin, usability challenges typically arise in a few areas. We discuss various categories of errors and our efforts to address them.
+In our experience as plugin users and maintainers, usability challenges typically arise in a few key areas. We discuss some of these obstacles and our efforts to surmount them.
 
 \subsection{User Onboarding}
 
@@ -109,47 +109,41 @@ Failure to recognize is a common issue in intent recognition, the most common so
 
 \subsection{Command Discoverability}
 
-We draw a distinction between capability discovery and intent recognition. Users previously familiar with the IDE capabilities may wish to invoke or bind a specific action directly, but may not know the command binding. The first and foremost way to improve discovery is through documentation. However keeping documentation in sync with capabilities can be a challenging task, and users are unlikely to read verbose documentation. To address this issue, we autogenerate documentation describing the action and their descriptions, by preprocessing the action list and assigning natural language descriptions from the IntelliJ Platform source code.
+We draw a distinction between capability discovery and intent recognition. Users previously familiar with the IDE capabilities may wish to invoke or bind a specific action directly, but may not know the command binding. The first and foremost way to improve discovery is through documentation, however keeping documentation in sync with capabilities can be challenging, and users are uninclined to read verbose documentation. To address this issue, we autogenerate documentation describing the action and their descriptions, by preprocessing the action list and assigning natural language descriptions from the IntelliJ Platform source code.
 
 Another common scenario is when the user is unfamiliar with the IDE capabilities, and the action they wish to perform is not supported by the IDE directly. User awareness of IDE functionality is outside the scope of this plugin, however, many actions that users wish to perform have no associated binding or are compound actions. For example ``delete the method named \textlangle foo\textrangle'' requires first resolving the method, selecting the body of the text and deleting it. These actions can be bound, but require a handcrafted recognition handler, and are generally quite brittle. We hope to improve scripting support for such actions in the future.
 
 \subsection{API Extensibility}
 
-Idiolect can try to anticipate users actions and give users additional action bindings. However, there will always be some functionality that is best implemeneted by downstream developers. In addition to end-user configurability, Idiolect is designed to be extensible by external plugin developers and can be used by other IntelliJ Platform plugins to programmatically define their own commands and recognition handlers. We provide a simple message passing API for plugins to communicate with Idiolect, and a DSL for defining custom commands.
+Idiolect tries to anticipate users actions and give users additional action bindings. Some functionality, however, is best left implemeneted by downstream developers. In addition to end-user configurability, Idiolect is designed to be extensible by external plugin developers and can be used by other IntelliJ Platform plugins to programmatically define their own commands and recognition handlers. We provide a simple message passing API for plugins to communicate with Idiolect, and a DSL for defining custom grammars.
 
 \subsection{Error Recovery}\label{sec:error}
 
-Another common usability barrier is when the speech is transcribed accurately, but the utterance does not correspond to an actionable command, possibly due to stopwords or unexpected text. In short, if a given phrase, e.g., ``open uh foo java'' is received, we attempt to repair the utterance. At the user's discretion, or in the case of ambiguity when the phrase has multiple plausible alternatives, we can either visually or verbally prompt the user to select from a set of alternate phrases, e.g., ``Did you mean \textlangle a\textrangle open file foo.java, \textlangle b\textrangle open folder foo/java, or \textlangle c\textrangle something else?''
+Another common usability barrier is when transcription is accurate, but the utterance does not correspond to an actionable command, possibly due to stopwords verbal fillers or extraneous text which cannot be directly parsed. In short, if a given phrase, e.g., ``open uh foo java'' is received, we attempt to repair the utterance. At the user's discretion, or in case of ambiguity when the phrase has multiple plausible alternatives, we can either visually or verbally prompt the user to choose from a set of actionable phrases, e.g., ``Did you mean \textlangle a\textrangle open file foo.java, \textlangle b\textrangle open folder foo/java, or \textlangle c\textrangle something else?''
 
-In keeping with the design principle of configurability, we allow users to define custom grammars and bind phrases to actions. In many cases however, there are verbal fillers and extraneous text which cannot be parsed directly. When the utterance is one or two tokens away from a command, we attempt to repair the utternace using error recovery.
+To address the issue of recognition errors, we apply Considine et al.'s (2022) work on Tidyparse, which supports supports recognition and parsing of context-free and mildly context-sensitive grammars, and computing language edit distance. Tidyparse implements a novel approach to error correction based on the theory of context-free language reachability, conjunctive grammars and Levenshtein automata. We use a SAT solver to find the smallest edit transforming a string outside the language to a string inside the langauge. When the utterance is one or two tokens away from a known command, we attempt to repair the utternace using error recovery.
 
-We address the issue of recognition errors by incorporating Considine et al.'s (2022) work on Tidyparse, which supports supports defining and recognizing context-free and mildly context-sensitive grammars and computing language edit distance. Tidyparse implements a novel approach to error correction based on the theory of context-free language reachability, finite field arithmetic, conjunctive grammars and Levenshtein automata. We use a SAT solver to find the smallest edit transforming a string outside the language to a string inside the langauge.
+VoskAPI is also capable of returning a list of alternate utterances, alongside a confidence score for each, which we use to determine if the user's utterance is sufficiently close to a known command in the list of alternates.
 
-Vosk is also capable of returning a list of alternate utterances, alongside a confidence score for each, which we use to determine if the user's utterance is sufficiently close to a known command.
+\subsection{Build Reproducibility}
 
-%\section{Large Langauge Models}
-%
-%Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance, for example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will soon be available on the edge, and can be used to perform real-time intent recognition.
-%
-%Finally, we can use a language model to rerank the most likely utterances, conditioned on a previous context of historical commands. This is a form of error recovery, where we attempt to locate the most likely intent matching the user's utterance, given the dictionary, context and a list of alternate utterances.
+One of the challenges of managing a multiplatform audio project is ensuring reproducible builds. The IntelliJ Platform does not allow shipping OS-specific plugins, which requires building a single artifact. In the past, updates would result in breaking changes for Windows, Mac OS, or Linux, which are difficult to to debug or test on a development environment and only identified by user acceptance testing on those platforms.
 
-\section{Build Automation}
-
-To streamline the development process, we set up an automated pipeline for building and deploying the plugin. We use GitHub Actions to build the plugin for each release, and when a new commit is tagged with a release number and merged, a changelog is automatically generated from the intervening commit messages, then the plugin is signed and automatically uploaded to the JetBrains plugin repository. This allows us to quickly iterate on the plugin, test the plugin on multiple platforms, and to release new versions with minimal effort.
+To streamline the development process and mitigate the effect of platform-specific regressions, we set up an automated pipeline for testing and deploying the plugin. We use GitHub Actions to build the plugin for each release, and when a new commit is tagged with a release number and merged, a changelog is automatically generated from the intervening commit messages, then the plugin is signed and automatically uploaded to the JetBrains plugin repository. This allows us to quickly iterate on the plugin, test the plugin on multiple platforms, and to release new versions with assurance.
 
 \section{Evaluation}
 
-We evaluated the plugin on a variety of tasks. We also evaluated the plugin on tasks outside the default grammar, such as creating new projects, and running Gradle tasks. Our primary means of evaluation was user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
+We evaluated the plugin on a variety of supported tasks. Our primary means of evaluation was user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
 
-We then performed an intervention, by switching to a new voice recognition engine, adding many usability improvements described in Sec.~\ref{sec:usability} and are collecting data on the number of downloads of the new version -- the results of this experiment are ongoing but promising.
+We then performed an intervention, by switching to a new voice recognition engine, adding many usability improvements described in Sec.~\ref{sec:usability} and are collecting data on the number of downloads of the new version -- the results of this experiment are promising but ongoing.
 
 \section{Results}
 
 \includegraphics[width=0.45\textwidth]{downloads.png}
 
-Downloads of the plugin have decreased over time since the plugin's initial release. We conjecture this relates to the fact that plugin was not updated for several years, and thus incompatible with the latest versions of IntelliJ Platform. After implementing the usability improvements described in Sec.~\ref{sec:usability}, we re-released the plugin in 2023.
+Downloads of the plugin have trended downwards over time since its initial release in 2015. We hypothesize this relates to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally implemented using the CMUSphinx speech recognition system, which was subsequently abandoned and replaced with a more robust deep-speech pipeline. Following a five-year hiatus, we rewrote the plugin, implemented the usability improvements described in Sec.~\ref{sec:usability}, and published a new release under its current name in 2023.
 
-\includegraphics[width=0.50\textwidth]{demographics.png}
+\begin{center}\includegraphics[width=0.40\textwidth]{demographics.png}\end{center}
 
 A careful inspection of demography indicates a large fraction of the plugin downloads originate from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support internationalization and localiation, an omission that we hope to remedy in a future release.
 
@@ -157,15 +151,17 @@ In addition, we performed an experiment to evaluate the performance of artificia
 
 \section{Future work}
 
-In the future, we plan to conduct a thorough user study to better understand the use cases for the plugin. In particular, we hope to offer improved support for accessibility to facilitate the development habits of visually and motor-impaired users, as well as broader support for other languages and dialects.
-
-We also aim to improve the interaction mechanism by adding audiovisual feedback and modes. A choose-your-adventure style modal dialog with a tree navigation mechanism, possibly integrating modal logical a la Hazel by adding a visual backpack and modal operators would be an interesting direction to take and one we hope to explore.
+In the future, we plan to conduct a thorough user study to better understand the use cases for the plugin. In particular, we hope to better understand the development habits of visually and motor-impaired users to improve accessibility, as well as broader support for other languages and dialects.
 
 We also plan to conduct an evaluation of the plugin's intent-recognition capability and improve support for personalization, such as speaker adaptation and user-specific language models.
 
-Finally we would like to provide a more user-friendly configuration interface, possibly using an embedded DSL for defining dialog trees.
+We also aim to improve the interaction mechanism by adding audiovisual feedback and modal voice commands. We would like to provide a more user-friendly configuration interface, possibly using an embedded DSL for defining dialog trees with a choose-your-own-adventure style modal dialog tree navigator. Futher integrating modal logic a la Hazel by adding a visual backpack and modal operators would be an interesting direction to take and one we hope to explore.
 
-To prioritize the development of these features, it would be helpful to collect telemetry to guide the development of the plugin and address the needs of voice programmers.
+Currently, we only track download statistics, however to inform the development of these features and better address the needs of voice programmers, it would be helpful to collect minimal telemetry on user utterances and custom commands.
+
+Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance, for example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will soon be available on the edge, and can be used to perform real-time intent recognition.
+
+Finally, we would like to use language models to rerank the most likely utterances, conditioned on a previous context of historical commands, where we attempt to locate the most likely intent matching the user's utterance, given the dictionary, context and a list of alternate utterances.
 
 \section{Conclusion}
 
