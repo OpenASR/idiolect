@@ -49,7 +49,7 @@ Idiolect provides a default lexicon of phrases, but does not force users to lear
 
 Primarily, Idiolect observes the following design principles: be (1) natural to use, (2) easy to configure, (3) as unobtrusive as possible. We believe that these principles are important for a system intended to be used by developers, who are busy people and capable of configuring the system themselves. We also support developers with visual and motor impairments, who may have difficulty typing, or prefer to use a voice interface.
 
-In this paper, we describe Idiolect, a dynamically reconfigurable system that allows users to teach the IDE new commands and actions on the fly, by either verbally or programmatically expressing the desired behavior.
+In the following paper, we describe Idiolect, a dynamically reconfigurable voice-programming system that supports teaching the IDE new commands and actions on-the-fly, by either verbally or programmatically expressing the desired behavior.
 
 %By targeting IDEs, whose users are already familiar with programming, commands that require complex instructions can be written programmatically, and then invoked on the fly with a keyword or phrase.
 
@@ -59,7 +59,7 @@ Mary Shaw, during her 2022 SPLASH keynote called for programming languages to ad
 
 Early attempts to build voice programming systems can be traced back at least twenty years to Leopold and Amber's (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite (2001), Begel and Graham's (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, and do not consider IDE integration or reconfigurability.
 
-Another stream of work has explored teaching voice assistants to use custom phrases (Chkroun \& Azaria, 2019). Their approach is similar to our own, but is limited to a single user, and does not consider more general forms of voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for this problem.
+Another stream of work has explored teaching voice assistants to use custom phrases (Chkroun \& Azaria, 2019). Their approach is similar to our own, but is limited to a single user, and does not consider more general forms of voice programming. It also predates most of the recent progress on large language modeling, which we consider a transformative enabling technology for speech programming.
 
 \section{Speech Models}
 
@@ -75,7 +75,7 @@ Users may optionally configure a built-in TTS voice from the host operating syst
 
 Once a spoken utterance is decoded as text, Idiolect must determine the relevant actions and entities needed to resolve the user's intent. Furthermore, it may need to consider the IDE context, i.e., the current editor state and command history, to resolve potentially ambiguous commands. For example, the command ``open plugin menu'' could refer to multiple different menus, depending on when and how it was invoked.
 
-The IntelliJ Platform has over $10^3$ possible actions. These actions are bound to keyboard shortcuts, menu items, and toolbar buttons. The user can also bind an action directly to voice commands, presuming the user already knows the action's identifier. Idiolect's default grammar was manually curated from the action list, using the CamelCase identifier to generate a suitable description for recognizing each intent.
+The IntelliJ Platform has over $10^3$ possible actions. These actions are bound to keyboard shortcuts, menu items, and toolbar buttons. The user can also bind a voice command directly to an action, presuming the user already knows the action's identifier. Idiolect's default grammar was manually curated from the IDE action list, using the CamelCase identifier to generate a suitable description for intent recognition.
 
 In keeping with the principle of configurability, we allow users to define custom grammars and bind utterances to actions using a context-free grammar. By providing an extensible DSL, users can bind their own command patterns using either a simple configuration file, or programmatically via the plugin API to handle more complex usage scenarios.
 
@@ -91,7 +91,7 @@ User-defined commands are the next highest priority. These can be a lexical matc
 
 If there is no exact match, we attempt to repair the phrase using an error-correcting parser. We describe this in Sec.~\ref{sec:error}.
 
-The recognizer of last resort is a large language model. Open ended commands which are unrecognizable by any of the previous approaches are dispatched to a service which matches the intent against a predefined lexicon. We can use a prompt, "What action is the most likely for the phrase "..." out of these actions: ..." and then delegate to the action choosen by the model.
+The recognizer of last resort is a large language model. Open ended commands which are unrecognizable by any of the previous approaches are dispatched to a service which matches the intent against a predefined lexicon. We can use a prompt, ``What action is the most likely for the phrase \ldots out of these actions: \ldots'', then delegate to the appropriate action.
 
 \section{Barriers and Pathways to Usability}\label{sec:usability}
 
@@ -129,25 +129,25 @@ VoskAPI is also capable of returning a list of alternate utterances, alongside a
 
 One of the challenges of managing a multiplatform audio project is ensuring reproducible builds. The IntelliJ Platform does not allow shipping OS-specific plugins, which requires building a single artifact. In the past, updates would result in breaking changes for Windows, Mac OS, or Linux, which are difficult to to debug or test on a development environment and only identified by user acceptance testing on those platforms.
 
-To streamline the development process and mitigate the effect of platform-specific regressions, we set up an automated pipeline for testing and deploying the plugin. We use GitHub Actions to build the plugin for each release, and when a new commit is tagged with a release number and merged, a changelog is automatically generated from the intervening commit messages, then the plugin is signed and automatically uploaded to the JetBrains plugin repository. This allows us to quickly iterate on the plugin, test the plugin on multiple platforms, and to release new versions with assurance.
+To streamline the development process and mitigate the risk of platform-specific regressions in production, we set up an automated pipeline for testing and deploying the plugin. We use GitHub Actions to build the plugin for each release, and when a new commit is tagged with a release number and merged, a changelog is automatically generated from the intervening commit messages, then the plugin is signed and automatically uploaded to the JetBrains plugin repository. This allows us to quickly iterate on the plugin, test the plugin on multiple platforms, and to release new versions with assurance.
 
 \section{Evaluation}
 
 We evaluated the plugin on a variety of supported tasks. Our primary means of evaluation was user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
 
-We then performed an intervention, by switching to a new voice recognition engine, adding many usability improvements described in Sec.~\ref{sec:usability} and are collecting data on the number of downloads of the new version -- the results of this experiment are promising but ongoing.
+
 
 \section{Results}
 
 \includegraphics[width=0.45\textwidth]{downloads.png}
 
-Downloads of the plugin have trended downwards over time since its initial release in 2015. We hypothesize this relates to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally implemented using the CMUSphinx speech recognition system, which was subsequently abandoned and replaced with a more robust deep-speech pipeline. Following a five-year hiatus, we rewrote the plugin, implemented the usability improvements described in Sec.~\ref{sec:usability}, and published a new release under its current name in 2023.
+Downloads of the plugin have stalled over time since its initial release in 2015. We hypothesize this is due to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally developed using the CMUSphinx speech recognition platform, we then performed an intervention by migrating to a more robust and technically capable ASR engine. Following a five-year hiatus, we rewrote the plugin from scratch, implemented the usability improvements described in Sec.~\ref{sec:usability}, published a new release under its current name in 2023 and are collecting usage statistics for the new plugin -- though promising, the results of this ongoing experiment are inconclusive.
 
 \begin{center}\includegraphics[width=0.40\textwidth]{demographics.png}\end{center}
 
-A careful inspection of demography indicates a large fraction of the plugin downloads originate from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support internationalization and localiation, an omission that we hope to remedy in a future release.
+A careful inspection of demography indicates a large fraction of the plugin downloads originated from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support internationalization and localiation, an omission that we hope to remedy in a future release.
 
-In addition, we performed an experiment to evaluate the performance of artificial speech recognition. Using a set of English TTS voices (male and female) included in MacOS Ventura 13.1, we synthesize a set of utterances from the predefined command list, feed them to VoskAPI, and evaluate the recognition accuracy across two pretrained models: \texttt{vosk-model-en-us-0.22} (0.30) \texttt{vosk-model-small-en-us-0.15} (0.28), and \texttt{vosk-model-en-us-0.22-lgraph} (0.35). Results on a per-voice and per-model basis are shown in Table \ref{tab:results}.
+In addition, we conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in MacOS Ventura 13.1, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, transcribe the audio stream using VoskAPI to simulate a user-generated microphone recording, and report the average word error rate of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.30) \texttt{vosk-model-small-en-us-0.15} (0.28), and \texttt{vosk-model-en-us-0.22-lgraph} (0.35). Results on a per-voice and per-model basis are shown in Table \ref{tab:results}.
 
 \section{Future work}
 
