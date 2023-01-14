@@ -98,17 +98,17 @@ Users may optionally configure a built-in TTS voice from the host operating syst
 
 \section{Intent Recognition}
 
-Once a spoken utterance is decoded as text, Idiolect must determine the relevant actions and entities needed to resolve the user's intent. Furthermore, it may need to consider the IDE context, i.e., the current editor state and command history, to resolve potentially ambiguous commands. For example, the command ``open plugin menu'' could refer to multiple different menus, depending on when and how it was invoked.
+Once a spoken utterance is decoded as text, Idiolect must determine the relevant actions and entities needed to fulfill the user's intent. Furthermore, it may need to consider the IDE context, i.e., the current editor state and command history, to resolve potentially ambiguous commands. For example, the command, ``open plugin menu'' could refer to multiple different menus, depending on when and how it was invoked.
 
 The IntelliJ Platform has over $10^3$ possible actions. These actions are bound to keyboard shortcuts, menu items, and toolbar buttons. The user can also bind a voice command directly to an action, presuming the user already knows the action's identifier. Idiolect's default grammar was manually curated from the IDE action list, using the CamelCase identifier to generate a suitable description for intent recognition.
 
 In keeping with the principle of configurability, we allow users to define custom grammars and bind utterances to actions using a context-free grammar. By providing an extensible DSL, users can bind their own command patterns using either a simple configuration file, or programmatically via the plugin API to handle more complex usage scenarios.
 
-In some cases, the user may not know or recall the exact phrase to which an action they intend to perform was bound. Given an utterance that does not match any of the predefined grammars, the plugin will fall back to a language model (LM), a probabilistic model trained on a large corpus of text, which can be used to perform reasoning simple tasks like predicting the most likely intent from a list of alternatives. For example, the utterance ``I want to edit foo.java'' is more likely to match the command ``open foo.java'' than ``execute foo.java''.
+In some cases, the user may not know or recall the exact phrase to which an action they intend to perform was bound. Given an utterance that does not match any of the predefined grammars, the plugin will fall back to a language model (LM), a probabilistic model trained on a large corpus of text, which can be used to perform reasoning simple tasks like predicting the most likely intent from a list of alternatives. For example, the utterance, ``I want to edit foo.java'' is more likely to match the command, ``open foo.java'' than, ``execute foo.java''.
 
 \subsection{Recognition Dispatch}
 
-Idiolect dispatches utterances to a series of recognizers using a tiered priority system. This system gives each recognizer the chance to match or pass on each utterance. Once a command is matched, the command is consumed and no subsequent recognizer will receive the dispatch.
+Idiolect dispatches utterances to a series of recognizers using a tiered priority system, in which each recognizer the chance to match or pass on each utterance. Once a command has been matched by a recognizer, the command is consumed and no subsequent recognizer will receive the dispatch.
 
 The plugin first attempts to resolve a spoken utterance using an exact lexical match against a lexicon of predefined commands. Highest priority are those which control the plugin itself, enabling and disabling speech recognition.
 
@@ -124,19 +124,19 @@ In our experience as plugin users and maintainers, usability challenges typicall
 
 \subsection{User Onboarding}
 
-Several users reported confusion when first installing our plugin. To address this issue, we added a wizard that guides users through during installation. Upon first installing the plugin, a user is greeted and prompted to download the Vosk model for recognizing their natural language of choice, which defaults to the system locale. Once unpacked, the model is stored in the plugin configuration directory, \texttt{~/.idealect}. The user is next prompted to configure the properties file, and to bind a few voice commands. This is a one-time process, and users may reconfigure the plugin by opening the settings dialog at any time.
+Several users reported confusion when first installing our plugin. To address this issue, we added a wizard that guides users through installation. Upon first installing the plugin, a user is greeted and prompted to download the Vosk model for recognizing their preferred natural language, defaulting to the system locale. Once unpacked, the model is stored in the plugin configuration directory, \texttt{~/.idiolect}. The user is next prompted to configure the properties file, and bind a few voice commands. This is a one-time process, and users may reconfigure the plugin via the settings menu at any time.
 
 \subsection{Plugin Observability}
 
-Failures can arise in many stages of the intent recognition pipeline. The best way to address this is by improving observability of the plugin, so that users can diagnose when an error occurs and learn how to avoid it in the future.
+Failures arise in many stages of the intent recognition pipeline. Often the best way to address failure is by improving observability, so that users can diagnose when an error occurs and learn how to avoid it in the future.
 
-Failure to recognize is a common issue in intent recognition, the most common source of which is unrecognizability due to a transcription error by the ASR model, due to e.g., noise in the audio signal or poor recognition accuracy. To address this issue, we add a visual cue at the corner of the IDE that reports the phrase transcribed in realtime, as well as the action (if any) that was triggered on intent recognition.
+Recognition failure is a common issue, often caused by transcription errors in the ASR model, due to, e.g., noise in the audio signal, stopwords, or poor recognition accuracy. To address this issue, we add a visual cue at the corner of the IDE that reports the phrase transcribed in realtime, as well as the action (if any) that was triggered on intent recognition.
 
 \subsection{Command Discoverability}
 
-We draw a distinction between capability discovery and intent recognition. Users previously familiar with the IDE capabilities may wish to invoke or bind a specific action directly, but may not know the command binding. The first and foremost way to improve discovery is through documentation, however keeping documentation in sync with capabilities can be challenging, and users are uninclined to read verbose documentation. To address this issue, we autogenerate documentation describing the action and their descriptions, by preprocessing the action list and assigning natural language descriptions from the IntelliJ Platform source code.
+We draw a distinction between capability discovery and intent recognition. Users previously familiar with the IDE capabilities may wish to invoke or bind a specific action directly, but may not know the specific action identifier. The first and foremost way to improve discovery is through documentation, however keeping documentation in sync with capabilities can be challenging, and users are uninclined to read verbose documentation. To address this issue, we autogenerate documentation for each action by preprocessing the action list and assigning natural language descriptions from the IntelliJ Platform source code.
 
-Another common scenario is when the user is unfamiliar with the IDE capabilities, and the action they wish to perform is not supported by the IDE directly. User awareness of IDE functionality is outside the scope of this plugin, however, many actions that users wish to perform have no associated binding or are compound actions. For example ``delete the method named \textlangle foo\textrangle'' requires first resolving the method, selecting the body of the text and deleting it. These actions can be bound, but require a handcrafted recognition handler, and are generally quite brittle. We hope to improve scripting support for such actions in the future.
+Another common scenario is when the user is unfamiliar with the IDE capabilities, and the action they wish to perform is not supported by the IDE directly. User awareness of IDE functionality is outside the scope of this plugin, however, certain actions users may intend to perform are compound actions or have no associated binding. For example ``delete the method named \textlangle foo\textrangle'' requires first resolving the method, selecting the body of the text and deleting it. These actions can be bound, but require a handcrafted recognition handler, and are generally quite brittle. We hope to improve scripting support for such actions in the future.
 
 \subsection{API Extensibility}
 
@@ -144,7 +144,7 @@ Idiolect tries to anticipate users actions and give users additional action bind
 
 \subsection{Error Recovery}\label{sec:error}
 
-Another common usability barrier is when transcription is accurate, but the utterance does not correspond to an actionable command, possibly due to stopwords verbal fillers or extraneous text which cannot be directly parsed. In short, if a given phrase, e.g., ``open uh foo java'' is received, we attempt to repair the utterance. At the user's discretion, or in case of ambiguity when the phrase has multiple plausible alternatives, we can either visually or verbally prompt the user to choose from a set of actionable phrases, e.g., ``Did you mean \textlangle a\textrangle open file foo.java, \textlangle b\textrangle open folder foo/java, or \textlangle c\textrangle something else?''
+Another common usability barrier is when transcription is accurate, but the utterance does not correspond to an actionable command, possibly due to stopwords, verbal fillers or extraneous text which cannot be directly parsed. In short, if a given phrase, e.g., ``open uh foo java'' is received, we attempt to repair the utterance. At the user's discretion, or in case of ambiguity when the phrase has multiple plausible alternatives, we can either visually or verbally prompt the user to choose from a set of actionable phrases, e.g., ``Did you mean \textlangle a\textrangle open file foo.java, \textlangle b\textrangle open folder foo/java, or \textlangle c\textrangle something else?''
 
 To correct recognition errors, we apply Considine et al.'s~\cite{considine2022tidyparse} work on Tidyparse, which supports recognition and parsing of context-free and mildly context-sensitive grammars, and computing language edit distance. Tidyparse implements a novel approach to error correction based on the theory of context-free language reachability, conjunctive grammars and Levenshtein automata. We use a SAT solver to find the smallest edit transforming a string outside the language to a string inside the language. Only when the utterance is one or two tokens away from a known command do we attempt a repair.
 
@@ -169,9 +169,9 @@ We conducted a preliminary experiment to evaluate recognition performance on syn
         \multicolumn{1}{c}{Reed} & \multicolumn{1}{c}{Rocko} &
         \multicolumn{1}{c}{Samantha} & \multicolumn{1}{c}{Sandy} &
         \multicolumn{1}{c}{Shelly} & \multicolumn{1}{c}{Fred} \\[1em]
-        \ldots-en-us-0.22       \hspace{10pt} & 0.581 & 0.635 & 0.627 & 0.981 & 0.293 & 0.492 & 0.528 & 0.888\\
-        \ldots-en-us-0.22-lgraph\hspace{10pt} & 0.631 & 0.659 & 0.672 & 0.977 & 0.346 & 0.544 & 0.569 & 0.877\\
-        \ldots-small-en-us-0.22 \hspace{10pt} & 0.793 & 0.736 & 0.760 & 0.998 & 0.271 & 0.725 & 0.661 & 0.905\\
+        \ldots\texttt{-en-us-0.22}       \hspace{10pt} & 0.581 & 0.635 & 0.627 & 0.981 & 0.293 & 0.492 & 0.528 & 0.888\\
+        \ldots\texttt{-en-us-0.22-lgraph}\hspace{10pt} & 0.631 & 0.659 & 0.672 & 0.977 & 0.346 & 0.544 & 0.569 & 0.877\\
+        \ldots\texttt{-small-en-us-0.22} \hspace{10pt} & 0.793 & 0.736 & 0.760 & 0.998 & 0.271 & 0.725 & 0.661 & 0.905\\
       \end{tabular}
     }
   \end{sidewaystable}
@@ -194,13 +194,13 @@ Downloads of the plugin have stalled over time since its initial release in 2015
 %  \caption{The two primary countries where downloads went.}
 %\end{figure}
 
-Over 30\% of the plugin page visitors originated from the People's Republic of China, indicating a substantial and potentially underserved vocie programming demographic. This suggests the need to support internationalization and localization, an omission we hope to remedy in a future release.
+Over 30\% of the plugin page visitors originated from the People's Republic of China, indicating a substantial and potentially underserved voice programming demographic. This suggests the need to support internationalization and localization, an omission we hope to remedy in a future release.
 
 \section{Threats to Validity}
 
 While voice programming may serve a niche purpose for developers, it has not been fully tested as a general paradigm. Our experience suggests frequent vocalizations may disturb programmers within earshot and we anticipate its usefulness in colocated workspaces will thus be limited, but do foresee some genuine use-cases, e.g., providing an alternate input method for those with vision and motor disabilities.
 
-We also acknowledge that our system is limited by its own natural language understanding capabilities. Speech is a comparatively inefficient medium for conducting programming tasks and users may be hesitant to invest time reconfiguring the system if intent recognition is low. Furthermore, the IDE plugin is currently limited to the set of actions that can be easily expressed using the IntelliJ Platform API.
+We also acknowledge that our system is limited by its own natural language understanding capabilities. Speech is a comparatively inefficient medium for conducting programming tasks and users may be hesitant to invest time reconfiguring the system if intent recognition accuracy is low. Furthermore, the IDE plugin is currently limited to the set of actions that can be easily expressed using the IntelliJ Platform API.
 
 \section{Future Work}
 
@@ -208,11 +208,11 @@ In the future, we plan to conduct a thorough user study to better understand the
 
 We plan to conduct an evaluation of the plugin's intent-recognition capability and improve support for personalization, such as speaker adaptation and user-specific language models.
 
-We also aim to improve the interaction mechanism by adding audiovisual feedback and modal voice commands. We would like to provide a more user-friendly configuration interface, possibly using an embedded DSL for defining dialog trees with a choose-your-own-adventure style modal dialog navigator. Incorporating modal logic a la Hazel~\cite{omar2021filling}, by adding a visual backpack and typing constraints would be an interesting direction to take and one we hope to explore.
+We also aim to improve the interaction mechanism by adding audiovisual feedback and modal voice commands. We would like to provide a more user-friendly configuration interface, possibly using an embedded DSL for defining dialog trees with a choose-your-own-adventure style modal dialog navigator. Incorporating modal logic \`a la Hazel~\cite{omar2021filling}, by adding a visual backpack and typing constraints would be an interesting direction to take and one we hope to explore.
 
 Currently, we only track download statistics, although to inform the development of these features and better address the needs of voice programmers, it would be helpful to collect minimal telemetry on user utterances and custom commands.
 
-Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance, for example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will become available on the edge, and can be used to perform end-to-end speech-to-intent recognition in realtime.
+Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance, for example, the utterance, ``I want to edit foo.java'' is more likely to be the command, ``open foo.java'' than the command, ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will become available on the edge, and can be used to perform end-to-end speech-to-intent recognition in realtime.
 
 As such, we would like to use a language model to rerank the most likely intent corresponding to a user's utterance, conditioned on a previous context of historical commands, the dictionary, UI context and a list of alternate utterances.
 
