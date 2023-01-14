@@ -32,10 +32,7 @@ class ASRTest {
 
   // Stream wav
   fun File.transcribeWavFile(rec: Recognizer): String =
-    readBytes().let {
-      rec.apply { acceptWaveForm(it, it.size) }
-        .result.drop(14).dropLast(3)
-    }
+    readBytes().let { rec.apply { acceptWaveForm(it, it.size) }.result.drop(14).dropLast(3) }
 
   @Test
   fun testUtterances() {

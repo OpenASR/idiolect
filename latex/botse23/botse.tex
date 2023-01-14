@@ -14,6 +14,7 @@
 \usepackage{tikz}
 \usepackage{collcell}
 \usepackage{diagbox}
+\bibliographystyle{IEEEtran}
 
 %The min, mid and max values
 \newcommand*{\MinNumber}{0.293}%
@@ -77,15 +78,13 @@ Primarily, Idiolect observes the following design principles: be (1) natural to 
 
 In the following paper, we describe Idiolect, a dynamically reconfigurable voice-programming system that supports teaching the IDE new commands and actions on-the-fly, by either verbally or programmatically expressing the desired behavior.
 
-
-
 \section{Prior Work}
 
-Mary Shaw, during her 2022 SPLASH keynote called for programming languages to address the needs of ``vernacular developers''. Jin Guo has also talked about the need for programming in ``ordinary people's langauge''. We take their proposals quite literally to mean that computers should be able to interpret spoken programs, and not just written ones.
+Mary Shaw, during her 2022 SPLASH keynote~\cite{shaw2022myths} called for programming languages to address the needs of ``vernacular developers''. Jin Guo has also talked about the need for programming in ``ordinary people's langauge''. We take their proposals quite literally to mean that computers should be able to interpret spoken programs, and not just written ones.
 
-Early attempts to build voice programming systems can be traced back at least twenty years to Leopold and Amber's (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite (2001), Begel and Graham's (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, and do not consider IDE integration or reconfigurability.
+Early attempts to build voice programming systems can be traced back at least twenty years to Leopold and Amber's~\cite{leopold1997keyboardless} (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite~\cite{arnold2000programming} (2001), Begel and Graham~\cite{begel2005spoken} (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, and do not consider IDE integration or reconfigurability.
 
-Another stream of work has explored teaching voice assistants to use custom phrases (Chkroun \& Azaria, 2019). Their approach is similar to our own, but is limited to a single user, and does not consider more general forms of voice programming. It also predates most of the recent progress on large language modeling, which we consider a transformative enabling technology for speech programming.
+Another stream of work has explored teaching voice assistants to use custom phrases (Chkroun \& Azaria~\cite{chkroun2019lia}). Their approach is similar to our own, but targets general-purpose voice user interfaces and does not consider voice programming. It also predates most of the recent progress on large language modeling, which we consider a transformative enabling technology for speech programming.
 
 \section{Speech Models}
 
@@ -117,7 +116,7 @@ User-defined commands are the next highest priority. These can be a lexical matc
 
 If there is no exact match, we attempt to repair the phrase using an error-correcting parser. We describe this in Sec.~\ref{sec:error}.
 
-The recognizer of last resort is a large language model. Open ended commands which are unrecognizable by any of the previous approaches are dispatched to a service which matches the intent against a predefined lexicon. We can use a prompt, ``What action is the most likely for the phrase \ldots out of these actions: \ldots'', then delegate to the appropriate action.
+The recognizer of last resort is a large language model. Open ended commands which are unrecognizable by any of the previous approaches can be dispatched to a service which matches the intent against a predefined lexicon, using a prompt: ``What action most likely fufuills the command \ldots out of these actions: \ldots'', and invoked dynamically at runtime.
 
 \section{Barriers and Pathways to Usability}\label{sec:usability}
 
@@ -125,7 +124,7 @@ In our experience as plugin users and maintainers, usability challenges typicall
 
 \subsection{User Onboarding}
 
-Several users reported confusion when first installing our plugin. To address this issue, we added a wizard that guides users through their first install. Upon first installing the plugin, the user is greeted and prompted to download the Vosk model for recognizing their natural language of choice, which defaults to the system locale. Once unpacked, the model is stored in the plugin configuration directory, \texttt{~/.idealect}. The user is next prompted to configure the properties file, and to bind a few voice commands. This is a one-time process, and users may reconfigure the plugin by opening the settings dialog at any time.
+Several users reported confusion when first installing our plugin. To address this issue, we added a wizard that guides users through during installation. Upon first installing the plugin, a user is greeted and prompted to download the Vosk model for recognizing their natural language of choice, which defaults to the system locale. Once unpacked, the model is stored in the plugin configuration directory, \texttt{~/.idealect}. The user is next prompted to configure the properties file, and to bind a few voice commands. This is a one-time process, and users may reconfigure the plugin by opening the settings dialog at any time.
 
 \subsection{Plugin Observability}
 
@@ -180,7 +179,7 @@ We conducted a preliminary experiment to evaluate recognition performance on syn
   \label{fig:fig1}
 \end{figure}
 
-We evaluated the plugin on a variety of downstream metrics, including user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
+We evaluated the plugin using a variety of downstream metrics, including user downloads of the plugin over a five-year timespan, bug reports and GitHub Insights. We also collected feedback from the JetBrains Plugin Marketplace, to determine how satisfied users were with the plugin.
 
 \begin{figure}[ht!]
   \centering
@@ -188,46 +187,40 @@ We evaluated the plugin on a variety of downstream metrics, including user downl
   \caption{Plugin downloads stalled circa August 2017 due to incompatibility.}
 \end{figure}
 
-Downloads of the plugin have stalled over time since its initial release in 2015. We hypothesize this is due to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally developed using the CMUSphinx speech recognition platform, we then performed an intervention by migrating to a more robust and technically capable ASR engine. Following a five-year hiatus, we rewrote the plugin from scratch, implemented the usability improvements described in Sec.~\ref{sec:usability}, published a new release under its current name in 2023 and are collecting usage statistics for the new plugin -- though promising, the results of this ongoing experiment are inconclusive.
+Downloads of the plugin have stalled over time since its initial release in 2015. We hypothesize this is due to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally developed using the CMUSphinx speech recognition platform, we performed an intervention by migrating to a more robust and technically capable ASR engine. Following a five-year hiatus, we rewrote the plugin from scratch, implemented the usability improvements described in Sec.~\ref{sec:usability}, republished the plugin in 2023 under its current name and are collecting usage statistics -- though promising, the results are still inconclusive.
 
 %\begin{figure}[ht!]
 %  \includegraphics[width=0.45\textwidth]{demographics.png}
 %  \caption{The two primary countries where downloads went.}
 %\end{figure}
 
-A careful inspection of demography indicates a large fraction of the plugin downloads originated from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support internationalization and localiation, an omission that we hope to remedy in a future release.
+Over 30\% of the plugin page visitors originated from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support internationalization and localiation, an omission we hope to remedy in a future release.
 
 \section{Future work}
 
 In the future, we plan to conduct a thorough user study to better understand the use cases for the plugin. In particular, we hope to better understand the development habits of visually and motor-impaired users to improve accessibility, as well as broader support for other languages and dialects.
 
-We also plan to conduct an evaluation of the plugin's intent-recognition capability and improve support for personalization, such as speaker adaptation and user-specific language models.
+We plan to conduct an evaluation of the plugin's intent-recognition capability and improve support for personalization, such as speaker adaptation and user-specific language models.
 
 We also aim to improve the interaction mechanism by adding audiovisual feedback and modal voice commands. We would like to provide a more user-friendly configuration interface, possibly using an embedded DSL for defining dialog trees with a choose-your-own-adventure style modal dialog tree navigator. Futher integrating modal logic a la Hazel by adding a visual backpack and modal operators would be an interesting direction to take and one we hope to explore.
 
-Currently, we only track download statistics, however to inform the development of these features and better address the needs of voice programmers, it would be helpful to collect minimal telemetry on user utterances and custom commands.
+Currently, we only track download statistics, although to inform the development of these features and better address the needs of voice programmers, it would be helpful to collect minimal telemetry on user utterances and custom commands.
 
-Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance, for example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will soon be available on the edge, and can be used to perform real-time intent recognition.
+Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance, for example, the utterance ``I want to edit foo.java'' is more likely to be the command ``open foo.java'' than the command ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will become available on the edge, and can be used to perform end-to-end speech-to-intent recognition in realtime.
 
-Finally, we would like to use language models to rerank the most likely utterances, conditioned on a previous context of historical commands, where we attempt to locate the most likely intent matching the user's utterance, given the dictionary, context and a list of alternate utterances.
+As such, we would like to use language models to rerank the most likely utterances, conditioned on a previous context of historical commands, where we attempt to locate the most likely intent matching the user's utterance, given the dictionary, context and a list of alternate utterances.
 
 \section{Conclusion}
 
-In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE and reconfigure the plugin using voice commands addressesing a common usability issue in voice UX design, where users are unable to express their intent in a way that the system understands. We described the design of the plugin, and the challenges we faced while implementing it. We also presented the results of our evaluation, and discussed future work.
+In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE and reconfigure the plugin using voice commands. This addresses a common usability issue in voice UX design, where users are unable to express their intent in a way that the system understands. We described the design of the plugin, and the challenges we faced while implementing it. We also presented the results of our evaluation, and discussed future work.
 
-On one end of the spectrum of the spectrum are general-purpose scripting and metaprogramming languages that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems are highly flexible, but require a high upfront investment from the user, who must design a language to define their own commands, and then learn the language itself, all whilst doing their daily job as a software engineer.
+On one end of the design spectrum are metaprogramming languages and software language engineering frameworks that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems can be powerful, but require a high upfront investment from the user, who must design a language, and then learn the language itself, all whilst doing their daily job as a software engineer. On the other end are finite languages, which are too rigid.
 
-On the other end are finite languages, which are rigid and only support a fixed number of commands. In the middle are technolects, or \textit{idiolects}, which give users the freedom to design a conversational programming assistant according to their own idiomatic style: this is the design space which Idiolect occupies. By targeting IDEs, whose users are already familiar with programming, commands with complex semantics can be written programmatically, and then invoked on-the-fly.
+In the middle of this language design spectrum are \textit{idiolects}, which give users the freedom to create a conversational domain-specific languages according to their own idiomatic style: this is the design space which Idiolect occupies. By targeting IDEs, whose users are typically adept programmers, commands with complex semantics can be written programmatically, then invoked on-the-fly, sans recompilation.
 
 \section{Acknowledgements}
 
 The first author wishes to thank his former colleagues Alexey Kudinkin and Yaroslav Lepenkin, who contributed to the plugin during the original JetBrains hackathon in 2015, and former manager Hadi Hariri for his advice and encouragement.
 
-\begin{thebibliography}{00}
-\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
-\end{thebibliography}
+\bibliography{botse}
 \end{document}
