@@ -11,83 +11,30 @@
 \usepackage{pgfplotstable}
 \usepackage{xcolor}
 \usepackage{booktabs}
-\pgfplotstableset{
-  precision=1,
-  fixed,
-  fixed zerofill,
-  /color cells/min/.initial=0,
-  /color cells/max/.initial=1000,
-  /color cells/textcolor/.initial=,
-%
-% Usage: 'color cells={min=<value which is mapped to lowest color>,
-%   max = <value which is mapped to largest>}
-  color cells/.code={%
-    \pgfqkeys{/color cells}{#1}%
-    \pgfkeysalso{%
-      postproc cell content/.code={%
-      %
-      \begingroup
-      %
-      % acquire the value before any number printer changed
-      % it:
-      \pgfkeysgetvalue{/pgfplots/table/@preprocessed cell content}\value
-      \ifx\value\empty
-      \endgroup
-      \else
-      \pgfmathfloatparsenumber{\value}%
-      \pgfmathfloattofixed{\pgfmathresult}%
-      \let\value=\pgfmathresult
-      %
-      % map that value:
-      \pgfplotscolormapaccess
-      [\pgfkeysvalueof{/color cells/min}:\pgfkeysvalueof{/color cells/max}]
-      {\value}
-      {\pgfkeysvalueof{/pgfplots/colormap name}}%
-      % now, \pgfmathresult contains {<R>,<G>,<B>}
-      %
-      % acquire the value AFTER any preprocessor or
-      % typesetter (like number printer) worked on it:
-      \pgfkeysgetvalue{/pgfplots/table/@cell content}\typesetvalue
-      \pgfkeysgetvalue{/color cells/textcolor}\textcolorvalue
-      %
-      % tex-expansion control
-      % see https://tex.stackexchange.com/questions/12668/where-do-i-start-latex-programming/27589#27589
-      \toks0=\expandafter{\typesetvalue}%
-      %%% my try to replicate the header row starts here
-      \xdef\III{0}
-      \ifnum\III=\pgfplotstablecol\relax
-      \def\addedContent{ \pgfplotstablecolname  &}%
-      \else
-      \def\addedContent{}%
-      \fi
-      %%% my try ends here: problem, I dont have access to the column header names
-      \xdef\temp{%
-        \noexpand\pgfkeysalso{%
-          @cell content={%
-          \addedContent
-          \noexpand\cellcolor[rgb]{\pgfmathresult}%
-          \noexpand\definecolor{mapped color}{rgb}{\pgfmathresult}%
-          \ifx\textcolorvalue\empty
-          \else
-          \noexpand\color{\textcolorvalue}%
-          \fi
-          \the\toks0 %
-          }%
-        }%
-      }%
-      \endgroup
-      \temp
-      \fi
-      }%
-    }%
-  },
-  every head row/.style={
-    before row=&,
-  },
-  every first column/.style={
-    column type/.add={c}{},
-  },
+\usepackage{tikz}
+\usepackage{collcell}
+\usepackage{diagbox}
+
+%The min, mid and max values
+\newcommand*{\MinNumber}{0.293}%
+\newcommand*{\MidNumber}{0.672} %
+\newcommand*{\MaxNumber}{0.998}%
+
+%Apply the gradient macro
+\newcommand{\ApplyGradient}[1]{%
+  \ifdim #1 pt > \MidNumber pt
+  \pgfmathsetmacro{\PercentColor}{max(min(100.0*(#1 - \MidNumber)/(\MaxNumber-\MidNumber),100.0),0.00)} %
+  \hspace{-0.33em}\colorbox{red!\PercentColor!yellow}{#1}
+  \else
+  \pgfmathsetmacro{\PercentColor}{max(min(100.0*(\MidNumber - #1)/(\MidNumber-\MinNumber),100.0),0.00)} %
+  \hspace{-0.33em}\colorbox{green!\PercentColor!yellow}{#1}
+  \fi
 }
+
+\newcolumntype{R}{>{\collectcell\ApplyGradient}c<{\endcollectcell}}
+\renewcommand{\arraystretch}{0}
+\setlength{\fboxsep}{3mm} % box size
+\setlength{\tabcolsep}{0pt}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -122,9 +69,6 @@ This paper presents Idiolect, an IDE plugin for voice coding and a novel approac
 
 Humans are able to quickly learn new words and phrases, and apply them in a variety of contexts. Chatbots, on the other hand, are often limited to a set of static commands and phrases defined at compile-time. This can be frustrating for users, who struggle to express their intent, as well as bot-developers, who must anticipate user intent and write bindings for each new capability. This rigidity is a common source of misalignment between user intent, author expectations and bot capabilities.
 
-%Considering  redefine commands addresses a common usability issue in voice UX design, where users are unable to express their intent in a way that the system understands. For example, a user may want to open a specific file, but the system only understands the command ``open file''. The user must then learn the system's command vocabulary, and then rephrase their intent in a way the system understands.
-%On the other end of the spectrum are general-purpose scripting and metaprogramming languages that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems are highly flexible, but require a high upfront investment from the user, who must design a language to define their own commands, and then learn the language itself, all whilst doing their daily job as a software engineer.
-
 Voice coding allows users to quickly dictate their own commands and phrases without resorting to a Turing Complete programming language. For example, the user might say ``whenever I say \textit{open sesame}, do the following action'', thereafter, the system will perform the desired action when so instructed. Or, ``whenever I say \textit{redo thrice}, repeat the last action three times''. Or, e.g., invoke a function in a scripting language, open a file, or perform other tedious chores.
 
 Idiolect provides a default lexicon of phrases, but does not force users to learn them explicitly. Instead, we allow users to override the default settings with their own voice commands on-the-fly, which are incorporated into the lexicon immediately. This shifts the burden of adaptation to the system, freeing users to express their intent in a natural way.
@@ -133,7 +77,7 @@ Primarily, Idiolect observes the following design principles: be (1) natural to 
 
 In the following paper, we describe Idiolect, a dynamically reconfigurable voice-programming system that supports teaching the IDE new commands and actions on-the-fly, by either verbally or programmatically expressing the desired behavior.
 
-%By targeting IDEs, whose users are already familiar with programming, commands that require complex instructions can be written programmatically, and then invoked on the fly with a keyword or phrase.
+
 
 \section{Prior Work}
 
@@ -215,30 +159,43 @@ To streamline the development process and mitigate the risk of platform-specific
 
 \section{Evaluation}
 
-We evaluated the plugin on a variety of supported tasks. Our primary means of evaluation was user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
+We conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in MacOS Ventura 13.1, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, then transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, and finally transcribe the audio using VoskAPI to simulate a user-generated utterance. We report the average word error rate (WER) of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.30) \texttt{vosk-model-small-en-us-0.15} (0.28), and \texttt{vosk-model-en-us-0.22-lgraph} (0.35). Results on a per-voice and per-model basis are shown in  Fig.~\ref{fig:fig1} below.
 
-\section{Results}
+\begin{figure}[ht!]
+  \centering
+  \begin{sidewaystable}
+    \resizebox{.48\textwidth}{!}{% <------ Don't forget this %
+      \begin{tabular}{c*{8}{R}}
+        & \multicolumn{1}{c}{Eddy} & \multicolumn{1}{c}{Flo} &
+        \multicolumn{1}{c}{Reed} & \multicolumn{1}{c}{Rocko} &
+        \multicolumn{1}{c}{Samantha} & \multicolumn{1}{c}{Sandy} &
+        \multicolumn{1}{c}{Shelly} & \multicolumn{1}{c}{Fred} \\[1em]
+        \ldots-en-us-0.22       \hspace{10pt} & 0.581 & 0.635 & 0.627 & 0.981 & 0.293 & 0.492 & 0.528 & 0.888\\
+        \ldots-en-us-0.22-lgraph\hspace{10pt} & 0.631 & 0.659 & 0.672 & 0.977 & 0.346 & 0.544 & 0.569 & 0.877\\
+        \ldots-small-en-us-0.22 \hspace{10pt} & 0.793 & 0.736 & 0.760 & 0.998 & 0.271 & 0.725 & 0.661 & 0.905\\
+      \end{tabular}
+    }
+  \end{sidewaystable}
+  \caption{WER for synthetic ASR using 100 commands from the default lexicon across three US English models and seven TTS voices (lower is better).}
+  \label{fig:fig1}
+\end{figure}
 
+We evaluated the plugin on a variety of downstream metrics, including user downloads of the plugin over a five-year timespan. We also performed a survey of users, to determine how satisfied they were with the plugin.
+
+\begin{figure}[ht!]
+  \centering
 \includegraphics[width=0.45\textwidth]{downloads.png}
+  \caption{Plugin downloads stalled circa August 2017 due to incompatibility.}
+\end{figure}
 
 Downloads of the plugin have stalled over time since its initial release in 2015. We hypothesize this is due to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally developed using the CMUSphinx speech recognition platform, we then performed an intervention by migrating to a more robust and technically capable ASR engine. Following a five-year hiatus, we rewrote the plugin from scratch, implemented the usability improvements described in Sec.~\ref{sec:usability}, published a new release under its current name in 2023 and are collecting usage statistics for the new plugin -- though promising, the results of this ongoing experiment are inconclusive.
 
-\begin{center}\includegraphics[width=0.40\textwidth]{demographics.png}\end{center}
+%\begin{figure}[ht!]
+%  \includegraphics[width=0.45\textwidth]{demographics.png}
+%  \caption{The two primary countries where downloads went.}
+%\end{figure}
 
 A careful inspection of demography indicates a large fraction of the plugin downloads originated from the People's Republic of China, indicating a substantial and potentially underserved programming demographic. A careful analysis suggests the need to support internationalization and localiation, an omission that we hope to remedy in a future release.
-
-In addition, we conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in MacOS Ventura 13.1, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, transcribe the audio stream using VoskAPI to simulate a user-generated microphone recording, and report the average word error rate of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.30) \texttt{vosk-model-small-en-us-0.15} (0.28), and \texttt{vosk-model-en-us-0.22-lgraph} (0.35). Results on a per-voice and per-model basis are shown in Table \ref{tab:results}.
-
-\pgfplotstabletypeset[
-  color cells={min=0.58107,max=0.998},
-  col sep=comma,
-  columns/a/.style={reset styles}
-]{
-  a,b,c,d,e,f,g,h,i,j,k
-  vosk-model-en-us-0.22, 0.58107, 0.63453, 0.62734, 0.98103, 0.29343, 0.49224, 0.52838, 0.88797
-  vosk-model-en-us-0.22-lgraph, 0.63115, 0.65877, 0.67231, 0.97682, 0.34644, 0.54357, 0.56907, 0.87699
-  vosk-model-small-en-us-0.22, 0.79331, 0.73552, 0.76048, 0.998, 0.27128, 0.72476, 0.6609, 0.90452
-}
 
 \section{Future work}
 
@@ -256,7 +213,11 @@ Finally, we would like to use language models to rerank the most likely utteranc
 
 \section{Conclusion}
 
-In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE using voice commands. We described the design of the plugin, and the challenges we faced while implementing it. We also presented the results of our evaluation, and discussed future work.
+In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE and reconfigure the plugin using voice commands addressesing a common usability issue in voice UX design, where users are unable to express their intent in a way that the system understands. We described the design of the plugin, and the challenges we faced while implementing it. We also presented the results of our evaluation, and discussed future work.
+
+On one end of the spectrum of the spectrum are general-purpose scripting and metaprogramming languages that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems are highly flexible, but require a high upfront investment from the user, who must design a language to define their own commands, and then learn the language itself, all whilst doing their daily job as a software engineer.
+
+On the other end are finite languages, which are rigid and only support a fixed number of commands. In the middle are technolects, or \textit{idiolects}, which give users the freedom to design a conversational programming assistant according to their own idiomatic style: this is the design space which Idiolect occupies. By targeting IDEs, whose users are already familiar with programming, commands with complex semantics can be written programmatically, and then invoked on-the-fly.
 
 \section{Acknowledgements}
 
