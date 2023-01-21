@@ -57,8 +57,7 @@ tasks {
   }
 
   if (System.getenv("GITHUB_REF_NAME") != null
-      && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty())
-  {
+      && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty()) {
     signPlugin {
       certificateChain.set(System.getenv("INTELLIJ_CERTIFICATE_CHAIN"))
       privateKey.set(System.getenv("INTELLIJ_PRIVATE_KEY"))
@@ -93,4 +92,5 @@ dependencies {
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
   testImplementation("org.reflections:reflections:0.10.2")
+  implementation("ai.hypergraph:kaliningraph:0.2.1")
 }

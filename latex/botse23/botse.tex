@@ -84,11 +84,11 @@ Mary Shaw, during her 2022 SPLASH keynote~\cite{shaw2022myths} called for progra
 
 Early attempts to build voice programming systems can be traced back at least twenty years to Leopold and Amber's~\cite{leopold1997keyboardless} (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite~\cite{arnold2000programming} (2001), Begel and Graham~\cite{begel2005spoken} (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, and do not consider IDE integration or reconfigurability.
 
-Another stream of work has explored teachable voice assistants and user-defined phrases (Chkroun \& Azaria~\cite{chkroun2019lia}). Though similar to our own, their work targets general-purpose voice user interfaces and does not consider voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for speech programming.
+Another stream of work has explored teachable voice assistants and user-defined phrases (Chkroun \& Azaria~\cite{chkroun2019lia}). Though similar to our own, their work targets general-purpose voice user interfaces and does not directly consider voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for speech programming.
 
 \section{Speech Recognition}
 
-Today, automatic speech recognition (ASR), the translation of an audio waveform containing speech to text, is essentially a solved problem - one of the many pretrained ASR models would work well enough for our purposes. However, we also require realtime offline speech recognition capabilities built on an open source deep speech pipeline, which has only recently become possible for users running on commodity hardware.
+Today, automatic speech recognition (ASR), the translation of an audio waveform containing speech to text, is essentially a solved problem -- one of the many pretrained ASR models would work well enough for our purposes. However, we also require realtime offline speech recognition capabilities built on an open source deep speech pipeline, which has only recently become possible for users running on commodity hardware.
 
 Idiolect integrates with Vosk, a state-of-the-art deep speech system with realtime models for various languages, which provides an open source Java API. Initially, we distributed a default model for the English language inside the plugin, but at the request of JetBrains to reduce bandwidth, we instead prompt the user to select and download a pretrained model from the Vosk website upon first installing the plugin.
 
@@ -108,19 +108,19 @@ In some cases, the user may not know or recall the exact phrase to which an acti
 
 \subsection{Recognition Dispatch}
 
-Idiolect dispatches utterances to a series of recognizers using a tiered priority system, in which each recognizer the chance to match or pass on each utterance. Once a command has been matched by a recognizer, the command is consumed and no subsequent recognizer will receive the dispatch.
+Idiolect dispatches utterances to a series of recognizers using a turn-based priority queue, in which each recognizer is given a single turn to match or pass on each utterance. Once a command is recognized, the command is consumed and dispatched to to no subsequent recognizer thereafter. This prevents the single command from triggering multiple actions.
 
-The plugin first attempts to resolve a spoken utterance using an exact lexical match against a lexicon of predefined commands. Highest priority are those which control the plugin itself, enabling and disabling speech recognition.
+The plugin first attempts to resolve an utterance using an exact lexical match against a finite language, i.e., a lexicon of predefined commands. Highest priority are those which control the plugin itself, enabling and disabling speech recognition.
 
-User-defined commands are the next highest priority. These can be a lexical match, or more generally a sentence in a context-free language. Nonterminal parameters allow one to define to more complex instructions, such as ``open the \textlangle filename\textrangle [in \textlangle project\_name\textrangle]'' or ``jump to the \textlangle nth\textrangle line''.
+User-defined commands are the next highest priority. These can be matched lexically, or more generally as a sentence in a context-free language. Nonterminal parameters allow one to define to more complex instructions, such as ``open the \textlangle filename\textrangle [in \textlangle project\_name\textrangle]'' or ``jump to the \textlangle nth\textrangle line''.
 
 If there is no exact match, we attempt to repair the phrase using an error-correcting parser. We describe this in Sec.~\ref{sec:error}.
 
-The recognizer of last resort is a large language model. Open ended commands which are unrecognizable by any of the previous approaches can be dispatched to a service which matches the intent against a predefined lexicon, using a prompt: ``What action most likely fulfills the command \ldots out of these actions: \ldots'', and invoked dynamically at runtime.
+The recognizer of last resort is a large language model. Open-ended commands which are unrecognizable by any of the previous approaches can be dispatched to a service which matches the intent against a predefined lexicon, using a prompt: ``What action most likely fulfills the command \ldots out of these actions: \ldots'', and invoked dynamically at runtime.
 
 \section{Barriers and Pathways to Usability}\label{sec:usability}
 
-In our experience as plugin users and maintainers, usability challenges typically arise in a few key areas. We discuss some of these obstacles and our efforts to surmount them.
+In our experience as plugin users and maintainers, usability challenges typically arise in a few key areas. In the following section, we will discuss some of the obstacles encountered developing Idiolect and our efforts to overcome them.
 
 \subsection{User Onboarding}
 
@@ -128,15 +128,15 @@ Several users reported confusion when first installing our plugin. To address th
 
 \subsection{Plugin Observability}
 
-Failures arise in many stages of the intent recognition pipeline. Often the best way to address failure is by improving observability, so that users can diagnose when an error occurs and learn how to avoid it in the future.
+Failures arise in many stages of the intent recognition pipeline. Short of fixing the error directly, often the best way to address failure is by improving observability, so that users can diagnose an error themselves and avoid it in the future.
 
 Recognition failure is a common issue, often caused by transcription errors in the ASR model, due to, e.g., noise in the audio signal, stopwords, or poor recognition accuracy. To address this issue, we add a visual cue at the corner of the IDE that reports the phrase transcribed in realtime, as well as the action (if any) that was triggered on intent recognition.
 
 \subsection{Command Discoverability}
 
-We draw a distinction between capability discovery and intent recognition. Users previously familiar with the IDE capabilities may wish to invoke or bind a specific action directly, but may not know the specific action identifier. The first and foremost way to improve discovery is through documentation, however keeping documentation in sync with capabilities can be challenging, and users are uninclined to read verbose documentation. To address this issue, we autogenerate documentation for each action by preprocessing the action list and assigning natural language descriptions from the IntelliJ Platform source code.
+We draw a distinction between capability discovery and intent recognition. Users previously familiar with the IDE capabilities may wish to invoke or bind a specific action directly, but may not know the specific action identifier. The first and foremost way to improve discovery is through documentation, however keeping documentation in sync with capabilities can be challenging, and users are uninclined to read verbose documentation. To address this issue, we autogenerate documentation for each action by preprocessing the action list and annotating each action with a natural language description from the IntelliJ Platform source code.
 
-Another common scenario is when the user is unfamiliar with the IDE capabilities, and the action they wish to perform is not supported by the IDE directly. User awareness of IDE functionality is outside the scope of this plugin, however, certain actions users may intend to perform are compound actions or have no associated binding. For example ``delete the method named \textlangle foo\textrangle'' requires first resolving the method, selecting the body of the text and deleting it. These actions can be bound, but require a handcrafted recognition handler, and are generally quite brittle. We hope to improve scripting support for such actions in the future.
+Another common scenario is when the user is unfamiliar with the IDE capabilities, and the action they wish to perform is not supported by the IDE directly. User awareness of IDE functionality is outside the scope of this plugin, however, certain actions users may intend to perform are compound actions or have no associated binding. For example ``delete the method named \textlangle foo\textrangle'' requires first resolving the method, selecting the body of the text and deleting it. Such actions can be defined, but require a implementing handcrafted recognition handler, and are generally quite brittle. We hope to improve scripting support for such actions in the future.
 
 \subsection{API Extensibility}
 
@@ -148,7 +148,7 @@ Another common usability barrier is when transcription is accurate, but the utte
 
 To correct recognition errors, we apply Considine et al.'s~\cite{considine2022tidyparse} work on Tidyparse, which supports recognition and parsing of context-free and mildly context-sensitive grammars, and computing language edit distance. Tidyparse implements a novel approach to error correction based on the theory of context-free language reachability, conjunctive grammars and Levenshtein automata. We use a SAT solver to find the smallest edit transforming a string outside the language to a string inside the language. Only when the utterance is one or two tokens away from a known command do we attempt a repair.
 
-VoskAPI is also capable of returning a list of alternate utterances, alongside a confidence score for each, which we use to determine if the user's utterance is sufficiently close to a known command in the list of alternates.
+VoskAPI is also capable of returning a list of alternate utterances alongside a confidence score for each. We use this list to determine if any recognized utterance is sufficiently close to an actionable command in the Idiolect grammar.
 
 \subsection{Build Reproducibility}
 
@@ -198,13 +198,13 @@ Over 30\% of the plugin page visitors originated from the People's Republic of C
 
 \section{Threats to Validity}
 
-While voice programming may serve a niche purpose for developers, it has not been fully tested as a general paradigm. Our experience suggests frequent vocalizations may disturb programmers within earshot and we anticipate its usefulness in colocated workspaces will thus be limited, but do foresee some genuine use-cases, e.g., providing an alternate input method for those with vision and motor disabilities.
+While voice programming may serve a niche purpose for developers, it has not been fully validated as a general programming mechanism. Our experience suggests frequent vocalizations may disturb programmers within earshot and we anticipate its usefulness in colocated workspaces will thus be limited, but do foresee some genuine use-cases, e.g., providing assistance to programmers with visual and motor disabilities.
 
 We also acknowledge that our system is limited by its own natural language understanding capabilities. Speech is a comparatively inefficient medium for conducting programming tasks and users may be hesitant to invest time reconfiguring the system if intent recognition accuracy is low. Furthermore, the IDE plugin is currently limited to the set of actions that can be easily expressed using the IntelliJ Platform API.
 
 \section{Future Work}
 
-In the future, we plan to conduct a thorough user study to better understand the use cases for the plugin. In particular, we hope to better understand the development habits of visually and motor-impaired users to improve accessibility, as well as broader support for other languages and dialects.
+In the future, we plan to conduct a thorough user study to better understand the use cases for the plugin. In particular, we hope to better understand the development habits of visually and motor-impaired users to improve accessibility, as well as broader support for other natural languages and dialects.
 
 We plan to conduct an evaluation of the plugin's intent-recognition capability and improve support for personalization, such as speaker adaptation and user-specific language models.
 
@@ -212,17 +212,17 @@ We also aim to improve the interaction mechanism by adding audiovisual feedback 
 
 Currently, we only track download statistics, although to inform the development of these features and better address the needs of voice programmers, it would be helpful to collect minimal telemetry on user utterances and custom commands.
 
-Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance, for example, the utterance, ``I want to edit foo.java'' is more likely to be the command, ``open foo.java'' than the command, ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will become available on the edge, and can be used to perform end-to-end speech-to-intent recognition in realtime.
+Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance. For example, the utterance, ``I want to edit foo.java'' is more likely to be the command, ``open foo.java'' than the command, ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will become available on the edge, and can be used to perform end-to-end speech-to-intent recognition in realtime.
 
 As such, we would like to use a language model to rerank the most likely intent corresponding to a user's utterance, conditioned on a previous context of historical commands, the dictionary, UI context and a list of alternate utterances.
 
 \section{Conclusion}
 
-In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE and reconfigure the plugin using voice commands. This addresses a common usability issue in voice UX design, where users are unable to express their intent in a way that the system understands. We described the design of the plugin, and the challenges we faced while implementing it. We also presented the results of our evaluation, and discussed future work.
+In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE and reconfigure the plugin using voice commands. This addresses a common usability issue in voice UX design, where users are unable to express their intent in a manner the system understands. We described the design of the plugin, and the challenges we faced while implementing it. We also presented the results of an early evaluation, and discussed avenues for future work.
 
-On one end of the design spectrum are metaprogramming languages and software language engineering frameworks that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems can be powerful, but require a high upfront investment from the user, who must design a language, and then learn the language itself, all whilst doing their daily job as a software engineer. On the other end are finite languages, which are too rigid.
+On one end of the design spectrum are metaprogramming languages and software language engineering frameworks that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems can be powerful, but require a high upfront investment from the user, who must design a language, and then learn the language itself, all whilst doing their daily job as a software engineer. On the other end are finite languages, which are too inflexible.
 
-In the middle of this language design spectrum are \textit{idiolects}, which give users the freedom to create conversational domain-specific languages according to their own idiomatic style: this is the design space which Idiolect occupies. By targeting IDEs, whose users are typically adept programmers, commands with complex semantics can be written programmatically, then invoked on-the-fly, sans recompilation.
+In the middle of this language design spectrum however are \textit{idiolects}, which give users the freedom to create conversational domain-specific languages according to their own idiomatic style: this is the design space which Idiolect occupies. By targeting IDEs, whose users are typically adept programmers, commands with more complex semantics can be expressed programmatically, then invoked on-the-fly, sans recompilation.
 
 We believe the intersection between conversational agents, vernacular programming languages and programmable voice assistants to be fertile ground, and one that is relatively unexplored in the language design space. We hope our small contribution inspires others to explore these ideas and take steps towards making programming more fun and accessible.
 
