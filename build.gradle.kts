@@ -1,9 +1,9 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
 
 plugins {
-  kotlin("jvm") version "1.8.0"
-  id("org.jetbrains.intellij") version "1.11.0"
-  id("com.github.ben-manes.versions") version "0.44.0"
+  kotlin("jvm") version "1.8.20-Beta"
+  id("org.jetbrains.intellij") version "1.12.0"
+  id("com.github.ben-manes.versions") version "0.45.0"
   id("org.jetbrains.changelog") version "2.0.0"
 }
 
@@ -13,7 +13,7 @@ version = "1.4.6-SNAPSHOT"
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
-  version.set("2022.3.1") // The version of the IntelliJ Platform IDE that will be used to build the plugin
+  version.set("2022.3.2") // The version of the IntelliJ Platform IDE that will be used to build the plugin
   pluginName.set("idiolect")
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))
@@ -88,7 +88,7 @@ repositories {
 }
 
 dependencies {
-  implementation("net.java.dev.jna:jna:5.12.1")
+  implementation("net.java.dev.jna:jna:5.13.0")
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
   testImplementation("org.reflections:reflections:0.10.2")

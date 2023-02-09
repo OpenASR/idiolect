@@ -108,11 +108,11 @@ In some cases, the user may not know or recall the exact phrase to which an acti
 
 \subsection{Recognition Dispatch}
 
-Idiolect dispatches utterances to a series of recognizers using a turn-based priority queue, in which each recognizer is given a single turn to match or pass on each utterance. Once a command is recognized, the command is consumed and dispatched to to no subsequent recognizer thereafter. This prevents the single command from triggering multiple actions.
+Idiolect dispatches utterances to a series of recognizers using a turn-based priority queue, in which each recognizer is given a single turn to match or pass on each utterance. Once a command is recognized, the command is consumed and dispatched to no subsequent recognizer thereafter. This prevents the single command from triggering multiple actions.
 
 The plugin first attempts to resolve an utterance using an exact lexical match against a finite language, i.e., a lexicon of predefined commands. Highest priority are those which control the plugin itself, enabling and disabling speech recognition.
 
-User-defined commands are the next highest priority. These can be matched lexically, or more generally as a sentence in a context-free language. Nonterminal parameters allow one to define to more complex instructions, such as ``open the \textlangle filename\textrangle [in \textlangle project\_name\textrangle]'' or ``jump to the \textlangle nth\textrangle line''.
+User-defined commands are the next highest priority. These can be matched lexically, or more generally as a sentence in a context-free language. Nonterminal parameters allow one to define more complex instructions, such as ``open the \textlangle filename\textrangle [in \textlangle project\_name\textrangle]'' or ``jump to the \textlangle nth\textrangle line''.
 
 If there is no exact match, we attempt to repair the phrase using an error-correcting parser. We describe this in Sec.~\ref{sec:error}.
 
@@ -140,7 +140,7 @@ Another common scenario is when the user is unfamiliar with the IDE capabilities
 
 \subsection{API Extensibility}
 
-Idiolect tries to anticipate users actions and give users additional action bindings. Some functionality, however, is best left implemeneted by downstream developers. In addition to end-user configurability, Idiolect is designed to be extensible by external plugin developers and can be used by other IntelliJ Platform plugins to programmatically define their own commands and recognition handlers. We provide a simple message passing API for plugins to communicate with Idiolect, and a DSL for defining custom grammars.
+Idiolect tries to anticipate users actions and expose default action bindings. Some functionality, however, is best left implemeneted by downstream developers. In addition to end-user configurability, Idiolect is designed to be extensible by external plugin developers and can be used by other IntelliJ Platform plugins to programmatically define their own commands and recognition handlers. We provide a simple message passing API for plugins to communicate with Idiolect, and a DSL for defining custom grammars.
 
 \subsection{Error Recovery}\label{sec:error}
 
