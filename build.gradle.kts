@@ -2,8 +2,8 @@ import org.jetbrains.changelog.Changelog.OutputType.HTML
 
 plugins {
   kotlin("jvm") version "1.8.20-Beta"
-  id("org.jetbrains.intellij") version "1.12.0"
-  id("com.github.ben-manes.versions") version "0.45.0"
+  id("org.jetbrains.intellij") version "1.13.0"
+  id("com.github.ben-manes.versions") version "0.46.0"
   id("org.jetbrains.changelog") version "2.0.0"
 }
 
@@ -84,7 +84,6 @@ tasks {
 repositories {
   mavenLocal()
   mavenCentral()
-  maven("https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local")
 }
 
 dependencies {
