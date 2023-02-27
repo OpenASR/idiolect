@@ -58,7 +58,7 @@ six@cs.utoronto.ca}
 \maketitle
 
 \begin{abstract}
-This paper presents Idiolect, an IDE plugin for voice coding and a novel approach to building bots that allows for users to define custom commands on-the-fly. Unlike traditional chatbots, Idiolect does not pretend to be an omniscient virtual assistant but rather a reconfigurable voice programming system that empowers users to create their own commands and actions dynamically, without rebuilding or restarting the application. We present a case study of integrating Idiolect~\footnote{https://github.com/OpenASR/idiolect} with the IntelliJ Platform, illustrate some example use cases, and offer some lessons learned during the tool's development.
+This paper presents Idiolect, an open source~\footnote{https://github.com/OpenASR/idiolect} IDE plugin for voice coding and a novel approach to building bots that allows for users to define custom commands on-the-fly. Unlike traditional chatbots, Idiolect does not pretend to be an omniscient virtual assistant but rather a reconfigurable voice programming system that empowers users to create their own commands and actions dynamically, without rebuilding or restarting the application. We offer an experience report describing the tool itself, illustrate some example use cases, and reflect on several lessons learned during the tool's development.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -67,12 +67,11 @@ This paper presents Idiolect, an IDE plugin for voice coding and a novel approac
 
 \section{Introduction}
 
-
 Humans are able to quickly learn new words and phrases, and apply them in a variety of contexts. Chatbots, on the other hand, are often limited to a set of static commands and phrases defined at compile-time. This can be frustrating for users, who struggle to express their intent, as well as bot developers, who must anticipate user intent and write bindings for each new capability. This rigidity is a common source of misalignment between user intent, author expectations and bot capabilities.
 
 Voice coding allows users to quickly dictate their own commands and phrases without resorting to a Turing Complete programming language. For example, the user might say ``whenever I say \textit{open sesame}, do the following action'', thereafter, the system will perform the desired action when so instructed. Or, ``whenever I say \textit{redo thrice}, repeat the last action three times''. Or, e.g., invoke a function in a scripting language, open a file, or perform other tedious chores.
 
-Idiolect provides a default lexicon of phrases, but does not force users to learn them explicitly. Instead, we allow users to override the default settings with their own voice commands on-the-fly, which are incorporated into the lexicon immediately. This shifts the burden of adaptation to the system, freeing users to express their intent in a natural way.
+Idiolect provides a default lexicon of phrases, but does not force users to learn them explicitly. Instead, we allow users to override the default settings with their custom voice commands on-the-fly, which are incorporated into the lexicon without delay. By shifting the burden of adaptation onto the system, this frees users to express their intent in a more natural way.
 
 Primarily, Idiolect observes the following design principles: be (1) natural to use, (2) easy to configure, (3) as unobtrusive as possible. We believe that these principles are important for a system intended to be used by developers, who are busy people and capable of configuring the system themselves. We also support developers with visual and motor impairments, who may have difficulty typing, or prefer to use a voice interface.
 
@@ -158,7 +157,7 @@ To streamline the development process and mitigate the risk of platform-specific
 
 \section{Evaluation}
 
-We conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in MacOS Ventura 13.1, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, then transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, and finally transcribe the audio using VoskAPI to simulate a user-generated utterance. We report the average word error rate (WER) of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.30) \texttt{vosk-model-small-en-us-0.15} (0.28), and \texttt{vosk-model-en-us-0.22-lgraph} (0.35). Results on a per-voice and per-model basis are shown in  Fig.~\ref{fig:fig1} below.
+We conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in MacOS Ventura 13.1 with IntelliJ IDEA 2023.1, VoskAPI 0.3.45 and Idiolect 1.3.3, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, then transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, and finally transcribe the audio using VoskAPI to simulate a user-generated utterance. We report the average word error rate (WER) of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.30) \texttt{vosk-model-small-en-us-0.15} (0.28), and \texttt{vosk-model-en-us-0.22-lgraph} (0.35). Results on a per-voice and per-model basis are shown in  Fig.~\ref{fig:fig1} below.
 
 \begin{figure}[ht!]
   \centering
@@ -179,7 +178,7 @@ We conducted a preliminary experiment to evaluate recognition performance on syn
   \label{fig:fig1}
 \end{figure}
 
-We also evaluated the plugin using a variety of downstream metrics, including user downloads of the plugin over a five-year timespan, bug reports and GitHub Insights. We also collected feedback from the JetBrains Plugin Marketplace to determine how satisfied users were with the plugin.
+We also evaluated the plugin using a variety of downstream metrics, such as user downloads of the plugin over a five-year timespan, bug reports, GitHub Insights, and feedback from the JetBrains Plugin Marketplace to help determine user satisfaction and identify areas for improvement.
 
 \begin{figure}[ht!]
   \centering
@@ -202,9 +201,11 @@ While voice programming may serve a niche purpose for developers, it has not bee
 
 We also acknowledge that our system is limited by its own natural language understanding capabilities. Speech is a comparatively inefficient medium for conducting programming tasks and users may be hesitant to invest time reconfiguring the system if intent recognition accuracy is low. Furthermore, the IDE plugin is currently limited to the set of actions that can be easily expressed using the IntelliJ Platform API.
 
+Finally, we acknowledge that synthetic voices are, while increasingly lifelike, an imperfect proxy for human speech. The voices used in our evaluation are not representative of the full range of human voices and dialects, and we have not yet conducted a systematic human evaluation. The lexicon used to generate synthetic speech is also limited to the set of commands supported by the IDE, and does not capture how the plugin would perform on a more general-purpose lexicon.
+
 \section{Future Work}
 
-In the future, we plan to conduct a thorough user study to better understand the use cases for the plugin. In particular, we hope to better understand the development habits of visually and motor-impaired users to improve accessibility, as well as broader support for other natural languages and dialects.
+In the future, we plan to conduct a thorough user study to better understand the use cases for the plugin. In particular, we hope to understand the development habits of visually and motor-impaired users to improve accessibility, as well as broader support for other natural languages and dialects.
 
 We plan to conduct an evaluation of the plugin's intent-recognition capability and improve support for personalization, such as speaker adaptation and user-specific language models.
 
@@ -214,7 +215,7 @@ Currently, we only track download statistics, although to inform the development
 
 Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance. For example, the utterance, ``I want to edit foo.java'' is more likely to be the command, ``open foo.java'' than the command, ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will become available on the edge, and can be used to perform end-to-end speech-to-intent recognition in realtime.
 
-As such, we would like to use a language model to rerank the most likely intent corresponding to a user's utterance, conditioned on a previous context of historical commands, the dictionary, UI context and a list of alternate utterances.
+Given their increasing reasoning capabilities, we would like to further explore the use of LLMs within the intent recognition pipeline. In particular, we could use language models to rerank the most likely intent corresponding to a user's utterance, conditioned on a previous historical commands, the UI state and other application-specific settings. Contextual-awareness would require more careful IDE integration and enable us to more accurately predict user intent.
 
 \section{Conclusion}
 
