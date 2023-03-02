@@ -8,5 +8,5 @@ import org.openasr.idiolect.nlp.NlpResponse
  * Fulfills an NlpResponse (Intent + slots), performing desired actions
  */
 interface IntentHandler {
-    fun tryFulfillIntent(response: NlpResponse, dataContext: DataContext): ActionCallInfo?
+    fun tryFulfillIntent(nlpResponse: NlpResponse, dataContext: DataContext): ActionCallInfo?
 }

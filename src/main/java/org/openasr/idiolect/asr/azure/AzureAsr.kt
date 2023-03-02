@@ -30,6 +30,7 @@ class AzureAsr : AsrProvider {
     override fun activate() {
         val speechConfig = SpeechConfig.fromSubscription(AzureConfig.settings.speechSubscriptionKey, AzureConfig.settings.serviceRegion)
         speechConfig.speechRecognitionLanguage = "en-AU"
+        speechConfig.outputFormat = OutputFormat.Simple
 
         val audioConfig = AudioConfig.fromDefaultMicrophoneInput()
         speechRecognizer = SpeechRecognizer(speechConfig, audioConfig)

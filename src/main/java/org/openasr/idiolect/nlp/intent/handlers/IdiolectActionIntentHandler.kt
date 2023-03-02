@@ -55,7 +55,7 @@ class IdiolectActionIntentHandler : IntentHandler {
 
     private fun extractFieldOrVariable(nlpResponse: NlpResponse): ActionCallInfo =
         ActionCallInfo(nlpResponse.slots!!["actionId"]!!).apply {
-            val name = nlpResponse.slots!!["name"]!!
+            val name = nlpResponse.slots["name"]!!
             if (name.isNotEmpty()) {
                 typeAfter = name.toCamelCase()
                 hitTabAfter = true

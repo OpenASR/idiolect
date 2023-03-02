@@ -91,6 +91,7 @@ class PsiFileNoWhiteSpace(private val actual: PsiFile) : PsiFile {
 
     override fun addAfter(element: PsiElement, anchor: PsiElement?) = actual.addAfter(element, anchor)
 
+    @Deprecated("Deprecated in Java")
     override fun checkAdd(element: PsiElement)  = actual.checkAdd(element)
 
     override fun addRange(first: PsiElement?, last: PsiElement?) = actual.addRange(first, last)
@@ -103,6 +104,7 @@ class PsiFileNoWhiteSpace(private val actual: PsiFile) : PsiFile {
 
     override fun delete() = actual.delete()
 
+    @Deprecated("Deprecated in Java")
     override fun checkDelete() = actual.checkDelete()
 
     override fun deleteChildRange(first: PsiElement?, last: PsiElement?) = actual.deleteChildRange(first, last)
@@ -169,6 +171,7 @@ class PsiFileNoWhiteSpace(private val actual: PsiFile) : PsiFile {
 
     override fun getFileType() = actual.fileType
 
+    @Deprecated("Deprecated in Java")
     override fun getPsiRoots() = actual.psiRoots
 
     override fun getViewProvider() = actual.viewProvider
