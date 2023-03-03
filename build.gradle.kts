@@ -13,7 +13,7 @@ version = "1.4.6-SNAPSHOT"
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
-  version.set("2022.3.2") // The version of the IntelliJ Platform IDE that will be used to build the plugin
+  version.set("LATEST-EAP-SNAPSHOT") // The version of the IntelliJ Platform IDE that will be used to build the plugin
   pluginName.set("idiolect")
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))

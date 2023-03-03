@@ -1,22 +1,19 @@
 package org.openasr.idiolect.presentation
 
-import com.intellij.notification.NotificationGroupManager
-import com.intellij.notification.NotificationType
+import com.intellij.notification.*
 import com.intellij.openapi.diagnostic.logger
-import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.*
 import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
 import com.intellij.openapi.wm.impl.status.TextPanel
-import com.intellij.openapi.wm.impl.status.widget.StatusBarWidgetWrapper.StatusBarWidgetClickListener
-import com.intellij.ui.GotItTooltip
-import com.intellij.util.*
+import com.intellij.ui.*
+import com.intellij.util.application
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.nlp.*
 import java.awt.event.MouseEvent
 import javax.swing.JComponent
 
-class RecognitionStatusBarWidget() :
+class RecognitionStatusBarWidget :
     TextPanel.WithIconAndArrows(),
     CustomStatusBarWidget,
     WidgetPresentation,
@@ -45,12 +42,13 @@ class RecognitionStatusBarWidget() :
         }
 
         this.statusBar = statusBar
-        Disposer.register(statusBar, this)
 
         GotItTooltip("org.openasr.idiolect.intro", "Click <b><a href=\"\">here</a></b> to get started with voice control", this)
             .show(this, GotItTooltip.TOP_MIDDLE)
 
-        StatusBarWidgetClickListener(clickConsumer).installOn(this, true)
+        object : ClickListener() {
+            override fun onClick(e: MouseEvent, clickCount: Int): Boolean = clickConsumer(e)
+        }.installOn(this, true)
     }
 
     override fun onAsrStatus(message: String) = updateStatus(message)
@@ -70,11 +68,13 @@ class RecognitionStatusBarWidget() :
 
     override fun getComponent(): JComponent = this
 
-    override fun getClickConsumer() = Consumer<MouseEvent> {
+    val clickConsumer: (MouseEvent) -> Boolean = {
         try {
             AsrService.toggleListening()
+            true
         } catch (e: Exception) {
             log.info("Failed to toggle listening: ${e.message}")
+            false
         }
     }
 
