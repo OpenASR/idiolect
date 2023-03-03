@@ -23,13 +23,13 @@
 
 %Apply the gradient macro
 \newcommand{\ApplyGradient}[1]{%
-  \ifdim #1 pt > \MidNumber pt
-  \pgfmathsetmacro{\PercentColor}{max(min(100.0*(#1 - \MidNumber)/(\MaxNumber-\MidNumber),100.0),0.00)} %
-  \hspace{-0.33em}\colorbox{red!\PercentColor!yellow}{#1}
-  \else
-  \pgfmathsetmacro{\PercentColor}{max(min(100.0*(\MidNumber - #1)/(\MidNumber-\MinNumber),100.0),0.00)} %
-  \hspace{-0.33em}\colorbox{green!\PercentColor!yellow}{#1}
-  \fi
+    \ifdim #1 pt > \MidNumber pt
+    \pgfmathsetmacro{\PercentColor}{max(min(100.0*(#1 - \MidNumber)/(\MaxNumber-\MidNumber),100.0),0.00)} %
+    \hspace{-0.33em}\colorbox{red!\PercentColor!yellow}{#1}
+    \else
+    \pgfmathsetmacro{\PercentColor}{max(min(100.0*(\MidNumber - #1)/(\MidNumber-\MinNumber),100.0),0.00)} %
+    \hspace{-0.33em}\colorbox{green!\PercentColor!yellow}{#1}
+    \fi
 }
 
 \newcolumntype{R}{>{\collectcell\ApplyGradient}c<{\endcollectcell}}
@@ -37,7 +37,7 @@
 \setlength{\fboxsep}{3mm} % box size
 \setlength{\tabcolsep}{0pt}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
 \title{Idiolect: A Reconfigurable Voice Coding Assistant}
@@ -58,7 +58,7 @@ six@cs.utoronto.ca}
 \maketitle
 
 \begin{abstract}
-This paper presents Idiolect, an open source~\footnote{https://github.com/OpenASR/idiolect} IDE plugin for voice coding and a novel approach to building bots that allows for users to define custom commands on-the-fly. Unlike traditional chatbots, Idiolect does not pretend to be an omniscient virtual assistant but rather a reconfigurable voice programming system that empowers users to create their own commands and actions dynamically, without rebuilding or restarting the application. We offer an experience report describing the tool itself, illustrate some example use cases, and reflect on several lessons learned during the tool's development.
+    This paper presents Idiolect, an open source~\footnote{https://github.com/OpenASR/idiolect} IDE plugin for voice coding and a novel approach to building bots that allows for users to define custom commands on-the-fly. Unlike traditional chatbots, Idiolect does not pretend to be an omniscient virtual assistant but rather a reconfigurable voice programming system that empowers users to create their own commands and actions dynamically, without rebuilding or restarting the application. We offer an experience report describing the tool itself, illustrate some example use cases, and reflect on several lessons learned during the tool's development.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -67,15 +67,15 @@ This paper presents Idiolect, an open source~\footnote{https://github.com/OpenAS
 
 \section{Introduction}
 
-Humans are able to quickly learn new words and phrases, and apply them in a variety of contexts. Chatbots, on the other hand, are often limited to a set of static commands and phrases defined at compile-time. This can be frustrating for users, who struggle to express their intent, as well as bot developers, who must anticipate user intent and write bindings for each new capability. This rigidity is a common source of misalignment between user intent, author expectations and bot capabilities.
+Humans are able to quickly learn new words and phrases, and apply them in a variety of contexts. Chatbots, however, are often limited to a set of static commands and phrases. This creates a frustrating experience for users, who struggle to express their intent, as well as bot developers, who must anticipate user intent and make new capabilities discoverable. This rigidity is a common source of misalignment between user intent, author expectations and bot capabilities.
 
-Voice coding allows users to quickly dictate their own commands and phrases without resorting to a Turing Complete programming language. For example, the user might say ``whenever I say \textit{open sesame}, do the following action'', thereafter, the system will perform the desired action when so instructed. Or, ``whenever I say \textit{redo thrice}, repeat the last action three times''. Or, e.g., invoke a function in a scripting language, open a file, or perform other tedious chores.
+Voice coding allows users to quickly dictate new commands and behaviors. For example, one might say, ``whenever I say \textit{open sesame}, do the following action'', thereafter, the system will perform the desired action when so instructed. Or, ``whenever I say \textit{redo thrice}, repeat the last action three times''. Or, e.g., invoke a function in a scripting language, open a file, or perform other manually repetitive chores.
 
-Idiolect provides a default lexicon of phrases, but does not force users to learn them explicitly. Instead, we allow users to override the default settings with their custom voice commands on-the-fly, which are incorporated into the lexicon without delay. By shifting the burden of adaptation onto the system, this frees users to express their intent in a more natural way.
+Idiolect provides a default lexicon of phrases, but does not impose them upon end-users. Instead, users may override the defaults with custom voice commands on-the-fly, which are incorporated into the lexicon without delay. By shifting the burden of adaptation onto the system, this frees users to express their intent in a more natural manner.
 
 Primarily, Idiolect observes the following design principles: be (1) natural to use, (2) easy to configure, (3) as unobtrusive as possible. We believe that these principles are important for a system intended to be used by developers, who are busy people and capable of configuring the system themselves. We also support developers with visual and motor impairments, who may have difficulty typing, or prefer to use a voice interface.
 
-In the following paper, we describe Idiolect, a dynamically reconfigurable voice-programming system that supports teaching the IDE new commands and actions on-the-fly, by either verbally or programmatically expressing the desired behavior.
+In the following paper, we describe Idiolect, an IDE plugin originally developed at JetBrains in 2015 and recently updated to support many new features, including deep speech recognition and dynamically-reconfigurable voice commands, letting users verbally or programmatically express their desired intent.
 
 \section{Prior Work}
 
@@ -115,11 +115,11 @@ User-defined commands are the next highest priority. These can be matched lexica
 
 If there is no exact match, we attempt to repair the phrase using an error-correcting parser. We describe this in Sec.~\ref{sec:error}.
 
-The recognizer of last resort is a large language model. Open-ended commands which are unrecognizable by any of the previous approaches can be dispatched to a service which matches the intent against a predefined lexicon, using a prompt: ``What action most likely fulfills the command \ldots out of these actions: \ldots'', and invoked dynamically at runtime.
+The recognizer of last resort is a large language model. Open-ended commands which are unrecognizable to all of the previous methods are dispatched to a service that matches the intent against a set of available actions using a prompt, e.g., ``Out of these actions: \ldots, which one most likely fulfills the command \ldots?'', whose response is then dynamically invoked.
 
 \section{Barriers and Pathways to Usability}\label{sec:usability}
 
-In our experience as plugin users and maintainers, usability challenges typically arise in a few key areas. In the following section, we will discuss some of the obstacles encountered developing Idiolect and our efforts to overcome them.
+In our experience as plugin users and maintainers, usability challenges typically arise in a few key areas. In the following section, we will discuss some of those obstacles encountered while developing Idiolect and our efforts to overcome them.
 
 \subsection{User Onboarding}
 
@@ -135,11 +135,11 @@ Recognition failure is a common issue, often caused by transcription errors in t
 
 We draw a distinction between capability discovery and intent recognition. Users previously familiar with the IDE capabilities may wish to invoke or bind a specific action directly, but may not know the specific action identifier. The first and foremost way to improve discovery is through documentation, however keeping documentation in sync with capabilities can be challenging, and users are uninclined to read verbose documentation. To address this issue, we autogenerate documentation for each action by preprocessing the action list and annotating each action with a natural language description from the IntelliJ Platform source code.
 
-Another common scenario is when the user is unfamiliar with the IDE capabilities, and the action they wish to perform is not supported by the IDE directly. User awareness of IDE functionality is outside the scope of this plugin, however, certain actions users may intend to perform are compound actions or have no associated binding. For example ``delete the method named \textlangle foo\textrangle'' requires first resolving the method, selecting the body of the text and deleting it. Such actions can be defined, but require a implementing handcrafted recognition handler, and are generally quite brittle. We hope to improve scripting support for such actions in the future.
+Another common scenario is when the user is unfamiliar with the IDE capabilities, and the action they wish to perform is not supported by the IDE directly. User awareness of IDE functionality is outside the scope of this plugin, however, certain actions users may intend to perform are compound actions or have no associated binding. For example ``delete the method named \textlangle foo\textrangle'' requires first resolving the method, selecting the body of the text and deleting it. Such actions can be defined, but require implementing a handcrafted recognition handler, and are generally quite brittle. We hope to improve scripting support for such actions in the future.
 
 \subsection{API Extensibility}
 
-Idiolect tries to anticipate users actions and expose default action bindings. Some functionality, however, is best left implemeneted by downstream developers. In addition to end-user configurability, Idiolect is designed to be extensible by external plugin developers and can be used by other IntelliJ Platform plugins to programmatically define their own commands and recognition handlers. We provide a simple message passing API for plugins to communicate with Idiolect, and a DSL for defining custom grammars.
+Idiolect tries to anticipate users actions and expose default action bindings. Some functionality, however, is best left implemeneted by downstream developers, who are better-equipped to understand their users' needs. In addition to end-user configurability, Idiolect is designed to be extensible by other IntelliJ Platform plugins, which can define additional commands, recognition handlers and custom actions. We offer a simple message-passing API for plugins to communicate with Idiolect, and a DSL for defining custom grammars.
 
 \subsection{Error Recovery}\label{sec:error}
 
@@ -151,7 +151,7 @@ VoskAPI is also capable of returning a list of alternate utterances alongside a 
 
 \subsection{Build Reproducibility}
 
-One of the challenges of managing a multiplatform audio project is ensuring reproducible builds. The IntelliJ Platform does not allow shipping OS-specific plugins, which requires building a single artifact. In the past, updates would result in breaking changes for Windows, Mac OS, or Linux, which are difficult to debug or test on a development environment and only identified by user acceptance testing on those platforms.
+One of the challenges of managing a multiplatform audio project is ensuring reproducible builds. The IntelliJ Platform does not allow shipping OS-specific plugins, which requires building a single artifact. In the past, updates would result in breaking changes on Windows, MacOS, or Linux, which are difficult to debug or test from a development environment and only identified by user acceptance testing on those platforms.
 
 To streamline the development process and mitigate the risk of platform-specific regressions in production, we set up an automated pipeline for testing and deploying the plugin. We use GitHub Actions to build the plugin for each release, and when a new commit is tagged with a release number and merged, a changelog is automatically generated from the intervening commit messages, then the plugin is signed and automatically uploaded to the JetBrains plugin repository. This allows us to quickly iterate on the plugin, test the plugin on multiple platforms, and to release new versions with assurance.
 
@@ -160,30 +160,30 @@ To streamline the development process and mitigate the risk of platform-specific
 We conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in MacOS Ventura 13.1 with IntelliJ IDEA 2023.1, VoskAPI 0.3.45 and Idiolect 1.3.3, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, then transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, and finally transcribe the audio using VoskAPI to simulate a user-generated utterance. We report the average word error rate (WER) of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.30) \texttt{vosk-model-small-en-us-0.15} (0.28), and \texttt{vosk-model-en-us-0.22-lgraph} (0.35). Results on a per-voice and per-model basis are shown in  Fig.~\ref{fig:fig1} below.
 
 \begin{figure}[ht!]
-  \centering
-  \begin{sidewaystable}
-    \resizebox{.48\textwidth}{!}{% <------ Don't forget this %
-      \begin{tabular}{c*{8}{R}}
-        & \multicolumn{1}{c}{Eddy} & \multicolumn{1}{c}{Flo} &
-        \multicolumn{1}{c}{Reed} & \multicolumn{1}{c}{Rocko} &
-        \multicolumn{1}{c}{Samantha} & \multicolumn{1}{c}{Sandy} &
-        \multicolumn{1}{c}{Shelly} & \multicolumn{1}{c}{Fred} \\[1em]
-        \ldots\texttt{-en-us-0.22}       \hspace{10pt} & 0.581 & 0.635 & 0.627 & 0.981 & 0.293 & 0.492 & 0.528 & 0.888\\
-        \ldots\texttt{-en-us-0.22-lgraph}\hspace{10pt} & 0.631 & 0.659 & 0.672 & 0.977 & 0.346 & 0.544 & 0.569 & 0.877\\
-        \ldots\texttt{-small-en-us-0.22} \hspace{10pt} & 0.793 & 0.736 & 0.760 & 0.998 & 0.271 & 0.725 & 0.661 & 0.905\\
-      \end{tabular}
-    }
-  \end{sidewaystable}
-  \caption{WER for synthetic ASR using 100 commands from the default lexicon across three US English models and seven TTS voices (lower is better).}
-  \label{fig:fig1}
+    \centering
+    \begin{sidewaystable}
+        \resizebox{.48\textwidth}{!}{% <------ Don't forget this %
+            \begin{tabular}{c*{8}{R}}
+                & \multicolumn{1}{c}{Eddy} & \multicolumn{1}{c}{Flo} &
+                \multicolumn{1}{c}{Reed} & \multicolumn{1}{c}{Rocko} &
+                \multicolumn{1}{c}{Samantha} & \multicolumn{1}{c}{Sandy} &
+                \multicolumn{1}{c}{Shelly} & \multicolumn{1}{c}{Fred} \\[1em]
+                \ldots\texttt{-en-us-0.22}       \hspace{10pt} & 0.581 & 0.635 & 0.627 & 0.981 & 0.293 & 0.492 & 0.528 & 0.888\\
+                \ldots\texttt{-en-us-0.22-lgraph}\hspace{10pt} & 0.631 & 0.659 & 0.672 & 0.977 & 0.346 & 0.544 & 0.569 & 0.877\\
+                \ldots\texttt{-small-en-us-0.22} \hspace{10pt} & 0.793 & 0.736 & 0.760 & 0.998 & 0.271 & 0.725 & 0.661 & 0.905\\
+            \end{tabular}
+        }
+    \end{sidewaystable}
+    \caption{WER for synthetic ASR using 100 commands from the default lexicon across three US English models and seven TTS voices (lower is better).}
+    \label{fig:fig1}
 \end{figure}
 
 We also evaluated the plugin using a variety of downstream metrics, such as user downloads of the plugin over a five-year timespan, bug reports, GitHub Insights, and feedback from the JetBrains Plugin Marketplace to help determine user satisfaction and identify areas for improvement.
 
 \begin{figure}[ht!]
-  \centering
-\includegraphics[width=0.45\textwidth]{downloads.png}
-  \caption{Plugin downloads stalled circa 2017 due to IDE incompatibility.}
+    \centering
+    \includegraphics[width=0.45\textwidth]{downloads.png}
+    \caption{Plugin downloads stalled circa 2017 due to IDE incompatibility.}
 \end{figure}
 
 Downloads of the plugin have stalled over time since its initial release in 2015. We hypothesize this is due to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally developed using the CMUSphinx speech recognition platform, we performed an intervention by migrating to a more robust and technically capable ASR engine. Following a five-year hiatus, we rewrote the plugin from scratch, implemented the usability improvements described in Sec.~\ref{sec:usability}, republished the plugin in 2023 under its current name and are collecting usage statistics -- though promising, the results are still inconclusive.
@@ -201,7 +201,7 @@ While voice programming may serve a niche purpose for developers, it has not bee
 
 We also acknowledge that our system is limited by its own natural language understanding capabilities. Speech is a comparatively inefficient medium for conducting programming tasks and users may be hesitant to invest time reconfiguring the system if intent recognition accuracy is low. Furthermore, the IDE plugin is currently limited to the set of actions that can be easily expressed using the IntelliJ Platform API.
 
-Finally, we acknowledge that synthetic voices are, while increasingly lifelike, an imperfect proxy for human speech. The voices used in our evaluation are not representative of the full range of human voices and dialects, and we have not yet conducted a systematic human evaluation. The lexicon used to generate synthetic speech is also limited to the set of commands supported by the IDE, and does not capture how the plugin would perform on a more general-purpose lexicon.
+Finally, we acknowledge that synthetic voices are, while increasingly lifelike, an imperfect proxy for human speech. The voices used in our evaluation are not representative of the full range of human voices and dialects, and we have not yet conducted a systematic human evaluation. The lexicon used to generate synthetic speech is also limited to the set of commands supported by the IDE, and does not capture how the plugin would perform in a more general-purpose setting.
 
 \section{Future Work}
 
