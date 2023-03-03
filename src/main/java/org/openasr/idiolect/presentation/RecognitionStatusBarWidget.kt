@@ -47,7 +47,14 @@ class RecognitionStatusBarWidget :
             .show(this, GotItTooltip.TOP_MIDDLE)
 
         object : ClickListener() {
-            override fun onClick(e: MouseEvent, clickCount: Int): Boolean = clickConsumer(e)
+            override fun onClick(e: MouseEvent, clickCount: Int): Boolean =
+                try {
+                    AsrService.toggleListening()
+                    true
+                } catch (e: Exception) {
+                    log.info("Failed to toggle listening: ${e.message}")
+                    false
+                }
         }.installOn(this, true)
     }
 
@@ -67,16 +74,6 @@ class RecognitionStatusBarWidget :
     override fun getPresentation() = this
 
     override fun getComponent(): JComponent = this
-
-    val clickConsumer: (MouseEvent) -> Boolean = {
-        try {
-            AsrService.toggleListening()
-            true
-        } catch (e: Exception) {
-            log.info("Failed to toggle listening: ${e.message}")
-            false
-        }
-    }
 
     override fun onListening(listening: Boolean) {
         isListening = listening
