@@ -1,8 +1,9 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
+import java.util.*
 
 plugins {
   kotlin("jvm") version "1.8.20-Beta"
-  id("org.jetbrains.intellij") version "1.13.0"
+  id("org.jetbrains.intellij") version "1.13.1"
   id("com.github.ben-manes.versions") version "0.46.0"
   id("org.jetbrains.changelog") version "2.0.0"
 }
@@ -18,6 +19,7 @@ intellij {
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))
 }
+
 
 tasks {
   changelog {
@@ -38,12 +40,20 @@ tasks {
   compileKotlin { kotlinOptions.jvmTarget = jvmTarget }
 
   compileTestKotlin {
+    val osName =System.getProperty("os.name").lowercase()
     exclude(
-      "**/windows/**",
-      "**/mac/**",
+      if ("windows" in osName) "" else "**/windows/**",
+      if ("mac" in osName) "" else "**/mac/**",
       "**/ActionRecognizerManagerTest.kt"
     )
     kotlinOptions.jvmTarget = jvmTarget
+  }
+
+  test {
+    testLogging {
+      outputs.upToDateWhen { false }
+      showStandardStreams = true
+    }
   }
 
   buildPlugin {
