@@ -3,11 +3,15 @@ package org.openasr.idiolect.mac
 import ai.hypergraph.kaliningraph.types.*
 import org.junit.Test
 import org.openasr.idiolect.utils.WordSequenceAligner
+import org.openasr.idiolect.utils.WordSequenceAligner.Alignment
 import org.vosk.*
 import java.io.File
+import kotlin.math.floor
+import kotlin.time.*
 
 class ASRTest {
-  fun String.alignCommandAndRecognition(voice: String, model: Recognizer, name: String): WordSequenceAligner.Alignment {
+  @OptIn(ExperimentalTime::class)
+  fun String.alignCommandAndRecognition(voice: String, model: Recognizer, name: String): Alignment {
     // Run say command
     val outputFile = "/tmp/test"
 
@@ -18,15 +22,25 @@ class ASRTest {
         .let { ProcessBuilder(it).start().waitFor() }
 
     // Read AIFF file
+    val timeNow = TimeSource.Monotonic.markNow()
     val recognizedUtterance = File("$outputFile.wav").transcribeWavFile(model)
         .split(" ").filter { it.isNotBlank() }.toTypedArray()
-    val originalSentence = this.split(" ").filter { it.isNotBlank() }.toTypedArray()
+    val recognitionTime = timeNow.elapsedNow().inWholeMilliseconds
+    val originalSentence = split(" ").filter { it.isNotBlank() }.toTypedArray()
 
-    return WordSequenceAligner().align(originalSentence, recognizedUtterance )
-        .also { println("Evaluating: ${name}/$voice\n$it\n") }
+    // Get length of AIF file in milliseconds
+    val aifLength =
+      (("ffprobe -v error -show_entries format=duration " +
+          "-of default=noprint_wrappers=1:nokey=1 $outputFile.aif").split(" "))
+      .let { (ProcessBuilder(it).start().inputStream.bufferedReader().readLine().toFloatOrNull() ?: Float.NaN) * 1000 }
+          .let { floor(it) }.toInt()
+
+    return WordSequenceAligner().align(originalSentence, recognizedUtterance)
+        .also { println("$name recognized ${aifLength}ms utterance spoken by $voice in ${recognitionTime}ms " +
+            "(${(aifLength.toDouble() / recognitionTime).toString().take(5)} x real-time):\n$it\n") }
   }
 
-  val voices = setOf("Eddy", "Flo", "Reed", "Rocko", "Samantha", "Sandy", "Shelley", "Fred")
+  val voices = setOf("Eddy", "Flo", "Reed", "Rocko", "Ralph", "Samantha", "Sandy", "Shelley")
 
   val models = setOf("vosk-model-en-us-0.22", "vosk-model-en-us-0.22-lgraph", "vosk-model-small-en-us-0.15")
     .map { it to Recognizer(Model("${System.getProperty("user.home")}/.idiolect/$it"), 16000f) }
