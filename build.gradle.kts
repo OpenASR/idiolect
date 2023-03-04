@@ -1,5 +1,4 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
-import java.util.*
 
 plugins {
   kotlin("jvm") version "1.8.20-Beta"
@@ -39,8 +38,17 @@ tasks {
   val jvmTarget = "17"
   compileKotlin { kotlinOptions.jvmTarget = jvmTarget }
 
+  // New test task without mac tests for runIde
+  val quickTests by registering(Test::class) {
+    exclude(
+      "**/windows/**",
+      "**/mac/**",
+      "**/ActionRecognizerManagerTest.kt"
+    )
+  }
+
   compileTestKotlin {
-    val osName =System.getProperty("os.name").lowercase()
+    val osName = System.getProperty("os.name").lowercase()
     exclude(
       if ("windows" in osName) "" else "**/windows/**",
       if ("mac" in osName) "" else "**/mac/**",
@@ -57,12 +65,13 @@ tasks {
   }
 
   buildPlugin {
-    dependsOn("test")
+    dependsOn("quickTests")
     archiveFileName.set("idiolect.zip")
   }
 
   runIde {
-    dependsOn("test")
+    // depend on test but exclude the tests that contain mac
+    dependsOn("quickTests")
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
   }
 
