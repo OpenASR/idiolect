@@ -164,19 +164,21 @@ We conducted a preliminary experiment to evaluate recognition performance on syn
     \begin{sidewaystable}
         \resizebox{.48\textwidth}{!}{% <------ Don't forget this %
             \begin{tabular}{c*{8}{R}}
-                & \multicolumn{1}{c}{Eddy} & \multicolumn{1}{c}{Flo} &
+                & \multicolumn{1}{c}{Eddy} & \multicolumn{1}{c}{Flo} & \multicolumn{1}{c}{Fred} &
                 \multicolumn{1}{c}{Reed} & \multicolumn{1}{c}{Rocko} &
                 \multicolumn{1}{c}{Samantha} & \multicolumn{1}{c}{Sandy} &
-                \multicolumn{1}{c}{Shelly} & \multicolumn{1}{c}{Fred} \\[1em]
-                \ldots\texttt{-en-us-0.22}       \hspace{10pt} & 0.581 & 0.635 & 0.627 & 0.981 & 0.293 & 0.492 & 0.528 & 0.888\\
-                \ldots\texttt{-en-us-0.22-lgraph}\hspace{10pt} & 0.631 & 0.659 & 0.672 & 0.977 & 0.346 & 0.544 & 0.569 & 0.877\\
-                \ldots\texttt{-small-en-us-0.22} \hspace{10pt} & 0.793 & 0.736 & 0.760 & 0.998 & 0.271 & 0.725 & 0.661 & 0.905\\
+                \multicolumn{1}{c}{Shelly} \\[1em]
+                \ldots\texttt{-en-us-0.22}       \hspace{10pt} & 0.581 & 0.635 & 0.888 & 0.627 & 0.981 & 0.293 & 0.492 & 0.528 \\
+                \ldots\texttt{-en-us-0.22-lgraph}\hspace{10pt} & 0.631 & 0.659 & 0.877 & 0.672 & 0.977 & 0.346 & 0.544 & 0.569 \\
+                \ldots\texttt{-small-en-us-0.22} \hspace{10pt} & 0.793 & 0.736 & 0.905 & 0.760 & 0.998 & 0.271 & 0.725 & 0.661 \\
             \end{tabular}
         }
     \end{sidewaystable}
     \caption{WER for synthetic ASR using 100 commands from the default lexicon across three US English models and seven TTS voices (lower is better).}
     \label{fig:fig1}
 \end{figure}
+
+Two primary trends are evident. First, model size has a weak, but observable effect on recognition performance, consistent with prior work on large-vocabulary continuous speech recognition. Though we only evaluated three of the smallest English-langauge models from the Vosk dataset, based on plentiful evidence in the scaling literature, we expect this trend to hold for larger models across natural languages. Out of the three models tested, we note that the \texttt{vosk-model-small-en-us-0.22} has the lowest overall WER across all voices. Second, is the presence of gender bias in the MacOS/Vosk TTS/ASR pipeline. Depsite the apparent intelligibility of both voices, WER is substantially lower on female voices (Flo, et al.) than their corresponding male counterparts (Eddy, et al.). The cause of this discrepancy is not immediately clear, but merits further investigation.
 
 We also evaluated the plugin using a variety of downstream metrics, such as user downloads of the plugin over a five-year timespan, bug reports, GitHub Insights, and feedback from the JetBrains Plugin Marketplace to help determine user satisfaction and identify areas for improvement.
 
@@ -186,14 +188,14 @@ We also evaluated the plugin using a variety of downstream metrics, such as user
     \caption{Plugin downloads stalled circa 2017 due to IDE incompatibility.}
 \end{figure}
 
-Downloads of the plugin have stalled over time since its initial release in 2015. We hypothesize this is due to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally developed using the CMUSphinx speech recognition platform, we performed an intervention by migrating to a more robust and technically capable ASR engine. Following a five-year hiatus, we rewrote the plugin from scratch, implemented the usability improvements described in Sec.~\ref{sec:usability}, republished the plugin in 2023 under its current name and are collecting usage statistics -- though promising, the results are still inconclusive.
+Downloads of the plugin have stalled over time since its initial release in 2015. We hypothesize this is due to the lack of steady updates, resulting in incompatiblity with more recent versions of the IntelliJ Platform. Originally developed using the CMUSphinx speech recognition platform, we performed an intervention by migrating to a more robust and technically capable ASR engine. Following a five-year hiatus, we rewrote the plugin from scratch, implemented the usability improvements described in Sec.~\ref{sec:usability}, republished the plugin in 2023 under its current name and are tracking usage statistics.
 
 %\begin{figure}[ht!]
 %  \includegraphics[width=0.45\textwidth]{demographics.png}
 %  \caption{The two primary countries where downloads went.}
 %\end{figure}
 
-Over 30\% of the plugin page visitors originated from the People's Republic of China, indicating a substantial and potentially underserved voice programming demographic. This suggests the need to support internationalization and localization, an omission we hope to remedy in a future release.
+%Over 30\% of the plugin page visitors originated from the People's Republic of China, indicating a substantial and potentially underserved voice programming demographic. This suggests the need to support internationalization and localization, an omission we hope to remedy in a future release.
 
 \section{Threats to Validity}
 
