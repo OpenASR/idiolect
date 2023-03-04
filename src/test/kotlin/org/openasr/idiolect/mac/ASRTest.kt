@@ -1,29 +1,29 @@
 package org.openasr.idiolect.mac
 
 import ai.hypergraph.kaliningraph.types.*
-import com.intellij.openapi.diagnostic.logger
 import org.junit.Test
+import org.openasr.idiolect.utils.WordSequenceAligner
 import org.vosk.*
 import java.io.File
 
 class ASRTest {
-  fun String.measureWER(voice: String, model: Recognizer): Float {
+  fun String.alignCommandAndRecognition(voice: String, model: Recognizer, name: String): WordSequenceAligner.Alignment {
     // Run say command
     val outputFile = "/tmp/test"
 
     ("say -o $outputFile.aif -v $voice".split(" ") + "\"$this\"")
-      .let { ProcessBuilder(it).start().waitFor() }
+        .let { ProcessBuilder(it).start().waitFor() }
 
     ("ffmpeg -y -i $outputFile.aif $outputFile.wav".split(" ")) // ffmpeg defaults to pcm_s16le for WAV
-      .let { ProcessBuilder(it).start().waitFor() }
+        .let { ProcessBuilder(it).start().waitFor() }
 
     // Read AIFF file
     val recognizedUtterance = File("$outputFile.wav").transcribeWavFile(model)
-//        throw Exception("Expected $this, but was $recognizedUtterance")
-    val werEval = WordSequenceAligner()
+        .split(" ").filter { it.isNotBlank() }.toTypedArray()
+    val originalSentence = this.split(" ").filter { it.isNotBlank() }.toTypedArray()
 
-    return werEval.align(split(" ").toTypedArray(), recognizedUtterance.split(" ").toTypedArray())
-      .let { (1 - it.numCorrect / it.referenceLength.toFloat()) }
+    return WordSequenceAligner().align(originalSentence, recognizedUtterance )
+        .also { println("Evaluating: ${name}/$voice\n$it\n") }
   }
 
   val voices = setOf("Eddy", "Flo", "Reed", "Rocko", "Samantha", "Sandy", "Shelley", "Fred")
@@ -54,11 +54,12 @@ class ASRTest {
         .filter { words -> words.filter { it.isNotBlank() }.all { (it in vocabulary) } }
         .also { println("After filtering: ${it.size} commands") }
         .map { it.joinToString(" ") }.shuffled().take(100).toSet()
+        .also { println("Total length of all utterances: ${it.joinToString(" ").split(" ").filter(String::isNotBlank).size}") }
         .let { models.toSet() * voices * it }
         .map { (name, model, voice, utterance) ->
-            (name to voice to utterance.trim().measureWER(voice, model))
+            Triple(name, voice, utterance.trim().alignCommandAndRecognition(voice, model, name))
         }.groupBy { it.first + "/" + it.second }
-        .mapValues { it.value.map { it.third }.joinToString(",") { it.toString().take(5) } }
+        .mapValues { WordSequenceAligner.SummaryStatistics(it.value.map { it.third }) }
         // Eddy     :: 0.24
         // Flo      :: 0.19
         // Reed     :: 0.22
@@ -67,6 +68,6 @@ class ASRTest {
         // Sandy    :: 0.24
         // Shelley  :: 0.26
         // Fred     :: 0.27
-        .let { println("Average word error rate:\n${it.entries.joinToString("\n") { it.key + " :: " + it.value }}") }
+        .let { println("Average word error rate:\n${it.entries.joinToString("\n") { it.key + " :: " + it.value.wordErrorRate}}") }
   }
 }
