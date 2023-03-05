@@ -11,7 +11,6 @@
 
 % Document
 \begin{document}
-
 %Idiolect: A Reconfigurable Voice Coding Assistant
 %
 %has been ***conditionally*** accepted to appear in the proceedings of the 5th International Workshop on Bots in Software Engineering (BotSE 2023).
@@ -34,14 +33,14 @@
 %- Present the link(s) to the original plugin website, paper, plugin.
 %-----
 
-\section{Overall Comments}
+\begin{center}{\textsc{Overall Comments}}\end{center}
 
-We thank our reviewers for their careful and constructive feedback to improve the paper. Among the requested revisions, we have incorporated the following suggestions:
+We thank the reviewers for their careful and constructive feedback to improve our paper. Among the requested changes, we have incorporated the following revisions, which are enclosed below for your reconsideration, and we look forward to your final decision. In summary,
 
 \begin{itemize}
-\item We have added a paragraph to the introduction and conclusion to better position our work among the existing voice assistants, indicating its relationship with bots.
+\item We have added a paragraph to the introduction and conclusion to better position our work among existing voice assistants, indicating its closer relationship with software bots.
 \item We state clearly in the abstract the paper is an experience report rather than a case study.
-\item We have improved the scoping of Section VI to specify the version used for reproducibility and provide a more thorough discussion of the models' performance.
+\item We have improved Section VI to specify the rationale behind WER, the version used for reproducibility and provide a more thorough discussion of the models' performance.
 \end{itemize}
 
 \section{Reviewer I}
@@ -84,19 +83,19 @@ We thank our reviewers for their careful and constructive feedback to improve th
 %
 %- The Threats to Validity section does not comment on any threats related to the evaluation of the voice-to-text model. Given that the authors used the text-to-voice voices of OSX I would expect that there is a threat to internal validity as a result of this choice.
 
-We add an outline of the architecture of Idiolect in Section II.
+Although related, voice assistants like Siri are not configurable nor intended for programming. In this regard, we believe our tool is more akin to a programmable bot with audio I/O than a voice assistant, and have expanded on its unique role in the introduction and related work.
 
-We specify the version of the OS, IDE and plugin version used to evaluate the models.
+As suggested, we have added an architectural overview of the plugin in Section II and have removed the paragraph identifying the geographic distribution of its users in Section VI.
 
-The most suitable model we tested was \texttt{vosk-model-small-en-us-0.22} with an average WER of 0.63. We have added a sentence in the discussion to clarify this.
+%We specify the version of the OS, IDE and plugin version used to evaluate the models.
 
-We have removed the paragraph identifying the geographic distribution of our users.
+%The most suitable model we tested was \texttt{vosk-model-small-en-us-0.22} with an average WER of 0.63. We have added a sentence in the discussion to clarify this.
 
-Lacking a corpus of voice recordings, we used synthetic voices as an integration test for the plugin. Synthetic voices are intended to be an integration test, but not representative of the true population, and we have added a paragraph under Threats to Validity to address this limitation.
+Lacking a dataset of spoken programming commands, we opted to synthesize them instead. Whilst useful for integration testing purposes, synthetic voices do not faithfully represent the full distribution of human speech, a limitation that we now acknowledge under Threats to Validity.
 
 \section{Reviewer II}
 
-Idiolect was recently re-released, but shares very little in common with its original edition. We drew from our experience developing the original plugin to inform its design and implementation, but neither the original plugin nor its reimplementation was ever submitted to or published by any conference, journal or workshop. The original plugin can be found here, but we omit the link from the paper to avoid any confusion: \url{https://plugins.jetbrains.com/plugin/7910-idear}.
+\textit{Idiolect} was originally conceived by the first author at a JetBrains hackathon under the name \textit{Idear}. Neither that plugin nor the current one was ever submitted to an academic conference, journal or workshop. We drew lessons from our experience developing Idear to inform the design of Idiolect, which is a complete rewrite of the original plugin and otherwise shares very little in common aside from functionality and authorship. As the original plugin was deprecated, we omit the link from our paper to avoid any confusion: \url{https://plugins.jetbrains.com/plugin/7910-idear}.
 
 %----------------------- REVIEW 2 ---------------------
 %SUBMISSION: 762
@@ -164,6 +163,7 @@ Idiolect was recently re-released, but shares very little in common with its ori
 %
 %Yet, the idea is great and also to serve impaired developers with this sounds promising.
 
-We have added a sentence to the introduction explaining the plugin's history. We report downloads to show the plugin's original popularity, which fell shortly thereafter due to lack of maitenance and configuration issues. Word-error-rate (WER) is a well-known metric for evaluating speech recognition systems that we use to measure the accuracy of various models.
+We have added a sentence to the introduction explaining the plugin's history. Downloads are later reported to show the plugin's original popularity, which fell shortly after its release due to lack of maintenance and configurability. Word-error-rate (WER) is a common metric for evaluating speech recognition systems that we use to measure the pretrained models' accuracy.
+
 
 \end{document}

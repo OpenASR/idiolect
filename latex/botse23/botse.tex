@@ -87,7 +87,7 @@ Early attempts to build voice programming systems can be traced back at least tw
 
 Another stream of work has explored teachable voice assistants and user-defined phrases (Chkroun \& Azaria~\cite{chkroun2019lia}). Though similar to our own, their work targets general-purpose voice user interfaces and does not directly consider voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for speech programming.
 
-\section{Speech Recognition}
+\section{Architecture}
 
 Today, automatic speech recognition (ASR), the translation of an audio waveform containing speech to text, is essentially a solved problem -- one of the many pretrained ASR models would work well enough for our purposes. However, we also require realtime offline speech recognition capabilities built on an open source deep speech pipeline, which has only recently become possible for users running on commodity hardware.
 
@@ -166,7 +166,7 @@ To streamline the development process and mitigate the risk of platform-specific
 
 \section{Evaluation}
 
-We conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in macOS Ventura 13.1 with IntelliJ IDEA 2023.1, VoskAPI 0.3.45 and Idiolect 1.3.3, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, then transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, and finally transcribe the audio using VoskAPI to simulate a user-generated utterance. We report the average word error rate (WER) of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.30) \texttt{vosk-model-small-en-us-0.15} (0.28), and \texttt{vosk-model-en-us-0.22-lgraph} (0.35). Results on a per-voice and per-model basis are shown in  Fig.~\ref{fig:fig1} below.
+We conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in macOS Ventura 13.1 with IntelliJ IDEA 2023.1, VoskAPI 0.3.45 and Idiolect 1.3.3, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, then transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, and finally transcribe the audio using VoskAPI to simulate a user-generated utterance. We report the average word error rate (WER) of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.63), \texttt{vosk-model-en-us-0.22-lgraph} (0.66) and \texttt{vosk-model-small-en-us-0.15} (0.73). Results on a per-voice and per-model basis are shown in  Fig.~\ref{fig:fig1} below.
 
 \begin{figure}[ht!]
     \centering
@@ -187,7 +187,7 @@ We conducted a preliminary experiment to evaluate recognition performance on syn
     \label{fig:fig1}
 \end{figure}
 
-Two primary trends are evident. First, model size has a weak, but observable effect on recognition performance, consistent with prior work on large-vocabulary continuous speech recognition. Though we only evaluated three of the smallest English-langauge models from the Vosk dataset, based on plentiful evidence in the scaling literature, we expect this trend to hold for larger models across natural languages. Out of the three models tested, we note that the \texttt{vosk-model-small-en-us-0.22} has the lowest overall WER across all voices. Second, is the presence of gender bias in the MacOS/Vosk TTS/ASR pipeline. Depsite the apparent intelligibility of both sets of voices, WER is substantially lower on female voices (Flo, et al.) than their corresponding male counterparts (Eddy, et al.). The cause of this discrepancy is not immediately clear, but merits further investigation.
+Two primary trends are evident. First, model size has a weak, but observable effect on recognition performance, consistent with prior work on large-vocabulary continuous speech recognition. Though we only evaluated three of the smallest English-langauge models from the Vosk dataset, based on plentiful evidence in the scaling literature~\cite{droppo2021scaling}, we expect this trend to hold for larger models across natural languages. Out of the three models tested, we note that the \texttt{vosk-model-small-en-us-0.22} has the lowest overall WER across all voices. Second, is the presence of gender bias in the MacOS/Vosk TTS/ASR pipeline. Depsite the apparent intelligibility of both sets of voices, WER is substantially lower on female voices (Flo, et al.) than their corresponding male counterparts (Eddy, et al.). The cause of this discrepancy is not immediately clear, but merits further investigation.
 
 We also evaluated the plugin using a variety of downstream metrics, such as user downloads of the plugin over a five-year timespan, bug reports, GitHub Insights, and feedback from the JetBrains Plugin Marketplace to help determine user satisfaction and identify areas for improvement.
 
