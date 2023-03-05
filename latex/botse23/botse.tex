@@ -81,6 +81,8 @@ In the following paper, we describe Idiolect, an IDE plugin originally developed
 
 Mary Shaw, during her 2022 SPLASH keynote~\cite{shaw2022myths} called for programming languages to address the needs of ``vernacular developers''. Jin Guo has also talked about the need for programming in ``ordinary people's language''. We take their proposals quite literally to mean that computers should be able to interpret spoken programs, and not just written ones.
 
+Bots are essentially a realization of the once scorned~\cite{dijkstra1979foolishness}, but now increasingly plausible idea natural language programming. Taken to its logical conclusion, the most natural form of expressing a program is therefor the human voice.
+
 Early attempts to build voice programming systems can be traced back at least twenty years to Leopold and Amber's~\cite{leopold1997keyboardless} (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite~\cite{arnold2000programming} (2001), Begel and Graham~\cite{begel2005spoken} (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, and do not consider IDE integration or reconfigurability.
 
 Another stream of work has explored teachable voice assistants and user-defined phrases (Chkroun \& Azaria~\cite{chkroun2019lia}). Though similar to our own, their work targets general-purpose voice user interfaces and does not directly consider voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for speech programming.
@@ -95,7 +97,12 @@ Idiolect integrates with Vosk, a state-of-the-art deep speech system with realti
 
 Users may optionally configure a built-in TTS voice from the host operating system and a cloud-based speech recognition or synthesis service, with the caveat that web speech requires uninterrupted internet connectivity and introduces an additional 300-500ms of overhead latency depending on the user's proximity to the datacenter and other load factors.
 
-\subsection{Intent Recognition}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.3\linewidth]{architecture.png}
+    \caption{Idiolect's architectural overview.}
+    \label{fig:architectural_overview}
+\end{figure}
 
 Once a spoken utterance is decoded as text, Idiolect must determine the relevant actions and entities needed to fulfill the user's intent. Furthermore, it may need to consider the IDE context, i.e., the current editor state and command history, to resolve potentially ambiguous commands. For example, the command, ``open plugin menu'' could refer to multiple different menus, depending on when and how it was invoked.
 
@@ -105,7 +112,7 @@ In keeping with the principle of configurability, we allow users to define custo
 
 %In some cases, the user may not know or recall the exact phrase to which an action they intend to perform was bound. Given an utterance that does not match any of the predefined grammars, the plugin will fall back to a language model (LM), a probabilistic model trained on a large corpus of text, which can be used to perform reasoning simple tasks like predicting the most likely intent from a list of alternatives. For example, the utterance, ``I want to edit foo.java'' is more likely to match the command, ``open foo.java'' than, ``execute foo.java''.
 
-\subsection{Recognition Dispatch}
+%\subsection{Recognition Dispatch}
 
 Idiolect dispatches utterances to a series of recognizers using a turn-based priority queue, in which each recognizer is given a single turn to match or pass on each utterance. Once a command is recognized, the command is consumed and dispatched to no subsequent recognizer thereafter. This prevents the single command from triggering multiple actions.
 
@@ -117,10 +124,7 @@ User-defined commands are the next highest priority. These can be matched lexica
 
 The recognizer of last resort is a large language model. Open-ended commands which are unrecognizable to all of the previous methods are dispatched to a service that matches the intent against a set of available actions using a prompt, e.g., ``Out of these actions: \ldots, which one most likely fulfills the command \ldots?'', whose response is then dynamically invoked.
 
-\subsection{Outline}
-
-The plugin is organized into a set of modules, each of which is responsible for stages of the speech recognition pipeline. The following diagram illustrates the major components of the plugin, and how they interact with each other.
-
+%\subsection{Outline}
 
 \pagebreak\section{Barriers and Pathways to Usability}\label{sec:usability}
 
