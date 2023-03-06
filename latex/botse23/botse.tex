@@ -71,27 +71,29 @@ Humans are able to quickly learn new words and phrases, and apply them in a vari
 
 Voice coding allows users to quickly dictate new commands and behaviors. For example, one might say, ``whenever I say \textit{open sesame}, do the following action'', thereafter, the system will perform the desired action when so instructed. Or, ``whenever I say \textit{redo thrice}, repeat the last action three times''. Or, e.g., invoke a function in a scripting language, open a file, or perform other manually repetitive chores.
 
-Idiolect provides a default lexicon of phrases, but does not impose them upon end-users. Instead, users may override the defaults with custom voice commands on-the-fly, which are incorporated into the lexicon without delay. By shifting the burden of adaptation onto the system, this frees users to express their intent in a more natural manner.
+Idiolect provides a default lexicon of phrases, but does not impose them upon end-users. Instead, users may override the defaults with custom voice commands on-the-fly, which are incorporated into the lexicon without delay. By shifting the burden of adaptation from the user to the system, this frees our users to express their intent in a more natural manner.
 
 Primarily, Idiolect observes the following design principles: be (1) natural to use, (2) easy to configure, (3) as unobtrusive as possible. We believe that these principles are important for a system intended to be used by developers, who are busy people and capable of configuring the system themselves. We also support developers with visual and motor impairments, who may have difficulty typing, or prefer to use a voice interface.
 
-In the following paper, we describe Idiolect, an IDE plugin originally developed at JetBrains in 2015 and recently updated to support many new features, including deep speech recognition and dynamically-reconfigurable voice commands, letting users verbally or programmatically express their desired intent.
+In the following paper, we describe Idiolect, an IDE plugin originally developed at JetBrains in 2015 and recently updated to provide many new features, such as deep speech recognition and dynamically-reconfigurable voice commands, letting users verbally or programmatically express their desired intent.
 
 \section{Prior Work}
 
 Mary Shaw, during her 2022 SPLASH keynote~\cite{shaw2022myths} called for programming languages to address the needs of ``vernacular developers''. Jin Guo has also talked about the need for programming in ``ordinary people's language''. We take their proposals quite literally to mean that computers should be able to interpret spoken programs, and not just written ones.
 
-Bots are essentially a realization of the once scorned~\cite{dijkstra1979foolishness}, but now increasingly plausible idea natural language programming. Taken to its logical conclusion, the most natural form of expressing a program is therefor the human voice.
+Although related, voice assistants like Siri and Alexa are not configurable nor intended for programming. In this regard, we believe our tool is more akin to a programmable bot with audio I/O than a dedicated voice assistant. Spoken programs are also closely related to natural language programming, an idea once scorned~\cite{dijkstra1979foolishness}, but now becoming increasingly plausible.
 
-Early attempts to build voice programming systems can be traced back at least twenty years to Leopold and Amber's~\cite{leopold1997keyboardless} (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite~\cite{arnold2000programming} (2001), Begel and Graham~\cite{begel2005spoken} (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, and do not consider IDE integration or reconfigurability.
+Early attempts to build voice programming systems can be traced back at least two decades to Leopold and Amber's~\cite{leopold1997keyboardless} (1997) work on keyboardless programming, later revisited by Arnold and Goldthwaite~\cite{arnold2000programming} (2001), Begel and Graham~\cite{begel2005spoken} (2005) and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabulary, and unlike our work, do not consider IDE integration or reconfigurability.
 
-Another stream of work has explored teachable voice assistants and user-defined phrases (Chkroun \& Azaria~\cite{chkroun2019lia}). Though similar to our own, their work targets general-purpose voice user interfaces and does not directly consider voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for speech programming.
+Another stream of work has explored teachable voice assistants and user-defined phrases (Chkroun \& Azaria~\cite{chkroun2019lia}). Though similar to our own, their work targets general-purpose voice user interfaces and does not directly consider voice programming. It also predates most of the recent progress on large language modeling, which we consider to be a transformative enabling technology for programming by voice.
 
 \section{Architecture}
 
 Today, automatic speech recognition (ASR), the translation of an audio waveform containing speech to text, is essentially a solved problem -- one of the many pretrained ASR models would work well enough for our purposes. However, we also require realtime offline speech recognition capabilities built on an open source deep speech pipeline, which has only recently become possible for users running on commodity hardware.
 
-Idiolect integrates with Vosk, a state-of-the-art deep speech system with realtime models for various languages, which provides an open source Java API. Initially, we distributed a default model for the English language inside the plugin, but at the request of JetBrains to reduce bandwidth, we instead prompt the user to select and download a pretrained model from the Vosk website upon first installing the plugin.
+Idiolect integrates with Vosk, a state-of-the-art deep speech system with realtime models for various languages, which provides an open source Java API. This allows us to provide a high-quality speech recognition experience without requiring users to upload their personal data to a cloud service.
+
+%Initially, we distributed a default model for the English language inside the plugin, but at the request of JetBrains to reduce bandwidth, we instead prompt the user to select and download a pretrained model from the Vosk website upon first installing the plugin.
 
 %For TTS, we use the built-in voices from the parent operating system, via the jAdapterForNativeTTS\footnote{https://github.com/jonelo/jAdapterForNativeTTS} library.
 
