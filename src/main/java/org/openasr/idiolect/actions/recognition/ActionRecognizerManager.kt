@@ -17,25 +17,23 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
     private var HANDLER_EP_NAME = ExtensionPointName<IntentHandler>("org.openasr.idiolect.intentHandler")
 
     fun documentGrammars(formatter: (recognizer: IntentResolver, List<NlpGrammar>) -> List<String>): List<String> {
-        val extensions = getResolvers()
-        val ideaActionRecognizer = extensions.find { it.javaClass == RegisteredActionRecognizer::class.java }!!
-        val editorActionRecognizer = extensions.find { it.javaClass == RegisteredEditorActionRecognizer::class.java }!!
-        var ideaGrammars = ideaActionRecognizer.grammars
-        val editorGrammars =
-            ideaGrammars.filter { it.intentName.startsWith("Editor") } + editorActionRecognizer.grammars
+      val extensions = getResolvers()
+      val ideaActionRecognizer = extensions.find { it.javaClass == RegisteredActionRecognizer::class.java }!!
+      val editorActionRecognizer = extensions.find { it.javaClass == RegisteredEditorActionRecognizer::class.java }!!
+      var ideaGrammars = ideaActionRecognizer.grammars
+      val editorGrammars =
+          ideaGrammars.filter { it.intentName.startsWith("Editor") } + editorActionRecognizer.grammars
 
-        ideaGrammars = ideaGrammars.filter { !it.intentName.startsWith("Editor") }
+      ideaGrammars = ideaGrammars.filter { !it.intentName.startsWith("Editor") }
 
-        return extensions
-                .sortedBy { it.order }
-                .flatMap { recognizer ->
-                    val grammars = when (recognizer) {
-                        is RegisteredEditorActionRecognizer -> editorGrammars
-                        is RegisteredActionRecognizer -> ideaGrammars
-                        else -> recognizer.grammars
-                    }
-                    formatter.invoke(recognizer, grammars)
-                }
+      return extensions.sortedBy { it.order }.flatMap { recognizer ->
+            val grammars = when (recognizer) {
+                is RegisteredEditorActionRecognizer -> editorGrammars
+                is RegisteredActionRecognizer -> ideaGrammars
+                else -> recognizer.grammars
+            }
+            formatter.invoke(recognizer, grammars)
+        }
     }
 
     fun handleNlpRequest(nlpRequest: NlpRequest): ActionCallInfo? {

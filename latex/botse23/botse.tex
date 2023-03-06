@@ -99,8 +99,8 @@ Users may optionally configure a built-in TTS voice from the host operating syst
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.3\linewidth]{architecture.png}
-    \caption{Idiolect's architectural overview.}
+    \includegraphics[width=0.9\linewidth]{architecture.png}
+    \caption{Idiolect has four components: a speech and intent recognizer, language synthesizer, and TTS service, which together faciliate a dialog with the IDE.}
     \label{fig:architectural_overview}
 \end{figure}
 
@@ -187,7 +187,9 @@ We conducted a preliminary experiment to evaluate recognition performance on syn
     \label{fig:fig1}
 \end{figure}
 
-Two primary trends are evident. First, model size has a weak, but observable effect on recognition performance, consistent with prior work on large-vocabulary continuous speech recognition. Though we only evaluated three of the smallest English-langauge models from the Vosk dataset, based on plentiful evidence in the scaling literature~\cite{droppo2021scaling}, we expect this trend to hold for larger models across natural languages. Out of the three models tested, we note that the \texttt{vosk-model-small-en-us-0.22} has the lowest overall WER across all voices. Second, is the presence of gender bias in the MacOS/Vosk TTS/ASR pipeline. Depsite the apparent intelligibility of both sets of voices, WER is substantially lower on female voices (Flo, et al.) than their corresponding male counterparts (Eddy, et al.). The cause of this discrepancy is not immediately clear, but merits further investigation.
+WER is a common metric for evaluating ASR performance. We use it to estimate overall intelligibility, but acknowledge it does not account for the quality or diversity of natural speech.
+
+Two primary trends are evident. First, model size has a weak, but observable effect on recognition performance, consistent with prior work on large-vocabulary continuous speech recognition. Based on plentiful evidence in the scaling literature~\cite{droppo2021scaling}, we expect this trend to hold for larger models across natural languages. Out of the three models we tested, \texttt{vosk-model-small-en-us-0.22} exhibits the lowest average WER across all voices. Second, we note the presence of gender bias in the MacOS/Vosk TTS/ASR pipeline. Despite the apparent intelligibility of both sets of voices, WER is substantially lower on female voices (Flo, et al.) than their corresponding male counterparts (Eddy, et al.). The cause of this discrepancy is unclear, but merits further investigation.
 
 We also evaluated the plugin using a variety of downstream metrics, such as user downloads of the plugin over a five-year timespan, bug reports, GitHub Insights, and feedback from the JetBrains Plugin Marketplace to help determine user satisfaction and identify areas for improvement.
 
