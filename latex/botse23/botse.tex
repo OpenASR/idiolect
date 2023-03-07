@@ -116,7 +116,7 @@ In keeping with the principle of configurability, we allow users to define custo
 
 %\subsection{Recognition Dispatch}
 
-Idiolect dispatches utterances to a series of recognizers using a turn-based priority queue, in which each recognizer is given a single turn to match or pass on each utterance. Once a command is recognized, the command is consumed and dispatched to no subsequent recognizer thereafter. This prevents the single command from triggering multiple actions.
+Idiolect dispatches utterances to a series of recognizers using a turn-based priority queue, in which each recognizer is given a single turn to match or pass on each utterance. Once a command is recognized, the command is consumed and dispatched to no subsequent recognizer thereafter, which prevents a single command from triggering multiple actions.
 
 The plugin first attempts to resolve an utterance using an exact lexical match against a finite language, i.e., a lexicon of predefined commands. Highest priority are those which control the plugin itself, enabling and disabling speech recognition.
 
@@ -193,7 +193,7 @@ WER is a common metric for evaluating ASR performance. We use it to estimate ove
 
 Two primary trends are evident. First, model size has a weak, but observable effect on recognition performance, consistent with prior work on large-vocabulary continuous speech recognition. Based on plentiful evidence in the scaling literature~\cite{droppo2021scaling}, we expect this trend to hold for larger models across natural languages. Out of the three models we tested, \texttt{vosk-model-small-en-us-0.22} exhibits the lowest average WER across all voices. Second, we note the presence of gender bias in the MacOS/Vosk TTS/ASR pipeline. Despite the apparent intelligibility of both sets of voices, WER is substantially lower on female voices (Flo, et al.) than their corresponding male counterparts (Eddy, et al.). The cause of this discrepancy is unclear, but merits further investigation.
 
-We also evaluated the plugin using a variety of downstream metrics, such as user downloads of the plugin over a five-year timespan, bug reports, GitHub Insights, and feedback from the JetBrains Plugin Marketplace to help determine user satisfaction and identify areas for improvement.
+We also evaluated the plugin using a variety of downstream metrics, such as user downloads of the plugin over a five-year timespan, bug reports, GitHub Insights, and feedback from the JetBrains Plugin Marketplace to help determine user satisfaction and identify potential areas for improvement.
 
 \begin{figure}[ht!]
     \centering
@@ -201,7 +201,7 @@ We also evaluated the plugin using a variety of downstream metrics, such as user
     \caption{Plugin downloads stalled circa 2017 due to IDE incompatibility.}
 \end{figure}
 
-Downloads of the plugin stalled since its initial release in 2015. Originally based on the CMUSphinx library that was later abandoned by its maintainers, and lacking regular updates, our plugin became incompatible with more recent versions of the IntelliJ Platform. Following a five-year hiatus, we performed an intervention, rewrote the plugin from scratch based on a new speech recognition engine, implemented the usability improvements described in Sec.~\ref{sec:usability}, and republished the plugin under its current name. Our assessment is ongoing.
+Downloads of the plugin stalled since its initial release in 2015. Originally based on the CMUSphinx library that was later abandoned, our plugin was downloaded over 15,964 times and 56 total bugs were filed, 14 of which were reported by external users. Following a five-year hiatus, the authors performed an intervention, rewrote the plugin from scratch based on a new speech recognition engine, implemented the usability improvements described in Sec.~\ref{sec:usability}, and republished the plugin under its current name. Our assessment is ongoing.
 
 %\begin{figure}[ht!]
 %  \includegraphics[width=0.45\textwidth]{demographics.png}
@@ -216,25 +216,25 @@ While voice programming may serve a niche purpose for developers, it has not bee
 
 We also acknowledge that our system is limited by its own natural language understanding capabilities. Speech is a comparatively inefficient medium for conducting programming tasks and users may be hesitant to invest time reconfiguring the system if intent recognition accuracy is low. Furthermore, the IDE plugin is currently limited to the set of actions that can be easily expressed using the IntelliJ Platform API.
 
-Finally, we acknowledge that synthetic voices are, while increasingly lifelike, an imperfect proxy for human speech. The voices available on macOS are not a representative sample of human dialects and accents, nor we have not yet conducted a systematic human evaluation. The lexicon used to generate synthetic speech is also limited to the set of commands supported by the IDE, and does not capture how the plugin would perform in a more general-purpose setting.
+Finally, we acknowledge that synthetic voices are, while increasingly lifelike, an imperfect proxy for human speech. The voices available on macOS are not a representative sample of human dialects and accents, nor we have not yet conducted a systematic human evaluation. The lexicon used to generate synthetic speech is also limited to the set of commands supported by the IDE, and does not capture how the plugin would have performed in a more general-purpose setting.
 
 \section{Future Work}
 
 In the future, we plan to conduct a thorough user study to better understand the use cases for the plugin. In particular, we hope to understand the development habits of visually and motor-impaired users to improve accessibility, as well as broader support for other natural languages and dialects.
 
-We plan to conduct an evaluation of the plugin's intent-recognition capability and improve support for personalization, such as speaker adaptation and user-specific language models.
+The current evaluation is far from comprehensive and we intend to conduct a more thorough human evaluation of the plugin's intent-recognition capabilities to better understand the tradeoffs between accuracy, intelligibility and latency. We also hope to improve support for personalization features, such as speaker adaptation and user-specific language models.
 
-We also aim to improve the interaction mechanism by adding audiovisual feedback and modal voice commands. We would like to provide a more user-friendly configuration interface, possibly using an embedded DSL for defining dialog trees with a choose-your-own-adventure style modal dialog navigator. Incorporating modal logic \`a la Hazel~\cite{omar2021filling}, by adding a visual backpack and typing constraints would be an interesting direction to take and one we hope to explore.
+We also aim to improve the interaction mechanism by adding audiovisual feedback and modal dialog commands. This functionality could be supported by a more user-friendly configuration interface, using an embedded DSL for defining dialog trees with a choose-your-own-adventure style modal dialog navigator. Incorporating modal logic \`a la Hazel~\cite{omar2021filling}, by adding a visual backpack and typing constraints would be an interesting direction to take and one we hope to explore.
 
 Currently, we only track download statistics, although to inform the development of these features and better address the needs of voice programmers, it would be helpful to collect minimal telemetry on user utterances and custom commands.
 
-Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance. For example, the utterance, ``I want to edit foo.java'' is more likely to be the command, ``open foo.java'' than the command, ``execute foo.java''. While LLMs are currently served on the cloud, recent efforts to compress and do inference on commodity hardware are ongoing. We predict in the next few years these models will become available on the edge, and can be used to perform end-to-end speech-to-intent recognition in realtime.
+Recent progress in machine learning has enabled the use of large language models (LLMs) for a variety of tasks, including speech recognition, machine translation, and text generation. An LLM trained on a large corpus of natural language can be used to perform simple reasoning tasks, such as predicting the most likely intent from a given utterance. For example, the utterance, ``I want to edit foo.java'' is more likely to trigger, ``open foo.java'' than the command, ``execute foo.java''. While LLMs are currently served on the cloud, we predict these models will become available on the edge over the next few years, enabling real-time offline speech-to-intent recognition.
 
 Given their increasing reasoning capabilities, we would like to further explore the use of LLMs within the intent recognition pipeline. In particular, we could use language models to rerank the most likely intent corresponding to a user's utterance, conditioned on a previous historical commands, the UI state and other application-specific settings. Contextual-awareness would require more careful IDE integration and enable us to more accurately predict user intent.
 
 \section{Conclusion}
 
-In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE and reconfigure the plugin using voice commands. This addresses a common usability issue in voice UX design, where users are unable to express their intent in a manner the system understands. We described the design of the plugin, and the challenges we faced while implementing it. We also presented the results of an early evaluation, and discussed avenues for future work.
+In this work, we presented Idiolect, a plugin for the IntelliJ Platform that allows users to control the IDE and reconfigure the plugin using voice commands. This addresses a common usability issue in voice UX design, where users are unable to express their intent in a manner the system understands. We described the plugin's design and challenges we faced while implementing it, presented the results of a preliminary evaluation, and discussed avenues for future work.
 
 On one end of the design spectrum are metaprogramming languages and software language engineering frameworks that allow users to define their own commands and build embedded domain specific languages (eDSLs). These systems can be powerful, but require a high upfront investment from the user, who must design a language, and then learn the language itself, all whilst doing their daily job as a software engineer. On the other end are finite languages, which are too inflexible.
 
