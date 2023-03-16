@@ -8,7 +8,7 @@ import com.intellij.codeInsight.template.impl.TemplateSettings
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys
 import com.intellij.openapi.editor.impl.EditorComponentImpl
-import org.openasr.idear.ide.PsiFileNoWhiteSpace
+import org.openasr.idiolect.ide.PsiFileNoWhiteSpace
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResponse
