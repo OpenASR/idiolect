@@ -62,12 +62,12 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: distribution
-        path: './build/distributions/idear.zip'
+        path: './build/distributions/idiolect.zip'
 
   publish-to-beta:
     runs-on: ubuntu-latest
     needs: build
-    # Requires approval - https://github.com/OpenASR/idear/settings/environments/788279606/edit
+    # Requires approval - https://github.com/OpenASR/idiolect/settings/environments/788279606/edit
     environment: beta
     env:
       INTELLIJ_CHANNEL: beta
@@ -92,7 +92,7 @@ jobs:
   publish-to-eap:
     runs-on: ubuntu-latest
     needs: build
-    # Requires approval - https://github.com/OpenASR/idear/settings/environments/788279606/edit
+    # Requires approval - https://github.com/OpenASR/idiolect/settings/environments/788279606/edit
     environment: eap
     env:
       INTELLIJ_CHANNEL: eap
