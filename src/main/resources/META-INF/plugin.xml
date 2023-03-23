@@ -77,6 +77,12 @@
     </extensions>
 
     <actions>
+        <action id="Idear.Start" text="Voice control" description="Start listening for voice commands"
+                class="org.openasr.idiolect.actions.VoiceRecordControllerAction"
+                icon="/org/openasr/idiolect/icons/start.svg">
+            <add-to-group group-id="MainToolbarRight"/>
+        </action>
+
         <action id="Idiolect.VoiceAction" text="Invoke by voice-command"
                 class="org.openasr.idiolect.actions.ExecuteVoiceCommandAction"/>
     </actions>

@@ -11,13 +11,13 @@ class JavaActionIntentHandler : IntentHandler {
         val INTENT_PREFIX = "Java."
     }
 
-    override fun tryFulfillIntent(nlpResponse: NlpResponse, dataContext: DataContext): ActionCallInfo? {
+    override fun tryFulfillIntent(response: NlpResponse, dataContext: DataContext): ActionCallInfo? {
 //        if (!nlpResponse.intentName.startsWith(INTENT_PREFIX)) {
 //            return null
 //        }
 
-        return when (nlpResponse.intentName) {
-            JavaActionRecognizer.INTENT_NEW_CLASS -> newClass(nlpResponse)
+        return when (response.intentName) {
+            JavaActionRecognizer.INTENT_NEW_CLASS -> newClass(response)
             else -> null
         }
     }

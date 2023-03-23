@@ -1,23 +1,24 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
 
 plugins {
-  kotlin("jvm") version "1.8.0"
-  id("org.jetbrains.intellij") version "1.11.0"
-  id("com.github.ben-manes.versions") version "0.44.0"
+  kotlin("jvm") version "1.8.20-Beta"
+  id("org.jetbrains.intellij") version "1.13.1"
+  id("com.github.ben-manes.versions") version "0.46.0"
   id("org.jetbrains.changelog") version "2.0.0"
 }
 
 group = "org.openasr"
-version = "1.4.7"
+version = "1.4.8-SNAPSHOT"
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 intellij {
-  version.set("2022.3.1") // The version of the IntelliJ Platform IDE that will be used to build the plugin
+  version.set("LATEST-EAP-SNAPSHOT") // The version of the IntelliJ Platform IDE that will be used to build the plugin
   pluginName.set("idiolect")
   updateSinceUntilBuild.set(false)
   plugins.set(listOf("java"))
 }
+
 
 tasks {
   changelog {
@@ -37,27 +38,45 @@ tasks {
   val jvmTarget = "17"
   compileKotlin { kotlinOptions.jvmTarget = jvmTarget }
 
-  compileTestKotlin {
+  // New test task without mac tests for runIde
+  val quickTests by registering(Test::class) {
     exclude(
       "**/windows/**",
+      "**/mac/**",
+      "**/ActionRecognizerManagerTest.kt"
+    )
+  }
+
+  compileTestKotlin {
+    val osName = System.getProperty("os.name").lowercase()
+    exclude(
+      if ("windows" in osName) "" else "**/windows/**",
+      if ("mac" in osName) "" else "**/mac/**",
       "**/ActionRecognizerManagerTest.kt"
     )
     kotlinOptions.jvmTarget = jvmTarget
   }
 
+  test {
+    testLogging {
+      outputs.upToDateWhen { false }
+      showStandardStreams = true
+    }
+  }
+
   buildPlugin {
-    dependsOn("test")
+    dependsOn("quickTests")
     archiveFileName.set("idiolect.zip")
   }
 
   runIde {
-    dependsOn("test")
+    // depend on test but exclude the tests that contain mac
+    dependsOn("quickTests")
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
   }
 
   if (System.getenv("GITHUB_REF_NAME") != null
-      && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty())
-  {
+      && !System.getenv("INTELLIJ_CERTIFICATE_CHAIN").isNullOrEmpty()) {
     signPlugin {
       certificateChain.set(System.getenv("INTELLIJ_CERTIFICATE_CHAIN"))
       privateKey.set(System.getenv("INTELLIJ_PRIVATE_KEY"))
@@ -84,12 +103,12 @@ tasks {
 repositories {
   mavenLocal()
   mavenCentral()
-  maven("https://mlt.jfrog.io/artifactory/mlt-mvn-releases-local")
 }
 
 dependencies {
-  implementation("net.java.dev.jna:jna:5.12.1")
+  implementation("net.java.dev.jna:jna:5.13.0")
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
   testImplementation("org.reflections:reflections:0.10.2")
+  implementation("ai.hypergraph:kaliningraph:0.2.1")
 }

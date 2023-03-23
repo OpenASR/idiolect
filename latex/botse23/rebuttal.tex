@@ -1,0 +1,170 @@
+%! Author = breandan
+%! Date = 3/4/23
+
+% Preamble
+\documentclass[journal,12pt,onecolumn,draftclsnofoot,]{IEEEtran}
+
+
+% Packages
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+% Document
+\begin{document}
+%Idiolect: A Reconfigurable Voice Coding Assistant
+%
+%has been ***conditionally*** accepted to appear in the proceedings of the 5th International Workshop on Bots in Software Engineering (BotSE 2023).
+%
+%Below, we provide a list of item(s) that will be checked again prior to final acceptance. Please address this feedback first and send the final version of your paper with the requested changes to igor.steinmacher@nau.edu by *March 6, 2023 23.59.59 AoE*. The chairs will check the changes, and then we will notify
+%you of the outcome by * March 8, 2023*.
+%
+%Note that you have an *extra page* to address the reviewers’ feedback. The page limit for the modified paper is *4 pages + 1 page for references*. This will also be the page limit for the camera-ready if the paper is accepted:
+%
+%IMPORTANT: Let us know right away (by 26 Feb 2023) about your intention of submitting the version with the required changes so we can plan accordingly
+%
+%---- REQUESTED CHANGES: ----
+%- Better position your work among the existing voice assistants, indicating the relationship with bots.
+%- State that the paper is an experience report instead of a case study.
+%- Improve the details about the method (Section VI) as requested by Reviewer 1.
+%- Better scope Section VI in terms of:
+%* WBetter specify the details about the version used for the error analysis and explain what was the goal of using WER
+%* Presenting a conclusion about the performance of the models
+%* More details about bugs and downloads
+%- Present the link(s) to the original plugin website, paper, plugin.
+%-----
+
+\begin{center}{\textsc{Overall Comments}}\end{center}
+
+We thank the reviewers for their careful and constructive feedback. We have enclosed the requested revisions for their reconsideration, and look forward to their final decision. In summary,
+
+\begin{itemize}
+\item We have added a statement to our related work section to better position our work among voice assistants like Siri and Alexa, indicating its closer relationship with software bots.
+\item We have added a diagram to Section III depicting the high-level architecture of the plugin.
+\item We state clearly in the abstract the paper is an experience report rather than a case study.
+\item We have clarified the rationale behind using WER, versions for reproducibility, included a discussion of the models' performance, and report total bugs and downloads in Section V.
+\end{itemize}
+
+\section{Reviewer I}
+
+%----------------------- REVIEW 1 ---------------------
+%SUBMISSION: 762
+%TITLE: Idiolect: A Reconfigurable Voice Coding Assistant
+%AUTHORS: Breandan Considine, Nicholas Albion and Xujie Si
+%
+%----------- Overall evaluation -----------
+%SCORE: -2 (reject)
+%----- TEXT:
+%Summary:
+%
+%The paper presents an experience report of the building, redesign and evaluation of a voice coding assistent for the intellij IDE. The tool, Idiolect can be used to issue voice commands to the IDE, which are then parsed and executed. The paper reports the experiences of the deployment of Idiolect, and lists some of the challenges associated with its adoption. Moreover, it reports an evaluation of the voice-to-text model, and it lists the plans for future work.
+%
+%Strong points:
+%- Well written paper that chronicles the design and deployment of a voice programming assistant.
+%
+%Weak points:
+%- The paper positions itself as a case study, while it is clearly not.
+%- Related work is not discussed in enought detail, nor is it clear how the work presented in this paper relates to bots in software engineering.
+%- Section VI is titled Evaluation, but the section does not contain enough details on the experiment that was conducted.
+%
+%Detailed comments:
+%
+%- There is a vast body of work that covers the adoption and acceptance of general purpose voice assistants. Given the positioning of this work I believe it makes sense to include work like this, and to indicate how a voice coding assistant is similar to a technique like for instance siri.
+%
+%- Similarly, the paper focuses mostly on voice programming assistants and does not discuss bots as such.
+%
+%- The paper does not clearly position itself as an experience report, instead the abstracts states that the paper reports on a case study. However, the paper is clearly an experience report as it chronicles the experiences of working with Idiolect, and it does not follow any established guidelines to report or execute case studies. For a case study I would expect documented and motivated RQs, and a clearly outlined procedure for data collection and data analysis.
+%
+%- The paper could be further improved through the inclusion of an outline of the architecture of Idiolect. Currently it discusses each part in isolation, but the integration of all of the individual parts is not covered.
+%
+%- Section VI is titled evaluation, it briefly reports on the process used to evaluate the voice to text models used. However, the first paragraph of the section is quite brief, and does not contain enough details to fully be able to replicate the process. For instance, how where the 100 utterances selected? What is the pre-defined command list?
+%
+%- Section VI evaluates three different models, but it does not conclude with an actual conclusion on which model was most suitable.
+%
+%- Section VI also reports on the number of downloads, however, it also mentioned that the bug reports etc. are used to evaluate Idiolect, but the paper does not continue and report on the actual number and types of bugs reported. Also the detail that 30% of the downloads originate from the People's Republic of China does not align with the rest of the paper. I would expect that if the paper is interested in the origins of the downloads that the paper reports a distribution and more details on the origin of downloads.
+%
+%- The Threats to Validity section does not comment on any threats related to the evaluation of the voice-to-text model. Given that the authors used the text-to-voice voices of OSX I would expect that there is a threat to internal validity as a result of this choice.
+
+Although related, voice assistants like Siri and Alexa are not configurable nor intended for programming. We argue the interaction model these tools impose is unsuitable for programmers and that voice programming UIs should be structured more like software engineering bots.
+
+As suggested, we have added an architectural overview of the plugin in Section III and have removed the paragraph identifying the geographic distribution of its users in Section V.
+
+%We specify the version of the OS, IDE and plugin version used to evaluate the models.
+
+%The most suitable model we tested was \texttt{vosk-model-small-en-us-0.22} with an average WER of 0.63. We have added a sentence in the discussion to clarify this.
+
+Lacking a dataset of spoken programming commands, we opted to synthesize them instead. Whilst useful for integration testing purposes, synthetic voices do not faithfully represent the full distribution of human speech, a limitation that we now acknowledge under Threats to Validity.
+
+\section{Reviewer II}
+
+\textit{Idiolect} was originally conceived by the first author at a JetBrains hackathon under the name \textit{Idear}. Neither that plugin nor the current one were previously submitted to an academic conference, journal or workshop. We drew lessons from our experience developing Idear to inform the design of Idiolect, which is mostly rewritten and otherwise shares very little in common aside from functionality and authorship. As the original plugin is now deprecated, we omit the link from our paper to avoid confusion: \url{https://plugins.jetbrains.com/plugin/7910-idear}.
+
+%----------------------- REVIEW 2 ---------------------
+%SUBMISSION: 762
+%TITLE: Idiolect: A Reconfigurable Voice Coding Assistant
+%AUTHORS: Breandan Considine, Nicholas Albion and Xujie Si
+%
+%----------- Overall evaluation -----------
+%SCORE: 1 (weak accept)
+%----- TEXT:
+%1. Paper summary
+%
+%The paper presents Idiolect, a voice-enabled bot that enables developers to perform actions in the IDE using voice commands. Idiolect can be a useful tool for developers to access or trigger actions within the IDE without the need to traverse complex nested menus. The paper presents an overview of the process taken by Idiolect to convert the utterances by the developer into actions within the IDE. Idiolect is a newer version of a plugin developed in 2015 that leverages new voice recognition models and newer IDE versions.
+%
+%The paper presents the results from a preliminary study on how well idiolect recognizes utterances when using different voice recognition models as well as historical data on the usage of the tool. The preliminary study involved the creation of synthetic voices to speak 100 utterances of the predetermined commands available in the tool. Unfortunately, the study results show very high WER, which could negatively impact the tool's usefulness.
+%
+%Overall, the paper presents an intriguing application of bots in software development with the potential to benefit developers and stimulate relevant discussions. However, the paper's evaluation of Idiolect leaves room for improvement, and further research on the tool's effectiveness is needed to make it more useful to developers.
+%
+%
+%2. Points for the paper
+%+ Well-presented overview of the tool
+%+ Potential for discussion
+%
+%
+%3. Points against the paper
+%- Re-release of updated tool
+%- Lack of analysis on preliminary study
+%
+%
+%4. Supporting argumentation for your points
+%
+%The strongest part of the paper is the introduction of idiolect. Although as outlined in the paper, Idiolect is not a new approach but rather a re-implementation from scratch from a plugin developed in 2015, the approach towards supporting voice-assisted support for developers' interactions with the IDE is a great use case for bots in software development.
+%
+%The paper presents a clear and detailed overview of how Idiolect leverages VOSK (neural network language recognition models) and integrates it with IntelliJ IDEA to enable developers to trigger actions on the IDE using the intent described by the developer's utterance.
+%
+%In addition to the potential discussions revolving around the use of bots for voice-assisted programming, the paper has the potential to promote discussion regarding the role of bots like idiolect as an accessibility tool for developers with disabilities.
+%
+%On the other hand, the paper's evaluation of Idiolect is a significant weakness. The evaluation section is split into two parts, the first section presents the word error ratio (WER) of multiple voice recognition models across different synthetic voices used for testing 100 utterances. However, the paper only presents the results in Figure 1 without any type of analysis of the results. The discussion of the results is crucial in any evaluation. Especially, since the WER is extremely high in most instances meaning that the only utterances in which the tool works are for those made by the voice labeled as Samantha.
+%
+%Furthermore, the paper presents the results from a very small study test using synthetic voices, which is not acknowledged as a threat to validity in the threats to validity section. Synthetic speech and the commands being spoken and used by actual users of the system might differ substantially.
+%
+%
+%5. Suggested paper improvements
+%
+%The paper references the original plugin from 2015 and reports on the usage statistics and rationale regarding the stalling of downloads since the original version of the plugin was no longer maintained in 2017. However, the paper does not present a link to the original plugin website or paper. Having a link to the original plugin will make the paper more self-contained.
+%
+%Similarly, a link to the current version of Idiolect in the IntelliJ marketplace would increase the discoverability of the plugin.
+%
+%Future work on the tool would benefit by having the full evaluation mentioned in the future work section. In which human users are presented with the tool and their voice is used. Furthermore, if possible, the paper would benefit from presenting a side-by-side comparison of the 2015 plugin and Idiolect.
+
+
+\section{Reviewer III}
+
+%----------------------- REVIEW 3 ---------------------
+%SUBMISSION: 762
+%TITLE: Idiolect: A Reconfigurable Voice Coding Assistant
+%AUTHORS: Breandan Considine, Nicholas Albion and Xujie Si
+%
+%----------- Overall evaluation -----------
+%SCORE: 2 (accept)
+%----- TEXT:
+%The paper describes an IDE-voice assistant that  allows users to flexibly create new commands by voice.
+%
+%I found the idea and paper interesting. Some of the write-up was a bit confusing. First of all, I did not realise until very late in the paper that the tool is 5 years old and was recently rewritten. You should explain this early in the paper. Similarly, the evaluation section is confusing. What version did you do the error rate analysis? What das WER really measure?
+%Why are 5 year old download number interesting?
+%
+%Yet, the idea is great and also to serve impaired developers with this sounds promising.
+
+We have added a sentence to the introduction explaining the plugin's history. Downloads are later reported to show the plugin's original popularity, which fell shortly after its release due to lack of maintenance and configurability. We use word error rate (WER), a common metric for evaluating speech recognizers, to test the end-to-end intelligibility of our ASR/TTS pipeline.
+
+
+\end{document}

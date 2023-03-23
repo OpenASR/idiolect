@@ -11,7 +11,6 @@ import java.io.File
 
 class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatformTestCase() {
     val manager = object : ActionRecognizerManager(TestContext()) {
-
         override fun getResolvers(): Array<IntentResolver> =
             Reflections("org.openasr.idiolect.actions.recognition").getSubTypesOf(IntentResolver::class.java)
                 .map { clazz ->

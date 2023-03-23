@@ -27,7 +27,7 @@ class VoskAsr : AsrProvider {
         private lateinit var instance: VoskAsr
         private val messageBus = ApplicationManager.getApplication()!!.messageBus
         private val httpClient = HttpClient.newBuilder().build()
-        private lateinit var recognizer: Recognizer
+        lateinit var recognizer: Recognizer
 
         private val alternatives = 4
         private const val defaultModelURL = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
@@ -176,9 +176,7 @@ class VoskAsr : AsrProvider {
         while (microphone.stream.read(b).also { nbytes = it } >= 0) {
             if (recognizer.acceptWaveForm(b, nbytes)) {
                 val result = tryParseResult(recognizer.result)
-                if (result.alternatives.isNotEmpty()) {
-                    return result
-                }
+                if (result.alternatives.isNotEmpty()) return result
             }
         }
 

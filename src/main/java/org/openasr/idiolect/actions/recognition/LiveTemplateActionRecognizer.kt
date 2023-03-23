@@ -46,7 +46,6 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
         }
     }
 
-
     override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): NlpResponse? {
         val editor = dataContext.getData(PlatformCoreDataKeys.EDITOR)!!
         val file = dataContext.getData(PlatformCoreDataKeys.PSI_FILE)!!

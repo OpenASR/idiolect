@@ -12,7 +12,7 @@ abstract class ExecuteActionByCommandText : IdiolectAction() {
     private val log = logger<ExecuteActionByCommandText>()
 
     override fun update(e: AnActionEvent) =
-            IdeService.getEditor(e.dataContext)?.run { e.presentation.isEnabled = true } ?: Unit
+        IdeService.getEditor(e.dataContext)?.run { e.presentation.isEnabled = true } ?: Unit
 
     protected open fun runInEditor(editor: Editor, info: ActionCallInfo) {
         log.info("Invoking in editor: ${info.actionId} ${if (info.actionEvent != null) "with" else "without"} actionEvent")

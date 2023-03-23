@@ -1,5 +1,3 @@
-
-<<<<<<< HEAD
 ## Idiolect Commands
  - hello
  - hi idea

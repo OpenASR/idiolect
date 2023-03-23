@@ -12,7 +12,7 @@ internal class RecognitionSettingsForm {
     private val ttsProviderCombo = ComboBox<String>()
         .apply {
             whenItemSelectedFromUi {
-                IdiolectTTS.sayWithVoice("Hello, my name is $it!", it)
+                IdiolectTTS().sayWithVoice("Hello, my name is $it!", it)
                 IdiolectConfig.settings.ttsService = it
             }
         }
