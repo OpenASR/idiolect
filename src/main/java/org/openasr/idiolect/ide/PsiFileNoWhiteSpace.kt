@@ -1,5 +1,6 @@
 package org.openasr.idiolect.ide
 
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.tree.java.PsiDeclarationStatementImpl
 import com.intellij.psi.util.PsiTreeUtil
@@ -11,7 +12,7 @@ import com.intellij.psi.util.PsiTreeUtil
 class PsiFileNoWhiteSpace(private val actual: PsiFile) : PsiFile by actual {
     class PhantomElement(private val _parent: PsiElement) : PsiDeclarationStatementImpl() {
         override fun getParent() = _parent
-        override fun getTextRange() = _parent.textRange
+        override fun getTextRange(): TextRange = _parent.textRange
     }
 
     override fun findElementAt(offset: Int): PsiElement? {

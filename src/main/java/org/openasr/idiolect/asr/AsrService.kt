@@ -3,6 +3,7 @@ package org.openasr.idiolect.asr
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import org.openasr.idiolect.asr.ListeningState.Status.ACTIVE
+import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
 import org.openasr.idiolect.settings.IdiolectConfig
 import org.openasr.idiolect.tts.TtsService
@@ -31,6 +32,10 @@ object AsrService {
 
         // If last asrSystem was previously active but terminated then swap restart
         this.asrSystem = asrSystem.apply { if (terminated && status == ACTIVE) start() }
+    }
+
+    fun onNlpRequest(nlpRequest: NlpRequest) {
+        asrSystem.onNlpRequest(nlpRequest)
     }
 
     fun promptForUtterance(prompt: String): String {

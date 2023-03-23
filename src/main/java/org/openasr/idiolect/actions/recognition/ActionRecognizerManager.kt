@@ -36,6 +36,9 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
         }
     }
 
+    /**
+     * Invoked from ExecuteVoiceCommandAction.actionPerformed()
+     */
     fun handleNlpRequest(nlpRequest: NlpRequest): ActionCallInfo? {
         val nlpResponse = getResolvers().filter { it.isSupported(dataContext, dataContext.getData(CONTEXT_COMPONENT)) }
             .firstNotNullOfOrNull { it.tryResolveIntent(nlpRequest, dataContext) }

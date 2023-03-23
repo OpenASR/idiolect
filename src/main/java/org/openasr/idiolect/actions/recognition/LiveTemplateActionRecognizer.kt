@@ -51,26 +51,30 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
         val file = dataContext.getData(PlatformCoreDataKeys.PSI_FILE)!!
         val templateCallback = CustomTemplateCallback(editor, file)
 
-        val isSurrounding = false
-        val templateContext = TemplateActionContext.create(
-            PsiFileNoWhiteSpace(file),
-            editor,
-            templateCallback.offset, templateCallback.offset,
-            isSurrounding
-        )
+        try {
+            val isSurrounding = false
+            val templateContext = TemplateActionContext.create(
+                PsiFileNoWhiteSpace(file),
+                editor,
+                templateCallback.offset, templateCallback.offset,
+                isSurrounding
+            )
 
-        val applicableTemplates = TemplateManagerImpl.listApplicableTemplates(templateContext)
-            .filter {
-                nlpRequest.alternatives.contains(getExamplePhraseForTemplate(it, formatKey(it.key)))
+            val applicableTemplates = TemplateManagerImpl.listApplicableTemplates(templateContext)
+                .filter {
+                    nlpRequest.alternatives.contains(getExamplePhraseForTemplate(it, formatKey(it.key)))
+                }
+
+            return if (applicableTemplates.isEmpty()) null
+            else {
+                val intentName = applicableTemplates.first().run {
+                    if (id != null) "Template.id.${id}" else "Template.${groupName}.${key}"
+                }
+
+                return NlpResponse(intentName)
             }
-
-        return if (applicableTemplates.isEmpty()) null
-        else {
-            val intentName = applicableTemplates.first().run {
-                if (id != null) "Template.id.${id}" else "Template.${groupName}.${key}"
-            }
-
-            return NlpResponse(intentName)
+        } catch (e: Exception) {
+            return null
         }
     }
 

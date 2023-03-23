@@ -1,6 +1,8 @@
 package org.openasr.idiolect.asr
 
 import org.openasr.idiolect.nlp.NlpProvider
+import org.openasr.idiolect.nlp.NlpRequest
+import org.openasr.idiolect.nlp.NlpResultListener
 
 /**
  * Processes audio input, recognises speech to text and executes actions
@@ -30,6 +32,8 @@ interface AsrSystem {
                          escapeWords: Array<String> = arrayOf("dont worry", "quit", "forget it", "escape")): String
 
     fun setGrammar(grammar: Array<String>) {}
+
+    fun onNlpRequest(nlpRequest: NlpRequest)
 
     fun terminate()
 }

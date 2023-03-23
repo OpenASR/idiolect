@@ -9,7 +9,7 @@ class AsrControlLoop : AsrSystem, Runnable {
     val log = logger<AsrControlLoop>()
 
     private lateinit var asrProvider: AsrProvider
-    private lateinit var nlpProvder: NlpProvider
+    private lateinit var nlpProvider: NlpProvider
     private var speechThread = Thread(this, "ASR Thread")
     private val messageBus = ApplicationManager.getApplication().messageBus
 
@@ -17,7 +17,7 @@ class AsrControlLoop : AsrSystem, Runnable {
 
     override fun initialise(asrProvider: AsrProvider, nlpProvider: NlpProvider) {
         this.asrProvider = asrProvider
-        this.nlpProvder = nlpProvider
+        this.nlpProvider = nlpProvider
     }
 
     override fun start() =
@@ -62,20 +62,10 @@ class AsrControlLoop : AsrSystem, Runnable {
             try {
                 ListeningState.waitIfStandby()
                 // This blocks on a recognition result
-                val result = asrProvider.waitForSpeech()
+                val nlpRequest = asrProvider.waitForSpeech()
 
-                if (result != null) {
-//                if (ListeningState.isInit) {
-//                    if (result == Commands.HI_IDEA) {
-//                        // Greet invoker
-//                        TTSService.say("Hi")
-//                        VoiceRecordControllerAction.invoke()
-//                    }
-//                } else if (ListeningState.isActive) {
-                    messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onRecognition(result)
-
-                    nlpProvder.processNlpRequest(result)
-//                }
+                if (nlpRequest != null) {
+                    onNlpRequest(nlpRequest)
                 }
             } catch (iex: InterruptedException) {
                 break
@@ -84,5 +74,11 @@ class AsrControlLoop : AsrSystem, Runnable {
 //                break
             }
         }
+    }
+
+    override fun onNlpRequest(nlpRequest: NlpRequest) {
+        messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onRecognition(nlpRequest)
+
+        nlpProvider.processNlpRequest(nlpRequest)
     }
 }
