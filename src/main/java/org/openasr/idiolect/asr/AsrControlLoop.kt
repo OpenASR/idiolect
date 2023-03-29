@@ -80,7 +80,7 @@ class AsrControlLoop : AsrSystem, Runnable {
             } catch (iex: InterruptedException) {
                 break
             } catch (ex: Exception) {
-                log.warn("Failed to process utterance: ${ex.message}")
+                log.warn("Failed to process utterance: ${ex.stackTraceToString()}")
 //                break
             }
         }

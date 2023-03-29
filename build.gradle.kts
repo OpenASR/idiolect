@@ -1,8 +1,8 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
 
 plugins {
-  kotlin("jvm") version "1.8.20-RC"
-  id("org.jetbrains.intellij") version "1.13.2"
+  kotlin("jvm") version "1.8.20-RC2"
+  id("org.jetbrains.intellij") version "1.13.3"
   id("com.github.ben-manes.versions") version "0.46.0"
   id("org.jetbrains.changelog") version "2.0.0"
 }
@@ -13,7 +13,7 @@ version = "1.4.8-SNAPSHOT"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 intellij {
-  version = "LATEST-EAP-SNAPSHOT" // The version of the IntelliJ Platform IDE that will be used to build the plugin
+  version = "2023.1" // The version of the IntelliJ Platform IDE that will be used to build the plugin
   pluginName = "idiolect"
   updateSinceUntilBuild = false
   plugins = listOf("java")
