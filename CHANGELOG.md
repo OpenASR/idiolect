@@ -3,6 +3,13 @@
 ## Unreleased
 
 ### Added
+- Tool Window with recognition log and searchable command list
+
+### Changed
+
+## 1.4.0
+
+### Added
 - Custom phrases.
 - Live Template support.
 - Added a lot more phrases.

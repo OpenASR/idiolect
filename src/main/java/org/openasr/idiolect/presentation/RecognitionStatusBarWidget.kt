@@ -7,6 +7,7 @@ import com.intellij.openapi.wm.*
 import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
 import com.intellij.openapi.wm.impl.status.TextPanel
 import com.intellij.ui.*
+import com.intellij.util.Consumer
 import com.intellij.util.application
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.asr.*
@@ -50,14 +51,22 @@ class RecognitionStatusBarWidget :
 
         object : ClickListener() {
             override fun onClick(e: MouseEvent, clickCount: Int): Boolean =
-                try {
-                    AsrService.toggleListening()
-                    true
-                } catch (e: Exception) {
-                    log.info("Failed to toggle listening: ${e.message}")
-                    false
-                }
+                onClick(e)
         }.installOn(this, true)
+    }
+
+    override fun getClickConsumer() = Consumer<MouseEvent> {
+        fun consume(e: MouseEvent) = this.onClick(e)
+    }
+
+    private fun onClick(event: MouseEvent): Boolean {
+        try {
+            AsrService.toggleListening()
+            return true
+        } catch (e: Exception) {
+            log.info("Failed to toggle listening: ${e.message}")
+        }
+        return false
     }
 
     override fun onAsrStatus(message: String) = updateStatus(message)
