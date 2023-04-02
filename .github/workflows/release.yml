@@ -26,7 +26,7 @@ jobs:
     - name: Update version number & changelog
       if: startsWith(github.ref, 'refs/tags/')
       run: |
-        sed -i "version = \".*-SNAPSHOT\"|version = \"${GITHUB_REF_NAME:1}\"|" build.gradle.kts
+        sed -i "s|^version = \".*-SNAPSHOT\"|version = \"${GITHUB_REF_NAME:1}\"|" build.gradle.kts
         ./gradlew patchChangelog 
         ./gradlew getChangelog -q > CHANGELOG-release.md
         
