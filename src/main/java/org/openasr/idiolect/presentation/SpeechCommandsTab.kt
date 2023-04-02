@@ -1,34 +1,88 @@
 package org.openasr.idiolect.presentation
 
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.project.DumbAware
+import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.SearchTextField
-import com.intellij.ui.TableSpeedSearch
+import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
-import com.intellij.util.application
-import org.openasr.idiolect.actions.recognition.ActionCallInfo
-import org.openasr.idiolect.nlp.NlpRequest
-import org.openasr.idiolect.nlp.NlpResultListener
+import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import java.util.*
 import javax.swing.JComponent
+import javax.swing.RowFilter
+import javax.swing.event.DocumentEvent
+import javax.swing.event.DocumentListener
+import javax.swing.table.AbstractTableModel
+import javax.swing.table.TableRowSorter
 
 
 class SpeechCommandsTab(val toolWindow: ToolWindow)
 {
     fun getContent(): JComponent {
-        var searchTextField = SearchTextField()
-        var table = JBTable()
-        var tableSearch = TableSpeedSearch(table)
-//        table.
+        var searchField = SearchTextField()
+        var table = JBTable(SpeechCommandTableModel())
+
+        val sorter = TableRowSorter(table.model)
+        table.rowSorter = sorter
+
+        searchField.addDocumentListener(object : DocumentListener {
+            override fun insertUpdate(e: DocumentEvent) {
+                filterTable()
+            }
+
+            override fun removeUpdate(e: DocumentEvent) {
+                filterTable()
+            }
+
+            override fun changedUpdate(e: DocumentEvent) {
+                filterTable()
+            }
+
+            private fun filterTable() {
+                val text = searchField.text.toLowerCase(Locale.getDefault())
+                sorter.rowFilter = RowFilter.regexFilter("(?i)$text")
+            }
+        })
 
         return panel {
             row {
-                cell(SearchTextField())
+                cell(searchField)
             }
             row {
-                cell(table) //Search)
+                scrollCell(table).align(Align.FILL)
+            }.resizableRow()
+        }
+    }
+
+    class SpeechCommandTableModel : AbstractTableModel() {
+        private var RESOLVER_EP_NAME = ExtensionPointName<IntentResolver>("org.openasr.idiolect.intentResolver")
+        private val grammars = getResolvers().flatMap { it.grammars }
+
+        override fun getRowCount(): Int {
+            return grammars.size
+        }
+
+        override fun getColumnCount(): Int {
+            return 2
+        }
+
+        override fun getColumnName(column: Int): String {
+            return when (column) {
+                0 -> "Action"
+                1 -> "Examples"
+                else -> throw RuntimeException("Incorrect column index")
             }
         }
+
+        override fun getValueAt(row: Int, column: Int): Any {
+            val grammar = grammars[row]
+            return when (column) {
+                0 -> grammar.intentName
+                1 -> grammar.examples.joinToString(", ")
+                else -> throw RuntimeException("Incorrect column index")
+            }
+        }
+
+        private fun getResolvers() = RESOLVER_EP_NAME.extensions
     }
 }
