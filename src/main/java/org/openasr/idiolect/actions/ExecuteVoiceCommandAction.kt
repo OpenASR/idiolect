@@ -15,11 +15,6 @@ object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
     private val messageBus = ApplicationManager.getApplication().messageBus
 
     override fun actionPerformed(e: AnActionEvent) {
-//        log.info("project: ${e.project}")
-//        e.dataContext.getData()
-//        val component = e.getData(PlatformCoreDataKeys.CONTEXT_COMPONENT)
-//        log.info("component: $component")
-
         val manager = ActionRecognizerManager(e.dataContext)
         val info = manager.handleNlpRequest((e.inputEvent as SpeechEvent).nlpRequest)
 

@@ -1,6 +1,7 @@
 package org.openasr.idiolect.presentation
 
 import com.intellij.notification.*
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.wm.*
 import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
@@ -18,7 +19,8 @@ class RecognitionStatusBarWidget :
     CustomStatusBarWidget,
     WidgetPresentation,
     NlpResultListener,
-    AsrSystemStateListener
+    AsrSystemStateListener,
+    Disposable
 {
     companion object {
         const val RECOGNITION_STATUS = "org.openasr.idiolect.Status"

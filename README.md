@@ -33,9 +33,9 @@ Contributors who have IntelliJ IDEA installed can simply open the project. Other
 
 Idiolect is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.org/intellij/sdk/docs/intro/welcome.html). For more information about the plugin architecture, please refer to [the wiki page](https://github.com/OpenASR/idiolect/wiki/Architecture).
 
-### Integration with Idear
+### Integration with Idiolect
 
-[plugin.xml](src/main/resources/META-INF/plugin.xml) defines a number of `<extensionPoint>`s which would allow other plugins to integrate with or extend/customise the capabilities of Idear.
+[plugin.xml](src/main/resources/META-INF/plugin.xml) defines a number of `<extensionPoint>`s which would allow other plugins to integrate with or extend/customise the capabilities of Idiolect.
 
 #### AsrProvider
 Listens for audio input, recognises speech to text and returns an `NlpRequest` with possible utterances.
@@ -61,7 +61,7 @@ Some APIs such as AWS Lex implement the functionality of `AsrProvider` and `NlpP
 Processes an `NlpRequest` (utterance/alternatives) and resolves an `NlpResponse` with `intentName` and `slots`.
 `ActionRecognizerManager.handleNlpRequest()` iterates through the `IntentResolver`s until it finds a match.
 
-The Idear implementations use either exact-match or regular expressions on the recognized text.
+The Idiolect implementations use either exact-match or regular expressions on the recognized text.
 Alternative implementations may use AI to resolve the intent.
 
 ##### CustomPhraseRecognizer
@@ -87,7 +87,7 @@ You can add your own trigger phrase -> live template mapping in `~/.idea/phrases
 #### ttsProvider
 Reads audio prompts/feedback to the user
 
-#### org.openasr.idear.nlp.NlpResultListener
+#### org.openasr.idiolect.nlp.NlpResultListener
 Any interfaces which are registered to the topic in plugin.xml under `<applicationListeners>` will be notified when
 
 - listening state changes

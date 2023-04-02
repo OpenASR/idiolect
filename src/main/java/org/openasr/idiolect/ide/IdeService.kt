@@ -35,16 +35,19 @@ object IdeService {
             return callback!!
         }
 
-    fun invokeAction(action: AnAction, nlpRequest: NlpRequest): ActionCallback =
+    fun invokeAction(action: AnAction, nlpRequest: NlpRequest): ActionCallback {
         with(ActionManager.getInstance()) {
             var callback: ActionCallback? = null
             ApplicationManager.getApplication().invokeAndWait {
-                callback = tryToExecute(action,
-                        SpeechEvent(JOptionPane.getRootFrame(), 0, System.currentTimeMillis(), nlpRequest),
-                        null, "microphone", true)
+                callback = tryToExecute(
+                    action,
+                    SpeechEvent(JOptionPane.getRootFrame(), 0, System.currentTimeMillis(), nlpRequest),
+                    null, "microphone", true
+                )
             }
             return callback!!
         }
+    }
 
     fun type(vararg keys: Int) = Keyboard.type(*keys)
 
@@ -56,11 +59,20 @@ object IdeService {
 
     fun type(string: String) = Keyboard.type(string)
 
-    fun getEditor(dataContext: DataContext? = null) =
-        if (dataContext != null) CommonDataKeys.EDITOR.getData(dataContext)
-        else FileEditorManager.getInstance(ProjectManager.getInstance().openProjects[0]).run {
-            selectedTextEditor ?: allEditors[0] as Editor
+    fun getEditor(dataContext: DataContext? = null): Editor? {
+        var editor: Editor? = null
+        if (dataContext != null) {
+            editor = CommonDataKeys.EDITOR.getData(dataContext)
         }
+
+        if (editor == null) {
+            editor = FileEditorManager.getInstance(ProjectManager.getInstance().openProjects[0]).run {
+                selectedTextEditor ?: if (allEditors.isEmpty()) null else allEditors[0] as Editor
+            }
+        }
+
+        return editor
+    }
 
     fun getProject(dataContext: DataContext? = null) = getEditor(dataContext)?.project
 }

@@ -15,7 +15,7 @@
 <!--    <depends>AceJump</depends>-->
 
     <applicationListeners>
-        <listener topic="org.openasr.idiolect.nlp.NlpResultListener" class="org.openasr.idiolect.nlp.IntellijNlpResultListener"/>
+<!--        <listener topic="org.openasr.idiolect.nlp.NlpResultListener" class="org.openasr.idiolect.nlp.IntellijNlpResultListener"/> -->
         <listener topic="org.openasr.idiolect.nlp.NlpResultListener" class="org.openasr.idiolect.nlp.LoggingNlpResultListener"/>
     </applicationListeners>
 
@@ -41,6 +41,8 @@
 
         <notificationGroup id="Idiolect" displayType="BALLOON"/>
         <statusBarWidgetFactory implementation="org.openasr.idiolect.presentation.RecognitionStatusBarWidgetFactory"/>
+        <toolWindow id="Idiolect" secondary="false" icon="AllIcons.CodeWithMe.CwmMicOn" anchor="bottom"
+                    factoryClass="org.openasr.idiolect.presentation.SpeechToolWindowFactory"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idiolect">
@@ -77,11 +79,14 @@
     </extensions>
 
     <actions>
-        <action id="Idear.Start" text="Voice control" description="Start listening for voice commands"
+        <action id="Idiolect.Start" text="Voice control" description="Start listening for voice commands"
                 class="org.openasr.idiolect.actions.VoiceRecordControllerAction"
                 icon="/org/openasr/idiolect/icons/start.svg">
             <add-to-group group-id="MainToolbarRight"/>
         </action>
+
+        <action id="Idiolect.CommandFrontTextField" text="Invoke voice command"
+                class="org.openasr.idiolect.actions.ExecuteActionFromTextField"/>
 
         <action id="Idiolect.VoiceAction" text="Invoke by voice-command"
                 class="org.openasr.idiolect.actions.ExecuteVoiceCommandAction"/>

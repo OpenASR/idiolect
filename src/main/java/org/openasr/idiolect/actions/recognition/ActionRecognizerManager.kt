@@ -8,7 +8,7 @@ import org.openasr.idiolect.nlp.intent.handlers.IntentHandler
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import org.openasr.idiolect.nlp.*
 
-open class ActionRecognizerManager(private val dataContext: DataContext) {
+open class ActionRecognizerManager(private val dataContext: DataContext?) {
     companion object {
         private val log = logger<ActionRecognizerManager>()
     }
@@ -36,13 +36,16 @@ open class ActionRecognizerManager(private val dataContext: DataContext) {
         }
     }
 
+    /**
+     * Invoked from ExecuteVoiceCommandAction.actionPerformed()
+     */
     fun handleNlpRequest(nlpRequest: NlpRequest): ActionCallInfo? {
-        val nlpResponse = getResolvers().filter { it.isSupported(dataContext, dataContext.getData(CONTEXT_COMPONENT)) }
-            .firstNotNullOfOrNull { it.tryResolveIntent(nlpRequest, dataContext) }
+        val nlpResponse = getResolvers().filter { it.isSupported(dataContext!!, dataContext.getData(CONTEXT_COMPONENT)) }
+            .firstNotNullOfOrNull { it.tryResolveIntent(nlpRequest, dataContext!!) }
 
         return if (nlpResponse == null) null else {
             log.info("Intent: ${nlpResponse.intentName}")
-            getHandlers().firstNotNullOfOrNull { it.tryFulfillIntent(nlpResponse, dataContext) }
+            getHandlers().firstNotNullOfOrNull { it.tryFulfillIntent(nlpResponse, dataContext!!) }
         }
     }
 
