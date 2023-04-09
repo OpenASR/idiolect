@@ -40,7 +40,8 @@
                                  instance="org.openasr.idiolect.asr.vosk.VoskConfigurable" dynamic="true"/>
 
         <notificationGroup id="Idiolect" displayType="BALLOON"/>
-        <statusBarWidgetFactory implementation="org.openasr.idiolect.presentation.RecognitionStatusBarWidgetFactory"/>
+        <statusBarWidgetFactory id="Idiolect"
+                                implementation="org.openasr.idiolect.presentation.RecognitionStatusBarWidgetFactory"/>
         <toolWindow id="Idiolect" secondary="false" icon="AllIcons.CodeWithMe.CwmMicOn" anchor="bottom"
                     factoryClass="org.openasr.idiolect.presentation.SpeechToolWindowFactory"/>
     </extensions>

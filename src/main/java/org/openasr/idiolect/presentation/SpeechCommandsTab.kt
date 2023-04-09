@@ -39,7 +39,7 @@ class SpeechCommandsTab(val toolWindow: ToolWindow)
             }
 
             private fun filterTable() {
-                val text = searchField.text.toLowerCase(Locale.getDefault())
+                val text = searchField.text.lowercase(Locale.getDefault())
                 sorter.rowFilter = RowFilter.regexFilter("(?i)$text")
             }
         })
