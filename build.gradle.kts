@@ -109,6 +109,7 @@ dependencies {
   implementation("net.java.dev.jna:jna:5.13.0")
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
+  implementation("com.theokanning.openai-gpt3-java:service:0.12.0")
   testImplementation("org.reflections:reflections:0.10.2")
   testImplementation("ai.hypergraph:kaliningraph:0.2.1") {
     exclude(group = "org.sosy-lab")

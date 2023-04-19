@@ -31,6 +31,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="org.openasr.idiolect.settings.IdiolectConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.asr.vosk.VoskConfig"/>
+        <applicationService serviceImplementation="org.openasr.idiolect.settings.openai.OpenAiConfig"/>
         <applicationConfigurable groupId="tools" displayName="Idiolect"
                                  id="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.settings.IdiolectConfigurable" dynamic="true"/>
@@ -38,6 +39,10 @@
                                  id="preferences.VoskConfiguration"
                                  parentId="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.asr.vosk.VoskConfigurable" dynamic="true"/>
+        <applicationConfigurable groupId="tools" displayName="OpenAI"
+                                 id="preferences.OpenAIConfiguration"
+                                 parentId="preferences.IdiolectConfiguration"
+                                 instance="org.openasr.idiolect.settings.openai.OpenAiConfigurable" dynamic="true"/>
 
         <notificationGroup id="Idiolect" displayType="BALLOON"/>
         <statusBarWidgetFactory id="Idiolect"
@@ -60,6 +65,7 @@
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.RenameActionRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.JavaActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.OpenAiRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.RegisteredEditorActionRecognizer"
                           id="RegisteredEditorActionRecognizer"
                           order="before RegisteredActionRecognizer"/>
