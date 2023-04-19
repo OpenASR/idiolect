@@ -1,6 +1,5 @@
 package org.openasr.idiolect.nlp
 
-import com.intellij.openapi.actionSystem.DataContext
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import com.intellij.openapi.diagnostic.logger
 
@@ -21,17 +20,17 @@ open class NlpGrammar(val intentName: String, val rank: Int = Int.MAX_VALUE) {
      * Delegates to `tryMatchRequest(string)` for an exact match between the examples
      * @return a simple [ActionCallInfo] with the [intentName] as [ActionCallInfo.actionId]
      */
-    open fun tryMatchRequest(nlpRequest: NlpRequest, dataContext: DataContext): NlpResponse? =
-        nlpRequest.alternatives.firstNotNullOfOrNull { tryMatchRequest(it, dataContext) }
+    open fun tryMatchRequest(nlpRequest: NlpRequest, context: NlpContext): NlpResponse? =
+        nlpRequest.alternatives.firstNotNullOfOrNull { tryMatchRequest(it, context) }
 
     /**
      * Checks for an exact match between the examples
      * @return a simple [ActionCallInfo] with the [intentName] as [ActionCallInfo.actionId]
      */
-    open fun tryMatchRequest(utterance: String, dataContext: DataContext): NlpResponse? =
-        if (examples.contains(utterance)) { createNlpResponse(utterance, dataContext) } else null
+    open fun tryMatchRequest(utterance: String, context: NlpContext): NlpResponse? =
+        if (examples.contains(utterance)) { createNlpResponse(utterance, context) } else null
 
-    open fun createNlpResponse(utterance: String, dataContext: DataContext) = createNlpResponse(utterance, intentName)
+    open fun createNlpResponse(utterance: String, context: NlpContext) = createNlpResponse(utterance, intentName)
 
     open fun createNlpResponse(utterance: String, intentName: String): NlpResponse {
         logUtteranceForIntent(utterance, intentName)
@@ -46,9 +45,9 @@ open class NlpGrammar(val intentName: String, val rank: Int = Int.MAX_VALUE) {
 open class NlpRegexGrammar(intentName: String, pattern: String) : NlpGrammar(intentName) {
     private val regex = Regex(pattern)
 
-    override fun tryMatchRequest(utterance: String, dataContext: DataContext): NlpResponse? =
-        regex.matchEntire(utterance)?.let { match -> createNlpResponse(utterance, match.groupValues, dataContext) }
+    override fun tryMatchRequest(utterance: String, context: NlpContext): NlpResponse? =
+        regex.matchEntire(utterance)?.let { match -> createNlpResponse(utterance, match.groupValues, context) }
 
-    open fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext) =
+    open fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext) =
         createNlpResponse(utterance, intentName)
 }

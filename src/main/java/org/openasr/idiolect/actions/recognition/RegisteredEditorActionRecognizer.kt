@@ -1,7 +1,7 @@
 package org.openasr.idiolect.actions.recognition
 
-import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.impl.EditorComponentImpl
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.utils.toUpperCamelCase
 import java.awt.Component
@@ -19,7 +19,7 @@ open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
         NlpGrammar("Undo").withExamples("undo", "whoops"),
     )
 
-    override fun isSupported(dataContext: DataContext, component: Component?): Boolean =
+    override fun isSupported(context: NlpContext, component: Component?): Boolean =
         component is EditorComponentImpl
 
     override fun getActionIdForUtterance(utterance: String): String {

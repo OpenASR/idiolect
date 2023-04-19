@@ -1,6 +1,6 @@
 package org.openasr.idiolect.actions.recognition
 
-import com.intellij.openapi.actionSystem.DataContext
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRegexGrammar
 import org.openasr.idiolect.nlp.NlpResponse
@@ -25,7 +25,7 @@ class FileNavigationRecognizer : IntentResolver("File Navigation", 800) {
         )
 
     class FileNavigationGrammar(intentName: String, pattern: String, private val slotName: String) : NlpRegexGrammar(intentName, pattern) {
-        override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+        override fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext): NlpResponse {
             logUtteranceForIntent(utterance, intentName)
             return NlpResponse(intentName, mapOf(slotName to values[1]))
         }

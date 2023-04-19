@@ -3,6 +3,7 @@ package org.openasr.idiolect.actions.recognition
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.diagnostic.logger
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
@@ -24,7 +25,7 @@ open class RegisteredActionRecognizer : IntentResolver("Idea Native Actions", In
 
     protected open fun buildGrammars() = ActionUtils.buildGrammar()
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): NlpResponse? {
+    override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext): NlpResponse? {
         return nlpRequest.alternatives.firstNotNullOfOrNull { utterance ->
             val actionId = getActionIdForUtterance(utterance)
             val action = actionManager.run { if (isGroup(actionId)) null else getAction(actionId) }

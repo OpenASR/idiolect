@@ -52,7 +52,7 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
 
     data class Binding(val name: String, val boundPhrases: List<String>)
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext) =
+    override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext) =
         properties.firstOrNull {
             it.boundPhrases.any {
                 phrase -> phrase in nlpRequest.alternatives

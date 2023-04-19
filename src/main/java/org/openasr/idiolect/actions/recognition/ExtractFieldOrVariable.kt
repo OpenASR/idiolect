@@ -1,7 +1,7 @@
 package org.openasr.idiolect.actions.recognition
 
-import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.impl.EditorComponentImpl
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpRegexGrammar
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
@@ -21,7 +21,7 @@ class ExtractFieldOrVariable : IntentResolver("Extract Field or Variable", 500) 
                 "parameter" to "IntroduceParameter",
             )
 
-            override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+            override fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext): NlpResponse {
                 logUtteranceForIntent(utterance, intentName)
                 return NlpResponse(intentName, mapOf(
                     "actionId" to actionIds[values[1]]!!,
@@ -36,5 +36,5 @@ class ExtractFieldOrVariable : IntentResolver("Extract Field or Variable", 500) 
         )
     )
 
-    override fun isSupported(dataContext: DataContext, component: Component?) = component is EditorComponentImpl
+    override fun isSupported(context: NlpContext, component: Component?) = component is EditorComponentImpl
 }

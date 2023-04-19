@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import org.openasr.idiolect.ide.PsiFileNoWhiteSpace
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResponse
@@ -26,7 +27,7 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
     // select virtual template element
     // expand live template by tab
 
-    override fun isSupported(dataContext: DataContext, component: Component?): Boolean =
+    override fun isSupported(context: NlpContext, component: Component?): Boolean =
         (component is EditorComponentImpl)
 
     /**
@@ -46,9 +47,9 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
         }
     }
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): NlpResponse? {
-        val editor = dataContext.getData(PlatformCoreDataKeys.EDITOR)!!
-        val file = dataContext.getData(PlatformCoreDataKeys.PSI_FILE)!!
+    override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext): NlpResponse? {
+        val editor = context.getData(PlatformCoreDataKeys.EDITOR)!!
+        val file = context.getData(PlatformCoreDataKeys.PSI_FILE)!!
         val templateCallback = CustomTemplateCallback(editor, file)
 
         try {
