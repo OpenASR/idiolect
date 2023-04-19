@@ -35,6 +35,8 @@ open class RegisteredActionRecognizer : IntentResolver("Idea Native Actions", In
         }
     }
 
+    // TODO: "show intention actions" (Alt Enter) "clean this up" "fix this"
+
     protected open fun getActionIdForUtterance(utterance: String): String =
         mapOf(
             "go to" to "goto",

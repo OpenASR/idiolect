@@ -1,6 +1,8 @@
 package org.openasr.idiolect.presentation
 
 import com.intellij.openapi.extensions.ExtensionPointName
+import com.intellij.openapi.keymap.KeymapManager
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.SearchTextField
 import com.intellij.ui.dsl.builder.Align
@@ -57,19 +59,21 @@ class SpeechCommandsTab(val toolWindow: ToolWindow)
     class SpeechCommandTableModel : AbstractTableModel() {
         private var RESOLVER_EP_NAME = ExtensionPointName<IntentResolver>("org.openasr.idiolect.intentResolver")
         private val grammars = getResolvers().flatMap { it.grammars }
+        private val keymap = KeymapManager.getInstance().activeKeymap
 
         override fun getRowCount(): Int {
             return grammars.size
         }
 
         override fun getColumnCount(): Int {
-            return 2
+            return 3
         }
 
         override fun getColumnName(column: Int): String {
             return when (column) {
                 0 -> "Action"
                 1 -> "Examples"
+                2 -> "Keyboard Shortcut"
                 else -> throw RuntimeException("Incorrect column index")
             }
         }
@@ -79,6 +83,7 @@ class SpeechCommandsTab(val toolWindow: ToolWindow)
             return when (column) {
                 0 -> grammar.intentName
                 1 -> grammar.examples.joinToString(", ")
+                2 -> keymap.getShortcuts(grammar.intentName).joinToString(separator = " or ")
                 else -> throw RuntimeException("Incorrect column index")
             }
         }

@@ -148,8 +148,8 @@ which typically calls `invokeAction()` and/or one or more of the methods of [`Id
 [travis-build-status]: https://travis-ci.com/OpenASR/idiolect
 [travis-status-svg]: https://travis-ci.com/OpenASR/idiolect.svg?branch=master
 [plugin-repo-page]: https://plugins.jetbrains.com/plugin/20776-idiolect
-[plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/7910-idiolect.svg
-[plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/7910-idiolect.svg
+[plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/20776-idiolect.svg
+[plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/20776-idiolect.svg
 
 
 [AsrControlLoop]: src/main/java/org/openasr/idiolect/asr/AsrControlLoop.kt
