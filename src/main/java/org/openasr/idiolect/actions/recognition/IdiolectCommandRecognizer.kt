@@ -1,6 +1,7 @@
 package org.openasr.idiolect.actions.recognition
 
 import com.intellij.openapi.actionSystem.DataContext
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.intent.handlers.IdiolectCommandIntentHandler
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
@@ -25,5 +26,5 @@ class IdiolectCommandRecognizer : IntentResolver("idiolect Commands", 0) {
 //                ActionCallInfo(intentName, true).also { GrammarService.useDictationGrammar() }
     )
 
-    override fun isSupported(dataContext: DataContext, component: Component?) = true
+    override fun isSupported(context: NlpContext, component: Component?) = true
 }

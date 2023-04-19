@@ -1,7 +1,6 @@
 package org.openasr.idiolect.actions.recognition
 
 import com.intellij.ide.highlighter.JavaFileType
-import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.*
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.psi.impl.file.PsiJavaDirectoryImpl
@@ -25,7 +24,7 @@ class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
 
         // "create new class (optional name)"
         object : NlpRegexGrammar(INTENT_NEW_CLASS, ".*new class ?(.*)?") {
-            override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+            override fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext): NlpResponse {
                 logUtteranceForIntent(utterance, intentName)
                 val className: String = values[1].ifEmpty {
                     AsrService.promptForUtterance("what shall we call it?")
@@ -64,9 +63,9 @@ class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
 //            }.withExamples("public method", "create private int function 'my demo'"),
     )
 
-    override fun isSupported(dataContext: DataContext, component: Component?): Boolean =
+    override fun isSupported(context: NlpContext, component: Component?): Boolean =
         (component is EditorComponentImpl
-            && dataContext.getData(FILE_EDITOR)?.file?.fileType is JavaFileType)
+            && context.getData(FILE_EDITOR)?.file?.fileType is JavaFileType)
             // or allow "new class" when a package is selected
-            || dataContext.getData(SELECTED_ITEMS)?.get(0) is PsiJavaDirectoryImpl
+            || context.getData(SELECTED_ITEMS)?.get(0) is PsiJavaDirectoryImpl
 }
