@@ -2,13 +2,12 @@ package org.openasr.idiolect.actions.recognition
 
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.diagnostic.Logger
-import com.theokanning.openai.completion.CompletionRequest
 import com.theokanning.openai.completion.chat.ChatCompletionRequest
 import com.theokanning.openai.completion.chat.ChatMessage
 import com.theokanning.openai.completion.chat.ChatMessageRole
 import com.theokanning.openai.service.OpenAiService
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResponse
@@ -26,7 +25,7 @@ class OpenAiRecognizer : IntentResolver("OpenAI", Int.MAX_VALUE) {
 //        service = OpenAiService(OpenAiConfig.apiKey)
     }
 
-    override fun isSupported(dataContext: DataContext, component: Component?): Boolean {
+    override fun isSupported(context: NlpContext, component: Component?): Boolean {
         if (service == null) {
             if (OpenAiConfig.apiKey.isNullOrEmpty()) {
 //            showNotificationForApiKey()
@@ -39,7 +38,7 @@ class OpenAiRecognizer : IntentResolver("OpenAI", Int.MAX_VALUE) {
         return true
     }
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, dataContext: DataContext): NlpResponse? {
+    override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext): NlpResponse? {
         val completionRequest = ChatCompletionRequest.builder()
             .messages(listOf(
                 ChatMessage(ChatMessageRole.SYSTEM.value(), "You are a helpful pair programming assistant"),
