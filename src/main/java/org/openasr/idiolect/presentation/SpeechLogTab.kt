@@ -1,7 +1,9 @@
 package org.openasr.idiolect.presentation
 
+import com.intellij.ide.DataManager
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionPlaces
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.wm.ToolWindow
@@ -21,7 +23,7 @@ import javax.swing.JEditorPane
 import javax.swing.text.html.HTMLEditorKit
 
 
-class SpeechLogTab(val toolWindow: ToolWindow) :
+class SpeechLogTab(private val toolWindow: ToolWindow) :
     Disposable,
     DumbAware,
     NlpResultListener
@@ -50,8 +52,14 @@ class SpeechLogTab(val toolWindow: ToolWindow) :
     override fun dispose() {
     }
 
-    fun getContent(): JComponent {
+    fun createComponent(): JComponent {
         val manualEntry = JBTextField(20)
+        val textFieldAction = ExecuteActionFromTextField().apply { textField = manualEntry }
+        manualEntry.addActionListener {
+            val dataContext = DataManager.getInstance().getDataContext(manualEntry)
+            val event = AnActionEvent.createFromDataContext(ActionPlaces.TOOLWINDOW_CONTENT, null, dataContext)
+            textFieldAction.actionPerformed(event)
+        }
 
         return panel {
             row {
@@ -59,10 +67,7 @@ class SpeechLogTab(val toolWindow: ToolWindow) :
             }.resizableRow()
             row {
                 cell(manualEntry)
-                actionButton(
-                    ExecuteActionFromTextField().apply { textField = manualEntry },
-                    ActionPlaces.TOOLWINDOW_CONTENT
-                )
+                actionButton(textFieldAction, ActionPlaces.TOOLWINDOW_CONTENT)
             }.enabled(true)
         }
     }
