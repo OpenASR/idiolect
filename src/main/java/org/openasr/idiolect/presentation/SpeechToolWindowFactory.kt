@@ -13,11 +13,12 @@ class SpeechToolWindowFactory : ToolWindowFactory, DumbAware {
 
         // Add tabs (or "contents") to the Speech ToolWindow
         val speechLogTab = SpeechLogTab(toolWindow)
-        val content = contentFactory.createContent(speechLogTab.getContent(), "Log", false)
-        toolWindow.contentManager.addContent(content)
+        val speechLogContent = contentFactory.createContent(speechLogTab.createComponent(), "Log", false)
+        toolWindow.contentManager.addContent(speechLogContent)
 
-        toolWindow.contentManager.addContent(
-            contentFactory.createContent(SpeechCommandsTab(toolWindow).getContent(), "Commands", false)
-        )
+        val speechCommandsTab = SpeechCommandsTab()
+        val speechCommandsContent = contentFactory.createContent(speechCommandsTab.createComponent(), "Commands", false)
+        speechCommandsContent.searchComponent = speechCommandsTab.getSearchField()
+        toolWindow.contentManager.addContent(speechCommandsContent)
     }
 }
