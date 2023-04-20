@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import org.openasr.idiolect.actions.recognition.ActionRecognizerManager
 import org.openasr.idiolect.ide.IdeService
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
 
 /**
@@ -15,7 +16,7 @@ object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
     private val messageBus = ApplicationManager.getApplication().messageBus
 
     override fun actionPerformed(e: AnActionEvent) {
-        val manager = ActionRecognizerManager(e.dataContext)
+        val manager = ActionRecognizerManager(NlpContext(e.dataContext))
         val info = manager.handleNlpRequest((e.inputEvent as SpeechEvent).nlpRequest)
 
         if (info != null) {

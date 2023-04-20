@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.*
 import org.openasr.idiolect.actions.ActionRoutines
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.actions.recognition.JavaActionRecognizer
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
 
 class JavaActionIntentHandler : IntentHandler {
@@ -11,7 +12,7 @@ class JavaActionIntentHandler : IntentHandler {
         val INTENT_PREFIX = "Java."
     }
 
-    override fun tryFulfillIntent(response: NlpResponse, dataContext: DataContext): ActionCallInfo? {
+    override fun tryFulfillIntent(response: NlpResponse, nlpContext: NlpContext): ActionCallInfo? {
 //        if (!nlpResponse.intentName.startsWith(INTENT_PREFIX)) {
 //            return null
 //        }

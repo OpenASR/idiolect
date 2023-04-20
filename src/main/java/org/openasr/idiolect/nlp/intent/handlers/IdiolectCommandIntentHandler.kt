@@ -6,15 +6,19 @@ import com.intellij.ide.actions.ApplyIntentionAction
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.actionSystem.Presentation
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.Computable
+import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
+import com.intellij.ui.SearchTextField
 import org.openasr.idiolect.actions.ActionRoutines
 import org.openasr.idiolect.actions.recognition.*
 import org.openasr.idiolect.ide.IdeService
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import org.openasr.idiolect.tts.TtsService
@@ -26,7 +30,7 @@ class IdiolectCommandIntentHandler : IntentHandler {
         val INTENT_PREFIX = IntentResolver.INTENT_PREFIX_IDIOLECT_COMMAND
     }
 
-    override fun tryFulfillIntent(nlpResponse: NlpResponse, dataContext: DataContext): ActionCallInfo? {
+    override fun tryFulfillIntent(nlpResponse: NlpResponse, nlpContext: NlpContext): ActionCallInfo? {
         val intentName = nlpResponse.intentName
 
         if (!intentName.startsWith(INTENT_PREFIX)) {
@@ -37,14 +41,15 @@ class IdiolectCommandIntentHandler : IntentHandler {
             IdiolectCommandRecognizer.INTENT_HI -> TtsService.say("Hi!")
             IdiolectCommandRecognizer.INTENT_ABOUT -> ActionRoutines.routineAbout()
             IdiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
-            SurroundWithNoNullCheckRecognizer.INTENT_NAME -> surroundWithNullCheck(dataContext)
+            SurroundWithNoNullCheckRecognizer.INTENT_NAME -> surroundWithNullCheck(nlpContext)
             else -> return null
         }
 
         return ActionCallInfo(intentName, true)
     }
 
-    private fun surroundWithNullCheck(dataContext: DataContext) {
+    private fun surroundWithNullCheck(nlpContext: NlpContext) {
+        val dataContext = nlpContext.getDataContext()
         val editor = IdeService.getEditor(dataContext)
 
 //        val project = IdeService.getProject(dataContext)

@@ -3,14 +3,15 @@ package org.openasr.idiolect.actions.recognition
 import com.intellij.testFramework.HeavyPlatformTestCase
 import com.intellij.testFramework.assertEqualsToFile
 import org.junit.Test
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
-import org.openasr.idiolect.testing.TestContext
+import org.openasr.idiolect.testing.TestDataContext
 import org.reflections.Reflections
 import java.io.File
 
 class ActionRecognizerManagerTest : HeavyPlatformTestCase() { // }: BasePlatformTestCase() {
-    val manager = object : ActionRecognizerManager(TestContext()) {
+    val manager = object : ActionRecognizerManager(NlpContext(TestDataContext())) {
         override fun getResolvers(): Array<IntentResolver> =
             Reflections("org.openasr.idiolect.actions.recognition").getSubTypesOf(IntentResolver::class.java)
                 .map { clazz ->

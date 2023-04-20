@@ -9,16 +9,18 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.ide.IdeService
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
 
 class TemplateIntentHandler : IntentHandler {
     val intentRegex = Regex("Template\\.([^\\.]+)\\.(.+)")
 
-    override fun tryFulfillIntent(response: NlpResponse, dataContext: DataContext): ActionCallInfo? {
+    override fun tryFulfillIntent(response: NlpResponse, nlpContext: NlpContext): ActionCallInfo? {
         if (!response.intentName.startsWith("Template.")) {
             return null
         }
 
+        val dataContext = nlpContext.getDataContext()
         val project = IdeService.getProject(dataContext)
         val templateManager = TemplateManager.getInstance(project)
         val editor = dataContext.getData(PlatformCoreDataKeys.EDITOR)!!
