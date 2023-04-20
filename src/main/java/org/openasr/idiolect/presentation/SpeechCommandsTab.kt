@@ -2,13 +2,13 @@ package org.openasr.idiolect.presentation
 
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.keymap.KeymapManager
-import com.intellij.openapi.util.text.StringUtil
-import com.intellij.openapi.wm.ToolWindow
+import com.intellij.ui.JBColor
 import com.intellij.ui.SearchTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import java.awt.Color
 import java.util.*
 import javax.swing.JComponent
 import javax.swing.RowFilter
@@ -18,11 +18,31 @@ import javax.swing.table.AbstractTableModel
 import javax.swing.table.TableRowSorter
 
 
-class SpeechCommandsTab(val toolWindow: ToolWindow)
-{
-    fun getContent(): JComponent {
-        var searchField = SearchTextField()
-        var table = JBTable(SpeechCommandTableModel())
+class SpeechCommandsTab {
+    companion object {
+        private val SEARCH_BOX_ACCESSIBLE_NAME = "Command search"
+    }
+
+    private val table = JBTable(SpeechCommandTableModel())
+    private val searchField = createSearchComponent(table)
+
+    fun createComponent(): JComponent {
+        return panel {
+            row {
+                cell(searchField)
+            }
+            row {
+                scrollCell(table).align(Align.FILL)
+            }.resizableRow()
+        }
+    }
+
+    fun getSearchField() = searchField
+
+    private fun createSearchComponent(table: JBTable): SearchTextField {
+        val searchField = SearchTextField()
+        searchField.accessibleContext.accessibleName = SEARCH_BOX_ACCESSIBLE_NAME
+        searchField.background = JBColor.YELLOW
 
         val sorter = TableRowSorter(table.model)
         table.rowSorter = sorter
@@ -46,14 +66,7 @@ class SpeechCommandsTab(val toolWindow: ToolWindow)
             }
         })
 
-        return panel {
-            row {
-                cell(searchField)
-            }
-            row {
-                scrollCell(table).align(Align.FILL)
-            }.resizableRow()
-        }
+        return searchField
     }
 
     class SpeechCommandTableModel : AbstractTableModel() {
