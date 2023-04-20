@@ -1,12 +1,13 @@
 package org.openasr.idiolect.actions.recognition
 
+import com.aallam.openai.api.BetaOpenAI
+import com.aallam.openai.api.chat.*
+import com.aallam.openai.api.model.ModelId
+import com.aallam.openai.client.*
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.diagnostic.Logger
-import com.theokanning.openai.completion.chat.ChatCompletionRequest
-import com.theokanning.openai.completion.chat.ChatMessage
-import com.theokanning.openai.completion.chat.ChatMessageRole
-import com.theokanning.openai.service.OpenAiService
+import kotlinx.coroutines.runBlocking
 import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRequest
@@ -19,37 +20,41 @@ class OpenAiRecognizer : IntentResolver("OpenAI", Int.MAX_VALUE) {
     private val logger = Logger.getInstance(javaClass)
 
     override val grammars = listOf(NlpGrammar("OpenAI").withExample("chat gpt"))
-    private var service: OpenAiService? = null
+    private var openAI: OpenAI? = null
 
     init {
 //        service = OpenAiService(OpenAiConfig.apiKey)
     }
 
     override fun isSupported(context: NlpContext, component: Component?): Boolean {
-        if (service == null) {
-            if (OpenAiConfig.apiKey.isNullOrEmpty()) {
-//            showNotificationForApiKey()
-                return false
-            } else {
-                // TODO - subscribe for changes
-                service = OpenAiService(OpenAiConfig.apiKey)
+        if (openAI == null) {
+            OpenAiConfig.apiKey.let {
+                if (it.isNullOrEmpty()) {
+    //            showNotificationForApiKey()
+                    return false
+                } else {
+                    // TODO - subscribe for changes
+                    openAI = OpenAI(it)
+                }
             }
         }
         return true
     }
 
+    @OptIn(BetaOpenAI::class)
     override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext): NlpResponse? {
-        val completionRequest = ChatCompletionRequest.builder()
-            .messages(listOf(
-                ChatMessage(ChatMessageRole.SYSTEM.value(), "You are a helpful pair programming assistant"),
+        val completionRequest = ChatCompletionRequest(
+            model = ModelId("gpt-3.5-turbo"),
+            messages = listOf(
+                ChatMessage(ChatRole.System, "You are a helpful pair programming assistant"),
 //                ChatMessage(ChatMessageRole.ASSISTANT.value(), context),
-                ChatMessage(ChatMessageRole.USER.value(), nlpRequest.utterance)
-            ))
-            .model(OpenAiConfig.settings.model)
-            .build()
-        val completion = service!!.createChatCompletion(completionRequest)
+                ChatMessage(ChatRole.User, nlpRequest.utterance)
+            )
+        )
 
-        if (completion.choices.isEmpty()) {
+        val completion = runBlocking { openAI?.chatCompletion(completionRequest) }
+
+        if (completion == null || completion.choices.isEmpty()) {
             return null
         }
 
@@ -75,8 +80,8 @@ class OpenAiRecognizer : IntentResolver("OpenAI", Int.MAX_VALUE) {
         //4
         //5
         //```
-        completion.getChoices().forEach({choice -> logger.info(choice.message.content) })
-        return NlpResponse("Chat", mapOf("choice" to completion.choices.first().message.content))
+        completion.choices.forEach { choice -> logger.info(choice.message?.content) }
+        return NlpResponse("Chat", mapOf("choice" to (completion.choices.first().message?.content ?: "")))
     }
 
     private fun showNotificationForApiKey() {
