@@ -1,6 +1,5 @@
 package org.openasr.idiolect.nlp.intent.handlers
 
-import com.intellij.openapi.actionSystem.*
 import org.openasr.idiolect.actions.ActionRoutines
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.actions.recognition.JavaActionRecognizer
@@ -19,7 +18,13 @@ class JavaActionIntentHandler : IntentHandler {
 
         return when (response.intentName) {
             JavaActionRecognizer.INTENT_NEW_CLASS -> newClass(response)
-            else -> null
+            else -> {
+                if (response.intentName.startsWith(JavaActionRecognizer.INTENT_TEMPLATE_PREFIX)) {
+                    ActionCallInfo("Template.Java." +
+                        response.intentName.substring(JavaActionRecognizer.INTENT_TEMPLATE_PREFIX.length))
+                }
+                null
+            }
         }
     }
 

@@ -13,14 +13,13 @@ import java.awt.Component
 class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
     companion object {
         val INTENT_NEW_CLASS = "${JavaActionIntentHandler.INTENT_PREFIX}NewClass"
+        val INTENT_TEMPLATE_PREFIX = "${JavaActionIntentHandler.INTENT_PREFIX}Template."
     }
 
     override val grammars = listOf(
-        NlpGrammar("Template.Java.psvm").withExample("public static void main"),
-//                ActionCallInfo(intentName, true).also { ActionRoutines.routinePsvm() }
+        NlpGrammar("${INTENT_TEMPLATE_PREFIX}psvm").withExample("public static void main"),
 
-        NlpGrammar("Template.Java.sout").withExample("print line"),
-//                ActionCallInfo(intentName, true).also { ActionRoutines.routinePrintln() }
+        NlpGrammar("${INTENT_TEMPLATE_PREFIX}sout").withExample("print line"),
 
         // "create new class (optional name)"
         object : NlpRegexGrammar(INTENT_NEW_CLASS, ".*new class ?(.*)?") {

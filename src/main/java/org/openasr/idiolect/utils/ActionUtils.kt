@@ -30,8 +30,10 @@ object ActionUtils {
     fun filterPronouncableActionId(actionId: String): Boolean {
         return !actionId.contains("Uast")
                 && !actionId.startsWith("Ace")
+            && !actionId.startsWith("JB")
                 && !actionId.endsWith("DebugAction")
-                && !actionId.contains(Regex("[$.-]"))   // TODO - implement these elsewhere
+                && !actionId.contains("$")
+//                && !actionId.contains(Regex("[$.-]"))   // TODO - implement these elsewhere
                 && !arrayOf(
                         // Remove some silly examples
                         "SegmentedVcsControlAction",
@@ -51,12 +53,19 @@ object ActionUtils {
         return actionId
                 // Only make changes here that we can un-do when converting utterance to actionId
                 .replace("Goto", "GoTo")
-                .replace("Cvs", "Git")
+                .replace(Regex("Vcs\\.(?:([^.]+)\\.)?"), "Git$1")
                 .replace("Laf", "LookAndFeel")
+                .replace("XSD", "Xsd")
+                .replace("TBX", "Tbx")
+                .replace("UI", "Ui")
+                .replace("WSL", "Wsl")
+                .replace("VFS", "Vfs")
+                .replace("Occurence", "occurrence")
                 .replace(Regex("^Editor"), "")
 //                                    .replace("$", "")
-//                                    .replace(".", "")
-//                                    .replace("-", " ")
+                                    .replace(".", "")
+                                    .replace("-", " ")
+//                                    .replace("_", " lodash ")
                 .replace("0", "Zero")
                 .replace("1", "One")
                 .replace("2", "Two")
