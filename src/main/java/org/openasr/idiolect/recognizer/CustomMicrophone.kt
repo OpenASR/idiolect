@@ -3,12 +3,11 @@ package org.openasr.idiolect.recognizer
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
+import org.openasr.idiolect.settings.IdiolectConfig
 import java.io.*
 import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
 import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
-//import com.sun.jna.platform.win32.WinDef.*
-//import com.sun.jna.platform.win32.WinUser.*
 
 @Service
 class CustomMicrophone : Closeable, Disposable {
@@ -17,18 +16,16 @@ class CustomMicrophone : Closeable, Disposable {
 
         private const val sampleRate = 16000f
         private const val sampleSize = 16
-        private const val signed = true
         private const val bigEndian = false
-        private const val DURATION = 4500
 
-        private const val TEMP_FILE = "/tmp/X.wav"
+        private val TEMP_FILE = IdiolectConfig.idiolectHomePath + "/temp.wav"
     }
 
     private var line: TargetDataLine? = null
     lateinit var stream: AudioInputStream
     private var isRecording: Boolean = false
 
-    private val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSize, 1, 2, sampleRate, bigEndian)
+    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSize, 1, 2, sampleRate, bigEndian)
 
     fun open() {
         if (line == null) {
@@ -42,16 +39,26 @@ class CustomMicrophone : Closeable, Disposable {
         return line
     }
 
+    fun getLine() = line
+
+//    fun useInputDevice(device: String): TargetDataLine? {
+//        log.info("Using audio input device: ${device}")
+//        AudioSystem.
+//        useLine(AudioSystem.getTargetDataLine(format, device))
+//        return line
+//    }
+
     private fun useLine(line: TargetDataLine) {
         line.open()
 
-        if (line.isControlSupported(MASTER_GAIN))
-            log.info("Microphone: MASTER_GAIN supported")
-        else log.info("Microphone: MASTER_GAIN NOT supported")
+//        if (line.isControlSupported(MASTER_GAIN))
+//            log.info("Microphone: MASTER_GAIN supported")
+//        else log.info("Microphone: MASTER_GAIN NOT supported")
 
         //masterGainControl = findMGControl(line);
 
-//        stream = AudioInputStreamWithAdjustableGain(line)
+        stream = AudioInputStreamWithAdjustableGain(line)
+//        stream = AudioInputStream(line)
         this.line = line
     }
 
@@ -66,7 +73,6 @@ class CustomMicrophone : Closeable, Disposable {
 
     fun startRecording() {
         line?.start().also { isRecording = true }
-
     }
     fun stopRecording() {
         line?.stop().also { isRecording = false }
@@ -74,12 +80,20 @@ class CustomMicrophone : Closeable, Disposable {
 
     fun isRecording() = isRecording
 
+    /** @param level 0 to 100 */
+    fun setNoiseLevel(level: Int) {
+        (stream as AudioInputStreamWithAdjustableGain).setNoiseLevel(level.toDouble() / 100)
+    }
+
+    /** @param volume 0 to 100 */
     fun setVolume(volume: Int) {
-        val mixer = AudioSystem.getMixer(null) as Mixer
-        val info = mixer.mixerInfo
-        val ctl = mixer.getControl(MASTER_GAIN) as FloatControl
-        val range = ctl.maximum - ctl.minimum
-        ctl.value = volume * range + ctl.minimum
+        (stream as AudioInputStreamWithAdjustableGain).setMasterGain(volume.toDouble() / 10)
+
+//        val mixer = AudioSystem.getMixer(null) as Mixer
+//        val info = mixer.mixerInfo
+//        val ctl = mixer.getControl(MASTER_GAIN) as FloatControl
+//        val range = ctl.maximum - ctl.minimum
+//        ctl.value = volume * range + ctl.minimum
 
 //        val hMixer = WinMM.mixerOpen(null, 0, null, null, MIXER_OBJECTF_MIXER)
 //        val mixerinfo = MIXERINFO()
@@ -112,6 +126,9 @@ class CustomMicrophone : Closeable, Disposable {
 
         startRecording()
 
-        return File(TEMP_FILE).apply { AudioSystem.write(stream, WAVE, this) }
+        return File(TEMP_FILE).apply {
+            this.parentFile.mkdirs()
+            AudioSystem.write(stream, WAVE, this)
+        }
     }
 }

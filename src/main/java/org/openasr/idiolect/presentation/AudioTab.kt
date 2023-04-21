@@ -1,30 +1,32 @@
 package org.openasr.idiolect.presentation
 
 import com.intellij.openapi.components.service
-import com.intellij.openapi.ui.ComboBox
-import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.util.preferredWidth
 import org.openasr.idiolect.recognizer.CustomMicrophone
 import java.awt.event.ItemEvent
-import java.util.*
-import javax.swing.JComponent
+import java.io.ByteArrayOutputStream
 import javax.sound.sampled.AudioSystem
-import javax.sound.sampled.LineEvent
-import javax.sound.sampled.LineListener
+import javax.sound.sampled.Clip
+import javax.swing.JComponent
 import javax.sound.sampled.Mixer
 import javax.sound.sampled.TargetDataLine
-import javax.swing.DefaultComboBoxModel
+import javax.swing.JButton
+import javax.swing.JLabel
+import javax.swing.JSlider
+import kotlin.concurrent.thread
 
 class AudioTab {
-    private var microphone: CustomMicrophone = service()
     private var vuMeter = VuMeter(null)
+    private var microphone: CustomMicrophone = service()
+    private val startTestButton = JButton("Start test")
+    private val replayButton = JButton("Replay")
+    private val waveformVisualizer = WaveformVisualizer()
+    private var isRecording = false
+    private var clip: Clip? = null
 
     fun createComponent(): JComponent {
-        val audioInputDevices = getAudioInputDevices()
-        val audioInputSelector = ComboBox(DefaultComboBoxModel(Vector(audioInputDevices)))
-        audioInputSelector.renderer = SimpleListCellRenderer.create("No input devices found") {
-            it.name
-        }
+        val audioInputSelector = AudioInputSelector()
 
         // add event handler
         audioInputSelector.addItemListener { event ->
@@ -33,45 +35,152 @@ class AudioTab {
             if (event.stateChange == ItemEvent.SELECTED) {
                 val line = microphone.useInputDevice(selectedDevice)
                 startVuMeter(line)
+                startWaveform(line)
             } else { // if (event.stateChange == ItemEvent.DESELECTED) {
                 stopVuMeter()
+                stopWaveform()
+                microphone.stopRecording()
+            }
+        }
+
+        // Button to detect bluetooth/USB microphones
+        val refreshButton = JButton("Refresh devices")
+        refreshButton.addActionListener {
+            audioInputSelector.refresh()
+        }
+
+        initialiseTestButtons()
+
+        val volumeSlider = createVolumeSlider()
+        val noiseLevelSlider = createNoiseLevelSlider()
+
+        val waveformButton = JButton("Start")
+        waveformButton.addActionListener {
+            if (waveformVisualizer.isRunning()) {
+                waveformVisualizer.stop()
+                waveformButton.text = "Start"
+            } else {
+                waveformVisualizer.start()
+                waveformButton.text = "Stop"
             }
         }
 
         return panel {
-            row("Input device") { cell(audioInputSelector) }
-            row { cell(vuMeter) }
-        }
-    }
+            threeColumnsRow({
+                panel {
+                    row {
+                        cell(refreshButton)
+                    }
+                    row {
+                        cell(audioInputSelector)
+                    }
 
-    private fun addMixerInfoListener() {
-        val listener = object : LineListener {
-            override fun update(event: LineEvent) {
-                if (event.type == LineEvent.Type.OPEN) {
-                    val audioInputDevices = getAudioInputDevices()
+                    row { cell(vuMeter) }
 
-                    // Update the combo box with the new list of audio input devices
-//                    comboBox.removeAllItems()
-//                    audioInputDevices.forEach { comboBox.addItem(it) }
+                    row {
+                        cell(startTestButton)
+                        cell(replayButton)
+                    }
                 }
-            }
-        }
-
-        val mixers = AudioSystem.getMixerInfo()
-
-        for (mixerInfo in mixers) {
-            val mixer = AudioSystem.getMixer(mixerInfo)
-            mixer.addLineListener(listener)
+            }, {
+                panel {
+                    row {
+                        label("Volume").applyToComponent {
+                            horizontalAlignment = JLabel.CENTER
+                            preferredWidth = 50
+                        }
+                        label("Noise").applyToComponent {
+                            horizontalAlignment = JLabel.CENTER
+                            preferredWidth = 50
+                        }
+                    }
+                    row {
+                        cell(volumeSlider).applyToComponent {
+                            preferredWidth = 50
+                        }
+                        cell(noiseLevelSlider).applyToComponent {
+                            preferredWidth = 50
+                        }
+                    }
+                }
+            }, {
+                panel {
+                    row {
+                        cell(waveformVisualizer)
+                    }
+                    row {
+                        cell(waveformButton)
+                    }
+                }
+            })
         }
     }
 
-    private fun getAudioInputDevices(): List<Mixer.Info> {
-        val mixerInfoArray: Array<Mixer.Info> = AudioSystem.getMixerInfo()
-        return mixerInfoArray.filter { mixerInfo ->
-            val mixer = AudioSystem.getMixer(mixerInfo)
+    private fun createVolumeSlider(): JSlider {
+        val volumeSlider = JSlider(JSlider.VERTICAL, 0, 100, 50)
 
-            val targetLineInfo = mixer.targetLineInfo
-            targetLineInfo.any { it.lineClass == TargetDataLine::class.java }
+        volumeSlider.addChangeListener {
+            val volume = volumeSlider.value
+            microphone.setVolume(volume)
+        }
+
+        return volumeSlider
+    }
+
+    private fun createNoiseLevelSlider(): JSlider {
+        val noiseLevelSlider = JSlider(JSlider.VERTICAL, 0, 100, 10)
+
+        noiseLevelSlider.addChangeListener {
+            val noiseLevel = noiseLevelSlider.value
+            microphone.setNoiseLevel(noiseLevel)
+        }
+
+        return noiseLevelSlider
+    }
+
+    /**
+     * Buttons to allow user to hear what idiolect is hearing
+     */
+    private fun initialiseTestButtons() {
+        replayButton.isEnabled = false
+        startTestButton.addActionListener {
+            if (!isRecording) {
+//                microphone.startRecording()
+                startTestButton.text = "Stop Test"
+                replayButton.isEnabled = false
+
+                // Start recording audio data to ByteArrayOutputStream
+                thread {
+                    val targetDataLine = microphone.getLine()!!
+                    val stream = microphone.stream
+                    val byteArrayOutputStream = ByteArrayOutputStream()
+
+                    // A larger buffer size can result in smoother audio playback but may also introduce latency.
+                    // If the buffer size is too small, it can result in choppy playback or gaps in the audio.
+                    val bufferSize = targetDataLine.bufferSize / 4
+                    val data = ByteArray(bufferSize)
+                    while (!replayButton.isEnabled) {
+                        val numBytesRead = stream.read(data, 0, data.size)
+                        byteArrayOutputStream.write(data, 0, numBytesRead)
+                    }
+
+                    val clip = AudioSystem.getClip()
+                    val bytes = byteArrayOutputStream.toByteArray()
+                    clip.open(microphone.format, bytes, 0, bytes.size)
+                    this.clip = clip
+                }
+            } else {
+                startTestButton.text = "Start test"
+                replayButton.isEnabled = true
+            }
+            isRecording = !isRecording
+        }
+
+        replayButton.addActionListener {
+            clip?.apply {
+                this.framePosition = 0
+                start()
+            }
         }
     }
 
@@ -85,5 +194,19 @@ class AudioTab {
 
     private fun stopVuMeter() {
         vuMeter.stop()
+    }
+
+    private fun startWaveform(line: TargetDataLine?) {
+        if (line != null) {
+            waveformVisualizer.stop()
+            waveformVisualizer.setDataLine(line)
+            waveformVisualizer.setStream(microphone.stream)
+//            waveformVisualizer.setStream(FileInputStream(File(IdiolectConfig.idiolectHomePath + "/temp.wav")))
+            waveformVisualizer.start()
+        }
+    }
+
+    private fun stopWaveform() {
+        waveformVisualizer.stop()
     }
 }

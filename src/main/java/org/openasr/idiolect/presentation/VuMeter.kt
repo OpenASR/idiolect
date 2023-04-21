@@ -46,8 +46,6 @@ class VuMeter(private var dataLine: TargetDataLine?) : JProgressBar(), Runnable 
 
     fun stop() {
         running = false
-        dataLine?.stop()
-        dataLine?.close()
     }
 
     fun setDataLine(dataLine: TargetDataLine?) {
