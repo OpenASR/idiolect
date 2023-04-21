@@ -22,6 +22,7 @@ class AudioTab {
     private val startTestButton = JButton("Start test")
     private val replayButton = JButton("Replay")
     private val waveformVisualizer = WaveformVisualizer()
+    private val waveformButton = JButton("Start")
     private var isRecording = false
     private var clip: Clip? = null
 
@@ -54,14 +55,11 @@ class AudioTab {
         val volumeSlider = createVolumeSlider()
         val noiseLevelSlider = createNoiseLevelSlider()
 
-        val waveformButton = JButton("Start")
         waveformButton.addActionListener {
             if (waveformVisualizer.isRunning()) {
-                waveformVisualizer.stop()
-                waveformButton.text = "Start"
+                stopWaveform()
             } else {
-                waveformVisualizer.start()
-                waveformButton.text = "Stop"
+                startWaveform()
             }
         }
 
@@ -117,7 +115,7 @@ class AudioTab {
     }
 
     private fun createVolumeSlider(): JSlider {
-        val volumeSlider = JSlider(JSlider.VERTICAL, 0, 100, 50)
+        val volumeSlider = JSlider(JSlider.VERTICAL, 0, 10, 5)
 
         volumeSlider.addChangeListener {
             val volume = volumeSlider.value
@@ -128,7 +126,7 @@ class AudioTab {
     }
 
     private fun createNoiseLevelSlider(): JSlider {
-        val noiseLevelSlider = JSlider(JSlider.VERTICAL, 0, 100, 10)
+        val noiseLevelSlider = JSlider(JSlider.VERTICAL, 0, 512, 10)
 
         noiseLevelSlider.addChangeListener {
             val noiseLevel = noiseLevelSlider.value
@@ -202,11 +200,17 @@ class AudioTab {
             waveformVisualizer.setDataLine(line)
             waveformVisualizer.setStream(microphone.stream)
 //            waveformVisualizer.setStream(FileInputStream(File(IdiolectConfig.idiolectHomePath + "/temp.wav")))
-            waveformVisualizer.start()
+            startWaveform()
         }
+    }
+
+    private fun startWaveform() {
+        waveformVisualizer.start()
+        waveformButton.text = "Stop"
     }
 
     private fun stopWaveform() {
         waveformVisualizer.stop()
+        waveformButton.text = "Start"
     }
 }
