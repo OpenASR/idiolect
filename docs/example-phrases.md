@@ -1,25 +1,32 @@
-## Idiolect Commands
+
+## idiolect Commands
  - hello
  - hi idea
  - tell me about yourself
  - stop listening
+ - what can I say
+ - what can I say about 'template'
 
 ## Custom Phrases
+ - find in project
+ - next method
+ - other pane
+ - inspect code
 
-## Find Usages
- - find usages
- - find usages of field 'my field'
- - find usages of method 'my method'
+## Rename
+ - rename
+ - rename as 'something better'
+ - rename to 'example'
 
 ## Extract Field or Variable
  - extract this as a parameter
  - extract to field
  - extract variable 'sum'
 
-## Rename
- - rename
- - rename as 'something better'
- - rename to 'example'
+## Find Usages
+ - find usages
+ - find usages of field 'my field'
+ - find usages of method 'my method'
 
 ## Surround with Not-Null Check
  - surround with not null check
@@ -455,6 +462,11 @@
  - scroll top
  - scroll up
  - scroll up and move
+ - search session next occurrence action
+ - search session prev occurrence
+ - search session toggle match case
+ - search session toggle regex
+ - search session toggle whole words only action
  - select line
  - select single line at caret
  - select word
@@ -505,18 +517,48 @@
  - change code style scheme
  - change color scheme
  - change file encoding action
+ - change ide scale
  - change inspection profile
  - change keymap
  - change look and feel
  - change signature
  - change split orientation
  - change template data language
+ - change tool window layout
  - change type signature
  - change view
+ - changes view add unversioned
+ - changes view apply patch
+ - changes view apply patch from clipboard
+ - changes view browse
+ - changes view create patch
+ - changes view create patch from changes
+ - changes view create patch to clipboard
+ - changes view edit
+ - changes view group by directory
+ - changes view group by module
+ - changes view group by repository
+ - changes view move
+ - changes view new change list
+ - changes view refresh
+ - changes view remove change list
+ - changes view remove deleted
+ - changes view rename
+ - changes view revert
+ - changes view revert files
+ - changes view save to shelve
+ - changes view set default
+ - changes view shelve
+ - changes view shelve silently
+ - changes view show commit options
+ - changes view single click preview
+ - changes view toggle commit ui
+ - changes view unshelve silently
  - activate commit tool window
  - activate debug tool window
  - activate find tool window
  - activate hierarchy tool window
+ - activate meet new ui tool window
  - activate nav bar
  - activate run tool window
  - action updates benchmark action
@@ -529,21 +571,29 @@
  - cleanup events test scheme action
  - component panel test action
  - configure events scheme file action
+ - console view show as json action
  - convert schema action
- - debug mig layout action
+ - dir diff menu compare new files with each other action
+ - disable declarative inlay action
  - dump focusable component hierarchy action
  - dump ilement types action
  - dump loaded inspections action
  - dump run debug action state action
  - edit test scheme action
+ - external system hide project refresh action
+ - external system project refresh action
  - go to action
  - grid layout test action
+ - icon scale test action
+ - idiolect voice action
  - j editor pane demo action
  - json path evaluate action
  - json path export evaluate result action
  - label size demo action
  - maintenance action
  - merge all windows action
+ - method hierarchy implement method action
+ - method hierarchy override method action
  - notification test action
  - online doc action
  - open events scheme file action
@@ -553,7 +603,9 @@
  - play saved macros action
  - position tracker test action
  - progress icon showcase action
+ - refactorings quick list popup action
  - reload project action
+ - reset ide scale action
  - reverte override file type action
  - run toolbar edit configuration action
  - run toolbar hot swap action
@@ -580,13 +632,17 @@
  - show south panel test dialog action
  - show update dialog action
  - status text mode action
+ - structural search plugin structural replace action
+ - structural search plugin structural search action
  - switch file based index storage action
+ - switch ide scale action
  - test dnd action
  - test gesture action
  - test message box action
  - test parse events scheme action
  - test text field action
  - test tooltips action
+ - text component clear action
  - text search action
  - toggle completion hints action
  - toggle inlay hints globally action
@@ -594,15 +650,31 @@
  - transfer settings demo action
  - turn on off cached value profiler action
  - ui dsl showcase action
+ - git copy commit subject action
+ - git copy revision number action
+ - git log annotate revision action
+ - git log enable filter by regex action
+ - git log match case action
+ - git log show details action
+ - git log show roots column action
+ - git quick list popup action
  - vcs toolbar label action
  - view new toolbar action
  - view obsolete nav bar action
  - view obsolete toolbar action
  - whats new action
  - wsl sync action
+ - x debugger attach dialog show only my processes toggle action
+ - zoom in ide action
+ - zoom out ide action
+ - comintellijfeedbacknew_ui test show new ui feedback action
+ - comintellijfeedbackproductivity metric test show productivity feedback action
+ - performance plugin show memory dialog action
+ - plugin install from disk action
  - add bom
  - remove bom
  - about
+ - actions actions plugin generate to string
  - add another bookmark
  - add breakpoint
  - add conditional breakpoint
@@ -611,14 +683,47 @@
  - analyze heap dump snapshot
  - analyze plugin startup performance
  - annotate
+ - annotate stack trace actionshowfilesmodificationinfo
  - apply fixed window size
+ - arrangement alias rule add
+ - arrangement alias rule edit
+ - arrangement alias rule match condition move down
+ - arrangement alias rule match condition move up
+ - arrangement alias rule remove
+ - arrangement custom token rule edit
+ - arrangement rule add
+ - arrangement rule edit
+ - arrangement rule group condition move down
+ - arrangement rule group condition move up
+ - arrangement rule match condition move down
+ - arrangement rule match condition move up
+ - arrangement rule remove
+ - arrangement rule section add
  - associate with file type
  - attach project
  - auto show process window
  - bookmark open tabs
+ - bookmarks view ask before deleting lists
+ - bookmarks view autoscroll from source
+ - bookmarks view autoscroll to source
+ - bookmarks view choose type
+ - bookmarks view create
+ - bookmarks view default group
+ - bookmarks view delete
+ - bookmarks view delete type
+ - bookmarks view group line bookmarks
+ - bookmarks view move down
+ - bookmarks view move up
+ - bookmarks view open in preview tab
+ - bookmarks view rename
+ - bookmarks view rewrite bookmark type
+ - bookmarks view show preview
+ - bookmarks view sort group bookmarks
  - brace or quote out
  - browse web
+ - call hierarchy base on this method
  - call saul
+ - check all repository libraries resolution
  - check for update
  - check ignored and not excluded directories
  - check status for files
@@ -650,6 +755,8 @@
  - close project
  - code cleanup
  - code completion
+ - code inspection on editor
+ - code vision show more
  - collapse all
  - collapse all regions
  - collapse block
@@ -659,11 +766,24 @@
  - collapse region recursively
  - collapse selection
  - collapse tree node
+ - collapsible panel toggle
  - collect troubleshooting information
  - collect zipped logs
  - color blindness test
  - comment by block comment
  - comment by line comment
+ - commit view show on double click editor preview
+ - commit view show on double click source
+ - commit view switch to commit dialog
+ - committed changes clear
+ - committed changes details
+ - committed changes filter
+ - committed changes refresh
+ - committed changes revert
+ - compare last version
+ - compare same version
+ - compare selected
+ - compare specified
  - compare clipboard with selection
  - compare dirs
  - compare file with editor
@@ -674,10 +794,18 @@
  - compile file
  - compile project
  - completion quality stats
- - compute vtatistics
+ - compute vfstatistics
  - configure default size
  - configure editor tabs
  - configure soft wraps
+ - console execute
+ - console execute multiline
+ - console history browse
+ - console history next
+ - console history previous
+ - console open
+ - console split line
+ - console view clear all
  - context help
  - convert indents to spaces
  - convert indents to tabs
@@ -697,7 +825,7 @@
  - copy reference
  - copy settings path
  - copy source root path
- - copy teference
+ - copy tbx reference
  - copy ui label
  - copy url
  - coverage
@@ -705,32 +833,127 @@
  - create desktop entry
  - create launcher script
  - create library from file
- - create new run configuration
- - create run configuration
- - customize u
+ - customize ui
  - data sharing options
  - debug
  - debug build process
  - debug listen
+ - debugger add inline watch
+ - debugger add stepping filter
+ - debugger add to watch
+ - debugger adjust array range
+ - debugger async stacks
+ - debugger auto renderer
+ - debugger call tracer
+ - debugger copy stack
+ - debugger create renderer
+ - debugger customize context view
+ - debugger customize threads view
+ - debugger edit array filter
+ - debugger edit custom field
+ - debugger edit frame source
+ - debugger evaluate in console
+ - debugger filter array
+ - debugger focus on breakpoint
+ - debugger focus on finish
+ - debugger force early return
+ - debugger freeze thread
+ - debugger interrupt thread
+ - debugger mark object
+ - debugger mute renderers
+ - debugger new custom field
+ - debugger pop frame
+ - debugger reload file
+ - debugger remove all breakpoints
+ - debugger remove all breakpoints in file
+ - debugger remove array filter
+ - debugger remove custom field
+ - debugger restore breakpoint
+ - debugger resume thread
+ - debugger show collection history
+ - debugger show library frames
+ - debugger show referring
+ - debugger show related stack
+ - debugger show types
+ - debugger step out of block
+ - debugger switch to the next context
+ - debugger throw exception
+ - debugger tree evaluate in console
+ - debugger view text
  - decrement window height
  - decrement window width
- - default bundle index
  - delegate methods
  - delete mnemonic from bookmark
  - delete old app dirs
  - delete recent files
+ - diff append left side
+ - diff append right side
+ - diff apply left side
+ - diff apply non conflicts
+ - diff apply non conflicts left
+ - diff apply non conflicts right
+ - diff apply right side
+ - diff compare partial base left
+ - diff compare partial base right
+ - diff compare partial left right
+ - diff compare with base left
+ - diff compare with base result
+ - diff compare with base right
+ - diff focus opposite pane
+ - diff focus opposite pane and scroll
+ - diff ignore left side
+ - diff ignore right side
+ - diff magic resolve conflicts
+ - diff next change
+ - diff next conflict
+ - diff open diff in editor
+ - diff prev change
+ - diff previous conflict
+ - diff resolve conflict
+ - diff show diff
+ - diff show in external tool
+ - diff show settings popup
+ - diff show standalone diff
+ - dir diff menu cancel comparing new files with each other
+ - dir diff menu enable equal
+ - dir diff menu enable left
+ - dir diff menu enable not equal
+ - dir diff menu enable right
+ - dir diff menu mirror to left
+ - dir diff menu mirror to right
+ - dir diff menu set copy to left
+ - dir diff menu set copy to right
+ - dir diff menu set default
+ - dir diff menu set delete
+ - dir diff menu set no operation
+ - dir diff menu synchronize diff
+ - dir diff menu synchronize diff all
+ - dir diff menu warn on deletion
  - disable inspection
+ - disable minimap
+ - disable new ui
  - disable p
+ - disable repository libraries sha two five six checksum
  - dock pinned mode
  - dock tool window
  - dock unpinned mode
+ - documentation back
+ - documentation edit source
+ - documentation forward
+ - documentation keep tab
+ - documentation toggle auto show
+ - documentation toggle auto update
+ - documentation toggle show in popup
+ - documentation view external
+ - dom collection control add
+ - dom collection control edit
+ - dom collection control remove
  - drop an error
  - drop an error with attachments
  - drop an out of memory error
  - drop plugin error
  - dumb mode
  - dump configuration types
- - dump directory index
  - dump extensions
  - dump features and tips
  - dump formatting model
@@ -758,7 +981,9 @@
  - emmet previous edit point
  - emmet update tag
  - emoji and symbols
+ - enable all repository libraries sha two five six checksum
  - enable metal rendering
+ - enable new ui
  - encapsulate fields
  - escape entities
  - evaluate expression
@@ -792,6 +1017,33 @@
  - expression statistics
  - expression type info
  - external java doc
+ - external system after compile
+ - external system after rebuild
+ - external system after sync
+ - external system assign run configuration shortcut
+ - external system assign shortcut
+ - external system before compile
+ - external system before rebuild
+ - external system before run
+ - external system before sync
+ - external system collapse all
+ - external system detach project
+ - external system edit run configuration
+ - external system expand all
+ - external system group modules
+ - external system group tasks
+ - external system ignore project
+ - external system open config
+ - external system open tasks activation manager
+ - external system refresh all projects
+ - external system refresh project
+ - external system remove run configuration
+ - external system run task
+ - external system select project data to import
+ - external system show common settings
+ - external system show ignored
+ - external system show inherited tasks
+ - external system show settings
  - extract class
  - extract include
  - extract interface
@@ -799,6 +1051,21 @@
  - extract module
  - extract module from package
  - extract superclass
+ - file chooser delete
+ - file chooser go to wsl home
+ - file chooser go to desktop
+ - file chooser go to home
+ - file chooser go to module
+ - file chooser go to project
+ - file chooser light edit go to opened file
+ - file chooser new file
+ - file chooser new folder
+ - file chooser refresh
+ - file chooser show hidden
+ - file chooser toggle path bar
+ - file chooser list level up
+ - file chooser list root
+ - file history annotate revision
  - file structure popup
  - fill paragraph
  - find
@@ -811,7 +1078,7 @@
  - find used test data
  - fix doc comment
  - fix line separators
- - fix wirewall
+ - fix wsl firewall
  - float mode
  - focus debugger
  - focus editor
@@ -829,7 +1096,7 @@
  - generate before class method
  - generate constructor
  - generate coverage report
- - generate create u
+ - generate create ui
  - generate d
  - generate data method
  - generate equals
@@ -915,6 +1182,9 @@
  - go to test
  - go to type declaration
  - gray filter config
+ - guess remote repository for each repository library
+ - help jet brains t
+ - help keymap reference
  - help topics
  - hide active window
  - hide all windows
@@ -927,14 +1197,17 @@
  - hotswap
  - icons load time
  - ide scripting console
+ - idiolect command front text field
+ - idiolect start
  - image duplicates
  - implement methods
  - import module
  - import module from iml file
  - import project
  - import settings
- - import tests
  - import tests from file
+ - inactive stop action placeholder
+ - incoming changes refresh
  - increment window height
  - increment window width
  - incremental search
@@ -953,25 +1226,50 @@
  - introduce variable
  - invalidate caches
  - invert boolean
- - j bef osr measure fps
- - j babs demo
+ - j shell console
  - j tabbed pane demo
+ - java control break
+ - java soft exit
  - json copy pointer
  - jump to colors and fonts
  - jump to last change
  - jump to last window
  - jump to next change
+ - keep tab open
  - keymap to csv
  - lagging mode
  - library usage statistics
  - light edit open file in project
+ - list scroll down
+ - list scroll down extend selection
+ - list scroll up
+ - list scroll up extend selection
+ - list select first row
+ - list select first row extend selection
+ - list select last row
+ - list select last row extend selection
+ - list select next column
+ - list select next column extend selection
+ - list select next row
+ - list select next row extend selection
+ - list select previous column
+ - list select previous column extend selection
+ - list select previous row
+ - list select previous row extend selection
  - list persistent state components
  - load all content
- - load all vontent
+ - load all vfs content
+ - load default yaml profile
  - load unload modules
+ - local changes view show on double click editor preview
+ - local changes view show on double click source
+ - local history put label
+ - local history show history
+ - local history show selection history
  - log debug configure
  - log focus requests
  - mac messages test
+ - main menu button show menu
  - make module
  - make static
  - manage recent projects
@@ -983,14 +1281,26 @@
  - maximize tool window
  - member push down
  - members pull up
+ - memory calculate retained size
+ - memory view enable tracking with closed window
+ - memory view jump to type source
+ - memory view show allocation stack trace
+ - memory view show instances
+ - memory view show instances from debugger tree
+ - memory view show new instances
+ - memory view show only tracked
+ - memory view show only with diff
+ - memory view show only with instances
+ - memory view switch update mode
+ - memory view tracking action new instances tracking
  - merge three files
  - method down
  - method duplicates
  - method hierarchy
+ - method hierarchy base on this method
  - method overload switch down
  - method overload switch up
  - method up
- - minimap filter
  - minimize current window
  - module settings
  - more run toolbar actions
@@ -1005,6 +1315,15 @@
  - move statement up
  - move tab down
  - move tab right
+ - nav bar cancel
+ - nav bar navigate
+ - nav bar return
+ - nav bar select down
+ - nav bar select end
+ - nav bar select home
+ - nav bar select left
+ - nav bar select right
+ - nav bar select up
  - nav bar location bottom
  - nav bar location hide
  - nav bar location top
@@ -1013,7 +1332,6 @@
  - new dummy project
  - new element same place
  - new file
- - new from template
  - new html file
  - new migration
  - new module
@@ -1023,9 +1341,10 @@
  - new project
  - new scratch buffer
  - new scratch file
+ - new ui run widget
  - next diff
  - next editor tab
- - next occurence
+ - nextoccurrence
  - next parameter
  - next project window
  - next splitter
@@ -1053,47 +1372,88 @@
  - pause
  - pause output
  - perform g
+ - performance activity monitor
+ - performance dump threads
+ - performance mem tester
  - pin active editor tab
  - pin active tab
  - pin active tab toggle
  - pin toolwindow tab
  - playback last macro
  - popup hector
+ - popup menu cancel
+ - popup menu return
+ - popup menu select child
+ - popup menu select next
+ - popup menu select parent
+ - popup menu select previous
  - prev parameter
  - prev splitter
  - prev template parameter
  - previous diff
  - previous editor tab
- - previous occurence
+ - previousoccurrence
  - previous project window
  - previous tab
  - previous template variable
  - previous window
  - print
+ - print modules and entity sources
+ - problems view autoscroll to source
+ - problems view copy problem description
+ - problems view group by tool id
+ - problems view open in preview tab
+ - problems view quick fixes
+ - problems view show preview
+ - problems view sort by name
+ - problems view sort by severity
+ - problems view sort folders first
  - productivity guide
  - project from version control
+ - project view abbreviate package names
+ - project view autoscroll from source
+ - project view autoscroll to source
+ - project view compact directories
+ - project view file nesting
+ - project view flatten modules
+ - project view flatten packages
+ - project view folders always on top
+ - project view hide empty middle packages
+ - project view manual order
+ - project view open in preview tab
+ - project view show excluded files
+ - project view show library contents
+ - project view show members
+ - project view show modules
+ - project view show scratches and consoles
+ - project view show visibility icons
+ - project view sort by type
  - project view edit source
  - prune empty directories
  - quick action popup
  - quick change scheme
  - quick doc copy
  - quick evaluate expression
- - quick fixes
  - quick implementations
  - quick java doc
  - quick preview
  - quick type definition
  - rearrange code
+ - rebuild repository libraries sha two five six checksum
  - recent changed files
  - recent changes
  - recent files
  - recent locations
  - record state collectors
  - redesigned run configuration selector
- - redesigned run toolbar wrapper
  - reformat code
  - refresh
- - reload yaml profile
+ - remote servers choose server deployment
+ - remote servers choose server deployment with debug
+ - remote servers connect server
+ - remote servers disconnect server
+ - remote servers edit deployment config
+ - remote servers edit server config
  - rename element
  - rename file
  - reopen closed tab
@@ -1117,30 +1477,73 @@
  - resume
  - retype file
  - reveal in
- - rotate selections backwards
- - rotate selections forward
  - ruler guide
  - run
  - run anything
  - run configuration
  - run configuration templates for new projects
+ - run dashboard add type
+ - run dashboard clear content
+ - run dashboard copy configuration
+ - run dashboard debug
+ - run dashboard edit configuration
+ - run dashboard group by status
+ - run dashboard group by type
+ - run dashboard group configurations
+ - run dashboard hide configuration
+ - run dashboard open running config in new tab
+ - run dashboard remove type
+ - run dashboard restore configuration
+ - run dashboard restore hidden configurations
+ - run dashboard run
+ - run dashboard stop
+ - run dashboard ungroup configurations
  - run inspection
  - run inspection on
  - run to cursor
  - run toolbar main slot active
  - run toolbar rollback to previous
  - run toolbar show tool window tab
- - run with drop down
+ - runner close all unpinned views
+ - runner close all views
+ - runner close other views
+ - runner close view
+ - runner focus on startup
+ - runner restore layout
+ - runner toggle tab labels
  - safe delete
  - save all
  - save as new format
  - save as template
  - save document
  - save file as template
+ - scope view edit scopes
+ - scratch change language
+ - scratch export to scratch
+ - scratch show files popup
+ - scroll pane scroll down
+ - scroll pane scroll end
+ - scroll pane scroll home
+ - scroll pane scroll left
+ - scroll pane scroll right
+ - scroll pane scroll up
+ - scroll pane unit scroll down
+ - scroll pane unit scroll left
+ - scroll pane unit scroll right
+ - scroll pane unit scroll up
  - scroll tree to center
  - search everywhere
+ - search everywhere complete command
+ - search everywhere navigate to next group
+ - search everywhere navigate to prev group
+ - search everywhere next tab
+ - search everywhere prev tab
+ - search everywhere select item
+ - segmented button left
+ - segmented button right
  - select all occurrences
  - select and dump invalid tips of the day
+ - select and show tip
  - select in
  - select in project view
  - select next occurrence
@@ -1148,8 +1551,24 @@
  - send e
  - send event log statistics
  - send feedback
+ - servers deploy
+ - servers deploy with debug
+ - servers undeploy
+ - service view group by contributor
+ - service view group by service groups
+ - service view jump to services
+ - service view open each in new tab
+ - service view open in new tab
+ - service view show services
+ - service view split by type
  - settings entry point
  - severity editor dialog
+ - shelve changes unshelve with dialog
+ - shelved changes import patches
+ - shelved changes rename
+ - shelved changes restore
+ - shelved changes show hide deleted
+ - show current revision
  - show backward package deps
  - show blank diff window
  - show bookmarks
@@ -1162,8 +1581,8 @@
  - show execution point
  - show experiments
  - show file path
- - show filter popup
  - show fonts used by editor
+ - show got it demo
  - show gutter icons settings
  - show intention actions
  - show live run configurations
@@ -1183,6 +1602,7 @@
  - show recent tests
  - show reformat file dialog
  - show registry
+ - show search everywhere item info
  - show search history
  - show settings
  - show settings and find usages
@@ -1202,8 +1622,19 @@
  - smart type completion
  - smart un select
  - split chooser
+ - split chooser duplicate
+ - split chooser exit
+ - split chooser next window
+ - split chooser previous window
+ - split chooser split
+ - split chooser split center
+ - split chooser split down
+ - split chooser split left
+ - split chooser split right
+ - split chooser split top
  - split horizontally
  - split vertically
+ - start use vcs
  - start stop macro recording
  - static icon fields
  - step into
@@ -1213,11 +1644,11 @@
  - stop background processes
  - stop with drop down
  - store default layout
+ - store new layout
  - stretch split to bottom
  - stretch split to left
  - stretch split to right
  - stretch split to top
- - suppress fixes
  - surround with
  - surround with emmet
  - surround with live template
@@ -1234,6 +1665,23 @@
  - synchronize
  - synchronize current file
  - tab list
+ - table scroll down change selection
+ - table scroll down extend selection
+ - table scroll up change selection
+ - table scroll up extend selection
+ - table select first row
+ - table select first row extend selection
+ - table select last row
+ - table select last row extend selection
+ - table select next column
+ - table select next column extend selection
+ - table select next row
+ - table select next row extend selection
+ - table select previous column
+ - table select previous column extend selection
+ - table select previous row
+ - table select previous row extend selection
+ - table start editing
  - technical support
  - template project properties
  - template project structure
@@ -1246,6 +1694,9 @@
  - test coroutine progress
  - test icon mappings
  - test progress window
+ - test search contributors
+ - text editor with preview split horizontally
+ - text editor with preview split vertically
  - text gray filter config
  - todo view group by flatten package
  - todo view group by show modules
@@ -1289,6 +1740,7 @@
  - toggle bookmark y
  - toggle bookmark z
  - toggle breakpoint enabled
+ - toggle compact mode
  - toggle content ui type mode
  - toggle distraction free mode
  - toggle dock mode
@@ -1313,17 +1765,41 @@
  - toggle ui inspector hierarchy trace
  - toggle windowed mode
  - toggle zen mode
- - toolwindow switcher
+ - tree scroll down change selection
+ - tree scroll down extend selection
+ - tree scroll up change selection
+ - tree scroll up extend selection
+ - tree select child
+ - tree select child extend selection
+ - tree select first
+ - tree select first extend selection
+ - tree select last
+ - tree select last extend selection
+ - tree select next
+ - tree select next extend selection
+ - tree select next sibling
+ - tree select parent
+ - tree select parent extend selection
+ - tree select parent no collapse
+ - tree select previous
+ - tree select previous extend selection
+ - tree select previous sibling
+ - tree start editing
  - tree expand all
  - trigger low memory notification
  - trust project
  - turn refs to super
  - type hierarchy
+ - type hierarchy class
+ - type hierarchy subtypes
+ - type hierarchy supertypes
+ - type hierarchy base base on this type
  - typing latency report
- - u iefaults
- - u ireeze
+ - ui defaults
+ - ui freeze
  - ui debugger
  - ui inspector
+ - unbind remote repository for all repository libraries
  - undock mode
  - unscramble
  - unselect previous occurrence
@@ -1333,11 +1809,98 @@
  - unwrap
  - update files
  - update running application
+ - usage filtering generated code
+ - usage filtering imports
+ - usage filtering read access
+ - usage filtering write access
+ - usage grouping directory
+ - usage grouping directory structure
+ - usage grouping file structure
+ - usage grouping flatten modules
+ - usage grouping module
+ - usage grouping package
+ - usage grouping scope
+ - usage grouping usage type
+ - usage view exclude
+ - usage view include
+ - usage view remove
+ - usage view rerun
+ - usage view show recent find usages
  - used icons listing
  - user invoked full analysis
  - validate local history
  - validate xml
  - validation test
+ - git apply selected changes
+ - git cherry pick
+ - git diff exclude changed lines from commit
+ - git diff include only changed lines into commit
+ - git diff show combined diff
+ - git diff show diff in editor tab
+ - git diff show diff in new window
+ - git diff toggle diff aligning mode
+ - git edit source
+ - git get version
+ - git integrate project
+ - git log align labels
+ - git log check first commits index data
+ - git log check selected commits index data
+ - git log collapse all
+ - git log compact references view
+ - git log compare revisions
+ - git log expand all
+ - git log focus text filter
+ - git log go to child
+ - git log go to parent
+ - git log go to ref
+ - git log intelli sort chooser
+ - git log invalidate caches
+ - git log move diff preview to bottom
+ - git log move diff preview to right
+ - git log open another tab
+ - git log open repository version
+ - git log prefer commit date
+ - git log refresh
+ - git log resume indexing
+ - git log show all affected
+ - git log show changes from parents
+ - git log show diff preview
+ - git log show long edges
+ - git log show only affected changes
+ - git log show other branches
+ - git log show tag names
+ - git log show tooltip
+ - git move changed lines to changelist
+ - git open repository version
+ - git operations popup annotate
+ - git push
+ - git push force
+ - git push simple
+ - git reformat commit message
+ - git refresh file history
+ - git revert selected changes
+ - git rollback changed lines
+ - git run commit checks
+ - git shelf apply
+ - git shelf drop
+ - git shelf pop
+ - git shelf unshelve changes
+ - git shelf unshelve changes and remove
+ - git show local changes
+ - git show log
+ - git show shelf
+ - git show diff changed lines
+ - git show diff with local
+ - git show diff with local before
+ - git show history for block
+ - git show history for revision
+ - git show message history
+ - git show tabbed file history
+ - git toggle amend commit mode
+ - git toolbar show more actions
+ - git update project
+ - git vcs clone
+ - vcs history show all affected
  - vcs show current change marker
  - vcs show next change marker
  - vcs show prev change marker
@@ -1354,9 +1917,53 @@
  - view tool buttons
  - virtual file info
  - web browser
+ - welcome screen change project icon
+ - welcome screen configure export
+ - welcome screen configure import
+ - welcome screen configure project structure
+ - welcome screen configure restore default
+ - welcome screen copy project path
+ - welcome screen develop plugins
+ - welcome screen edit group
+ - welcome screen new group
+ - welcome screen open directory project
+ - welcome screen open selected
+ - welcome screen plugins
+ - welcome screen remove selected
+ - welcome screen reveal in
+ - welcome screen settings
  - window mode
  - write action under progress
- - x swo document
+ - x debugger attach to process
+ - x debugger compare value with clipboard
+ - x debugger copy name
+ - x debugger copy value
+ - x debugger copy watch
+ - x debugger edit watch
+ - x debugger inline
+ - x debugger inspect
+ - x debugger jump to source
+ - x debugger jump to type source
+ - x debugger move watch down
+ - x debugger move watch up
+ - x debugger mute breakpoints
+ - x debugger new watch
+ - x debugger pin to top
+ - x debugger preview tab
+ - x debugger remove all watches
+ - x debugger remove watch
+ - x debugger set value
+ - x debugger show breakpoints over line numbers
+ - x debugger switch watches in variables
+ - x debugger toggle evaluate expression field
+ - x debugger toggle sort values
+ - x debugger unmute on stop
+ - xsd two document
  - zoom current window
+ - comintellijfeedbacklocalizationdialog show localization feedback dialog
  - edit run configurations
+ - font editor preview toggle bold font
+ - maintoolbar filename
+ - maintoolbar project
  - open assert equals diff
+ - smartupdate

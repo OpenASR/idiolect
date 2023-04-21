@@ -7,6 +7,10 @@
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). 
 Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. Originally developed as part of a [JetBrains hackathon](https://blog.jetbrains.com/blog/2015/08/31/jetbrains-3rd-annual-hackathon-new-generation-debugger-grabs-1st-place/), it is now a community-supported project. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
+## See Also
+
+- [idiolect-azure](https://github.com/OpenASR/idiolect-azure)
+
 ## Usage
 
 To get started, press the <img src="src/main/resources/org/openasr/idiolect/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar, then speak a command, e.g. "Hi, IDEA!" Idiolect supports a simple [grammar](src/main/resources/org/openasr/idiolect/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idiolect/wiki/Feature-Roadmap#features). Click the button once more to deactivate.
@@ -36,6 +40,9 @@ Idiolect is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.
 ### Integration with Idiolect
 
 [plugin.xml](src/main/resources/META-INF/plugin.xml) defines a number of `<extensionPoint>`s which would allow other plugins to integrate with or extend/customise the capabilities of Idiolect.
+
+An example of this is provided in [idiolect-azure](https://github.com/OpenASR/idiolect-azure) which implements `AsrProvider` 
+and adds its own settings under **Tools/Idiolect**.
 
 #### AsrProvider
 Listens for audio input, recognises speech to text and returns an `NlpRequest` with possible utterances.

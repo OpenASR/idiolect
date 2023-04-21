@@ -4,6 +4,7 @@
 
 ### Added
 - Tool Window with recognition log and searchable command list
+- "What can I say?", "What can I say about X"
 
 ### Changed
 
