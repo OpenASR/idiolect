@@ -20,14 +20,18 @@ class IdiolectConfig : PersistentStateComponent<IdiolectConfig.Settings>  {
     companion object {
         val settings get() = application.getService(IdiolectConfig::class.java).settings
         val idiolectHomePath = System.getProperty("user.home") + "/.idiolect"
+        private val microphone: CustomMicrophone = service()
 
         private var asrProvider = AtomicReference<AsrProvider?>()
         private var ttsProvider = AtomicReference<TtsProvider?>()
         private var nlpProvider = AtomicReference<NlpProvider?>()
 
+        init {
+            initialiseAudioInput()
+        }
+
         /** Called by AsrService */
         fun initialiseAsrSystem(): AsrSystem {
-            initialiseAudioInput()
             val asrProvider = getAsrProvider()
             val nlpProvider = getNlpProvider()
 
@@ -36,7 +40,6 @@ class IdiolectConfig : PersistentStateComponent<IdiolectConfig.Settings>  {
         }
 
         private fun initialiseAudioInput() {
-            val microphone: CustomMicrophone = service()
             microphone.useInputDevice(settings.audioInputDevice)
             microphone.setVolume(settings.audioGain)
             microphone.setNoiseLevel(settings.audioNoise)

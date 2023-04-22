@@ -17,23 +17,23 @@ interface AsrSystem {
     /**
      * Starts recognition process.
      */
-    fun startRecognition()
+    fun startRecognition(): Boolean
 
     /**
      * Stops recognition process.
      * Recognition process is paused until the next call to startRecognition.
      */
-    fun stopRecognition()
+    fun stopRecognition(): Boolean
 
     /** Blocks until we recognise something from the user. Called from [AsrControlLoop.run] */
     fun waitForUtterance(): String
 
     fun waitForUtterance(grammar: Array<String>,
-                         escapeWords: Array<String> = arrayOf("dont worry", "quit", "forget it", "escape")): String
+                         escapeWords: Array<String> = arrayOf("dont worry", "never mind", "quit", "forget it", "escape")): String
 
     fun setGrammar(grammar: Array<String>) {}
 
     fun onNlpRequest(nlpRequest: NlpRequest)
 
-    fun terminate()
+    fun terminate(): Boolean
 }

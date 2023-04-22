@@ -6,6 +6,7 @@ import com.intellij.openapi.diagnostic.logger
 import org.openasr.idiolect.settings.IdiolectConfig
 import org.openasr.idiolect.utils.AudioUtils
 import java.io.*
+import java.util.concurrent.atomic.AtomicInteger
 import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
 
@@ -24,6 +25,7 @@ class CustomMicrophone : Closeable, Disposable {
         private val TEMP_FILE = IdiolectConfig.idiolectHomePath + "/temp.wav"
     }
 
+    private val activeThreadCount = AtomicInteger(0)
     private var line: TargetDataLine? = null
     lateinit var stream: AudioInputStream
     private var isRecording: Boolean = false
@@ -36,10 +38,13 @@ class CustomMicrophone : Closeable, Disposable {
         }
     }
 
-    fun useDefaultLine() = useLine(AudioSystem.getTargetDataLine(format))
+    fun useDefaultLine() {
+        log.info("Microphone using default line")
+        useLine(AudioSystem.getTargetDataLine(format))
+    }
 
     fun useInputDevice(device: Mixer.Info): TargetDataLine? {
-        log.info("Using audio input device: ${device.name}")
+        log.info("Microphone using device: ${device.name}")
         useLine(AudioSystem.getTargetDataLine(format, device))
         return line
     }
@@ -51,12 +56,12 @@ class CustomMicrophone : Closeable, Disposable {
             }
 
             if (device != null) {
-                log.info("Using audio input device: ${deviceName}")
+                log.info("Microphone using: ${deviceName}")
                 useInputDevice(device)
                 return
             }
 
-            log.info("Audio input device '${deviceName}' not found, using default line")
+            log.info("Microphone could not find '${deviceName}' not found")
         }
 
         useDefaultLine()
@@ -64,8 +69,15 @@ class CustomMicrophone : Closeable, Disposable {
 
     fun getLine() = line
 
+    /** Acquire audio resources, but do not begin the flow of data */
     private fun useLine(line: TargetDataLine) {
+        if (this.line != null) {
+            log.warn("call to useLine: $line")
+            log.warn("but already have a line: " + this.line)
+            close()
+        }
         line.open()
+        log.info("Microphone line open")
 
 //        if (line.isControlSupported(MASTER_GAIN))
 //            log.info("Microphone: MASTER_GAIN supported")
@@ -78,20 +90,41 @@ class CustomMicrophone : Closeable, Disposable {
         this.line = line
     }
 
+    /** Note: once a `line` is closed, it can not be reopened */
     override fun close() = dispose()
 
     override fun dispose() {
-        stopRecording()
-        line?.close()
-        stream.close()
-        line = null
+        line?.apply {
+            stop()
+            drain()
+            stream.close()
+            close()
+            log.info("Microphone line closed")
+            line = null
+        }
     }
 
-    fun startRecording() {
-        line?.start().also { isRecording = true }
+    /** Begin the flow of data for listening */
+    @Synchronized
+    fun startRecording(): Boolean {
+        if (activeThreadCount.getAndIncrement() == 0) {
+            line?.start().also { isRecording = true }
+            log.info("Microphone started")
+            return true
+        }
+
+        return false
     }
-    fun stopRecording() {
-        line?.stop().also { isRecording = false }
+
+    @Synchronized
+    fun stopRecording(): Boolean {
+        if (activeThreadCount.decrementAndGet() == 0) {
+            line?.stop().also { isRecording = false }
+            log.info("Microphone stopped")
+            return true
+        }
+
+        return false
     }
 
     fun isRecording() = isRecording

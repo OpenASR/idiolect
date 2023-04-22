@@ -1,19 +1,27 @@
 package org.openasr.idiolect.asr
 
+import com.intellij.openapi.diagnostic.logger
 import org.openasr.idiolect.asr.ListeningState.Status.*
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 object ListeningState {
-    private val status = AtomicReference(INIT)
+    private val log = logger<ListeningState>()
+    private val status = AtomicReference(INITIALISING)
     private val lock = ReentrantLock()
     private val condition = lock.newCondition()
 
-    enum class Status { INIT, ACTIVE, STANDBY, TERMINATED }
+    enum class Status {
+        INITIALISING,  // needs to be initialised
+        STARTED,       // actively listening for voice commands
+        STOPPED,       // user pressed the stop button
+        TERMINATED     // Idiolect is closed. Restart required
+    }
 
     private fun setStatus(s: Status) {
         lock.withLock {
+            log.info("ListeningState -> $s")
             status.set(s)
             condition.signal()
         }
@@ -23,16 +31,36 @@ object ListeningState {
 
     val isTerminated get() = getStatus() == TERMINATED
 
-    val isInit get() = getStatus() == INIT
+    val isInit get() = getStatus() == INITIALISING
 
-    val isActive get() = getStatus() == ACTIVE
+    val isStarted get() = getStatus() == STARTED
 
-    fun waitIfStandby() =
-        lock.withLock { if (status.get() == STANDBY) condition.await() }
+    fun waitIfStandby() {
+        lock.withLock {
+            if (status.get() == STOPPED) {
+                log.info("ListeningState is STOPPED. ${Thread.currentThread().name} waiting...")
+                condition.await()
+            }
+            log.info("ListeningState is ${status.get()}. ${Thread.currentThread().name} proceeding")
+        }
+    }
 
-    fun standBy() = setStatus(STANDBY)
+    /**
+     * IllegalStateException may be thrown if app calls microphone.stream.read() before calling line.start()
+     */
+    fun waitForStarted() {
+        lock.withLock {
+            while (status.get() != STARTED) {
+                log.info("ListeningState is ${status.get()}. ${Thread.currentThread().name} waiting for STARTED...")
+                condition.await()
+            }
+            log.info("...ListeningState is STARTED. ${Thread.currentThread().name} proceeding")
+        }
+    }
 
-    fun activate() = setStatus(ACTIVE)
+    fun stopped() = setStatus(STOPPED)
 
-    fun terminate() = setStatus(TERMINATED)
+    fun started() = setStatus(STARTED)
+
+    fun terminated() = setStatus(TERMINATED)
 }

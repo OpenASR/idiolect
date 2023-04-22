@@ -23,14 +23,14 @@ import kotlin.concurrent.thread
 
 
 class AudioTab : JComponent(), Disposable, AncestorListener {
-    private var vuMeter = VuMeter(null, VuMeter.RMS_MODE)
     private var microphone: CustomMicrophone = service()
+    private var vuMeter = VuMeter(null, VuMeter.RMS_MODE)
     private val startTestButton = JButton("Start test")
     private val replayButton = JButton("Replay")
     private val waveformVisualizer = WaveformVisualizer()
     private val waveformButton = JButton("Start")
     private var isTabVisible = false
-    private var isRecording = false
+    private var isRecordingTestClip = false
     private var clip: Clip? = null
 
     init {
@@ -120,13 +120,14 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
                 startWaveform(line)
             } else { // if (event.stateChange == ItemEvent.DESELECTED) {
                 stopThreads()
-                microphone.stopRecording()
+                microphone.close()
             }
         }
 
         return audioInputSelector
     }
 
+    /** Check to see if this tab has just become visible */
     override fun ancestorAdded(event: AncestorEvent?) {
         if (!isTabVisible && isVisible) {
             isTabVisible = true
@@ -134,6 +135,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
         }
     }
 
+    /** Check to see if this tab is still visible */
     override fun ancestorRemoved(event: AncestorEvent?) {
         if (isTabVisible) {
             isTabVisible = false
@@ -149,10 +151,12 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
     }
 
     private fun startThreads() {
-        vuMeter.start()
+        microphone.startRecording()
+        startVuMeter(microphone.getLine())
     }
 
     private fun stopThreads() {
+        microphone.stopRecording()
         stopVuMeter()
         stopWaveform()
     }
@@ -187,7 +191,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
     private fun initialiseTestButtons() {
         replayButton.isEnabled = false
         startTestButton.addActionListener {
-            if (!isRecording) {
+            if (!isRecordingTestClip) {
 //                microphone.startRecording()
                 startTestButton.text = "Stop Test"
                 replayButton.isEnabled = false
@@ -216,7 +220,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
                 startTestButton.text = "Start test"
                 replayButton.isEnabled = true
             }
-            isRecording = !isRecording
+            isRecordingTestClip = !isRecordingTestClip
         }
 
         replayButton.addActionListener {
@@ -232,7 +236,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
             if (waveformVisualizer.isRunning()) {
                 stopWaveform()
             } else {
-                startWaveform()
+                startWaveform(microphone.getLine())
             }
         }
     }
@@ -256,13 +260,10 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
             waveformVisualizer.setDataLine(line)
             waveformVisualizer.setStream(microphone.stream)
 //            waveformVisualizer.setStream(FileInputStream(File(IdiolectConfig.idiolectHomePath + "/temp.wav")))
-            startWaveform()
-        }
-    }
 
-    private fun startWaveform() {
-        waveformVisualizer.start()
-        waveformButton.text = "Stop"
+            waveformVisualizer.start()
+            waveformButton.text = "Stop"
+        }
     }
 
     private fun stopWaveform() {

@@ -107,21 +107,3 @@ open class VuMeter(private var dataLine: TargetDataLine?, private val mode: Int 
         return scaled
     }
 }
-
-
-
-//    override fun paintComponent(g: Graphics) {
-//        super.paintComponent(g)
-//
-//        // calculate the height of the green bar based on the current level
-//        val greenHeight = (height * level).toInt()
-//
-//        // draw the red background bar
-//        g.color = JBColor.RED
-//        g.fillRect(0, 0, width, height)
-//
-//        // draw the green level bar on top of the red background bar
-//        g.color = JBColor.GREEN
-//        g.fillRect(0, height - greenHeight, width, greenHeight)
-//    }
-//

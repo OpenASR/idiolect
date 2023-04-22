@@ -6,6 +6,9 @@ import org.openasr.idiolect.asr.AsrService
 import org.openasr.idiolect.nlp.NlpResultListener
 import org.openasr.idiolect.presentation.Icons
 
+/**
+ * Toggles the listening status of the ASR Service
+ */
 object VoiceRecordControllerAction : IdiolectAction() {
     @Volatile private var isRecording = false
     private val messageBus = ApplicationManager.getApplication().messageBus

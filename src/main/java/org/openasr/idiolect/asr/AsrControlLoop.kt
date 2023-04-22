@@ -20,11 +20,34 @@ class AsrControlLoop : AsrSystem, Runnable {
         this.nlpProvider = nlpProvider
     }
 
-    override fun start() =
-        startRecognition().also { if (!speechThread.isAlive) speechThread.start() }
+    override fun start() {
+//        startRecognition()
+        if (!speechThread.isAlive) {
+            speechThread.start()
+        }
+    }
 
+    override fun setGrammar(grammar: Array<String>) = asrProvider.setGrammar(grammar)
+
+    override fun startRecognition() = asrProvider.startRecognition()
+
+    override fun stopRecognition() = asrProvider.stopRecognition()
+
+    override fun terminate() = asrProvider.stopRecognition()
+
+    /**
+     * Called from IntentHandlers via the likes of promptForUtterance()
+     *
+     * TODO: This probably needs to be refactored so that there's only one clear call to `asrSystem.waitForUtterance()`
+     */
     override fun waitForUtterance(): String = asrProvider.waitForSpeech()?.utterance ?: ""
 
+    /**
+     * This will block until the user says something in grammar, or one of the escape words.
+     *
+     * @param grammar - phrases that we're expecting the user to say
+     * @param escapeWords - defaults to "dont worry", "never mind", "quit", "forget it", "escape"
+     */
     override fun waitForUtterance(grammar: Array<String>,
                                   escapeWords: Array<String>): String {
         val effectiveGrammar = grammar.plus(escapeWords)
@@ -49,18 +72,11 @@ class AsrControlLoop : AsrSystem, Runnable {
         return response
     }
 
-    override fun setGrammar(grammar: Array<String>) = asrProvider.setGrammar(grammar)
-
-    override fun startRecognition() = asrProvider.startRecognition()
-
-    override fun stopRecognition() = asrProvider.stopRecognition()
-
-    override fun terminate() = asrProvider.stopRecognition()
-
+    /** Called from the ASR Thread to capture asynchronous user requests */
     override fun run() {
         while (!ListeningState.isTerminated) {
             try {
-                ListeningState.waitIfStandby()
+                ListeningState.waitForStarted()
                 // This blocks on a recognition result
                 val nlpRequest = asrProvider.waitForSpeech()
 

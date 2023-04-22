@@ -9,13 +9,13 @@ interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
     /**
      * Starts recognition process.
      */
-    override fun startRecognition()
+    override fun startRecognition(): Boolean
 
     /**
      * Stops recognition process.
      * Recognition process is paused until the next call to startRecognition.
      */
-    override fun stopRecognition()
+    override fun stopRecognition(): Boolean
 
     /** Blocks until we recognise something from the user. Called from [AsrControlLoop.run] */
     fun waitForSpeech(): NlpRequest?
