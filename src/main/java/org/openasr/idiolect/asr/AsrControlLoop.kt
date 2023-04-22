@@ -10,7 +10,7 @@ class AsrControlLoop : AsrSystem, Runnable {
 
     private lateinit var asrProvider: AsrProvider
     private lateinit var nlpProvider: NlpProvider
-    private var speechThread = Thread(this, "ASR Thread")
+    private var speechThread = Thread(this, "Idiolect ASR Control Loop")
     private val messageBus = ApplicationManager.getApplication().messageBus
 
     override fun supportsAsrAndNlp(asrProvider: AsrProvider, nlpProvider: NlpProvider) = true

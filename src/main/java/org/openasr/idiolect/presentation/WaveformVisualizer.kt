@@ -57,7 +57,7 @@ class WaveformVisualizer : JPanel(), Runnable, Disposable {
     }
 
     fun start() {
-        Thread(this).start()
+        Thread(this, "Idiolect Waveform Visualizer").start()
     }
 
     fun stop() {

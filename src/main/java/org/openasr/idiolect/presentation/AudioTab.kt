@@ -193,7 +193,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
                 replayButton.isEnabled = false
 
                 // Start recording audio data to ByteArrayOutputStream
-                thread {
+                thread(name = "Audio Clip Recorder") {
                     val targetDataLine = microphone.getLine()!!
                     val stream = microphone.stream
                     val byteArrayOutputStream = ByteArrayOutputStream()

@@ -151,9 +151,10 @@ object ActionRoutines {
 //            }
 
 
+    /** User requested "stop listening" */
     fun pauseSpeech() {
         beep()
-        while (ListeningState.isActive) {
+        while (ListeningState.isStarted) {
             val result = AsrService.waitForUtterance(arrayOf("resume", "listening"))
 
             if (result == "resume listening") {
@@ -177,7 +178,7 @@ object ActionRoutines {
 
     @Synchronized
     fun beep() {
-        val t = Thread {
+        val t = Thread({
             try {
                 val clip = AudioSystem.getClip()
                 val inputStream = AudioSystem.getAudioInputStream(
@@ -187,7 +188,7 @@ object ActionRoutines {
             } catch (e: Exception) {
                 System.err.println(e.message)
             }
-        }
+        }, "Idiolect Beep")
 
         t.start()
 

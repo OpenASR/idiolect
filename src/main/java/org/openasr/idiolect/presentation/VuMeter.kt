@@ -51,7 +51,7 @@ open class VuMeter(private var dataLine: TargetDataLine?, private val mode: Int 
 
     fun start() {
         if (!running) {
-            Thread(this).start()
+            Thread(this, "Idiolect VU Meter").start()
         }
     }
 
