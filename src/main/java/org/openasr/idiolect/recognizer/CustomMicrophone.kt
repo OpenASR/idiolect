@@ -4,15 +4,18 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
 import org.openasr.idiolect.settings.IdiolectConfig
+import org.openasr.idiolect.utils.AudioUtils
 import java.io.*
 import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
-import javax.sound.sampled.FloatControl.Type.MASTER_GAIN
 
 @Service
 class CustomMicrophone : Closeable, Disposable {
     companion object {
         private val log = logger<CustomMicrophone>()
+
+        val DEFAULT_GAIN = 5
+        val DEFAULT_NOISE = 10
 
         private const val sampleRate = 16000f
         private const val sampleSize = 16
@@ -29,9 +32,11 @@ class CustomMicrophone : Closeable, Disposable {
 
     fun open() {
         if (line == null) {
-            useLine(AudioSystem.getTargetDataLine(format))
+            useDefaultLine()
         }
     }
+
+    fun useDefaultLine() = useLine(AudioSystem.getTargetDataLine(format))
 
     fun useInputDevice(device: Mixer.Info): TargetDataLine? {
         log.info("Using audio input device: ${device.name}")
@@ -39,14 +44,25 @@ class CustomMicrophone : Closeable, Disposable {
         return line
     }
 
-    fun getLine() = line
+    fun useInputDevice(deviceName: String) {
+        if (deviceName.isNotEmpty()) {
+            val device = AudioUtils.getAudioInputDevices().firstOrNull { device ->
+                device.name == deviceName
+            }
 
-//    fun useInputDevice(device: String): TargetDataLine? {
-//        log.info("Using audio input device: ${device}")
-//        AudioSystem.
-//        useLine(AudioSystem.getTargetDataLine(format, device))
-//        return line
-//    }
+            if (device != null) {
+                log.info("Using audio input device: ${deviceName}")
+                useInputDevice(device)
+                return
+            }
+
+            log.info("Audio input device '${deviceName}' not found, using default line")
+        }
+
+        useDefaultLine()
+    }
+
+    fun getLine() = line
 
     private fun useLine(line: TargetDataLine) {
         line.open()

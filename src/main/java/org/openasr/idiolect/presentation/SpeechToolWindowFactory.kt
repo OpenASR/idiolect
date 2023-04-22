@@ -22,7 +22,8 @@ class SpeechToolWindowFactory : ToolWindowFactory, DumbAware {
         toolWindow.contentManager.addContent(speechCommandsContent)
 
         val audioTab = AudioTab()
-        val audioContent = contentFactory.createContent(audioTab.createComponent(), "Audio", false)
+        val audioContent = contentFactory.createContent(audioTab, "Audio", false)
+        audioContent.setDisposer(audioTab)
         toolWindow.contentManager.addContent(audioContent)
     }
 }

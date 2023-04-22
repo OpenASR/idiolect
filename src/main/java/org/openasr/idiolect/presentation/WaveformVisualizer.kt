@@ -1,5 +1,6 @@
 package org.openasr.idiolect.presentation
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.invokeLater
 import com.intellij.ui.JBColor
 import org.jfree.chart.ChartPanel
@@ -17,7 +18,7 @@ import javax.sound.sampled.TargetDataLine
 import javax.swing.JPanel
 import kotlin.math.min
 
-class WaveformVisualizer : JPanel(), Runnable {
+class WaveformVisualizer : JPanel(), Runnable, Disposable {
     private val dataset = XYSeriesCollection()
     private val waveformSeries = XYSeries("Waveform")
     private val chart: JFreeChart
@@ -66,6 +67,10 @@ class WaveformVisualizer : JPanel(), Runnable {
     }
 
     fun isRunning() = running
+
+    override fun dispose() {
+        stop()
+    }
 
     fun setDataLine(dataLine: TargetDataLine?) {
         this.dataLine = dataLine
