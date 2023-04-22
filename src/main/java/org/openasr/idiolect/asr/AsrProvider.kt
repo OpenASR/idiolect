@@ -23,4 +23,23 @@ interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
     fun setGrammar(grammar: Array<String>) {}
 
     fun setModel(model: String) {}
+
+    companion object {
+        val defaultStopWords = listOf("yeah", "ah", "oh")
+        fun stopWords(grammar: Array<String>?,
+                      stopWords: Iterable<String> = defaultStopWords): List<String> {
+            return stopWords.filterNot { grammar?.contains(it) ?: true }
+        }
+
+        /**
+         * Removes the stop words from the utterance
+         * @param utterance multiple words separated by space, all lower-case
+         * @param stopWords a list of words to remove
+         **/
+        fun removeStopWords(utterance: String, stopWords: Iterable<String>): String {
+            val words = utterance.split(" ")
+            val filteredWords = words.filterNot { it in stopWords }
+            return filteredWords.joinToString(" ")
+        }
+    }
 }

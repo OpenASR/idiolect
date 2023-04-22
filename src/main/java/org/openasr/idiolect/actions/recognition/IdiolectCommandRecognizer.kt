@@ -27,7 +27,7 @@ class IdiolectCommandRecognizer : IntentResolver("idiolect Commands", 0) {
                 logUtteranceForIntent(utterance, intentName)
                 return NlpResponse(intentName, mapOf(IdiolectCommandIntentHandler.SLOT_COMMAND_TERM to values[1]))
             }
-        }.withExamples("what can I say", "what can I say about 'template'"),
+        }.withExamples("what can i say", "what can i say about 'template'"),
 
 //        NlpGrammar("idiolect.Command").withExample("command mode")
 //                ActionCallInfo(intentName, true).also { GrammarService.useCommandGrammar() }

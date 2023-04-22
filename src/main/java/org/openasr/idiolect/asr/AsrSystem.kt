@@ -29,7 +29,8 @@ interface AsrSystem {
     fun waitForUtterance(): String
 
     fun waitForUtterance(grammar: Array<String>,
-                         escapeWords: Array<String> = arrayOf("dont worry", "never mind", "quit", "forget it", "escape")): String
+                         escapeWords: Array<String>
+                         = arrayOf("dont worry", "never mind", "quit", "forget it", "escape")): String
 
     fun setGrammar(grammar: Array<String>) {}
 

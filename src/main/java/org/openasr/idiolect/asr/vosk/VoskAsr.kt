@@ -20,6 +20,7 @@ import java.util.zip.*
 
 class VoskAsr : AsrProvider {
     private lateinit var microphone: CustomMicrophone
+    private var grammar: Array<String>? = null
 
     override fun displayName() = "Vosk"
 
@@ -164,35 +165,46 @@ class VoskAsr : AsrProvider {
     /**
      * @param grammar eg: ["hello", "world", "[unk]"]
      */
-    override fun setGrammar(grammar: Array<String>) =
+    override fun setGrammar(grammar: Array<String>) {
         recognizer//.apply { setGrammar(grammar.joinToString("\",\"", "[\"", "\"]")) }
             .reset()
+    }
 
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
     override fun waitForSpeech(): NlpRequest {
         var nbytes: Int
         val b = ByteArray(4096)
 
+        val stopWords = AsrProvider.stopWords(grammar)
+
         while (microphone.stream.read(b).also { nbytes = it } >= 0) {
             if (recognizer.acceptWaveForm(b, nbytes)) {
-                val result = tryParseResult(recognizer.result)
+                val result = tryParseResult(recognizer.result, stopWords)
                 if (result.alternatives.isNotEmpty()) return result
             }
         }
 
-        return tryParseResult(recognizer.finalResult)
+        return tryParseResult(recognizer.finalResult, stopWords)
     }
 
-    private fun tryParseResult(json: String): NlpRequest = NlpRequest(parseVosk(json))
+    private fun tryParseResult(json: String, stopWords: List<String>): NlpRequest = NlpRequest(parseVosk(json, stopWords))
+
 
     /** Use this instead of parseResult if alternatives > 0 */
-    private fun parseVosk(json: String): List<String> =
+    private fun parseVosk(json: String, stopWords: List<String>): List<String> =
         parseString(json).asJsonObject.let { jo ->
             jo.get("alternatives").run {
                 if (isJsonNull) listOf(jo.get("text").toString())
                 else asJsonArray.map { it.asJsonObject.get("text").asString }
             }
-        }.filter { it.isNotEmpty() }
+        }.filter {
+            // I see a LOT of "yeah" | "i" | "ah".
+            // - "yeah" could be a valid response to a question, if it is explicitly allowed in grammar
+            // - "i" could be in grammar as it helps to make utterances more natural, but probably not by itself
+            it.isNotEmpty() && !stopWords.contains(it) && it != "i"
+        }.map {
+            AsrProvider.removeStopWords(it, stopWords)
+        }
 
     private fun showNotificationForModel() {
         NotificationGroupManager.getInstance()
