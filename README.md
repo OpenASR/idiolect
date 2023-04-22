@@ -7,6 +7,10 @@
 
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. Originally developed as part of a [JetBrains hackathon](https://blog.jetbrains.com/blog/2015/08/31/jetbrains-3rd-annual-hackathon-new-generation-debugger-grabs-1st-place/), it is now a community-supported project. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
+# Deprecated
+
+Please see [idiolect](https://plugins.jetbrains.com/plugin/20776-idiolect)
+
 ## Usage
 
 To get started, press the ![Voice control](src/main/resources/org.openasr.idear/icons/start.png) button in the toolbar, then speak a command, e.g. "Hi, IDEA!" Idear supports a simple [grammar](src/main/resources/org.openasr.idear/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idear/wiki/Feature-Roadmap#features). Click the button once more to deactivate.
