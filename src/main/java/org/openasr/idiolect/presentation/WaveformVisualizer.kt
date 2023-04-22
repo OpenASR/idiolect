@@ -45,8 +45,7 @@ class WaveformVisualizer : JPanel(), Runnable, Disposable {
         running = true
         while (running) {
             val b = ByteArray(bufferSize)
-            val read = stream!!.read(b, 0, bufferSize)
-//            val read = dataLine!!.read(b, 0, bufferSize)
+            val read = stream?.read(b, 0, bufferSize) ?: dataLine?.read(b, 0, bufferSize) ?: -1
             if (read == -1) break
 
             // Update waveform visualizer with samples
