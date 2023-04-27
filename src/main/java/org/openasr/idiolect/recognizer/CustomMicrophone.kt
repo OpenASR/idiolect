@@ -3,7 +3,6 @@ package org.openasr.idiolect.recognizer
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
-import org.openasr.idiolect.settings.IdiolectConfig
 import org.openasr.idiolect.utils.AudioUtils
 import java.io.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -19,10 +18,13 @@ class CustomMicrophone : Closeable, Disposable {
         val DEFAULT_NOISE = 10
 
         private const val sampleRate = 16000f
-        private const val sampleSize = 16
+        private const val sampleSizeInBits = 16
+        private const val chanels = 1
+        private const val frameSize = 1
+        private const val frameRate = 2
         private const val bigEndian = false
 
-        private val TEMP_FILE = IdiolectConfig.idiolectHomePath + "/temp.wav"
+        private val TEMP_FILE = System.getProperty("user.home") + "/.idiolect/temp.wav"
     }
 
     private val activeThreadCount = AtomicInteger(0)
@@ -30,7 +32,8 @@ class CustomMicrophone : Closeable, Disposable {
     lateinit var stream: AudioInputStream
     private var isRecording: Boolean = false
 
-    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSize, 1, 2, sampleRate, bigEndian)
+//    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 16000f, 16, 1, 2, 16000f, false)
+    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSizeInBits, chanels, 2, sampleRate, bigEndian)
 
     fun open() {
         if (line == null) {
@@ -161,9 +164,16 @@ class CustomMicrophone : Closeable, Disposable {
 //        WinMM.mixerClose(hMixer)
     }
 
+    /** Used by the Idiolect toolbar to record an audio clip for evaluation */
     @Throws(IOException::class)
     fun recordFromMic(duration: Long): File {
-        //Why is this in a thread?
+        return recordFromMic(TEMP_FILE, duration)
+    }
+
+    /** Can be used to record audio as idiolect hears it, for playback or testing of recognition */
+    @Throws(IOException::class)
+    fun recordFromMic(fileName: String, duration: Long): File {
+        // Why is this in a thread?
         Thread {
             try {
                 Thread.sleep(duration)
@@ -175,7 +185,7 @@ class CustomMicrophone : Closeable, Disposable {
 
         startRecording()
 
-        return File(TEMP_FILE).apply {
+        return File(fileName).apply {
             this.parentFile.mkdirs()
             AudioSystem.write(stream, WAVE, this)
         }

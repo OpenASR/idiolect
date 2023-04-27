@@ -6,6 +6,7 @@ import com.intellij.notification.NotificationType.INFORMATION
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.ShowSettingsUtil
+import com.intellij.util.messages.MessageBus
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
 import org.openasr.idiolect.nlp.NlpRequest
@@ -16,6 +17,7 @@ import java.io.*
 import java.net.URI
 import java.net.http.*
 import java.util.zip.*
+import javax.sound.sampled.AudioInputStream
 
 
 class VoskAsr : AsrProvider {
@@ -26,7 +28,7 @@ class VoskAsr : AsrProvider {
 
     companion object {
         private lateinit var instance: VoskAsr
-        private val messageBus = ApplicationManager.getApplication()!!.messageBus
+        private lateinit var messageBus: MessageBus
         private val httpClient = HttpClient.newBuilder().build()
         lateinit var recognizer: Recognizer
 
@@ -118,11 +120,15 @@ class VoskAsr : AsrProvider {
             if (model.isNotEmpty()) {
                 VoskConfig.saveModelPath(model)
 
-                recognizer = Recognizer(Model(model), 16000f)
-                recognizer.setMaxAlternatives(alternatives)
+                initialiseRecogniserForModel(model)
 
                 messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been applied")
             }
+        }
+
+        fun initialiseRecogniserForModel(model: String) {
+            recognizer = Recognizer(Model(model), 16000f)
+            recognizer.setMaxAlternatives(alternatives)
         }
 
         fun activate() {
@@ -141,9 +147,11 @@ class VoskAsr : AsrProvider {
             showNotificationForModel()
 
             throw ModelNotAvailableException()
-        } else {
-            setModel(VoskConfig.settings.modelPath)
         }
+
+        messageBus = ApplicationManager.getApplication()!!.messageBus
+
+        setModel(VoskConfig.settings.modelPath)
 
         microphone = service()
         microphone.open()
@@ -172,12 +180,16 @@ class VoskAsr : AsrProvider {
 
     /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
     override fun waitForSpeech(): NlpRequest {
+        return processAudioInputStream(microphone.stream)
+    }
+
+    public fun processAudioInputStream(stream: AudioInputStream): NlpRequest {
         var nbytes: Int
         val b = ByteArray(4096)
 
         val stopWords = AsrProvider.stopWords(grammar)
 
-        while (microphone.stream.read(b).also { nbytes = it } >= 0) {
+        while (stream.read(b).also { nbytes = it } >= 0) {
             if (recognizer.acceptWaveForm(b, nbytes)) {
                 val result = tryParseResult(recognizer.result, stopWords)
                 if (result.alternatives.isNotEmpty()) return result
