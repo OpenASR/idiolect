@@ -23,13 +23,14 @@ interface Filter {
     }
 
     /** Can be used to record the output of the Filters for testing */
-    fun filter(audioInputStream: InputStream): ByteArrayOutputStream {
+    fun filter(audioInputStream: AudioInputStream): ByteArrayOutputStream {
         val end = audioInputStream.available()
         val output = ByteArrayOutputStream(end)
         var b = ByteArray(2)
 
         for (i in 0 until end step 2) {
-            audioInputStream.readNBytes(2) // read(b)
+//            audioInputStream.readNBytes(2)
+            audioInputStream.read(b)
 
             filterSample(b, 0)
 

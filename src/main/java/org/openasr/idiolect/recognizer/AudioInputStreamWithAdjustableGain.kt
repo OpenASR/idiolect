@@ -11,6 +11,12 @@ class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLi
     private var masterGain = DEFAULT_MASTER_GAIN
     private var noiseLevel = DEFAULT_NOISE_LEVEL
 
+//    private val filter = NoiseSuppressor()
+//
+//    private val frameSize = 256
+//    private val frameBuffer = IntArray(frameSize)
+
+
     @Throws(IOException::class)
     override fun read(b: ByteArray, off: Int, len: Int): Int {
         val bytesRead = super.read(b, off, len)
@@ -25,18 +31,52 @@ class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLi
             // TODO: delegate to Filter.filterSample(b, i) and move into recognizer.filter
             var sample = ((b[i + 1].toInt() shl 8) + (b[i].toInt() and 0xff)) // / MAX_SAMPLE_VALUE
 
-            val amplifiedSample = transformSample(sample)
+            val amplifiedSample = filterSample(sample)
 
             b[i] = (amplifiedSample and 0xff).toByte()
             b[i + 1] = ((amplifiedSample shr 8) and 0xff).toByte()
         }
 
-        //dump(b, off, read);
-
         return bytesRead
     }
 
-    fun transformSample(sample: Int): Int {
+   /* @Throws(IOException::class)
+    override fun read(b: ByteArray, off: Int, len: Int): Int {
+        val bytesRead = super.read(b, off, len)
+        if (bytesRead == -1) {
+            return bytesRead
+        }
+
+        val end = off + bytesRead
+        var j = 0
+
+        // step by 2 bytes because `sampleSizeInBytes = format.sampleSizeInBits / 8` = 2
+        for (i in off until end step 2) {
+            // TODO: delegate to Filter.filterSample(b, i) and move into recognizer.filter
+            var sample = ((b[i + 1].toInt() shl 8) + (b[i].toInt() and 0xff)) // / MAX_SAMPLE_VALUE
+
+            frameBuffer[j++] = sample
+
+            if (j == frameSize) {
+                // frameBuffer is full, filter and update `b` buffer
+                filter.filterSamples(frameBuffer, j)
+
+                for (k in 0 until j) {
+                    val filteredSample = frameBuffer[k]
+                    val l = off + (k shl 1)
+
+                    b[l] = (filteredSample and 0xff).toByte()
+                    b[l + 1] = ((filteredSample shr 8) and 0xff).toByte()
+                }
+
+                j = 0
+            }
+        }
+
+        return bytesRead
+    }*/
+
+    fun filterSample(sample: Int): Int {
         if (sample < noiseLevel && sample > -noiseLevel) {
             return 0
         }

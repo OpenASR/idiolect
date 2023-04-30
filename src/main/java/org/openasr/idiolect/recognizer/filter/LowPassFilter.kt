@@ -1,8 +1,6 @@
 package org.openasr.idiolect.recognizer.filter
 
 /**
- * This filter uses a simple FIR (finite impulse response) filter design method.
- *
  * If you are trying to remove high-frequency noise from an audio signal,
  * you would want to choose a cutoff frequency that is above the frequency of the noise.
  *

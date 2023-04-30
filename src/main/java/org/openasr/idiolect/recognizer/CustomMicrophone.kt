@@ -19,21 +19,47 @@ class CustomMicrophone : Closeable, Disposable {
 
         private const val sampleRate = 16000f
         private const val sampleSizeInBits = 16
-        private const val chanels = 1
-        private const val frameSize = 1
-        private const val frameRate = 2
+        private const val channels = 1
+        // "the number of bytes in each frame"
+        // The alternative constructor calculates it: `((sampleSizeInBits + 7) / 8) * channels` which would be 2.
+        // GPT-3 says:
+        // A frame size of 2 is likely too small to be practical for most speech recognition applications,
+        // as it would result in very high processing overhead due to the need to process a large number of small frames.
+        // A frame size of 1024 may be more appropriate for some applications, especially those that require high accuracy
+        // and are not as concerned with real-time performance.
+//        private const val frameSize = 1024
+        // GPT-3 also says that Vosk defaults to 480 samples
+        private const val frameSize = 480 * 2                                   // 960
+//        private const val frameSize = ((sampleSizeInBits + 7) / 8) * channels // 2 or 1024?
+        // "the number of frames per second"
+        // The alternative constructor uses sampleRate
+        private const val frameRate = 2 * sampleRate / frameSize              // 16000 or 31.25
         private const val bigEndian = false
 
         private val TEMP_FILE = System.getProperty("user.home") + "/.idiolect/temp.wav"
+
+        /**
+         * Requirements:
+         *                    sampleRate size   frameSize (according to Google Bard)
+         * - Amazon Lex:            16bit       1024 bytes  little endian
+         * - Azure:           16KHz 16bit       1024 bytes
+         * - Google:          16kHz 16bit mono  1024(2?) bytes
+         * - IBM Watson                         1024 bytes
+         * - Baidu                              1024
+         * - Vosk/Kaldi:  PCM 16kHz 16bit mono  1024 bytes
+         * - HTK              16kHz             1024 bytes
+         * - OpenSMILE        16kHz             2048 bytes
+         */
+//    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 16000f, 16, 1, 960, 31.25f, false)
+//    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 16000f, 16, 1, 2, 16f, false)
+        val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSizeInBits, channels, frameSize, frameRate, bigEndian)
+//    val format = AudioFormat(sampleRate, sampleSizeInBits, channels, true, bigEndian)
     }
 
     private val activeThreadCount = AtomicInteger(0)
     private var line: TargetDataLine? = null
     lateinit var stream: AudioInputStream
     private var isRecording: Boolean = false
-
-//    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 16000f, 16, 1, 2, 16000f, false)
-    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSizeInBits, chanels, 2, sampleRate, bigEndian)
 
     fun open() {
         if (line == null) {
