@@ -43,9 +43,9 @@
 
         <notificationGroup id="Idiolect" displayType="BALLOON"/>
         <statusBarWidgetFactory id="Idiolect"
-                                implementation="org.openasr.idiolect.presentation.RecognitionStatusBarWidgetFactory"/>
+                                implementation="org.openasr.idiolect.presentation.statusbar.RecognitionStatusBarWidgetFactory"/>
         <toolWindow id="Idiolect" secondary="false" icon="AllIcons.CodeWithMe.CwmMicOn" anchor="bottom"
-                    factoryClass="org.openasr.idiolect.presentation.SpeechToolWindowFactory"/>
+                    factoryClass="org.openasr.idiolect.presentation.toolwindow.SpeechToolWindowFactory"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idiolect">
