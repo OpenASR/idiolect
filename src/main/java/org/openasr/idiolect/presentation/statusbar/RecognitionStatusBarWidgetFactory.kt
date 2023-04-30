@@ -1,4 +1,4 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.statusbar
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer

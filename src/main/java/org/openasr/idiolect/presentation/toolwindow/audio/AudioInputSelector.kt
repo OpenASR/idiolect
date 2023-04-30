@@ -1,11 +1,11 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.toolwindow.audio
 
+import org.openasr.idiolect.settings.IdiolectConfig
+import org.openasr.idiolect.utils.AudioUtils
 import java.awt.ItemSelectable
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
-import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Mixer
-import javax.sound.sampled.TargetDataLine
 import javax.swing.BoxLayout
 import javax.swing.ButtonGroup
 import javax.swing.JPanel
@@ -52,11 +52,12 @@ class AudioInputSelector : JPanel(), ItemSelectable {
 
     private fun reset() {
         buttonGroup.clearSelection()
+        selectedItem = null
         removeAll()
     }
 
     private fun addAllAudioInputDevices() {
-        getAudioInputDevices().forEach { info ->
+        AudioUtils.getAudioInputDevices().forEach { info ->
             addRadioButton(info)
         }
     }
@@ -71,6 +72,12 @@ class AudioInputSelector : JPanel(), ItemSelectable {
             selectedItem = info
             itemListener?.itemStateChanged(ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, info, ItemEvent.SELECTED))
         }
+
+        if (info.name == IdiolectConfig.settings.audioInputDevice) {
+            selectedItem = info
+            radioButton.isSelected = true
+        }
+
         buttonGroup.add(radioButton)
         add(radioButton)
         revalidate()
@@ -82,13 +89,5 @@ class AudioInputSelector : JPanel(), ItemSelectable {
             remove(it)
             revalidate()
         }
-    }
-
-    private fun getAudioInputDevices(): List<Mixer.Info> {
-        return AudioSystem.getMixerInfo().filter(::isInputDevice)
-    }
-
-    private fun isInputDevice(mixerInfo: Mixer.Info): Boolean {
-        return AudioSystem.getMixer(mixerInfo).targetLineInfo.any { it.lineClass == TargetDataLine::class.java }
     }
 }

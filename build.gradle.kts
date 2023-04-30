@@ -10,7 +10,11 @@ plugins {
 group = "org.openasr"
 version = "1.4.9-SNAPSHOT"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(17))
+  }
+}
 
 intellij {
   version = "2023.1" // The version of the IntelliJ Platform IDE that will be used to build the plugin
@@ -115,4 +119,5 @@ dependencies {
   testImplementation("ai.hypergraph:kaliningraph:0.2.1") {
     exclude(group = "org.sosy-lab")
   }
+  testImplementation("io.mockk:mockk:1.13.5")
 }

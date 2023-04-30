@@ -1,4 +1,4 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.statusbar
 
 import com.intellij.notification.*
 import com.intellij.openapi.Disposable
@@ -12,6 +12,7 @@ import com.intellij.util.application
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.nlp.*
+import org.openasr.idiolect.presentation.Icons
 import java.awt.event.MouseEvent
 import javax.swing.JComponent
 

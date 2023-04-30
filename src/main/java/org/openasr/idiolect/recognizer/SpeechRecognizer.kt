@@ -4,11 +4,11 @@ interface SpeechRecognizer {
     /**
      * Starts recognition process.
      */
-    fun startRecognition()
+    fun startRecognition(): Boolean
 
     /**
      * Stops recognition process.
      * Recognition process is paused until the next call to startRecognition.
      */
-    fun stopRecognition()
+    fun stopRecognition(): Boolean
 }

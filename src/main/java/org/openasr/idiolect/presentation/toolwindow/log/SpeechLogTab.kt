@@ -1,4 +1,4 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.toolwindow.log
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.Disposable

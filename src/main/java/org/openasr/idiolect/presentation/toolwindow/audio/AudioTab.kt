@@ -1,48 +1,46 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.toolwindow.audio
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.service
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.util.preferredWidth
 import org.openasr.idiolect.recognizer.CustomMicrophone
+import org.openasr.idiolect.settings.IdiolectConfig
+import java.awt.BorderLayout
 import java.awt.event.ItemEvent
 import java.io.ByteArrayOutputStream
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
-import javax.swing.JComponent
 import javax.sound.sampled.Mixer
 import javax.sound.sampled.TargetDataLine
 import javax.swing.JButton
+import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JSlider
+import javax.swing.event.AncestorEvent
+import javax.swing.event.AncestorListener
 import kotlin.concurrent.thread
 
-class AudioTab {
-    private var vuMeter = VuMeter(null)
+
+class AudioTab : JComponent(), Disposable, AncestorListener {
     private var microphone: CustomMicrophone = service()
+    private var vuMeter = VuMeter(null, VuMeter.RMS_MODE)
     private val startTestButton = JButton("Start test")
     private val replayButton = JButton("Replay")
     private val waveformVisualizer = WaveformVisualizer()
     private val waveformButton = JButton("Start")
-    private var isRecording = false
+    private var isTabVisible = false
+    private var isRecordingTestClip = false
     private var clip: Clip? = null
 
-    fun createComponent(): JComponent {
-        val audioInputSelector = AudioInputSelector()
+    init {
+        layout = BorderLayout()
+        add(createComponent(), BorderLayout.CENTER)
+        addAncestorListener(this)
+    }
 
-        // add event handler
-        audioInputSelector.addItemListener { event ->
-            val selectedDevice = audioInputSelector.selectedItem as Mixer.Info
-
-            if (event.stateChange == ItemEvent.SELECTED) {
-                val line = microphone.useInputDevice(selectedDevice)
-                startVuMeter(line)
-                startWaveform(line)
-            } else { // if (event.stateChange == ItemEvent.DESELECTED) {
-                stopVuMeter()
-                stopWaveform()
-                microphone.stopRecording()
-            }
-        }
+    private fun createComponent(): JComponent {
+        val audioInputSelector = createAudioInputSelector()
 
         // Button to detect bluetooth/USB microphones
         val refreshButton = JButton("Refresh devices")
@@ -55,13 +53,7 @@ class AudioTab {
         val volumeSlider = createVolumeSlider()
         val noiseLevelSlider = createNoiseLevelSlider()
 
-        waveformButton.addActionListener {
-            if (waveformVisualizer.isRunning()) {
-                stopWaveform()
-            } else {
-                startWaveform()
-            }
-        }
+        initialiseWaveformButton()
 
         return panel {
             threeColumnsRow({
@@ -114,23 +106,80 @@ class AudioTab {
         }
     }
 
+    private fun createAudioInputSelector(): AudioInputSelector {
+        val audioInputSelector = AudioInputSelector()
+
+        // add event handler
+        audioInputSelector.addItemListener { event ->
+            val selectedDevice = audioInputSelector.selectedItem as Mixer.Info
+
+            if (event.stateChange == ItemEvent.SELECTED) {
+                val line = microphone.useInputDevice(selectedDevice)
+                IdiolectConfig.settings.audioInputDevice = selectedDevice.name
+                startVuMeter(line)
+                startWaveform(line)
+            } else { // if (event.stateChange == ItemEvent.DESELECTED) {
+                stopThreads()
+                microphone.close()
+            }
+        }
+
+        return audioInputSelector
+    }
+
+    /** Check to see if this tab has just become visible */
+    override fun ancestorAdded(event: AncestorEvent?) {
+        if (!isTabVisible && isVisible) {
+            isTabVisible = true
+            startThreads()
+        }
+    }
+
+    /** Check to see if this tab is still visible */
+    override fun ancestorRemoved(event: AncestorEvent?) {
+        if (isTabVisible) {
+            isTabVisible = false
+            stopThreads()
+        }
+    }
+
+    override fun ancestorMoved(event: AncestorEvent?) {}
+
+    override fun dispose() {
+        vuMeter.dispose()
+        waveformVisualizer.dispose()
+    }
+
+    private fun startThreads() {
+        microphone.startRecording()
+        startVuMeter(microphone.getLine())
+    }
+
+    private fun stopThreads() {
+        microphone.stopRecording()
+        stopVuMeter()
+        stopWaveform()
+    }
+
     private fun createVolumeSlider(): JSlider {
-        val volumeSlider = JSlider(JSlider.VERTICAL, 0, 10, 5)
+        val volumeSlider = JSlider(JSlider.VERTICAL, 0, 10, IdiolectConfig.settings.audioGain)
 
         volumeSlider.addChangeListener {
             val volume = volumeSlider.value
             microphone.setVolume(volume)
+            IdiolectConfig.settings.audioGain = volume
         }
 
         return volumeSlider
     }
 
     private fun createNoiseLevelSlider(): JSlider {
-        val noiseLevelSlider = JSlider(JSlider.VERTICAL, 0, 512, 10)
+        val noiseLevelSlider = JSlider(JSlider.VERTICAL, 0, 512, IdiolectConfig.settings.audioNoise)
 
         noiseLevelSlider.addChangeListener {
             val noiseLevel = noiseLevelSlider.value
             microphone.setNoiseLevel(noiseLevel)
+            IdiolectConfig.settings.audioNoise = noiseLevel
         }
 
         return noiseLevelSlider
@@ -142,13 +191,13 @@ class AudioTab {
     private fun initialiseTestButtons() {
         replayButton.isEnabled = false
         startTestButton.addActionListener {
-            if (!isRecording) {
+            if (!isRecordingTestClip) {
 //                microphone.startRecording()
                 startTestButton.text = "Stop Test"
                 replayButton.isEnabled = false
 
                 // Start recording audio data to ByteArrayOutputStream
-                thread {
+                thread(name = "Audio Clip Recorder") {
                     val targetDataLine = microphone.getLine()!!
                     val stream = microphone.stream
                     val byteArrayOutputStream = ByteArrayOutputStream()
@@ -164,14 +213,14 @@ class AudioTab {
 
                     val clip = AudioSystem.getClip()
                     val bytes = byteArrayOutputStream.toByteArray()
-                    clip.open(microphone.format, bytes, 0, bytes.size)
+                    clip.open(CustomMicrophone.format, bytes, 0, bytes.size)
                     this.clip = clip
                 }
             } else {
                 startTestButton.text = "Start test"
                 replayButton.isEnabled = true
             }
-            isRecording = !isRecording
+            isRecordingTestClip = !isRecordingTestClip
         }
 
         replayButton.addActionListener {
@@ -182,10 +231,21 @@ class AudioTab {
         }
     }
 
+    private fun initialiseWaveformButton() {
+        waveformButton.addActionListener {
+            if (waveformVisualizer.isRunning()) {
+                stopWaveform()
+            } else {
+                startWaveform(microphone.getLine())
+            }
+        }
+    }
+
     private fun startVuMeter(line: TargetDataLine?) {
         if (line != null) {
             vuMeter.stop()
             vuMeter.setDataLine(line)
+            vuMeter.setStream(microphone.stream)
             vuMeter.start()
         }
     }
@@ -200,13 +260,10 @@ class AudioTab {
             waveformVisualizer.setDataLine(line)
             waveformVisualizer.setStream(microphone.stream)
 //            waveformVisualizer.setStream(FileInputStream(File(IdiolectConfig.idiolectHomePath + "/temp.wav")))
-            startWaveform()
-        }
-    }
 
-    private fun startWaveform() {
-        waveformVisualizer.start()
-        waveformButton.text = "Stop"
+            waveformVisualizer.start()
+            waveformButton.text = "Stop"
+        }
     }
 
     private fun stopWaveform() {

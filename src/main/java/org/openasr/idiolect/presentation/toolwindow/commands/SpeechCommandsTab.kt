@@ -1,4 +1,4 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.toolwindow.commands
 
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.keymap.KeymapManager
@@ -8,7 +8,6 @@ import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
-import java.awt.Color
 import java.util.*
 import javax.swing.JComponent
 import javax.swing.RowFilter
