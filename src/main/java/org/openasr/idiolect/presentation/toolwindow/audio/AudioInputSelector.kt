@@ -1,14 +1,11 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.toolwindow.audio
 
-import com.intellij.ui.layout.selected
 import org.openasr.idiolect.settings.IdiolectConfig
 import org.openasr.idiolect.utils.AudioUtils
 import java.awt.ItemSelectable
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
-import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Mixer
-import javax.sound.sampled.TargetDataLine
 import javax.swing.BoxLayout
 import javax.swing.ButtonGroup
 import javax.swing.JPanel

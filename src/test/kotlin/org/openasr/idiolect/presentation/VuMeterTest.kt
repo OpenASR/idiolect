@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
+import org.openasr.idiolect.presentation.toolwindow.audio.VuMeter
 import javax.sound.sampled.TargetDataLine
 
 class VuMeterTest {

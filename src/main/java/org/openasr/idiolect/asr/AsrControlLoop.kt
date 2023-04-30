@@ -93,6 +93,8 @@ class AsrControlLoop : AsrSystem, Runnable {
     }
 
     override fun onNlpRequest(nlpRequest: NlpRequest) {
+        // Display the request as recognised
+//        repairUtterance(nlpRequest)
         messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onRecognition(nlpRequest)
 
         nlpProvider.processNlpRequest(nlpRequest)

@@ -1,4 +1,4 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.toolwindow.audio
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.service
@@ -213,7 +213,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
 
                     val clip = AudioSystem.getClip()
                     val bytes = byteArrayOutputStream.toByteArray()
-                    clip.open(microphone.format, bytes, 0, bytes.size)
+                    clip.open(CustomMicrophone.format, bytes, 0, bytes.size)
                     this.clip = clip
                 }
             } else {

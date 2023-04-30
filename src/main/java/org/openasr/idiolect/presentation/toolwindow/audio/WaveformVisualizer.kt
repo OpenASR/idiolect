@@ -1,4 +1,4 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.toolwindow.audio
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.invokeLater
