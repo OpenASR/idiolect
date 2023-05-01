@@ -5,10 +5,12 @@ import com.intellij.notification.*
 import com.intellij.notification.NotificationType.INFORMATION
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.options.ShowSettingsUtil
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
 import org.openasr.idiolect.nlp.NlpRequest
+import org.openasr.idiolect.presentation.statusbar.RecognitionStatusBarWidget
 import org.openasr.idiolect.recognizer.CustomMicrophone
 import org.openasr.idiolect.settings.IdiolectConfig
 import org.vosk.*
@@ -19,8 +21,10 @@ import java.util.zip.*
 
 
 class VoskAsr : AsrProvider {
+    private val log = logger<VoskAsr>()
     private lateinit var microphone: CustomMicrophone
     private var grammar: Array<String>? = null
+    private var listening = false
 
     override fun displayName() = "Vosk"
 
@@ -154,13 +158,19 @@ class VoskAsr : AsrProvider {
     /**
      * Starts recognition process.
      */
-    override fun startRecognition() = microphone.startRecording()
+    override fun startRecognition(): Boolean {
+        listening = true
+        return microphone.startRecording()
+    }
 
     /**
      * Stops recognition process.
      * Recognition process is paused until the next call to startRecognition.
      */
-    override fun stopRecognition() = microphone.stopRecording()
+    override fun stopRecognition(): Boolean {
+        listening = false
+        return microphone.stopRecording()
+    }
 
     /**
      * @param grammar eg: ["hello", "world", "[unk]"]
@@ -170,15 +180,17 @@ class VoskAsr : AsrProvider {
             .reset()
     }
 
-    /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
+    /** Blocks until we recognise something from the user. Called from [AsrControlLoop.run] */
     override fun waitForSpeech(): NlpRequest {
         var nbytes: Int
         val b = ByteArray(4096)
 
         val stopWords = AsrProvider.stopWords(grammar)
 
-        while (microphone.stream.read(b).also { nbytes = it } >= 0) {
+        while (microphone.stream.read(b).also { nbytes = it } > 0 && listening) {
+//            log.debug("We have $nbytes bytes for Vosk...")
             if (recognizer.acceptWaveForm(b, nbytes)) {
+//                log.debug("...and Vosk has a recognition for us")
                 val result = tryParseResult(recognizer.result, stopWords)
                 if (result.alternatives.isNotEmpty()) return result
             }

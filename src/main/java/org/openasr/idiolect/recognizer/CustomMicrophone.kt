@@ -3,7 +3,6 @@ package org.openasr.idiolect.recognizer
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
-import org.openasr.idiolect.settings.IdiolectConfig
 import org.openasr.idiolect.utils.AudioUtils
 import java.io.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -19,18 +18,21 @@ class CustomMicrophone : Closeable, Disposable {
         val DEFAULT_NOISE = 10
 
         private const val sampleRate = 16000f
-        private const val sampleSize = 16
+        private const val sampleSizeInBits = 16
+        private const val channels = 1
         private const val bigEndian = false
 
-        private val TEMP_FILE = IdiolectConfig.idiolectHomePath + "/temp.wav"
+        private val TEMP_FILE = System.getProperty("user.home") + "/.idiolect/temp.wav"
+
+        // frameSize (the number of bytes in each frame) defaults to 2 and can only be 1, 2 or 4.
+        val format = AudioFormat(sampleRate, sampleSizeInBits, channels, true, bigEndian)
     }
 
     private val activeThreadCount = AtomicInteger(0)
     private var line: TargetDataLine? = null
     lateinit var stream: AudioInputStream
     private var isRecording: Boolean = false
-
-    val format = AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sampleRate, sampleSize, 1, 2, sampleRate, bigEndian)
+    private val streamLock = Object()
 
     fun open() {
         if (line == null) {
@@ -39,12 +41,12 @@ class CustomMicrophone : Closeable, Disposable {
     }
 
     fun useDefaultLine() {
-        log.info("Microphone using default line")
+        log.debug("Microphone using default line")
         useLine(AudioSystem.getTargetDataLine(format))
     }
 
     fun useInputDevice(device: Mixer.Info): TargetDataLine? {
-        log.info("Microphone using device: ${device.name}")
+        log.debug("Microphone using device by info: ${device.name}")
         useLine(AudioSystem.getTargetDataLine(format, device))
         return line
     }
@@ -56,7 +58,7 @@ class CustomMicrophone : Closeable, Disposable {
             }
 
             if (device != null) {
-                log.info("Microphone using: ${deviceName}")
+                log.debug("Microphone using device by name: ${deviceName}")
                 useInputDevice(device)
                 return
             }
@@ -70,7 +72,7 @@ class CustomMicrophone : Closeable, Disposable {
     fun getLine() = line
 
     /** Acquire audio resources, but do not begin the flow of data */
-    private fun useLine(line: TargetDataLine) {
+    fun useLine(line: TargetDataLine) {
         if (this.line != null) {
             log.warn("call to useLine: $line")
             log.warn("but already have a line: " + this.line)
@@ -85,8 +87,11 @@ class CustomMicrophone : Closeable, Disposable {
 
         //masterGainControl = findMGControl(line);
 
-        stream = AudioInputStreamWithAdjustableGain(line)
-//        stream = AudioInputStream(line)
+        synchronized(streamLock) {
+            stream = AudioInputStreamWithAdjustableGain(line)
+//            stream = AudioInputStream(line)
+        }
+
         this.line = line
     }
 
@@ -104,6 +109,12 @@ class CustomMicrophone : Closeable, Disposable {
         }
     }
 
+    fun read(buffer: ByteArray, size: Int): Int {
+        synchronized(streamLock) {
+            return stream.read(buffer, 0, size)
+        }
+    }
+
     /** Begin the flow of data for listening */
     @Synchronized
     fun startRecording(): Boolean {
@@ -111,6 +122,8 @@ class CustomMicrophone : Closeable, Disposable {
             line?.start().also { isRecording = true }
             log.info("Microphone started")
             return true
+        } else {
+            log.info("Microphone already started")
         }
 
         return false
@@ -122,6 +135,8 @@ class CustomMicrophone : Closeable, Disposable {
             line?.stop().also { isRecording = false }
             log.info("Microphone stopped")
             return true
+        } else {
+            log.info("Microphone in use, will not stop")
         }
 
         return false
@@ -163,6 +178,10 @@ class CustomMicrophone : Closeable, Disposable {
 
     @Throws(IOException::class)
     fun recordFromMic(duration: Long): File {
+        return recordFromMic(TEMP_FILE, duration)
+    }
+
+    fun recordFromMic(filename: String, duration: Long): File {
         //Why is this in a thread?
         Thread {
             try {
@@ -175,7 +194,7 @@ class CustomMicrophone : Closeable, Disposable {
 
         startRecording()
 
-        return File(TEMP_FILE).apply {
+        return File(filename).apply {
             this.parentFile.mkdirs()
             AudioSystem.write(stream, WAVE, this)
         }

@@ -2,6 +2,7 @@ package org.openasr.idiolect.presentation.toolwindow.audio
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.service
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.util.preferredWidth
 import org.openasr.idiolect.recognizer.CustomMicrophone
@@ -12,7 +13,6 @@ import java.io.ByteArrayOutputStream
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.Mixer
-import javax.sound.sampled.TargetDataLine
 import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.JLabel
@@ -23,11 +23,12 @@ import kotlin.concurrent.thread
 
 
 class AudioTab : JComponent(), Disposable, AncestorListener {
+    private val log = logger<AudioTab>()
     private var microphone: CustomMicrophone = service()
-    private var vuMeter = VuMeter(null, VuMeter.RMS_MODE)
+    private var vuMeter = VuMeter(microphone, VuMeter.RMS_MODE)
     private val startTestButton = JButton("Start test")
     private val replayButton = JButton("Replay")
-    private val waveformVisualizer = WaveformVisualizer()
+    private val waveformVisualizer = WaveformVisualizer(microphone)
     private val waveformButton = JButton("Start")
     private var isTabVisible = false
     private var isRecordingTestClip = false
@@ -114,10 +115,10 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
             val selectedDevice = audioInputSelector.selectedItem as Mixer.Info
 
             if (event.stateChange == ItemEvent.SELECTED) {
-                val line = microphone.useInputDevice(selectedDevice)
+                microphone.useInputDevice(selectedDevice)
                 IdiolectConfig.settings.audioInputDevice = selectedDevice.name
-                startVuMeter(line)
-                startWaveform(line)
+                startVuMeter()
+                startWaveform()
             } else { // if (event.stateChange == ItemEvent.DESELECTED) {
                 stopThreads()
                 microphone.close()
@@ -131,6 +132,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
     override fun ancestorAdded(event: AncestorEvent?) {
         if (!isTabVisible && isVisible) {
             isTabVisible = true
+//            log.debug("Audio tab visible, starting")
             startThreads()
         }
     }
@@ -139,6 +141,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
     override fun ancestorRemoved(event: AncestorEvent?) {
         if (isTabVisible) {
             isTabVisible = false
+//            log.debug("Audio tab not visible, stopping")
             stopThreads()
         }
     }
@@ -152,7 +155,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
 
     private fun startThreads() {
         microphone.startRecording()
-        startVuMeter(microphone.getLine())
+        startVuMeter()
     }
 
     private fun stopThreads() {
@@ -191,36 +194,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
     private fun initialiseTestButtons() {
         replayButton.isEnabled = false
         startTestButton.addActionListener {
-            if (!isRecordingTestClip) {
-//                microphone.startRecording()
-                startTestButton.text = "Stop Test"
-                replayButton.isEnabled = false
-
-                // Start recording audio data to ByteArrayOutputStream
-                thread(name = "Audio Clip Recorder") {
-                    val targetDataLine = microphone.getLine()!!
-                    val stream = microphone.stream
-                    val byteArrayOutputStream = ByteArrayOutputStream()
-
-                    // A larger buffer size can result in smoother audio playback but may also introduce latency.
-                    // If the buffer size is too small, it can result in choppy playback or gaps in the audio.
-                    val bufferSize = targetDataLine.bufferSize / 4
-                    val data = ByteArray(bufferSize)
-                    while (!replayButton.isEnabled) {
-                        val numBytesRead = stream.read(data, 0, data.size)
-                        byteArrayOutputStream.write(data, 0, numBytesRead)
-                    }
-
-                    val clip = AudioSystem.getClip()
-                    val bytes = byteArrayOutputStream.toByteArray()
-                    clip.open(CustomMicrophone.format, bytes, 0, bytes.size)
-                    this.clip = clip
-                }
-            } else {
-                startTestButton.text = "Start test"
-                replayButton.isEnabled = true
-            }
-            isRecordingTestClip = !isRecordingTestClip
+            recordClip(!isRecordingTestClip)
         }
 
         replayButton.addActionListener {
@@ -231,39 +205,65 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
         }
     }
 
+    private fun recordClip(recordClip: Boolean) {
+        if (recordClip) {
+            startTestButton.text = "Stop"
+            replayButton.isEnabled = false
+
+            // Start recording audio data to ByteArrayOutputStream
+            thread(name = "Audio Clip Recorder") {
+                val targetDataLine = microphone.getLine()!!
+                val stream = microphone.stream
+                val byteArrayOutputStream = ByteArrayOutputStream()
+
+                // A larger buffer size can result in smoother audio playback but may also introduce latency.
+                // If the buffer size is too small, it can result in choppy playback or gaps in the audio.
+                val bufferSize = targetDataLine.bufferSize // 4
+                val data = ByteArray(bufferSize)
+                while (!replayButton.isEnabled) {
+                    val numBytesRead = microphone.read(data, data.size)
+                    if (numBytesRead == -1) {
+                        recordClip(false)
+                    } else {
+                        byteArrayOutputStream.write(data, 0, numBytesRead)
+                    }
+                }
+
+                val clip = AudioSystem.getClip()
+                val bytes = byteArrayOutputStream.toByteArray()
+                clip.open(CustomMicrophone.format, bytes, 0, bytes.size)
+                this.clip = clip
+            }
+        } else {
+            startTestButton.text = "Record clip"
+            replayButton.isEnabled = true
+        }
+        isRecordingTestClip = recordClip
+    }
+
     private fun initialiseWaveformButton() {
         waveformButton.addActionListener {
             if (waveformVisualizer.isRunning()) {
+//                log.debug("Clicked to stop waveform")
                 stopWaveform()
             } else {
-                startWaveform(microphone.getLine())
+//                log.debug("Clicked to stop waveform")
+                startWaveform()
             }
         }
     }
 
-    private fun startVuMeter(line: TargetDataLine?) {
-        if (line != null) {
-            vuMeter.stop()
-            vuMeter.setDataLine(line)
-            vuMeter.setStream(microphone.stream)
-            vuMeter.start()
-        }
+    private fun startVuMeter() {
+        vuMeter.start()
     }
 
     private fun stopVuMeter() {
         vuMeter.stop()
     }
 
-    private fun startWaveform(line: TargetDataLine?) {
-        if (line != null) {
-            waveformVisualizer.stop()
-            waveformVisualizer.setDataLine(line)
-            waveformVisualizer.setStream(microphone.stream)
-//            waveformVisualizer.setStream(FileInputStream(File(IdiolectConfig.idiolectHomePath + "/temp.wav")))
-
-            waveformVisualizer.start()
-            waveformButton.text = "Stop"
-        }
+    private fun startWaveform() {
+        waveformVisualizer.start()
+        waveformButton.text = "Stop"
     }
 
     private fun stopWaveform() {

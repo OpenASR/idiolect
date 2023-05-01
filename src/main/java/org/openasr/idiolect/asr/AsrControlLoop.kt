@@ -46,7 +46,7 @@ class AsrControlLoop : AsrSystem, Runnable {
      * This will block until the user says something in grammar, or one of the escape words.
      *
      * @param grammar - phrases that we're expecting the user to say
-     * @param escapeWords - defaults to "dont worry", "never mind", "quit", "forget it", "escape"
+     * @param escapeWords - defaults to "don't worry", "never mind", "quit", "forget it", "escape"
      */
     override fun waitForUtterance(grammar: Array<String>,
                                   escapeWords: Array<String>): String {
@@ -56,15 +56,20 @@ class AsrControlLoop : AsrSystem, Runnable {
 
         while (response.isEmpty()) {
             val speech = asrProvider.waitForSpeech() ?: break
+            log.debug("waitForUtterance - ASR has speech")
 
             for (alternative in speech.alternatives) {
                 for (expected in grammar) {
                     if (alternative.contains(expected)) {
                         response = expected
+                        log.debug("...and it's what we were waiting for")
                         break
                     }
                 }
-                if (alternative in escapeWords) break
+                if (alternative in escapeWords) {
+                    log.debug("...escape word")
+                    break
+                }
             }
         }
 
@@ -80,7 +85,7 @@ class AsrControlLoop : AsrSystem, Runnable {
                 // This blocks on a recognition result
                 val nlpRequest = asrProvider.waitForSpeech()
 
-                if (nlpRequest != null) {
+                if (nlpRequest != null && nlpRequest.alternatives.isNotEmpty()) {
                     onNlpRequest(nlpRequest)
                 }
             } catch (iex: InterruptedException) {

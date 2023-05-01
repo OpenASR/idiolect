@@ -1,58 +1,63 @@
 package org.openasr.idiolect.presentation.toolwindow.audio
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.invokeLater
 import com.intellij.ui.JBColor
-import org.jfree.chart.ChartPanel
-import org.jfree.chart.JFreeChart
-import org.jfree.chart.axis.NumberAxis
-import org.jfree.chart.plot.PlotOrientation
-import org.jfree.chart.plot.XYPlot
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
-import org.jfree.data.xy.XYSeries
-import org.jfree.data.xy.XYSeriesCollection
-import org.openasr.idiolect.utils.AudioUtils
+import org.openasr.idiolect.recognizer.CustomMicrophone
 import java.awt.Dimension
-import java.io.InputStream
-import javax.sound.sampled.TargetDataLine
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.RenderingHints
 import javax.swing.JPanel
-import kotlin.math.min
 
-class WaveformVisualizer : JPanel(), Runnable, Disposable {
-    private val dataset = XYSeriesCollection()
-    private val waveformSeries = XYSeries("Waveform")
-    private val chart: JFreeChart
-    private var dataLine: TargetDataLine? = null
-    private var stream: InputStream? = null
+class WaveformVisualizer(private val microphone: CustomMicrophone) : JPanel(), Runnable, Disposable {
     private var running = false
-    private val maxSamples = 1024
+    private val maxSamples = 512
+    private val height = 256
+    private val yScale = Short.MAX_VALUE * 2 / height
+    private val xPoints = IntArray(maxSamples) { it }
+    private val yPoints = IntArray(maxSamples) { 0 }
 
     init {
-//        preferredSize = Dimension(1000, 500)
-        dataset.addSeries(waveformSeries)
-        chart = createChart(dataset)
-        chart.removeLegend()
-        val chartPanel = ChartPanel(chart)
-        chartPanel.preferredSize = Dimension(600, 300)
-        add(chartPanel)
+        preferredSize = Dimension(maxSamples, 256)
+        setToZero()
     }
+
+    override fun paintComponent(g: Graphics?) {
+        super.paintComponent(g)
+        val g2d = g as Graphics2D
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+
+        // Draw the background
+        g2d.color = JBColor.WHITE
+        g2d.fillRect(0, 0, width - 1, height - 1)
+        g2d.color = JBColor.GRAY
+        g2d.drawRect(0, 0, width - 1, height - 1)
+
+        // Draw the data points
+        g2d.color = JBColor.BLUE
+        g2d.drawPolyline(xPoints, yPoints, maxSamples)
+    }
+
 
     override fun run() {
         // A larger buffer size can result in smoother audio playback but may also introduce latency.
         // If the buffer size is too small, it can result in choppy playback or gaps in the audio.
-        val bufferSize = min(maxSamples, 1024) // dataLine!!.bufferSize / 10
+        val bufferSize = maxSamples * 2 //  min(maxSamples, 1024) // dataLine!!.bufferSize / 10
+        val b = ByteArray(bufferSize)
 
         running = true
         while (running) {
-            val b = ByteArray(bufferSize)
-            val read = stream?.read(b, 0, bufferSize) ?: dataLine?.read(b, 0, bufferSize) ?: -1
-            if (read == -1) break
+            // Read `bufferSize` bytes at a time & update the waveformSeries
+            val numBytesRead = microphone.read(b, bufferSize)
+            if (numBytesRead == -1) return
 
             // Update waveform visualizer with samples
-            invokeLater {
-                clear()
-                AudioUtils.readLittleEndianShorts(b, read) { addSample(it) }
+            for (i in 0 until numBytesRead step 2) {
+                val sample = ((b[i + 1].toInt() shl 8) or (b[i].toInt() and 0x00FF))
+                yPoints[i shr 1] = (sample - Short.MIN_VALUE) / yScale
             }
+
+            repaint()
         }
     }
 
@@ -62,7 +67,7 @@ class WaveformVisualizer : JPanel(), Runnable, Disposable {
 
     fun stop() {
         running = false
-        clear()
+        setToZero()
     }
 
     fun isRunning() = running
@@ -71,47 +76,11 @@ class WaveformVisualizer : JPanel(), Runnable, Disposable {
         stop()
     }
 
-    fun setDataLine(dataLine: TargetDataLine?) {
-        this.dataLine = dataLine
-    }
-
-    fun setStream(stream: InputStream) {
-        this.stream = stream
-    }
-
-    private fun createChart(dataset: XYSeriesCollection): JFreeChart {
-        val xAxis = NumberAxis()
-        xAxis.isAutoRange = false
-        xAxis.lowerBound = 0.0
-        xAxis.upperBound = (maxSamples / 2).toDouble()
-        xAxis.isTickLabelsVisible = false
-        xAxis.isAxisLineVisible = false
-
-        val yAxis = NumberAxis()
-        yAxis.isAutoRange = false
-        yAxis.lowerBound = -32768.0
-        yAxis.upperBound = 32767.0
-        yAxis.isTickLabelsVisible = false
-        yAxis.isAxisLineVisible = false
-
-        val renderer = XYLineAndShapeRenderer()
-        renderer.setSeriesPaint(0, JBColor.BLUE)
-        renderer.setSeriesShapesVisible(0, false)
-        renderer.drawSeriesLineAsPath = true
-
-        val plot = XYPlot(dataset, xAxis, yAxis, renderer)
-        plot.orientation = PlotOrientation.VERTICAL
-        plot.isDomainGridlinesVisible = false
-        plot.isRangeGridlinesVisible = false
-
-        return JFreeChart(plot)
-    }
-
-    fun addSample(sample: Short) {
-        waveformSeries.add(waveformSeries.itemCount.toDouble(), sample)
-    }
-
-    fun clear() {
-        waveformSeries.clear()
+    private fun setToZero() {
+        val zeroLevel = height / 2
+        for (i in 0 until maxSamples) {
+            yPoints[i] = zeroLevel
+        }
+        repaint()
     }
 }

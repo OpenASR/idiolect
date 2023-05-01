@@ -1,22 +1,20 @@
 package org.openasr.idiolect.presentation.toolwindow.audio
 
 import com.intellij.openapi.Disposable
+import org.openasr.idiolect.recognizer.CustomMicrophone
 import org.openasr.idiolect.utils.AudioUtils
 import java.awt.Dimension
-import java.io.InputStream
-import javax.sound.sampled.TargetDataLine
 import javax.swing.JProgressBar
 import kotlin.math.abs
 import kotlin.math.log10
 import kotlin.math.max
 
-open class VuMeter(private var dataLine: TargetDataLine?, private val mode: Int = MAX_MODE) : JProgressBar(), Runnable, Disposable {
+open class VuMeter(private val microphone: CustomMicrophone, private val mode: Int = MAX_MODE) : JProgressBar(), Runnable, Disposable {
     private var running = false
-    private var stream: InputStream? = null
 
     companion object {
-        val MAX_MODE = 0
-        val RMS_MODE = 1
+        const val MAX_MODE = 0
+        const val RMS_MODE = 1
     }
 
     init {
@@ -26,26 +24,19 @@ open class VuMeter(private var dataLine: TargetDataLine?, private val mode: Int 
     }
 
     override fun run() {
-        if (dataLine == null) {
-            value = 0
-            return
-        }
+        val bufferSize = microphone.getLine()!!.bufferSize / 5
+        val buffer = ByteArray(bufferSize)
+        start()
 
-        dataLine?.apply {
-            val bufferSize = bufferSize / 5
-            val buffer = ByteArray(bufferSize)
-            start()
-
-            running = true
-            while (running) {
-                val bytesRead = stream?.read(buffer, 0, bufferSize) ?: read(buffer, 0, bufferSize)
-                if (bytesRead == -1) {
-                    break
-                }
-
-                value = if (mode == MAX_MODE) calculateMaxLevel(buffer, bytesRead)
-                    else calculateRmsLevel(buffer, bytesRead)
+        running = true
+        while (running) {
+            val bytesRead = microphone.read(buffer, bufferSize)
+            if (bytesRead == -1) {
+                break
             }
+
+            value = if (mode == MAX_MODE) calculateMaxLevel(buffer, bytesRead)
+                else calculateRmsLevel(buffer, bytesRead)
         }
     }
 
@@ -57,14 +48,6 @@ open class VuMeter(private var dataLine: TargetDataLine?, private val mode: Int 
 
     fun stop() {
         running = false
-    }
-
-    fun setDataLine(dataLine: TargetDataLine?) {
-        this.dataLine = dataLine
-    }
-
-    fun setStream(stream: InputStream) {
-        this.stream = stream
     }
 
     override fun dispose() {
