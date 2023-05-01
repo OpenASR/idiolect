@@ -8,9 +8,14 @@ import com.intellij.ui.content.ContentFactory
 import org.openasr.idiolect.presentation.toolwindow.audio.AudioTab
 import org.openasr.idiolect.presentation.toolwindow.commands.SpeechCommandsTab
 import org.openasr.idiolect.presentation.toolwindow.log.SpeechLogTab
+import org.openasr.idiolect.settings.PrintlnLogger
 
 
 class SpeechToolWindowFactory : ToolWindowFactory, DumbAware {
+    init {
+        PrintlnLogger.installForLocalDev()
+    }
+
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val contentFactory = ContentFactory.getInstance()
 

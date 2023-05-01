@@ -77,6 +77,7 @@ tasks {
     // depend on test but exclude the tests that contain mac
     dependsOn("quickTests")
     findProperty("luginDev")?.let { args = listOf(projectDir.absolutePath) }
+    systemProperty("idiolect.environment", "development")
   }
 
   if (System.getenv("GITHUB_REF_NAME") != null

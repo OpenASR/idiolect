@@ -1,9 +1,11 @@
 package org.openasr.idiolect.ide
 
+import com.intellij.openapi.diagnostic.logger
 import java.awt.Robot
 import java.awt.event.KeyEvent.*
 
 object Keyboard {
+    private val log = logger<Keyboard>()
     private var robot = Robot()
 
     fun type(characters: CharSequence) = characters.forEach { type(it) }
@@ -126,7 +128,7 @@ object Keyboard {
             doType(keyCodes, offset + 1, length - 1)
             robot.keyRelease(keyCodes[offset])
         } catch (ex: Exception) {
-            println("can not type: $keyCodes, ${ex.message}")
+            log.error("can not type: $keyCodes, ${ex.message}")
         }
     }
 
