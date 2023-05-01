@@ -1,7 +1,11 @@
 package org.openasr.idiolect.asr
 
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.diagnostic.DefaultLogger
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.util.messages.MessageBus
 import org.openasr.idiolect.asr.ListeningState.Status.STARTED
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
@@ -19,9 +23,10 @@ import javax.sound.sampled.LineUnavailableException
  * Entry points:
  *  - activate() - Called when the user presses the start button
  */
-object AsrService {
+@Service
+class AsrService {
     private val log = logger<AsrService>()
-    private val messageBus = ApplicationManager.getApplication().messageBus
+    private val messageBus: MessageBus by lazy { ApplicationManager.getApplication().messageBus }
     private lateinit var asrSystem: AsrSystem
     @Volatile private var isListening = false
 
@@ -167,6 +172,6 @@ object AsrService {
 }
 
 // This is for testing purposes solely
-fun main() {
-    AsrService.activate()
-}
+//fun main() {
+//    AsrService.activate()
+//}
