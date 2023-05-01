@@ -5,11 +5,13 @@ import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
 import org.openasr.idiolect.presentation.toolwindow.audio.VuMeter
+import org.openasr.idiolect.recognizer.CustomMicrophone
 import javax.sound.sampled.TargetDataLine
 
 class VuMeterTest {
+    private val microphone = CustomMicrophone()
 
-    class TestableVuMeter(dataLine: TargetDataLine, mode: Int = MAX_MODE) : VuMeter(dataLine, mode) {
+    class TestableVuMeter(microphone: CustomMicrophone, mode: Int = MAX_MODE) : VuMeter(microphone, mode) {
         override fun setValue(value: Int) {
             super.setValue(value)
             stop()
@@ -19,8 +21,8 @@ class VuMeterTest {
     @Test
     fun testCalculateMaxLevel() {
         // Given
-        val dataLine = prepareDataLine(0, 100, -3000, 60)
-        val vuMeter = TestableVuMeter(dataLine)
+        prepareDataLine(0, 100, -3000, 60)
+        val vuMeter = TestableVuMeter(microphone)
 
         // When
         vuMeter.run()
@@ -32,8 +34,8 @@ class VuMeterTest {
     @Test
     fun testCalculateRmsLevel() {
         // Given
-        val dataLine = prepareDataLine(0, 100, -3000, 60)
-        val vuMeter = TestableVuMeter(dataLine, VuMeter.RMS_MODE)
+        prepareDataLine(0, 100, -3000, 60)
+        val vuMeter = TestableVuMeter(microphone, VuMeter.RMS_MODE)
 
         // When
         vuMeter.run()
@@ -46,8 +48,8 @@ class VuMeterTest {
     @Test
     fun testCalculateRmsLevelLow() {
         // Given
-        val dataLine = prepareDataLine(0, 0, 0, 0)
-        val vuMeter = TestableVuMeter(dataLine, VuMeter.RMS_MODE)
+        prepareDataLine(0, 0, 0, 0)
+        val vuMeter = TestableVuMeter(microphone, VuMeter.RMS_MODE)
 
         // When
         vuMeter.run()
@@ -59,8 +61,8 @@ class VuMeterTest {
     @Test
     fun testCalculateRmsLevelMid() {
         // Given
-        val dataLine = prepareDataLine(16383, 16383, 16383, 16383)
-        val vuMeter = TestableVuMeter(dataLine, VuMeter.RMS_MODE)
+        prepareDataLine(16383, 16383, 16383, 16383)
+        val vuMeter = TestableVuMeter(microphone, VuMeter.RMS_MODE)
 
         // When
         vuMeter.run()
@@ -73,8 +75,8 @@ class VuMeterTest {
     @Test
     fun testCalculateRmsLevelHigh() {
         // Given
-        val dataLine = prepareDataLine(Short.MAX_VALUE, Short.MAX_VALUE, Short.MAX_VALUE, Short.MAX_VALUE)
-        val vuMeter = TestableVuMeter(dataLine, VuMeter.RMS_MODE)
+        prepareDataLine(Short.MAX_VALUE, Short.MAX_VALUE, Short.MAX_VALUE, Short.MAX_VALUE)
+        val vuMeter = TestableVuMeter(microphone, VuMeter.RMS_MODE)
 
         // When
         vuMeter.run()
@@ -83,7 +85,7 @@ class VuMeterTest {
         Assert.assertEquals(Short.MAX_VALUE.toInt(), vuMeter.value)
     }
 
-    private fun prepareDataLine(vararg data: Short): TargetDataLine {
+    private fun prepareDataLine(vararg data: Short) {
         val dataLine = mockk<TargetDataLine>(relaxed = true)
         every { dataLine.bufferSize } returns data.size * 2 * 5
 
@@ -97,7 +99,7 @@ class VuMeterTest {
             thirdArg()
         }
 
-        return dataLine
+        microphone.useLine(dataLine)
     }
 
 

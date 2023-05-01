@@ -120,10 +120,10 @@ class CustomMicrophone : Closeable, Disposable {
     fun startRecording(): Boolean {
         if (activeThreadCount.getAndIncrement() == 0) {
             line?.start().also { isRecording = true }
-            log.info("Microphone started")
+            log.debug("Microphone started")
             return true
-        } else {
-            log.info("Microphone already started")
+//        } else {
+//            log.debug("Microphone already started")
         }
 
         return false
@@ -133,10 +133,10 @@ class CustomMicrophone : Closeable, Disposable {
     fun stopRecording(): Boolean {
         if (activeThreadCount.decrementAndGet() == 0) {
             line?.stop().also { isRecording = false }
-            log.info("Microphone stopped")
+            log.debug("Microphone stopped")
             return true
-        } else {
-            log.info("Microphone in use, will not stop")
+//        } else {
+//            log.debug("Microphone in use, will not stop")
         }
 
         return false

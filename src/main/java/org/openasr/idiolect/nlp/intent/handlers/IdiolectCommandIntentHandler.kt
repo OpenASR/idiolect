@@ -39,7 +39,7 @@ class IdiolectCommandIntentHandler : IntentHandler {
         }
 
         when (intentName) {
-            IdiolectCommandRecognizer.INTENT_HI -> TtsService.say("Hi!")
+            IdiolectCommandRecognizer.INTENT_HI -> TtsService.say("Hello!")
             IdiolectCommandRecognizer.INTENT_ABOUT -> ActionRoutines.routineAbout()
             IdiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
             IdiolectCommandRecognizer.INTENT_COMMANDS -> showCommands(nlpContext, nlpResponse.slots?.get(SLOT_COMMAND_TERM))
@@ -52,7 +52,9 @@ class IdiolectCommandIntentHandler : IntentHandler {
 
     private fun showCommands(nlpContext: NlpContext, term: String?) {
         nlpContext.getData(PlatformDataKeys.PROJECT)?.let { project ->
-            val contentManager = ToolWindowManager.getInstance(project).getToolWindow("Idiolect")!!.contentManager
+            val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Idiolect")!!
+            toolWindow.show()
+            val contentManager = toolWindow.contentManager
             val commandsContent = contentManager.getContent(1)
             contentManager.setSelectedContent(commandsContent!!)
 
