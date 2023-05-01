@@ -113,7 +113,6 @@ repositories {
 dependencies {
   implementation("net.java.dev.jna:jna:5.13.0")
   implementation("com.alphacephei:vosk:0.3.45")
-  implementation("org.jfree:jfreechart:1.5.3")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
   testImplementation("org.reflections:reflections:0.10.2")
   testImplementation("ai.hypergraph:kaliningraph:0.2.1") {
