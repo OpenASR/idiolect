@@ -13,6 +13,7 @@ import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.nlp.*
 import org.openasr.idiolect.presentation.Icons
+import org.openasr.idiolect.settings.PrintlnLogger
 import java.awt.event.MouseEvent
 import javax.swing.JComponent
 
@@ -26,6 +27,10 @@ class RecognitionStatusBarWidget :
 {
     companion object {
         const val RECOGNITION_STATUS = "org.openasr.idiolect.Status"
+
+        init {
+            PrintlnLogger.installForLocalDev()
+        }
     }
 
     private val log = logger<RecognitionStatusBarWidget>()

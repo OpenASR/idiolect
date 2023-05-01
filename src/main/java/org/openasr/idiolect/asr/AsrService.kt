@@ -6,6 +6,7 @@ import org.openasr.idiolect.asr.ListeningState.Status.STARTED
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResultListener.Companion.NLP_RESULT_TOPIC
 import org.openasr.idiolect.settings.IdiolectConfig
+import org.openasr.idiolect.settings.PrintlnLogger
 import org.openasr.idiolect.tts.TtsService
 import javax.sound.sampled.LineUnavailableException
 
@@ -25,6 +26,7 @@ object AsrService {
     @Volatile private var isListening = false
 
     init {
+        PrintlnLogger.installForLocalDev()
 //        System.setProperty("jna.nounpack", "false")
 //        System.setProperty("jna.noclasspath", "false")
 
