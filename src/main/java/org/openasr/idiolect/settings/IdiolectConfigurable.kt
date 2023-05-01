@@ -14,6 +14,7 @@ import org.openasr.idiolect.tts.*
  * @see http://corochann.com/intellij-plugin-development-introduction-applicationconfigurable-projectconfigurable-873.html
  */
 class IdiolectConfigurable : Configurable {
+    private val asrService = service<AsrService>()
     private val gui by lazy(::RecognitionSettingsForm)
 
     override fun getDisplayName() = "Idiolect"
@@ -36,7 +37,7 @@ class IdiolectConfigurable : Configurable {
     override fun apply() {
         if (isModified) {
             if (settings.asrService != gui.asrService) {
-                AsrService.setAsrSystem(initialiseAsrSystem())
+                asrService.setAsrSystem(initialiseAsrSystem())
                 settings.asrService = gui.asrService
             }
             settings.nlpService = gui.nlpService

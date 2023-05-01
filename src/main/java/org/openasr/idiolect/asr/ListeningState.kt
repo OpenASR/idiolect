@@ -38,10 +38,10 @@ object ListeningState {
     fun waitIfStandby() {
         lock.withLock {
             if (status.get() == STOPPED) {
-                log.info("ListeningState is STOPPED. ${Thread.currentThread().name} waiting...")
+//                log.debug("ListeningState is STOPPED. ${Thread.currentThread().name} waiting...")
                 condition.await()
             }
-            log.info("ListeningState is ${status.get()}. ${Thread.currentThread().name} proceeding")
+//            log.debug("ListeningState is ${status.get()}. ${Thread.currentThread().name} proceeding")
         }
     }
 
@@ -51,10 +51,10 @@ object ListeningState {
     fun waitForStarted() {
         lock.withLock {
             while (status.get() != STARTED) {
-                log.info("ListeningState is ${status.get()}. ${Thread.currentThread().name} waiting for STARTED...")
+//                log.debug("ListeningState is ${status.get()}. ${Thread.currentThread().name} waiting for STARTED...")
                 condition.await()
             }
-            log.info("...ListeningState is STARTED. ${Thread.currentThread().name} proceeding")
+//            log.debug("...ListeningState is STARTED. ${Thread.currentThread().name} proceeding")
         }
     }
 

@@ -2,6 +2,7 @@ package org.openasr.idiolect.presentation.statusbar
 
 import com.intellij.notification.*
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.wm.*
 import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
@@ -34,6 +35,7 @@ class RecognitionStatusBarWidget :
     }
 
     private val log = logger<RecognitionStatusBarWidget>()
+    private val asrService = service<AsrService>()
     private var statusBar: StatusBar? = null
     private var isListening: Boolean = false
 
@@ -67,7 +69,8 @@ class RecognitionStatusBarWidget :
 
     private fun onClick(event: MouseEvent): Boolean {
         try {
-            AsrService.toggleListening()
+//            log.info("Clicked the status bar widget")
+            asrService.toggleListening()
             return true
         } catch (e: Exception) {
             log.info("Failed to toggle listening: ${e.message}")

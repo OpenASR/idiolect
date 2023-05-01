@@ -2,12 +2,14 @@ package org.openasr.idiolect.asr
 
 import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.ex.AnActionListener
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.util.messages.MessageBus
 import org.openasr.idiolect.utils.ActionUtils
 
 object GrammarService : AnActionListener {
     private val log = logger<GrammarService>()
+    private val asrService = service<AsrService>()
 
     fun init(bus: MessageBus) = bus.connect().subscribe(AnActionListener.TOPIC, this)
 
@@ -17,10 +19,10 @@ object GrammarService : AnActionListener {
         addIdiolectGrammar(grammar)
         ActionUtils.addActionWords(grammar)
 
-        AsrService.setGrammar(grammar.toTypedArray())
+        asrService.setGrammar(grammar.toTypedArray())
     }
 
-    fun useDictationGrammar() = AsrService.setGrammar(emptyArray())
+    fun useDictationGrammar() = asrService.setGrammar(emptyArray())
 
     private fun addIdiolectGrammar(grammar: HashSet<String>) =
         grammar.addAll(arrayOf("command", "dictation", "mode"))

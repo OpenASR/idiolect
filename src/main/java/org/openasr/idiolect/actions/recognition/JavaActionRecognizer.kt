@@ -2,6 +2,7 @@ package org.openasr.idiolect.actions.recognition
 
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.actionSystem.PlatformCoreDataKeys.*
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.impl.EditorComponentImpl
 import com.intellij.psi.impl.file.PsiJavaDirectoryImpl
 import org.openasr.idiolect.nlp.*
@@ -11,6 +12,8 @@ import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import java.awt.Component
 
 class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
+    private val asrService = service<AsrService>()
+
     companion object {
         val INTENT_NEW_CLASS = "${JavaActionIntentHandler.INTENT_PREFIX}NewClass"
         val INTENT_TEMPLATE_PREFIX = "${JavaActionIntentHandler.INTENT_PREFIX}Template."
@@ -26,7 +29,7 @@ class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
             override fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext): NlpResponse {
                 logUtteranceForIntent(utterance, intentName)
                 val className: String = values[1].ifEmpty {
-                    AsrService.promptForUtterance("what shall we call it?")
+                    asrService.promptForUtterance("what shall we call it?")
                 }
 
                 return NlpResponse(intentName, mapOf("className" to className))

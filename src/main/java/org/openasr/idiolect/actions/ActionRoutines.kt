@@ -2,6 +2,7 @@ package org.openasr.idiolect.actions
 
 import com.intellij.openapi.actionSystem.IdeActions.*
 import com.intellij.openapi.application.ApplicationInfo
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.SystemInfo
 import org.openasr.idiolect.asr.*
@@ -16,6 +17,7 @@ import javax.sound.sampled.AudioSystem
 
 object ActionRoutines {
     private val log = logger<ActionRoutines>()
+    private val asrService = service<AsrService>()
 
     fun routineReleaseKey(c: String) {
         if ("shift" in c) IdeService.releaseShift()
@@ -59,15 +61,15 @@ object ActionRoutines {
     }
 
     fun promptForVisibility(grammar: Array<String>): String? {
-        return AsrService.promptForUtterance("with what visibility?", grammar)
+        return asrService.promptForUtterance("with what visibility?", grammar)
     }
 
     fun promptForReturnType(): String {
-        return AsrService.promptForUtterance("what will it return?")
+        return asrService.promptForUtterance("what will it return?")
     }
 
     fun promptForName(): String {
-        return AsrService.promptForUtterance("what shall we call it?")
+        return asrService.promptForUtterance("what shall we call it?")
     }
 
     fun routineAbout() {
@@ -155,7 +157,7 @@ object ActionRoutines {
     fun pauseSpeech() {
         beep()
         while (ListeningState.isStarted) {
-            val result = AsrService.waitForUtterance(arrayOf("resume", "listening"))
+            val result = asrService.waitForUtterance(arrayOf("resume", "listening"))
 
             if (result == "resume listening") {
                 beep()
@@ -167,7 +169,7 @@ object ActionRoutines {
     private fun recognizeJumpMarker(): Int {
         log.info("Recognizing number...")
         while (true) {
-            val result = AsrService.waitForUtterance()
+            val result = asrService.waitForUtterance()
             if (result.startsWith("jump ")) {
                 val number = WordToNumberConverter.getNumber(result.substring(5))
                 log.info("Recognized number: $number")
@@ -182,11 +184,11 @@ object ActionRoutines {
             try {
                 val clip = AudioSystem.getClip()
                 val inputStream = AudioSystem.getAudioInputStream(
-                        AsrService.javaClass.getResourceAsStream("/org/openasr/idiolect/sounds/beep.wav"))
+                        asrService.javaClass.getResourceAsStream("/org/openasr/idiolect/sounds/beep.wav"))
                 clip.open(inputStream)
                 clip.start()
             } catch (e: Exception) {
-                System.err.println(e.message)
+                log.error("Failed to play beep:", e)
             }
         }, "Idiolect Beep")
 
