@@ -49,7 +49,7 @@ class WaveformVisualizer(private val microphone: CustomMicrophone) : JPanel(), R
         while (running) {
             // Read `bufferSize` bytes at a time & update the waveformSeries
             val numBytesRead = microphone.read(b, bufferSize)
-            if (numBytesRead == -1) return
+            if (numBytesRead <= 0) return
 
             // Update waveform visualizer with samples
             for (i in 0 until numBytesRead step 2) {

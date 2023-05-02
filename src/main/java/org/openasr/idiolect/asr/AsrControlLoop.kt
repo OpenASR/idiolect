@@ -56,18 +56,18 @@ class AsrControlLoop : AsrSystem, Runnable {
 
         while (response.isEmpty()) {
             val speech = asrProvider.waitForSpeech() ?: break
-            log.debug("waitForUtterance - ASR has speech")
+//            log.debug("waitForUtterance - ASR has speech")
 
             for (alternative in speech.alternatives) {
                 for (expected in grammar) {
                     if (alternative.contains(expected)) {
                         response = expected
-                        log.debug("...and it's what we were waiting for")
+//                        log.debug("...and it's what we were waiting for")
                         break
                     }
                 }
                 if (alternative in escapeWords) {
-                    log.debug("...escape word")
+//                    log.debug("...escape word")
                     break
                 }
             }

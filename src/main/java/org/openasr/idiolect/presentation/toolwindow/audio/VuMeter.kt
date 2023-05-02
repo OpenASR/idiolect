@@ -1,6 +1,7 @@
 package org.openasr.idiolect.presentation.toolwindow.audio
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.diagnostic.logger
 import org.openasr.idiolect.recognizer.CustomMicrophone
 import org.openasr.idiolect.utils.AudioUtils
 import java.awt.Dimension
@@ -10,7 +11,8 @@ import kotlin.math.log10
 import kotlin.math.max
 
 open class VuMeter(private val microphone: CustomMicrophone, private val mode: Int = MAX_MODE) : JProgressBar(), Runnable, Disposable {
-    private var running = false
+    private val log = logger<VuMeter>()
+    private var thread: Thread? = null
 
     companion object {
         const val MAX_MODE = 0
@@ -26,28 +28,35 @@ open class VuMeter(private val microphone: CustomMicrophone, private val mode: I
     override fun run() {
         val bufferSize = microphone.getLine()!!.bufferSize / 5
         val buffer = ByteArray(bufferSize)
-        start()
 
-        running = true
-        while (running) {
-            val bytesRead = microphone.read(buffer, bufferSize)
-            if (bytesRead == -1) {
+//        log.debug("starting VuMeter thread, ${Thread.currentThread().id}")
+        while (true) {
+            try {
+                val bytesRead = microphone.read(buffer, bufferSize)
+                if (bytesRead <= 0) {
+//                    log.debug("VuMeter read $bytesRead bytes, ${Thread.currentThread().id}")
+                    break
+                }
+
+                value = if (mode == MAX_MODE) calculateMaxLevel(buffer, bytesRead)
+                else calculateRmsLevel(buffer, bytesRead)
+            } catch (ie: InterruptedException) {
+//                log.debug("interrupted VuMeter thread, ${Thread.currentThread().id}")
                 break
             }
-
-            value = if (mode == MAX_MODE) calculateMaxLevel(buffer, bytesRead)
-                else calculateRmsLevel(buffer, bytesRead)
         }
+//        log.debug("exiting VuMeter thread, ${Thread.currentThread().id}")
     }
 
     fun start() {
-        if (!running) {
-            Thread(this, "Idiolect VU Meter").start()
+        if (thread?.isAlive != true) {
+            thread = Thread(this, "Idiolect VU Meter").apply { start() }
         }
     }
 
     fun stop() {
-        running = false
+        thread?.interrupt()
+        thread = null
     }
 
     override fun dispose() {
