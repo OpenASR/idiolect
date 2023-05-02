@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
+import org.openasr.idiolect.presentation.toolwindow.ai.AiTab
 import org.openasr.idiolect.presentation.toolwindow.audio.AudioTab
 import org.openasr.idiolect.presentation.toolwindow.commands.SpeechCommandsTab
 import org.openasr.idiolect.presentation.toolwindow.log.SpeechLogTab
@@ -40,5 +41,11 @@ class SpeechToolWindowFactory : ToolWindowFactory, DumbAware {
         val audioContent = contentFactory.createContent(audioTab, "Audio", false)
         audioContent.setDisposer(audioTab)
         toolWindow.contentManager.addContent(audioContent)
+
+        // AI
+        val aiTab = AiTab(toolWindow)
+        val aiContent = contentFactory.createContent(aiTab, "AI", false)
+//        aiContent.setDisposer(aiTab)
+        toolWindow.contentManager.addContent(aiContent)
     }
 }

@@ -2,6 +2,7 @@ package org.openasr.idiolect.actions.recognition
 
 import com.aallam.openai.api.BetaOpenAI
 import com.aallam.openai.api.chat.*
+import com.aallam.openai.api.completion.CompletionRequest
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.*
 import com.intellij.notification.NotificationGroupManager
@@ -16,6 +17,16 @@ import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import java.awt.Component
 import org.openasr.idiolect.settings.openai.OpenAiConfig
 
+/*
+Planning
+
+- "command/chat/completion mode"
+  - show ToolBar for chat/completion with edit & submit, auto submit option
+  - configure which grammars are active
+-
+
+ */
+
 class OpenAiRecognizer : IntentResolver("OpenAI", Int.MAX_VALUE) {
     private val logger = Logger.getInstance(javaClass)
 
@@ -28,60 +39,24 @@ class OpenAiRecognizer : IntentResolver("OpenAI", Int.MAX_VALUE) {
 
     override fun isSupported(context: NlpContext, component: Component?): Boolean {
         if (openAI == null) {
-            OpenAiConfig.apiKey.let {
-                if (it.isNullOrEmpty()) {
-    //            showNotificationForApiKey()
-                    return false
-                } else {
-                    // TODO - subscribe for changes
-                    openAI = OpenAI(it)
-                }
-            }
+//            OpenAiConfig.apiKey.let {
+//                if (it.isNullOrEmpty()) {
+//    //            showNotificationForApiKey()
+//                    return false
+//                } else {
+//                    // TODO - subscribe for changes
+//                    openAI = OpenAI(it)
+//                }
+//            }
         }
         return true
     }
 
     @OptIn(BetaOpenAI::class)
     override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext): NlpResponse? {
-        val completionRequest = ChatCompletionRequest(
-            model = ModelId("gpt-3.5-turbo"),
-            messages = listOf(
-                ChatMessage(ChatRole.System, "You are a helpful pair programming assistant"),
-//                ChatMessage(ChatMessageRole.ASSISTANT.value(), context),
-                ChatMessage(ChatRole.User, nlpRequest.utterance)
-            )
-        )
+        return null
 
-        val completion = runBlocking { openAI?.chatCompletion(completionRequest) }
 
-        if (completion == null || completion.choices.isEmpty()) {
-            return null
-        }
-
-        // 53 tokens for a couple of words, or 168 for "example of a for loop in kotlin"
-        // Sure! Here's an example of a for loop in Kotlin:
-        //
-        //```
-        //fun main() {
-        //    val numbers = listOf(1, 2, 3, 4, 5)
-        //
-        //    for (num in numbers) {
-        //        println(num)
-        //    }
-        //}
-        //```
-        //
-        //In this example, we have a list called `numbers` that contains the values 1 through 5. We use a `for` loop to iterate over each value in the list and print it to the console. The loop variable `num` takes on the value of each element in the list during each iteration. The output of this code would be:
-        //
-        //```
-        //1
-        //2
-        //3
-        //4
-        //5
-        //```
-        completion.choices.forEach { choice -> logger.info(choice.message?.content) }
-        return NlpResponse("Chat", mapOf("choice" to (completion.choices.first().message?.content ?: "")))
     }
 
     private fun showNotificationForApiKey() {

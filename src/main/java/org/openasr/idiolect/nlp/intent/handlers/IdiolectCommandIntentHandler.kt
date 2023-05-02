@@ -28,7 +28,8 @@ import java.util.ArrayList
 class IdiolectCommandIntentHandler : IntentHandler {
     companion object {
         val INTENT_PREFIX = IntentResolver.INTENT_PREFIX_IDIOLECT_COMMAND
-        val SLOT_COMMAND_TERM = "term"
+        const val SLOT_COMMAND_TERM = "term"
+        const val SLOT_MODE = "mode"
     }
 
     override fun tryFulfillIntent(nlpResponse: NlpResponse, nlpContext: NlpContext): ActionCallInfo? {
@@ -43,11 +44,16 @@ class IdiolectCommandIntentHandler : IntentHandler {
             IdiolectCommandRecognizer.INTENT_ABOUT -> ActionRoutines.routineAbout()
             IdiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
             IdiolectCommandRecognizer.INTENT_COMMANDS -> showCommands(nlpContext, nlpResponse.slots?.get(SLOT_COMMAND_TERM))
+            IdiolectCommandRecognizer.INTENT_MODE -> changeMode(nlpContext, nlpResponse.slots!!.get(SLOT_MODE)!!)
             SurroundWithNoNullCheckRecognizer.INTENT_NAME -> surroundWithNullCheck(nlpContext)
             else -> return null
         }
 
         return ActionCallInfo(intentName, true)
+    }
+
+    private fun changeMode(nlpContext: NlpContext, mode: String) {
+
     }
 
     private fun showCommands(nlpContext: NlpContext, term: String?) {

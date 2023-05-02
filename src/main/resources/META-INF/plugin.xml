@@ -35,6 +35,7 @@
         <applicationService serviceImplementation="org.openasr.idiolect.settings.IdiolectConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.asr.vosk.VoskConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.settings.openai.OpenAiConfig"/>
+        <applicationService serviceImplementation="org.openasr.idiolect.nlp.ai.AiService"/>
         <applicationConfigurable groupId="tools" displayName="Idiolect"
                                  id="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.settings.IdiolectConfigurable" dynamic="true"/>
@@ -100,5 +101,8 @@
 
         <action id="Idiolect.VoiceAction" text="Invoke by Voice Command"
                 class="org.openasr.idiolect.actions.ExecuteVoiceCommandAction"/>
+
+        <action id="Idiolect.AiCompletion" text="AI Completion"
+                class="org.openasr.idiolect.actions.AiAction"/>
     </actions>
 </idea-plugin>

@@ -17,10 +17,13 @@ class OpenAiConfig : PersistentStateComponent<OpenAiConfig.Settings> {
     private var settings = Settings()
 
     companion object {
+
         val settings get() = application.getService(OpenAiConfig::class.java).settings
         private val credentialAttributes = CredentialAttributes(generateServiceName("openai", "idiolect"))
         var apiKey get() = PasswordSafe.instance.getPassword(credentialAttributes)
-            set(password) = PasswordSafe.instance.setPassword(credentialAttributes, password)
+            set(apiKey) {
+                PasswordSafe.instance.setPassword(credentialAttributes, apiKey)
+            }
     }
 
     override fun getState() = settings
