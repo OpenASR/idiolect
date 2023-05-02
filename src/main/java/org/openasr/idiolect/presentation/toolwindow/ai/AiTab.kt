@@ -49,16 +49,20 @@ class AiTab(private val toolWindow: ToolWindow) : JComponent(), Disposable, AiRe
         }
     }
 
-//    fun createToolBar(): JComponent {
-////        val group = DefaultActionGroup()
-////        group.add(searchField)
-////        val toolbar: ActionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.TOOLBAR, group, false)
-//        return panel {
-//            row {
-//                cell(searchField)
-//            }
-//        }
-//    }
+    fun createToolBar(): JComponent {
+//        val group = DefaultActionGroup()
+//        group.add(searchField)
+//        val toolbar: ActionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.TOOLBAR, group, false)
+        return panel {
+            row {
+                comboBox(listOf("gpt-4", "gpt-4-0314", "gpt-4-32k", "gpt-4-32k-0314", "gpt-3.5-turbo", "gpt-3.5-turbo-0301"))
+                    .label("Chat model")
+
+                comboBox(listOf("text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001"))
+                    .label("Completion model")
+            }
+        }
+    }
 
     private fun createComponent(): JComponent {
 //        val userInput = JBTextField(20).apply {
