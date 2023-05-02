@@ -13,8 +13,11 @@ class AiService {
     private var client = OpenAiClient(OpenAiConfig.apiKey)
 
     fun setApiKey(apiKey: String) = client.setApiKey(apiKey)
-    fun setModel(model: String) {
-        client.model = model
+    fun setCompletionModel(model: String) {
+        client.completionModel = model
+    }
+    fun setChatModel(model: String) {
+        client.chatModel = model
     }
 
     fun sendCompletion(prompt: String) {

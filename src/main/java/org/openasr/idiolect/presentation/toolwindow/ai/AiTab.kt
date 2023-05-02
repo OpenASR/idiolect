@@ -1,33 +1,22 @@
 package org.openasr.idiolect.presentation.toolwindow.ai
 
-import com.intellij.ide.DataManager
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionPlaces
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.util.minimumWidth
 import com.intellij.util.application
 import com.intellij.util.ui.UIUtil
 import org.openasr.idiolect.actions.AiAction
 import org.openasr.idiolect.nlp.ai.AiResponseListener
-import org.openasr.idiolect.recognizer.CustomMicrophone
-import org.openasr.idiolect.settings.IdiolectConfig
 import java.awt.BorderLayout
 import java.awt.Rectangle
-import java.awt.event.ItemEvent
-import java.io.ByteArrayOutputStream
-import javax.sound.sampled.AudioSystem
-import javax.sound.sampled.Clip
-import javax.sound.sampled.Mixer
 import javax.swing.*
-import javax.swing.event.AncestorEvent
-import javax.swing.event.AncestorListener
 import javax.swing.text.html.HTMLEditorKit
-import kotlin.concurrent.thread
 
 
 class AiTab(private val toolWindow: ToolWindow) : JComponent(), Disposable, AiResponseListener {
@@ -48,13 +37,14 @@ class AiTab(private val toolWindow: ToolWindow) : JComponent(), Disposable, AiRe
         }
 
         logPane.isEditable = false
+        userInput.minimumWidth = 100
 //        logPane.addHyperlinkListener {  }
 
         val kit = logPane.editorKit
         if (kit is HTMLEditorKit) {
             kit.styleSheet.addRule(
                 ".message {margin: 10px; color: black; border-radius: 10px;} " +
-                    ".ai {background: gray;} " +
+                    ".ai {background-color: gray;} " +
                     ".user {background: white;} ")
         }
     }

@@ -15,17 +15,19 @@ class OpenAiConfigurable : Configurable {
     override fun createComponent() = gui.rootPanel
 
     override fun isModified(): Boolean {
-        return gui.apiKey.text != OpenAiConfig.apiKey || gui.model.text != OpenAiConfig.settings.model
+        return gui.apiKey.text != OpenAiConfig.apiKey || gui.chatModel.text != OpenAiConfig.settings.chatModel
     }
 
     override fun apply() {
         if (isModified) {
             OpenAiConfig.apiKey = gui.apiKey.text
-            OpenAiConfig.settings.model = gui.model.text
+            OpenAiConfig.settings.chatModel = gui.chatModel.text
+            OpenAiConfig.settings.completionModel = gui.completionModel.text
 
             val aiService = service<AiService>()
             aiService.setApiKey(gui.apiKey.text)
-            aiService.setModel(gui.model.text)
+            aiService.setChatModel(gui.chatModel.text)
+            aiService.setCompletionModel(gui.completionModel.text)
         }
     }
 

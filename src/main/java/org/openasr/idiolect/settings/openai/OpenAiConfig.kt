@@ -32,5 +32,6 @@ class OpenAiConfig : PersistentStateComponent<OpenAiConfig.Settings> {
         settings = state
     }
 
-    data class Settings(var model: String = "gpt-3.5-turbo")
+    data class Settings(var chatModel: String = "gpt-3.5-turbo",
+                        var completionModel: String = "text-davinci-003")
 }

@@ -1,21 +1,27 @@
 package org.openasr.idiolect.nlp.ai
 
-import com.aallam.openai.api.completion.CompletionRequest
-import com.aallam.openai.api.model.ModelId
-import com.aallam.openai.client.OpenAI
+//import com.aallam.openai.api.completion.CompletionRequest
+//import com.aallam.openai.api.model.ModelId
+//import com.aallam.openai.client.OpenAI
+import com.theokanning.openai.completion.chat.ChatCompletionRequest
+import com.theokanning.openai.completion.chat.ChatMessage
+import com.theokanning.openai.completion.chat.ChatMessageRole
+import com.theokanning.openai.service.OpenAiService
 import com.intellij.openapi.diagnostic.logger
+import com.theokanning.openai.completion.CompletionRequest
 import kotlinx.coroutines.runBlocking
 
 
 class OpenAiClient(private var apiKey: String?) {
     private val log = logger<OpenAiClient>()
-    private var openAi: OpenAI? = null
-    var model = "gpt-3.5-turbo"
+    private var openAi: OpenAiService? = null
+    var chatModel = "gpt-3.5-turbo"
+    var completionModel = "text-davinci-003"
 //    private var apiKey: String? = null
 
     init {
         apiKey?.let {
-            openAi = OpenAI(it)
+            openAi = OpenAiService(it)
         }
     }
 
@@ -24,22 +30,24 @@ class OpenAiClient(private var apiKey: String?) {
             openAi = null
         } else if (apiKey != this.apiKey) {
             this.apiKey = apiKey
-            openAi = OpenAI(apiKey)
+            openAi = OpenAiService(apiKey)
         }
     }
 
+//    @OptIn(BetaOpenAI::class)
     fun sendCompletion(prompt: String): List<String> {
         return openAi?.let {
-            val completionRequest = CompletionRequest(
-                model = ModelId(model),
-                prompt = prompt
-            )
+            val completionRequest = CompletionRequest.builder()
+                .model(completionModel)
+                .maxTokens(2048)
+                .prompt(prompt)
+                .build()
 
-            val completion = runBlocking { it.completion(completionRequest) }
+            val completion = runBlocking { it.createCompletion(completionRequest) }
             log.info("OpenAI request cost ${completion.usage?.totalTokens} tokens")
 
             return completion.choices.map { choice ->
-                log.debug("  finish reason: ${choice.finishReason}")
+                log.debug("  finish reason: ${choice.finish_reason}")
                 choice.text
             }
         } ?: emptyList()

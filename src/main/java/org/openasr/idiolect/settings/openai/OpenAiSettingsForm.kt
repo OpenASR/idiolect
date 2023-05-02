@@ -6,11 +6,13 @@ import javax.swing.*
 class OpenAiSettingsForm {
 
     internal val apiKey = JTextField()
-    internal val model = JTextField()
+    internal val chatModel = JTextField()
+    internal val completionModel = JTextField()
 
     fun reset() {
         apiKey.text = OpenAiConfig.apiKey
-        model.text = OpenAiConfig.settings.model
+        chatModel.text = OpenAiConfig.settings.chatModel
+        completionModel.text = OpenAiConfig.settings.completionModel
     }
 
     internal val rootPanel: JPanel = panel {
@@ -18,7 +20,8 @@ class OpenAiSettingsForm {
             row { browserLink("OpenAi API Keys", "https://platform.openai.com/account/api-keys") }
             row("API key") { cell(apiKey).columns(COLUMNS_SHORT) }
             row { browserLink("GPT-3.5 models", "https://platform.openai.com/docs/models/gpt-3-5") }
-            row("Model") { cell(model).columns(COLUMNS_SHORT) }
+            row("Chat model") { cell(chatModel).columns(COLUMNS_SHORT) }
+            row("Completion model") { cell(completionModel).columns(COLUMNS_SHORT) }
         }
     }
 }
