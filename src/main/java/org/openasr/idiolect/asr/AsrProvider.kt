@@ -27,8 +27,9 @@ interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
     companion object {
         val defaultStopWords = listOf("yeah", "ah", "oh")
         fun stopWords(grammar: Array<String>?,
-                      stopWords: Iterable<String> = defaultStopWords): List<String> {
-            return stopWords.filterNot { grammar?.contains(it) ?: false }
+                      stopWords: List<String> = defaultStopWords): List<String> {
+            return if (grammar == null) stopWords
+            else stopWords.filterNot { grammar.contains(it) ?: false }
         }
 
         /**

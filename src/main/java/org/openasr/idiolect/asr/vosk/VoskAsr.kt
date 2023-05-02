@@ -10,7 +10,6 @@ import com.intellij.openapi.options.ShowSettingsUtil
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
 import org.openasr.idiolect.nlp.NlpRequest
-import org.openasr.idiolect.presentation.statusbar.RecognitionStatusBarWidget
 import org.openasr.idiolect.recognizer.CustomMicrophone
 import org.openasr.idiolect.settings.IdiolectConfig
 import org.vosk.*
@@ -190,9 +189,10 @@ class VoskAsr : AsrProvider {
         while (microphone.stream.read(b).also { nbytes = it } > 0 && listening) {
 //            log.debug("We have $nbytes bytes for Vosk...")
             if (recognizer.acceptWaveForm(b, nbytes)) {
-//                log.debug("...and Vosk has a recognition for us")
-                val result = tryParseResult(recognizer.result, stopWords)
-                if (result.alternatives.isNotEmpty()) return result
+//                log.debug("...and Vosk has a recognition for us: ${recognizer.result}")
+                val nlpRequest = tryParseResult(recognizer.result, stopWords)
+//                log.debug("parsed NlpRequest: $nlpRequest")
+                if (nlpRequest.alternatives.isNotEmpty()) return nlpRequest
             }
         }
 

@@ -117,7 +117,7 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
             if (event.stateChange == ItemEvent.SELECTED) {
                 microphone.useInputDevice(selectedDevice)
                 IdiolectConfig.settings.audioInputDevice = selectedDevice.name
-                startVuMeter()
+                startThreads()
                 startWaveform()
             } else { // if (event.stateChange == ItemEvent.DESELECTED) {
                 stopThreads()

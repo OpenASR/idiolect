@@ -83,7 +83,7 @@ class RecognitionStatusBarWidget :
     override fun onAsrReady(message: String) =
         NotificationGroupManager.getInstance()
             .getNotificationGroup("Idiolect")
-            .createNotification("ASR is Ready",
+            .createNotification("Idiolect is Ready",
                 message,
                 NotificationType.INFORMATION)
             .notify(null)

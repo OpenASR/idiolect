@@ -18,7 +18,7 @@ class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLi
 
         //dump(b, off, read);
 
-        if (read == -1) {
+        if (read <= 0) {
             return read
         }
 
