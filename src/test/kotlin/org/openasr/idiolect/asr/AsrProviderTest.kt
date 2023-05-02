@@ -14,7 +14,10 @@ class AsrProviderTest {
 
         // Then
         assertArrayEquals(AsrProvider.defaultStopWords.toTypedArray(), stopWords.toTypedArray())
-        assertFalse("Stop words should not contain 'i' as it helps to make utterances more natural", stopWords.contains("i"))
+        assertFalse(
+            "Stop words should not contain 'i' as it helps to make utterances more natural",
+            stopWords.contains("i")
+        )
     }
 
     @Test
