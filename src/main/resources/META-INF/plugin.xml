@@ -89,16 +89,16 @@
     </extensions>
 
     <actions>
-        <action id="Idiolect.Start" text="Voice control" description="Start listening for voice commands"
+        <action id="Idiolect.Start" text="Voice Control" description="Start listening for voice commands"
                 class="org.openasr.idiolect.actions.VoiceRecordControllerAction"
                 icon="/org/openasr/idiolect/icons/start.svg">
             <add-to-group group-id="MainToolbarRight"/>
         </action>
 
-        <action id="Idiolect.CommandFrontTextField" text="Invoke voice command"
+        <action id="Idiolect.CommandFrontTextField" text="Invoke Voice Command"
                 class="org.openasr.idiolect.actions.ExecuteActionFromTextField"/>
 
-        <action id="Idiolect.VoiceAction" text="Invoke by voice-command"
+        <action id="Idiolect.VoiceAction" text="Invoke by Voice Command"
                 class="org.openasr.idiolect.actions.ExecuteVoiceCommandAction"/>
     </actions>
 </idea-plugin>

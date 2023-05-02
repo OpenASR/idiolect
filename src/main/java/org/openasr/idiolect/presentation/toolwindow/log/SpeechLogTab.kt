@@ -30,13 +30,14 @@ class SpeechLogTab(private val toolWindow: ToolWindow) :
 {
     private val maxLength = 100
     private val log = mutableListOf<String>()
-    private var logPane = JEditorPane(UIUtil.HTML_MIME, log.joinToString(""))
+    private val logPane = JEditorPane(UIUtil.HTML_MIME, log.joinToString(""))
 
     init {
         application.messageBus.connect(this).let {
             it.subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
-//            it.subscribe(ToolWindowManagerListener.TOPIC, this)
         }
+
+        logPane.isEditable = false
 
         val kit = logPane.editorKit
         if (kit is HTMLEditorKit) {

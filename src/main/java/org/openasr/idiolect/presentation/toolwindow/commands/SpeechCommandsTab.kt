@@ -1,5 +1,10 @@
 package org.openasr.idiolect.presentation.toolwindow.commands
 
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.ActionPlaces
+import com.intellij.openapi.actionSystem.ActionToolbar
+import com.intellij.openapi.actionSystem.DefaultActionGroup
+import com.intellij.openapi.editor.actions.ScrollToTheEndToolbarAction
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.keymap.KeymapManager
 import com.intellij.ui.JBColor
@@ -25,11 +30,16 @@ class SpeechCommandsTab {
     private val table = JBTable(SpeechCommandTableModel())
     private val searchField = createSearchComponent(table)
 
-    fun createComponent(): JComponent {
+    fun createToolBar(): JComponent {
         return panel {
             row {
                 cell(searchField)
             }
+        }
+    }
+
+    fun createComponent(): JComponent {
+        return panel {
             row {
                 scrollCell(table).align(Align.FILL)
             }.resizableRow()
