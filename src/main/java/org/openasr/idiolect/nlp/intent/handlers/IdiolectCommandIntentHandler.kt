@@ -44,6 +44,7 @@ class IdiolectCommandIntentHandler : IntentHandler {
             IdiolectCommandRecognizer.INTENT_ABOUT -> ActionRoutines.routineAbout()
             IdiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
             IdiolectCommandRecognizer.INTENT_COMMANDS -> showCommands(nlpContext, nlpResponse.slots?.get(SLOT_COMMAND_TERM))
+            IdiolectCommandRecognizer.INTENT_EDIT_PHRASES -> editCustomPhrases(nlpContext)
             IdiolectCommandRecognizer.INTENT_MODE -> changeMode(nlpContext, nlpResponse.slots!!.get(SLOT_MODE)!!)
             SurroundWithNoNullCheckRecognizer.INTENT_NAME -> surroundWithNullCheck(nlpContext)
             else -> return null
@@ -52,11 +53,16 @@ class IdiolectCommandIntentHandler : IntentHandler {
         return ActionCallInfo(intentName, true)
     }
 
+    private fun editCustomPhrases(nlpContext: NlpContext) {
+        CustomPhraseRecognizer.openCustomPhrasesFile(nlpContext.getProject()!!)
+        showCommands(nlpContext)
+    }
+
     private fun changeMode(nlpContext: NlpContext, mode: String) {
 
     }
 
-    private fun showCommands(nlpContext: NlpContext, term: String?) {
+    private fun showCommands(nlpContext: NlpContext, term: String? = null) {
         nlpContext.getData(PlatformDataKeys.PROJECT)?.let { project ->
             val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Idiolect")!!
             toolWindow.show()

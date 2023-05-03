@@ -124,7 +124,7 @@ class VoskAsr : AsrProvider {
                 recognizer = Recognizer(Model(model), 16000f)
                 recognizer.setMaxAlternatives(alternatives)
 
-                messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been applied")
+                messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Speech model has been applied")
             }
         }
 

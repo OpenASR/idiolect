@@ -24,6 +24,8 @@ interface NlpResultListener {
 
     fun onFulfilled(actionCallInfo: ActionCallInfo)
 
+    fun onNoMatch(nlpRequest: NlpRequest) {}
+
     /**
      * Display/read a failure message to the user.
      */

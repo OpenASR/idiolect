@@ -17,9 +17,11 @@ import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.actions.recognition.IdiolectCommandRecognizer
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResultListener
+import org.openasr.idiolect.presentation.IdiolectHtmlEditorKit
 import java.awt.Rectangle
 import javax.swing.JComponent
 import javax.swing.JEditorPane
+import javax.swing.JTextPane
 import javax.swing.text.html.HTMLEditorKit
 
 
@@ -30,24 +32,21 @@ class SpeechLogTab(private val toolWindow: ToolWindow) :
 {
     private val maxLength = 100
     private val log = mutableListOf<String>()
-    private val logPane = JEditorPane(UIUtil.HTML_MIME, log.joinToString(""))
+//    private val logPane = JEditorPane(UIUtil.HTML_MIME, log.joinToString(""))
+    private val logPane = JTextPane()//.apply { contentType = UIUtil.HTML_MIME }
+
 
     init {
-        application.messageBus.connect(this).let {
-            it.subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
-        }
+        application.messageBus.connect(this).subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
 
+//        logPane.contentType = UIUtil.HTML_MIME
         logPane.isEditable = false
-
-        val kit = logPane.editorKit
-        if (kit is HTMLEditorKit) {
-            kit.styleSheet.addRule(
+        logPane.editorKit = IdiolectHtmlEditorKit().withStyle(
                 ".recognition {margin: 10px 0 0 0;} " +
                 ".alternatives {color: gray; margin: 0 0 0 20px;} " +
                 ".error {color: red; margin: 0 0 0 20px;} " +
                 ".fulfilled {color: green; margin: 0 0 0 20px;} " +
                 ".message {color: yellow; margin: 0 0 0 20px;} ")
-        }
     }
 
     override fun dispose() {
@@ -86,13 +85,13 @@ class SpeechLogTab(private val toolWindow: ToolWindow) :
 
     override fun onFulfilled(actionCallInfo: ActionCallInfo) {
         when (actionCallInfo.actionId) {
-            IdiolectCommandRecognizer.INTENT_HI -> updateLog("\uD83D\uDC4B\uD83D\uDE00")
-            else -> updateLog("<div class=\"fulfilled\">${actionCallInfo.actionId}</div>")
+            IdiolectCommandRecognizer.INTENT_HI -> updateLog("\uD83D\uDC4B\uD83D\uDE00", "fulfilled")
+            else -> updateLog(actionCallInfo.actionId, "fulfilled")
         }
     }
 
     override fun onFailure(message: String) {
-        updateLog("<div class=\"error\">$message</div>")
+        updateLog(message, "error")
     }
 
     override fun onMessage(message: String, verbosity: NlpResultListener.Companion.Verbosity) {
@@ -100,9 +99,15 @@ class SpeechLogTab(private val toolWindow: ToolWindow) :
             verbosity.name + ": " + message
         } else message
 
-        updateLog("<div class=\"message ${verbosity.name}\">$displayMessage</div>")
+        updateLog(displayMessage, "message ${verbosity.name}")
         toolWindow.show()
     }
+
+    private fun formatMessage(text: String, styleClass: String): String {
+        return "<div class=\"$styleClass}\">$text</div>"
+    }
+
+    private fun updateLog(text: String, role: String) = updateLog(formatMessage(text, role))
 
     private fun updateLog(line: String) {
         if (log.size > maxLength) {
@@ -110,7 +115,7 @@ class SpeechLogTab(private val toolWindow: ToolWindow) :
         }
         log.add(line)
 
-        logPane.text = log.joinToString("")
+        logPane.text = log.joinToString("\n")
 
         invokeLater {
             logPane.scrollRectToVisible(Rectangle(0, logPane.height,1,1))

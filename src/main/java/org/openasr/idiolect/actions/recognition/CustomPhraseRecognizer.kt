@@ -16,26 +16,30 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
         private val defaultPropertiesFileContents = """
             # This file may be used to bind custom utterances to actions.
             # The first action with a matching utterance will be invoked.
+            # Any changes saved to this file are applied immediately.
             # For a list of potential actions that could be rebound, see:
             # https://github.com/OpenASR/idiolect/blob/master/src/main/resources/phrases.example.properties
 
             FindInPath=find in project
             MethodDown=next method
+            ActivateProjectToolWindow=open project
             ActivateTerminalToolWindow=open terminal
-            Diff.FocusOppositePane=other pane
             CodeInspection.OnEditor=inspect code
             """.trimIndent()
 
-        private val propertiesFile by lazy { File(IdiolectConfig.idiolectHomePath, "phrases.properties")
+        private val phrasesFile by lazy { File(IdiolectConfig.idiolectHomePath, "phrases.properties")
             .apply {
-                if (exists()) readText()
+                if (false && exists()) readText()
                 else {
                     defaultPropertiesFileContents.also { writeText(it) }
 
                     NotificationGroupManager.getInstance()
                         .getNotificationGroup("Idiolect")
-                        .createNotification("Custom Phrases",
-                            "You can configure phrases to be recognised in $absolutePath",
+                        .createNotification("Custom phrases",
+                            """
+                            Edit $absolutePath
+                            or say "Edit custom phrases".
+                            """,
                             NotificationType.INFORMATION)
                         .addAction(NotificationAction.create("Open properties file (~/${name})") { e ->
                             openCustomPhrasesFile(e.project!!)
@@ -45,37 +49,42 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
             }
         }
 
-        private fun openCustomPhrasesFile(project: Project) {
-            OpenFileAction.openFile(propertiesFile.absolutePath, project)
+        fun openCustomPhrasesFile(project: Project) {
+            OpenFileAction.openFile(phrasesFile.absolutePath, project)
         }
     }
 
-    data class Binding(val name: String, val boundPhrases: List<String>)
+    data class PhraseToActionBinding(val name: String, val boundPhrases: List<String>)
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext) =
-        properties.firstOrNull {
-            it.boundPhrases.any {
-                phrase -> phrase in nlpRequest.alternatives
+    override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext) = properties.firstOrNull {
+            it.boundPhrases.any { phrase ->
+                phrase in nlpRequest.alternatives
             }
         }?.let { NlpResponse(it.name) }
 
     var lastModified = 0L
 
-    private var cachedProperties = listOf<Binding>()
-    private val properties: List<Binding> get() =
-        if (propertiesFile.lastModified() == lastModified) cachedProperties
+    private var cachedProperties = listOf<PhraseToActionBinding>()
+
+    /**
+     * Upon access, updates `cachedProperties` if the file has been modified since the last access.
+     *
+     * @return the cached properties.
+     */
+    private val properties: List<PhraseToActionBinding> get() =
+        if (phrasesFile.lastModified() == lastModified) cachedProperties
         else readBindingsFromPropertiesFile().apply {
             cachedProperties = this
-            lastModified = propertiesFile.lastModified()
+            lastModified = phrasesFile.lastModified()
         }
 
     private val actionManager by lazy { ActionManager.getInstance() }
 
-    private fun readBindingsFromPropertiesFile(): List<Binding> =
-        propertiesFile.readText().lines()
+    private fun readBindingsFromPropertiesFile(): List<PhraseToActionBinding> =
+        phrasesFile.readText().lines()
             .filter { it.split("=").size == 2 } // Only take lines containing a single '='
             .map {
-                it.split("=").let { (k, v) -> Binding(k, v.split("|")) }
+                it.split("=").let { (k, v) -> PhraseToActionBinding(k, v.split("|")) }
             }
             // Check if name is a valid actionId
             .filter {

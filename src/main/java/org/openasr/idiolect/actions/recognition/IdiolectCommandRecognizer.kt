@@ -16,6 +16,7 @@ class IdiolectCommandRecognizer : IntentResolver("idiolect Commands", 0) {
         val INTENT_ABOUT = "${IdiolectCommandIntentHandler.INTENT_PREFIX}About"
         val INTENT_PAUSE = "${IdiolectCommandIntentHandler.INTENT_PREFIX}Pause"
         val INTENT_COMMANDS = "${IdiolectCommandIntentHandler.INTENT_PREFIX}Commands"
+        val INTENT_EDIT_PHRASES = "${IdiolectCommandIntentHandler.INTENT_PREFIX}EditPhrases"
         val INTENT_MODE = "${IdiolectCommandIntentHandler.INTENT_PREFIX}Mode"
     }
 
@@ -23,6 +24,7 @@ class IdiolectCommandRecognizer : IntentResolver("idiolect Commands", 0) {
         NlpGrammar(INTENT_HI).withExamples("hi idea", "hello"),
         NlpGrammar(INTENT_ABOUT).withExample("tell me about yourself"),
         NlpGrammar(INTENT_PAUSE).withExample("stop listening"),
+        NlpGrammar(INTENT_EDIT_PHRASES).withExample("edit custom phrases"),
 
         object : NlpRegexGrammar(INTENT_COMMANDS, "what can i say(?: about (.*))?") {
             override fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext): NlpResponse {

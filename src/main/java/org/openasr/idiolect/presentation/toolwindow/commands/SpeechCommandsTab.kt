@@ -7,6 +7,8 @@ import com.intellij.ui.SearchTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
+import org.openasr.idiolect.actions.recognition.CustomPhraseRecognizer
+import org.openasr.idiolect.ide.IdeService
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import java.util.*
 import javax.swing.JComponent
@@ -29,6 +31,11 @@ class SpeechCommandsTab {
         return panel {
             row {
                 cell(searchField)
+                button("Edit Custom Phrases") {
+                    IdeService.getProject()?.let {
+                        CustomPhraseRecognizer.openCustomPhrasesFile(it)
+                    }
+                }
             }
         }
     }
@@ -89,7 +96,7 @@ class SpeechCommandsTab {
         override fun getColumnName(column: Int): String {
             return when (column) {
                 0 -> "Action"
-                1 -> "Examples"
+                1 -> "Example Phrases"
                 2 -> "Keyboard Shortcut"
                 else -> throw RuntimeException("Incorrect column index")
             }

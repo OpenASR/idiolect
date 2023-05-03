@@ -17,20 +17,28 @@ object ExecuteVoiceCommandAction : ExecuteActionByCommandText() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val manager = ActionRecognizerManager(NlpContext(e.dataContext))
-        val info = manager.handleNlpRequest((e.inputEvent as SpeechEvent).nlpRequest)
+        val nlpRequest = (e.inputEvent as SpeechEvent).nlpRequest
+        val info = manager.handleNlpRequest(nlpRequest)
 
         if (info != null) {
-            messageBus.syncPublisher(NLP_RESULT_TOPIC).onFulfilled(info)
-
             if (!info.fulfilled) {
-                val editor = IdeService.getEditor(e.dataContext)
-                if (editor == null) {
-                    log.info("Invoking outside of editor: ${info.actionId}")
-                    IdeService.invokeAction(info.actionId)
-                } else runInEditor(editor, info)
+                try {
+                    val editor = IdeService.getEditor(e.dataContext)
+                    if (editor == null) {
+                        log.info("Invoking outside of editor: ${info.actionId}")
+                        IdeService.invokeAction(info.actionId)
+                    } else runInEditor(editor, info)
+                } catch (err: Exception) {
+                    log.error("Failed to execute ${info.actionId}", err)
+                    messageBus.syncPublisher(NLP_RESULT_TOPIC).onFailure("Failed to execute '${info.actionId}'")
+                    return
+                }
             }
+
+            messageBus.syncPublisher(NLP_RESULT_TOPIC).onFulfilled(info)
         } else {
             log.info("Command not recognized")
+//            messageBus.syncPublisher(NLP_RESULT_TOPIC).onNoMatch(nlpRequest)
         }
     }
 }
