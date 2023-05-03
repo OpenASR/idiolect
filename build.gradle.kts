@@ -31,7 +31,7 @@ tasks {
 
   patchPluginXml {
     version = "${project.version}"
-    sinceBuild = "222.*"
+    sinceBuild = "223"
 //    untilBuild = "223.*")
 
     changeNotes = provider {

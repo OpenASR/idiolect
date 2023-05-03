@@ -20,6 +20,8 @@ class AiService {
         client.chatModel = model
     }
 
+    fun listModels(type: OpenAiClient.ModelType) = client.listModels(type)
+
     fun sendCompletion(prompt: String) {
         val publisher = messageBus.syncPublisher(AiResponseListener.AI_RESPONSE_TOPIC)
 

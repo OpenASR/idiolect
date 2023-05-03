@@ -17,7 +17,6 @@ class OpenAiConfig : PersistentStateComponent<OpenAiConfig.Settings> {
     private var settings = Settings()
 
     companion object {
-
         val settings get() = application.getService(OpenAiConfig::class.java).settings
         private val credentialAttributes = CredentialAttributes(generateServiceName("openai", "idiolect"))
         var apiKey get() = PasswordSafe.instance.getPassword(credentialAttributes)
@@ -33,5 +32,9 @@ class OpenAiConfig : PersistentStateComponent<OpenAiConfig.Settings> {
     }
 
     data class Settings(var chatModel: String = "gpt-3.5-turbo",
-                        var completionModel: String = "text-davinci-003")
+                        var completionModel: String = "text-davinci-003",
+                        var maxTokens: Int = 16,
+                        var temperature: Double? = null, // = 1.0,
+                        var topP: Double? = null         // = 1.0
+        )
 }

@@ -7,19 +7,25 @@ import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.components.JBTextField
-import com.intellij.ui.dsl.builder.Align
-import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
+import com.intellij.ui.util.preferredWidth
 import com.intellij.util.application
 import com.intellij.util.ui.UIUtil
 import org.openasr.idiolect.actions.AiAction
 import org.openasr.idiolect.nlp.ai.AiResponseListener
+import org.openasr.idiolect.nlp.ai.OpenAiClient
 import org.openasr.idiolect.presentation.IdiolectHtmlEditorKit
+import org.openasr.idiolect.settings.openai.OpenAiConfig
 import java.awt.Rectangle
+import java.util.Hashtable
 import javax.swing.*
+import javax.swing.event.AncestorEvent
+import javax.swing.event.AncestorListener
+import kotlin.reflect.KMutableProperty0
 
 
-class AiTab(private val toolWindow: ToolWindow) : Disposable, AiResponseListener, DumbAware {
+class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, AiResponseListener, DumbAware {
     private val log = logger<AiTab>()
     private val maxLength = 100
     private val aiLog = mutableListOf<String>()
@@ -28,24 +34,14 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AiResponseListener
 //    private val userInput = JEditorPane("text", "")
 //    private val userInput = JBTextArea(null, "Hello", 1, 20)
     private val userInput = JBTextField(20)
+    private val chatModelSelector = LlmModelSelector(OpenAiClient.ModelType.chat, OpenAiConfig.settings::chatModel)
+    private val completionModelSelector = LlmModelSelector(OpenAiClient.ModelType.completions, OpenAiConfig.settings::completionModel)
+
 
     init {
         application.messageBus.connect(this).subscribe(AiResponseListener.AI_RESPONSE_TOPIC, this)
 
-//        logPane.addHyperlinkListener {  }
-        logPane.isEditable = false
-        // HtmlEditorKit doesn't seem to support multiple class names
-        val commonStyles = "margin-top: 10px; padding: 6px; color: black;"
-        logPane.editorKit = IdiolectHtmlEditorKit().withStyle("""
-            .prompt {
-                $commonStyles
-                background-color: silver;
-            }
-            .response {
-                $commonStyles                
-                background-color: white;
-            }
-            """)
+        initialiseLogPane()
 
         userInput.minimumWidth = 100
     }
@@ -53,19 +49,48 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AiResponseListener
     override fun dispose() {
     }
 
+
     fun createToolBar(): JComponent {
 //        val group = DefaultActionGroup()
 //        group.add(searchField)
 //        val toolbar: ActionToolbar = ActionManager.getInstance().createActionToolbar(ActionPlaces.TOOLBAR, group, false)
-        return panel {
-            row {
-                comboBox(listOf("gpt-4", "gpt-4-0314", "gpt-4-32k", "gpt-4-32k-0314", "gpt-3.5-turbo", "gpt-3.5-turbo-0301"))
-                    .label("Chat model")
 
-                comboBox(listOf("text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001"))
-                    .label("Completion model")
+        val toolbar = panel {
+            row {
+                cell(chatModelSelector).label("Chat model")
+                cell(completionModelSelector).label("Completion model")
+
+                intTextField(1..4096, 16).columns(COLUMNS_TINY).label("Max tokens")
+                    .onChanged {
+                        if (it.text.isNotEmpty()) {
+                            try {
+                                OpenAiConfig.settings.maxTokens = it.text.toInt()
+                            } catch (e: Exception) {
+                                log.info("Invalid max token. Must be an integer value <= 4096")
+                            }
+                        }
+                    }
+                    .bindIntText(OpenAiConfig.settings::maxTokens)
+
+                doubleSlider(OpenAiConfig.settings::temperature).label("Temperature")
+                doubleSlider(OpenAiConfig.settings::topP).label("Top P")
             }
         }
+
+        toolbar.addAncestorListener(this)
+
+        return toolbar
+    }
+
+    override fun ancestorAdded(event: AncestorEvent?) {
+        updateModels()
+    }
+    override fun ancestorRemoved(event: AncestorEvent?) {}
+    override fun ancestorMoved(event: AncestorEvent?) {}
+
+    private fun updateModels() {
+        chatModelSelector.update()
+        completionModelSelector.update()
     }
 
     fun createComponent(): JComponent {
@@ -95,6 +120,8 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AiResponseListener
         }
     }
 
+
+
     override fun onUserPrompt(prompt: String) {
         updateLog(prompt, "prompt")
     }
@@ -105,6 +132,52 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AiResponseListener
         }
 
         toolWindow.show()
+    }
+
+    private fun Row.doubleSlider(prop: KMutableProperty0<Double?>, default: Double = 1.0, scale: Int = 10): Cell<JSlider> {
+        val sliderLabels = Hashtable<Int, JComponent>()
+        sliderLabels[0] = JLabel("0")
+        sliderLabels[scale / 2] = JLabel("0.5")
+        sliderLabels[scale] = JLabel("1")
+
+        return slider(0, scale, 1, scale / 2)
+            .applyToComponent {
+                preferredWidth = 100
+//                labelTable = sliderLabels
+//                paintTicks = false
+                paintLabels = false
+                toolTipText = "${value.toDouble() / scale}"
+                addChangeListener {
+                    val doubleVal = value.toDouble() / scale
+                    toolTipText = "$doubleVal"
+                    prop.set(if (doubleVal == default) null else doubleVal)
+                }
+            }
+            .applyIfEnabled()
+            .bindValue({
+                prop.get()?.let {
+                    (it * scale).toInt()
+                } ?: (default * scale).toInt()
+            }, {
+                prop.set(it.toDouble() / scale)
+            })
+    }
+
+    private fun initialiseLogPane() {
+//        logPane.addHyperlinkListener {  }
+        logPane.isEditable = false
+        // HtmlEditorKit doesn't seem to support multiple class names
+        val commonStyles = "margin-top: 10px; padding: 6px; color: black;"
+        logPane.editorKit = IdiolectHtmlEditorKit().withStyle("""
+            .prompt {
+                $commonStyles
+                background-color: silver;
+            }
+            .response {
+                $commonStyles                
+                background-color: white;
+            }
+            """)
     }
 
     private fun formatMessage(text: String, messageType: String): String {
