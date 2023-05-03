@@ -26,7 +26,7 @@ or
 
 <img src="docs/command-search.png" alt="Command tab"/>
 
-There are _a lot_, and some of them are not easy to say or remember, but you can [customise the phrases](#CustomPhraseRecognizer).
+There are _a lot_ of actions, and some of them are not easy to say or remember. To make it easier you can [customise the phrases](#CustomPhraseRecognizer).
 
 > Edit custom phrases
 
@@ -72,7 +72,6 @@ Some of the more useful commands are:
 - git add/pull/merge/push/stash...
 - checkin files
 - annotate
-
 
 ## Building
 
