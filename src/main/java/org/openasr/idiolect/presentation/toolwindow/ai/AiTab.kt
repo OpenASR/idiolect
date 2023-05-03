@@ -61,6 +61,9 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
                 cell(completionModelSelector).label("Completion model")
 
                 intTextField(1..4096, 16).columns(COLUMNS_TINY).label("Max tokens")
+                    .applyToComponent {
+                        toolTipText = "The maximum number of tokens the LLM will generate"
+                    }
                     .onChanged {
                         if (it.text.isNotEmpty()) {
                             try {
@@ -73,7 +76,13 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
                     .bindIntText(OpenAiConfig.settings::maxTokens)
 
                 doubleSlider(OpenAiConfig.settings::temperature).label("Temperature")
+                    .applyToComponent {
+                        toolTipText = "Randomness"
+                    }
                 doubleSlider(OpenAiConfig.settings::topP).label("Top P")
+                    .applyToComponent {
+                        toolTipText = "Probability"
+                    }
             }
         }
 
