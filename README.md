@@ -16,20 +16,19 @@ Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Re
 To get started, press the <img src="src/main/resources/org/openasr/idiolect/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar, then speak a command, e.g. "Hi, IDEA!" Idiolect supports a simple [grammar](src/main/resources/org/openasr/idiolect/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idiolect/wiki/Feature-Roadmap#features). Click the button once more to deactivate.
 
 ### Voice Commands
-For a full list of all actions that can be be activated by voice ask Idiolect:
+For a full list of all actions that can be activated by voice ask Idiolect:
 
 > What can I say?
 
 or
 
 > What can I say about "activate"?
-> What can I say about "create"?
-> What can I say about "generate"?
-> What can I say about "new"?
-> What can I say about "template"?
 
+<img src="docs/command-search.png" alt="Command tab"/>
 
 There are _a lot_, and some of them are not easy to say or remember, but you can [customise the phrases](#CustomPhraseRecognizer).
+
+> Edit custom phrases
 
 Some of the more useful commands are:
 
