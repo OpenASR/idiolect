@@ -11,6 +11,66 @@ Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Re
 
 To get started, press the <img src="src/main/resources/org/openasr/idiolect/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar, then speak a command, e.g. "Hi, IDEA!" Idiolect supports a simple [grammar](src/main/resources/org/openasr/idiolect/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idiolect/wiki/Feature-Roadmap#features). Click the button once more to deactivate.
 
+### Voice Commands
+For a full list of all actions that can be activated by voice ask Idiolect:
+
+> What can I say?
+
+or
+
+> What can I say about "activate"?
+> What can I say about "create"?
+> What can I say about "generate"?
+> What can I say about "new"?
+> What can I say about "template"?
+
+There are _a lot_ of actions, and some of them are not easy to say or remember. To make it easier you can [customise the phrases](#CustomPhraseRecognizer).
+
+> Edit custom phrases
+
+Some of the more useful commands are:
+
+#### Navigation
+- activate project tool window (commit, database, debug, find, gradle, run, terminal...)
+- back/forward, down/up, left/right, page up/down, scroll up/down
+- next/previous word
+- method down/up
+- find, find in project
+- go to ... (class, bookmark, declaration, line, implementation...)
+- close all editors
+- next method
+- find usages
+- call hierarchy
+
+#### Editing
+- create (editor config file, grpc request action, liquibase changelog, vue single file comp)
+- new class/dockerfile/element/file...
+- code cleanup
+- code completion
+- collapse block
+- extract class/function/method/etc
+- generate getter/setter/test method...
+- new class (or "create new class "something")
+- rename (or rename to "something")
+- cut / copy / paste / delete 
+- cut line end/backward
+- delete to (line/word) (start/end)
+- toggle column mode
+- reformat code
+- fix it
+- whoops
+
+#### Debugging
+- debug
+- context debug
+- context run
+- coverage
+
+#### Git Commands
+- git add/pull/merge/push/stash...
+- checkin files
+- annotate
+
 ## Building
 
 For Linux or macOS users:
