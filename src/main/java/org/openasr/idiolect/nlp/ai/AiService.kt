@@ -25,7 +25,17 @@ class AiService {
 
         publisher.onUserPrompt(prompt)
 
-        val choices = client.sendCompletion(prompt)
+//        val choices = client.sendCompletion(prompt)
+        val choices = listOf("""
+            Here is the code for `AiService`:
+            ```
+            class AiService {
+                init {
+                    println("hello world")
+                }
+            }
+            ```
+            """.trimIndent())
 
         publisher.onAiResponse(choices)
     }

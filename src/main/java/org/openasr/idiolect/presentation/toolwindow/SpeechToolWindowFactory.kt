@@ -18,10 +18,13 @@ class SpeechToolWindowFactory : ToolWindowFactory, DumbAware {
         PrintlnLogger.installForLocalDev()
     }
 
+    /**
+     * Adds tabs (or "contents") to the Idiolect ToolWindow
+     */
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val contentFactory = ContentFactory.getInstance()
 
-        // Add tabs (or "contents") to the Speech ToolWindow
+        // Log
         val speechLogTab = SpeechLogTab(toolWindow)
         val speechLogContent = contentFactory.createContent(speechLogTab.createComponent(), "Log", false)
         toolWindow.contentManager.addContent(speechLogContent)
@@ -44,8 +47,10 @@ class SpeechToolWindowFactory : ToolWindowFactory, DumbAware {
 
         // AI
         val aiTab = AiTab(toolWindow)
-        val aiContent = contentFactory.createContent(aiTab, "AI", false)
-//        aiContent.setDisposer(aiTab)
+        val aiPanel = SimpleToolWindowPanel(true, true)
+        aiPanel.toolbar = aiTab.createToolBar()
+        aiPanel.setContent(aiTab.createComponent())
+        val aiContent = contentFactory.createContent(aiPanel, "AI", false)
         toolWindow.contentManager.addContent(aiContent)
     }
 }

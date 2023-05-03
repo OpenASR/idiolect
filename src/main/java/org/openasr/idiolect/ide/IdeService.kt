@@ -67,7 +67,7 @@ object IdeService {
 
         if (editor == null) {
             editor = FileEditorManager.getInstance(ProjectManager.getInstance().openProjects[0]).run {
-                selectedTextEditor ?: if (allEditors.isEmpty()) null else allEditors[0] as Editor
+                selectedTextEditor ?: allEditors.firstOrNull { it is Editor } as Editor?
             }
         }
 

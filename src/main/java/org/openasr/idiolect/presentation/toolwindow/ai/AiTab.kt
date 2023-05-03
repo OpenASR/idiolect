@@ -4,8 +4,9 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionPlaces
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.wm.ToolWindow
-import com.intellij.ui.components.JBTextArea
+import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.util.minimumWidth
@@ -13,40 +14,43 @@ import com.intellij.util.application
 import com.intellij.util.ui.UIUtil
 import org.openasr.idiolect.actions.AiAction
 import org.openasr.idiolect.nlp.ai.AiResponseListener
-import java.awt.BorderLayout
+import org.openasr.idiolect.presentation.IdiolectHtmlEditorKit
 import java.awt.Rectangle
 import javax.swing.*
-import javax.swing.text.html.HTMLEditorKit
 
 
-class AiTab(private val toolWindow: ToolWindow) : JComponent(), Disposable, AiResponseListener {
+class AiTab(private val toolWindow: ToolWindow) : Disposable, AiResponseListener, DumbAware {
     private val log = logger<AiTab>()
     private val maxLength = 100
     private val aiLog = mutableListOf<String>()
     private val logPane = JEditorPane(UIUtil.HTML_MIME, aiLog.joinToString(""))
+//    private val logPane = JTextPane()//.apply { contentType = UIUtil.HTML_MIME }
 //    private val userInput = JEditorPane("text", "")
-    private val userInput = JBTextArea(null, "Hello", 1, 20)
+//    private val userInput = JBTextArea(null, "Hello", 1, 20)
+    private val userInput = JBTextField(20)
 
     init {
-        layout = BorderLayout()
-        add(createComponent(), BorderLayout.CENTER)
+        application.messageBus.connect(this).subscribe(AiResponseListener.AI_RESPONSE_TOPIC, this)
 
-        application.messageBus.connect(this).let {
-            it.subscribe(AiResponseListener.AI_RESPONSE_TOPIC, this)
-//            it.subscribe(ToolWindowManagerListener.TOPIC, this)
-        }
-
-        logPane.isEditable = false
-        userInput.minimumWidth = 100
 //        logPane.addHyperlinkListener {  }
+        logPane.isEditable = false
+        // HtmlEditorKit doesn't seem to support multiple class names
+        val commonStyles = "margin-top: 10px; padding: 6px; color: black;"
+        logPane.editorKit = IdiolectHtmlEditorKit().withStyle("""
+            .prompt {
+                $commonStyles
+                background-color: silver;
+            }
+            .response {
+                $commonStyles                
+                background-color: white;
+            }
+            """)
 
-        val kit = logPane.editorKit
-        if (kit is HTMLEditorKit) {
-            kit.styleSheet.addRule(
-                ".message {margin: 10px; color: black; border-radius: 10px;} " +
-                    ".ai {background-color: gray;} " +
-                    ".user {background: white;} ")
-        }
+        userInput.minimumWidth = 100
+    }
+
+    override fun dispose() {
     }
 
     fun createToolBar(): JComponent {
@@ -64,7 +68,7 @@ class AiTab(private val toolWindow: ToolWindow) : JComponent(), Disposable, AiRe
         }
     }
 
-    private fun createComponent(): JComponent {
+    fun createComponent(): JComponent {
 //        val userInput = JBTextField(20).apply {
 //            addActionListener {
 //
@@ -91,25 +95,39 @@ class AiTab(private val toolWindow: ToolWindow) : JComponent(), Disposable, AiRe
         }
     }
 
-    override fun dispose() {
-    }
-
     override fun onUserPrompt(prompt: String) {
-        updateLog("<div class=\"user message\">${prompt}</div>")
+        updateLog(prompt, "prompt")
     }
 
     override fun onAiResponse(choices: List<String>) {
-        updateLog("<div class=\"ai message\">${choices[0]}</div>")
+        choices.forEach { choice ->
+            updateLog(choice, "response")
+        }
+
         toolWindow.show()
     }
 
-    private fun updateLog(line: String) {
+    private fun formatMessage(text: String, messageType: String): String {
+        var tripleTicks = 0
+        return "<div class=\"$messageType\">${
+            text.replace("\\n", "<br/>")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace(Regex("([^`])`([^`]+)`([^`])"), "$1`<code>$2</code>`$3")
+                .replace(Regex("```")) { if (tripleTicks++ % 2 == 0) "<pre><code>" else "</code></pre>" }
+        }</div>"
+    }
+
+    private fun updateLog(text: String, role: String) = updateLog(formatMessage(text, role))
+
+    private fun updateLog(html: String) {
         if (aiLog.size > maxLength) {
             aiLog.removeFirst()
         }
-        aiLog.add(line)
 
-        logPane.text = aiLog.joinToString("")
+        aiLog.add(html)
+
+        logPane.text = aiLog.joinToString("\n")
 
         invokeLater {
             logPane.scrollRectToVisible(Rectangle(0, logPane.height,1,1))
