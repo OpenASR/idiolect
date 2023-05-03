@@ -19,10 +19,8 @@ For a full list of all actions that can be activated by voice ask Idiolect:
 or
 
 > What can I say about "activate"?
-> What can I say about "create"?
-> What can I say about "generate"?
-> What can I say about "new"?
-> What can I say about "template"?
+
+<img src="docs/command-search.png" alt="Command tab"/>
 
 There are _a lot_ of actions, and some of them are not easy to say or remember. To make it easier you can [customise the phrases](#CustomPhraseRecognizer).
 
