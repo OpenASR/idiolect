@@ -29,7 +29,7 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
 
         private val phrasesFile by lazy { File(IdiolectConfig.idiolectHomePath, "phrases.properties")
             .apply {
-                if (false && exists()) readText()
+                if (exists()) readText()
                 else {
                     defaultPropertiesFileContents.also { writeText(it) }
 
