@@ -5,6 +5,7 @@ import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRegexGrammar
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import java.awt.Component
 
 class FileNavigationRecognizer : IntentResolver("File Navigation", 800) {
     companion object {
@@ -23,6 +24,8 @@ class FileNavigationRecognizer : IntentResolver("File Navigation", 800) {
             FileNavigationGrammar(INTENT_FOCUS, "focus (editor|project|symbols)", "target")
                 .withExamples("focus editor", "focus project", "focus symbols")
         )
+
+    override fun isSupported(context: NlpContext, component: Component?) = context.isActionMode()
 
     class FileNavigationGrammar(intentName: String, pattern: String, private val slotName: String) : NlpRegexGrammar(intentName, pattern) {
         override fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext): NlpResponse {

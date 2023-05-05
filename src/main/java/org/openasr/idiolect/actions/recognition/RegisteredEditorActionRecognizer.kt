@@ -20,6 +20,7 @@ open class RegisteredEditorActionRecognizer : RegisteredActionRecognizer() {
     )
 
     override fun isSupported(context: NlpContext, component: Component?): Boolean =
+        context.isActionMode() &&
         component is EditorComponentImpl
 
     override fun getActionIdForUtterance(utterance: String): String {

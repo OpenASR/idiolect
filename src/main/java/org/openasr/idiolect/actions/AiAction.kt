@@ -23,6 +23,7 @@ class AiAction : AnAction() {
 
     override fun actionPerformed(e: AnActionEvent) {
         val prompt = textField.text
+        textField.text = ""
 
         aiService.sendCompletion(prompt)
     }

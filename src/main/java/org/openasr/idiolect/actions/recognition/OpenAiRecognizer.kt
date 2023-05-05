@@ -40,16 +40,4 @@ class OpenAiRecognizer : IntentResolver("OpenAI", Int.MAX_VALUE) {
 
 
     }
-
-    private fun showNotificationForApiKey() {
-        NotificationGroupManager.getInstance()
-            .getNotificationGroup("Idiolect")
-            .createNotification("OpenAI not configured",
-                """
-                    <p>Create and configure OpenAI API key<p>
-                    <p><a href="https://platform.openai.com/account/api-keys">https://platform.openai.com/account/api-keys</a></p>
-                """.trimIndent(), NotificationType.INFORMATION
-            )
-            .notify(null)
-    }
 }

@@ -66,8 +66,10 @@ class JavaActionRecognizer : IntentResolver("Java Shortcuts", 1000) {
     )
 
     override fun isSupported(context: NlpContext, component: Component?): Boolean =
+        context.isActionMode() && (
         (component is EditorComponentImpl
             && context.getData(FILE_EDITOR)?.file?.fileType is JavaFileType)
             // or allow "new class" when a package is selected
             || context.getData(SELECTED_ITEMS)?.get(0) is PsiJavaDirectoryImpl
+        )
 }

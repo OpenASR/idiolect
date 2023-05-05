@@ -21,6 +21,7 @@ import org.openasr.idiolect.ide.IdeService
 import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import org.openasr.idiolect.presentation.toolwindow.IdiolectToolWindowFactory
 import org.openasr.idiolect.tts.TtsService
 import java.util.ArrayList
 
@@ -29,7 +30,6 @@ class IdiolectCommandIntentHandler : IntentHandler {
     companion object {
         val INTENT_PREFIX = IntentResolver.INTENT_PREFIX_IDIOLECT_COMMAND
         const val SLOT_COMMAND_TERM = "term"
-        const val SLOT_MODE = "mode"
     }
 
     override fun tryFulfillIntent(nlpResponse: NlpResponse, nlpContext: NlpContext): ActionCallInfo? {
@@ -45,8 +45,12 @@ class IdiolectCommandIntentHandler : IntentHandler {
             IdiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
             IdiolectCommandRecognizer.INTENT_COMMANDS -> showCommands(nlpContext, nlpResponse.slots?.get(SLOT_COMMAND_TERM))
             IdiolectCommandRecognizer.INTENT_EDIT_PHRASES -> editCustomPhrases(nlpContext)
-            IdiolectCommandRecognizer.INTENT_MODE -> changeMode(nlpContext, nlpResponse.slots!!.get(SLOT_MODE)!!)
             SurroundWithNoNullCheckRecognizer.INTENT_NAME -> surroundWithNullCheck(nlpContext)
+
+            IdiolectCommandRecognizer.INTENT_ACTION_MODE -> actionMode(nlpContext)
+            IdiolectCommandRecognizer.INTENT_EDIT_MODE -> editMode(nlpContext)
+            IdiolectCommandRecognizer.INTENT_CHAT_MODE -> chatMode(nlpContext)
+
             else -> return null
         }
 
@@ -58,23 +62,27 @@ class IdiolectCommandIntentHandler : IntentHandler {
         showCommands(nlpContext)
     }
 
-    private fun changeMode(nlpContext: NlpContext, mode: String) {
+    private fun actionMode(nlpContext: NlpContext) {
+        nlpContext.setMode(NlpContext.Mode.ACTION)
+    }
 
+    private fun editMode(nlpContext: NlpContext) {
+        nlpContext.setMode(NlpContext.Mode.EDIT)
+    }
+
+    private fun chatMode(nlpContext: NlpContext) {
+        nlpContext.setMode(NlpContext.Mode.CHAT)
+
+        IdiolectToolWindowFactory.showTab(IdiolectToolWindowFactory.Tab.CHAT)
     }
 
     private fun showCommands(nlpContext: NlpContext, term: String? = null) {
-        nlpContext.getData(PlatformDataKeys.PROJECT)?.let { project ->
-            val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Idiolect")!!
-            toolWindow.show()
-            val contentManager = toolWindow.contentManager
-            val commandsContent = contentManager.getContent(1)
-            contentManager.setSelectedContent(commandsContent!!)
+        val commandsContent = IdiolectToolWindowFactory.showTab(IdiolectToolWindowFactory.Tab.COMMANDS)
 
-            // enter the term in the search field
-            val searchTextField = commandsContent.searchComponent as SearchTextField
-            searchTextField.text = term
-            searchTextField.requestFocus()
-        }
+        // enter the term in the search field
+        val searchTextField = commandsContent.searchComponent as SearchTextField
+        searchTextField.text = term
+        searchTextField.requestFocus()
     }
 
     private fun surroundWithNullCheck(nlpContext: NlpContext) {

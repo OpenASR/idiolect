@@ -73,26 +73,30 @@ class CustomMicrophone : Closeable, Disposable {
 
     /** Acquire audio resources, but do not begin the flow of data */
     fun useLine(line: TargetDataLine) {
-        if (this.line != null) {
-            log.warn("call to useLine: $line")
-            log.warn("but already have a line: " + this.line)
-            close()
-        }
-        line.open()
-        log.info("Microphone line open")
+        try {
+            if (this.line != null) {
+                log.warn("call to useLine: $line")
+                log.warn("but already have a line: " + this.line)
+                close()
+            }
+            line.open()
+            log.info("Microphone line open")
 
 //        if (line.isControlSupported(MASTER_GAIN))
 //            log.info("Microphone: MASTER_GAIN supported")
 //        else log.info("Microphone: MASTER_GAIN NOT supported")
 
-        //masterGainControl = findMGControl(line);
+            //masterGainControl = findMGControl(line);
 
-        synchronized(streamLock) {
-            stream = AudioInputStreamWithAdjustableGain(line)
+            synchronized(streamLock) {
+                stream = AudioInputStreamWithAdjustableGain(line)
 //            stream = AudioInputStream(line)
-        }
+            }
 
-        this.line = line
+            this.line = line
+        } catch (ex: LineUnavailableException) {
+            log.error("Failed to open line ${line.lineInfo}")
+        }
     }
 
     /** Note: once a `line` is closed, it can not be reopened */

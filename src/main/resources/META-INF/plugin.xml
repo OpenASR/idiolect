@@ -55,7 +55,7 @@
         <statusBarWidgetFactory id="Idiolect"
                                 implementation="org.openasr.idiolect.presentation.statusbar.RecognitionStatusBarWidgetFactory"/>
         <toolWindow id="Idiolect" secondary="false" icon="AllIcons.CodeWithMe.CwmMicOn" anchor="bottom"
-                    factoryClass="org.openasr.idiolect.presentation.toolwindow.SpeechToolWindowFactory"/>
+                    factoryClass="org.openasr.idiolect.presentation.toolwindow.IdiolectToolWindowFactory"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idiolect">

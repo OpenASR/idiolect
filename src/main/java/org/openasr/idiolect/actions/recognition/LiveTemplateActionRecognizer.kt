@@ -28,6 +28,7 @@ class LiveTemplateActionRecognizer : IntentResolver("Live Templates", 900) {
     // expand live template by tab
 
     override fun isSupported(context: NlpContext, component: Component?): Boolean =
+        context.isActionMode() &&
         (component is EditorComponentImpl)
 
     /**

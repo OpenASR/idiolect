@@ -1,7 +1,5 @@
 package org.openasr.idiolect.actions.recognition
 
-import com.intellij.openapi.actionSystem.DataContext
-import org.openasr.idiolect.asr.AsrService
 import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRegexGrammar
@@ -17,7 +15,10 @@ class IdiolectCommandRecognizer : IntentResolver("idiolect Commands", 0) {
         val INTENT_PAUSE = "${IdiolectCommandIntentHandler.INTENT_PREFIX}Pause"
         val INTENT_COMMANDS = "${IdiolectCommandIntentHandler.INTENT_PREFIX}Commands"
         val INTENT_EDIT_PHRASES = "${IdiolectCommandIntentHandler.INTENT_PREFIX}EditPhrases"
-        val INTENT_MODE = "${IdiolectCommandIntentHandler.INTENT_PREFIX}Mode"
+        // Keep the mode commands separate so that they can be betters supported by custom phrases
+        val INTENT_ACTION_MODE = "${IdiolectCommandIntentHandler.INTENT_PREFIX}ActionMode"
+        val INTENT_CHAT_MODE = "${IdiolectCommandIntentHandler.INTENT_PREFIX}ChatMode"
+        val INTENT_EDIT_MODE = "${IdiolectCommandIntentHandler.INTENT_PREFIX}EditMode"
     }
 
     override val grammars = listOf(
@@ -33,12 +34,9 @@ class IdiolectCommandRecognizer : IntentResolver("idiolect Commands", 0) {
             }
         }.withExamples("what can i say", "what can i say about 'template'"),
 
-        object : NlpRegexGrammar(INTENT_MODE, "(command|dictation|chat|completion) mode") {
-            override fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext): NlpResponse {
-                logUtteranceForIntent(utterance, intentName)
-                return NlpResponse(intentName, mapOf(IdiolectCommandIntentHandler.SLOT_MODE to values[1]))
-            }
-        }.withExamples("command mode", "chat mode", "completion mode"), // "dictation mode"
+        NlpGrammar(INTENT_ACTION_MODE).withExamples("action mode", "command mode"),
+        NlpGrammar(INTENT_CHAT_MODE).withExamples("bot mode", "chat mode", "ai mode"),
+        NlpGrammar(INTENT_EDIT_MODE).withExamples("dictation mode", "edit mode", "typing mode")
     )
 
     override fun isSupported(context: NlpContext, component: Component?) = true

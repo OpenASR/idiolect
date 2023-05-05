@@ -9,6 +9,7 @@ import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import org.openasr.idiolect.utils.ActionUtils
 import org.openasr.idiolect.utils.toUpperCamelCase
+import java.awt.Component
 
 /**
  * As a last resort, attempt to match a registered Action ID
@@ -24,6 +25,8 @@ open class RegisteredActionRecognizer : IntentResolver("Idea Native Actions", In
     private val actionManager by lazy { ActionManager.getInstance() }
 
     protected open fun buildGrammars() = ActionUtils.buildGrammar()
+
+    override fun isSupported(context: NlpContext, component: Component?) = context.isActionMode()
 
     override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext): NlpResponse? {
         return nlpRequest.alternatives.firstNotNullOfOrNull { utterance ->

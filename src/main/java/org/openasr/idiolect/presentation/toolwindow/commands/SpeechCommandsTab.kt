@@ -9,6 +9,7 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
 import org.openasr.idiolect.actions.recognition.CustomPhraseRecognizer
 import org.openasr.idiolect.ide.IdeService
+import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import java.util.*
 import javax.swing.JComponent
@@ -82,7 +83,7 @@ class SpeechCommandsTab {
 
     class SpeechCommandTableModel : AbstractTableModel() {
         private var RESOLVER_EP_NAME = ExtensionPointName<IntentResolver>("org.openasr.idiolect.intentResolver")
-        private val grammars = getResolvers().flatMap { it.grammars }
+        private val grammars: List<NlpGrammar> by lazy { getResolvers().flatMap { it.grammars } }
         private val keymap = KeymapManager.getInstance().activeKeymap
 
         override fun getRowCount(): Int {

@@ -11,18 +11,15 @@ import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.application
-import com.intellij.util.ui.UIUtil
 import org.openasr.idiolect.actions.ExecuteActionFromTextField
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.actions.recognition.IdiolectCommandRecognizer
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.nlp.NlpResultListener
-import org.openasr.idiolect.presentation.IdiolectHtmlEditorKit
+import org.openasr.idiolect.presentation.components.IdiolectHtmlEditorKit
 import java.awt.Rectangle
 import javax.swing.JComponent
-import javax.swing.JEditorPane
 import javax.swing.JTextPane
-import javax.swing.text.html.HTMLEditorKit
 
 
 class SpeechLogTab(private val toolWindow: ToolWindow) :
@@ -66,8 +63,8 @@ class SpeechLogTab(private val toolWindow: ToolWindow) :
                 scrollCell(logPane).align(Align.FILL)
             }.resizableRow()
             row {
-                cell(manualEntry)
-                actionButton(textFieldAction, ActionPlaces.TOOLWINDOW_CONTENT)
+                cell(manualEntry).accessibleName("command text input")
+                actionButton(textFieldAction, ActionPlaces.TOOLWINDOW_CONTENT).accessibleName("invoke")
             }.enabled(true)
         }
     }

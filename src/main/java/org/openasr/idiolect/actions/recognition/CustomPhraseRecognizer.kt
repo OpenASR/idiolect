@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project
 import org.openasr.idiolect.nlp.*
 import org.openasr.idiolect.settings.IdiolectConfig
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import java.awt.Component
 import java.io.File
 
 class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
@@ -55,6 +56,10 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
     }
 
     data class PhraseToActionBinding(val name: String, val boundPhrases: List<String>)
+
+
+    // Custom phrases may need to be enabled for all modes, but for now, only in ACTION mode
+    override fun isSupported(context: NlpContext, component: Component?) = context.isActionMode()
 
     override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext) = properties.firstOrNull {
             it.boundPhrases.any { phrase ->

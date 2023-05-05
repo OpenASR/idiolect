@@ -28,5 +28,5 @@ class FindUsagesActionRecognizer : IntentResolver("Find Usages", 500) {
         )
     )
 
-    override fun isSupported(context: NlpContext, component: Component?) = component is EditorComponentImpl
+    override fun isSupported(context: NlpContext, component: Component?) = context.isActionMode() && component is EditorComponentImpl
 }

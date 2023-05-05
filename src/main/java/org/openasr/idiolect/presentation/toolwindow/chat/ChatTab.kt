@@ -1,12 +1,12 @@
-package org.openasr.idiolect.presentation.toolwindow.ai
+package org.openasr.idiolect.presentation.toolwindow.chat
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionPlaces
 import com.intellij.openapi.application.invokeLater
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.wm.ToolWindow
-import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
 import com.intellij.ui.util.preferredWidth
@@ -14,36 +14,43 @@ import com.intellij.util.application
 import com.intellij.util.ui.UIUtil
 import org.openasr.idiolect.actions.AiAction
 import org.openasr.idiolect.nlp.ai.AiResponseListener
+import org.openasr.idiolect.nlp.ai.AiService
 import org.openasr.idiolect.nlp.ai.OpenAiClient
-import org.openasr.idiolect.presentation.IdiolectHtmlEditorKit
+import org.openasr.idiolect.presentation.components.FocusableTextArea
+import org.openasr.idiolect.presentation.components.IdiolectHtmlEditorKit
 import org.openasr.idiolect.settings.openai.OpenAiConfig
 import java.awt.Rectangle
-import java.util.Hashtable
-import javax.swing.*
+import java.util.*
+import javax.swing.JComponent
+import javax.swing.JEditorPane
+import javax.swing.JLabel
+import javax.swing.JSlider
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
+import kotlin.reflect.KFunction1
 import kotlin.reflect.KMutableProperty0
 
 
-class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, AiResponseListener, DumbAware {
-    private val log = logger<AiTab>()
+class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, AiResponseListener, DumbAware {
+    private val log = logger<ChatTab>()
     private val maxLength = 100
     private val aiLog = mutableListOf<String>()
     private val logPane = JEditorPane(UIUtil.HTML_MIME, aiLog.joinToString(""))
 //    private val logPane = JTextPane()//.apply { contentType = UIUtil.HTML_MIME }
 //    private val userInput = JEditorPane("text", "")
-//    private val userInput = JBTextArea(null, "Hello", 1, 20)
-    private val userInput = JBTextField(20)
+//    private val userInput = JBTextArea(1, 20)
+    private val userInput = FocusableTextArea(1, 20)
     private val chatModelSelector = LlmModelSelector(OpenAiClient.ModelType.chat, OpenAiConfig.settings::chatModel)
     private val completionModelSelector = LlmModelSelector(OpenAiClient.ModelType.completions, OpenAiConfig.settings::completionModel)
-
+    private val aiService = service<AiService>()
 
     init {
         application.messageBus.connect(this).subscribe(AiResponseListener.AI_RESPONSE_TOPIC, this)
 
         initialiseLogPane()
 
-        userInput.minimumWidth = 100
+        userInput.minimumWidth = 500
+        userInput.emptyText.text = "Enter prompt here..."
     }
 
     override fun dispose() {
@@ -67,7 +74,9 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
                     .onChanged {
                         if (it.text.isNotEmpty()) {
                             try {
-                                OpenAiConfig.settings.maxTokens = it.text.toInt()
+                                val value = it.text.toInt()
+                                OpenAiConfig.settings.maxTokens = value
+                                aiService.setMaxTokens(value)
                             } catch (e: Exception) {
                                 log.info("Invalid max token. Must be an integer value <= 4096")
                             }
@@ -75,11 +84,11 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
                     }
                     .bindIntText(OpenAiConfig.settings::maxTokens)
 
-                doubleSlider(OpenAiConfig.settings::temperature).label("Temperature")
+                doubleSlider(OpenAiConfig.settings::temperature, aiService::setTemperature).label("Temperature")
                     .applyToComponent {
                         toolTipText = "Randomness"
                     }
-                doubleSlider(OpenAiConfig.settings::topP).label("Top P")
+                doubleSlider(OpenAiConfig.settings::topP, aiService::setTopP).label("Top P")
                     .applyToComponent {
                         toolTipText = "Probability"
                     }
@@ -93,6 +102,9 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
 
     override fun ancestorAdded(event: AncestorEvent?) {
         updateModels()
+        invokeLater {
+            userInput.requestFocusInWindow()
+        }
     }
     override fun ancestorRemoved(event: AncestorEvent?) {}
     override fun ancestorMoved(event: AncestorEvent?) {}
@@ -123,8 +135,8 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
                 scrollCell(logPane).align(Align.FILL)
             }.resizableRow()
             row {
-                cell(userInput)
-                actionButton(aiAction, ActionPlaces.TOOLWINDOW_CONTENT)
+                cell(userInput).focused().accessibleName("prompt input")
+                actionButton(aiAction, ActionPlaces.TOOLWINDOW_CONTENT).accessibleName("send")
             }.enabled(true)
         }
     }
@@ -143,7 +155,12 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
         toolWindow.show()
     }
 
-    private fun Row.doubleSlider(prop: KMutableProperty0<Double?>, default: Double = 1.0, scale: Int = 10): Cell<JSlider> {
+    private fun Row.doubleSlider(
+        prop: KMutableProperty0<Double?>,
+        updateService: KFunction1<Double, Unit>,
+        default: Double = 1.0,
+        scale: Int = 10): Cell<JSlider>
+    {
         val sliderLabels = Hashtable<Int, JComponent>()
         sliderLabels[0] = JLabel("0")
         sliderLabels[scale / 2] = JLabel("0.5")
@@ -160,6 +177,7 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
                     val doubleVal = value.toDouble() / scale
                     toolTipText = "$doubleVal"
                     prop.set(if (doubleVal == default) null else doubleVal)
+                    updateService(doubleVal)
                 }
             }
             .applyIfEnabled()
@@ -168,7 +186,10 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
                     (it * scale).toInt()
                 } ?: (default * scale).toInt()
             }, {
-                prop.set(it.toDouble() / scale)
+                // this doesn't actually get called, not sure why - see addChangeListener above
+                val value = it.toDouble() / scale
+                prop.set(value)
+                updateService(value)
             })
     }
 
@@ -192,7 +213,7 @@ class AiTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, 
     private fun formatMessage(text: String, messageType: String): String {
         var tripleTicks = 0
         return "<div class=\"$messageType\">${
-            text.replace("\\n", "<br/>")
+            text //.replace("\n", "<br/>")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;")
                 .replace(Regex("([^`])`([^`]+)`([^`])"), "$1`<code>$2</code>`$3")

@@ -1,4 +1,4 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.components
 
 import javax.swing.text.html.HTMLEditorKit
 import javax.swing.text.html.StyleSheet

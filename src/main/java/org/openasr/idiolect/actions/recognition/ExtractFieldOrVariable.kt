@@ -36,5 +36,5 @@ class ExtractFieldOrVariable : IntentResolver("Extract Field or Variable", 500) 
         )
     )
 
-    override fun isSupported(context: NlpContext, component: Component?) = component is EditorComponentImpl
+    override fun isSupported(context: NlpContext, component: Component?) = context.isActionMode() && component is EditorComponentImpl
 }

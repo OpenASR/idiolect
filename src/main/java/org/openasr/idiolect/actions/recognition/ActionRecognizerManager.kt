@@ -7,6 +7,9 @@ import org.openasr.idiolect.nlp.intent.handlers.IntentHandler
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import org.openasr.idiolect.nlp.*
 
+/**
+ * Provides access to all [IntentResolver]s registered in `src/main/resources/plugin.xml`.
+ */
 open class ActionRecognizerManager(private val nlpContext: NlpContext) {
     companion object {
         private val log = logger<ActionRecognizerManager>()

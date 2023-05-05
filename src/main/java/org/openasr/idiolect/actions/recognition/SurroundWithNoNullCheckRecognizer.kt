@@ -15,5 +15,7 @@ class SurroundWithNoNullCheckRecognizer : IntentResolver("Surround with Not-Null
         NlpGrammar(INTENT_NAME).withExample("surround with not null check"),
     )
 
-    override fun isSupported(context: NlpContext, component: Component?) = component is EditorComponentImpl
+    override fun isSupported(context: NlpContext, component: Component?) =
+        context.isActionMode() &&
+        component is EditorComponentImpl
 }
