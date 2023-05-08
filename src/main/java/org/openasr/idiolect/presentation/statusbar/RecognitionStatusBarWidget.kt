@@ -1,7 +1,8 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.statusbar
 
 import com.intellij.notification.*
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.wm.*
 import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
@@ -12,6 +13,8 @@ import com.intellij.util.application
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.nlp.*
+import org.openasr.idiolect.presentation.Icons
+import org.openasr.idiolect.settings.PrintlnLogger
 import java.awt.event.MouseEvent
 import javax.swing.JComponent
 
@@ -25,9 +28,14 @@ class RecognitionStatusBarWidget :
 {
     companion object {
         const val RECOGNITION_STATUS = "org.openasr.idiolect.Status"
+
+        init {
+            PrintlnLogger.installForLocalDev()
+        }
     }
 
     private val log = logger<RecognitionStatusBarWidget>()
+    private val asrService = service<AsrService>()
     private var statusBar: StatusBar? = null
     private var isListening: Boolean = false
 
@@ -61,7 +69,8 @@ class RecognitionStatusBarWidget :
 
     private fun onClick(event: MouseEvent): Boolean {
         try {
-            AsrService.toggleListening()
+//            log.info("Clicked the status bar widget")
+            asrService.toggleListening()
             return true
         } catch (e: Exception) {
             log.info("Failed to toggle listening: ${e.message}")
@@ -74,7 +83,7 @@ class RecognitionStatusBarWidget :
     override fun onAsrReady(message: String) =
         NotificationGroupManager.getInstance()
             .getNotificationGroup("Idiolect")
-            .createNotification("ASR is Ready",
+            .createNotification("Idiolect is Ready",
                 message,
                 NotificationType.INFORMATION)
             .notify(null)

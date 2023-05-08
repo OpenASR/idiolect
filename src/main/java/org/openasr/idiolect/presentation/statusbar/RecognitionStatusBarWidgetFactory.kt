@@ -1,4 +1,4 @@
-package org.openasr.idiolect.presentation
+package org.openasr.idiolect.presentation.statusbar
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
@@ -14,7 +14,7 @@ class RecognitionStatusBarWidgetFactory : StatusBarWidgetFactory {
 
     override fun isAvailable(project: Project) = true
 
-    override fun createWidget(project: Project) = widget
+    override fun createWidget(project: Project): StatusBarWidget = widget
 
     override fun disposeWidget(widget: StatusBarWidget) = Disposer.dispose(widget)
 

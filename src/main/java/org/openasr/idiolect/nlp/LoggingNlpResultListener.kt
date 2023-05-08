@@ -1,16 +1,17 @@
 package org.openasr.idiolect.nlp
 
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.diagnostic.logger
+import org.openasr.idiolect.actions.ActionRoutines
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.nlp.NlpResultListener.Companion.Verbosity
 
 object LoggingNlpResultListener : NlpResultListener {
-    private val logger = Logger.getInstance(javaClass)
+    private val logger = logger<LoggingNlpResultListener>()
 
     override fun onRecognition(nlpRequest: NlpRequest) {
         val alternatives = nlpRequest.alternatives.joinToString("|")
         logger.info("Listener Recognised: $alternatives")
-        println("Listener Recognized: $alternatives")
     }
 
     override fun onFulfilled(actionCallInfo: ActionCallInfo) =

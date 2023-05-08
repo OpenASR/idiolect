@@ -5,6 +5,7 @@ import com.intellij.notification.*
 import com.intellij.notification.NotificationType.INFORMATION
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.options.ShowSettingsUtil
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
@@ -19,7 +20,10 @@ import java.util.zip.*
 
 
 class VoskAsr : AsrProvider {
+    private val log = logger<VoskAsr>()
     private lateinit var microphone: CustomMicrophone
+    private var grammar: Array<String>? = null
+    private var listening = false
 
     override fun displayName() = "Vosk"
 
@@ -120,7 +124,7 @@ class VoskAsr : AsrProvider {
                 recognizer = Recognizer(Model(model), 16000f)
                 recognizer.setMaxAlternatives(alternatives)
 
-                messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Model has been applied")
+                messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrReady("Speech model has been applied")
             }
         }
 
@@ -153,46 +157,66 @@ class VoskAsr : AsrProvider {
     /**
      * Starts recognition process.
      */
-    override fun startRecognition() = microphone.startRecording()
+    override fun startRecognition(): Boolean {
+        listening = true
+        return microphone.startRecording()
+    }
 
     /**
      * Stops recognition process.
      * Recognition process is paused until the next call to startRecognition.
      */
-    override fun stopRecognition() = microphone.stopRecording()
+    override fun stopRecognition(): Boolean {
+        listening = false
+        return microphone.stopRecording()
+    }
 
     /**
      * @param grammar eg: ["hello", "world", "[unk]"]
      */
-    override fun setGrammar(grammar: Array<String>) =
+    override fun setGrammar(grammar: Array<String>) {
         recognizer//.apply { setGrammar(grammar.joinToString("\",\"", "[\"", "\"]")) }
             .reset()
+    }
 
-    /** Blocks until we recognise something from the user. Called from [ASRControlLoop.run] */
+    /** Blocks until we recognise something from the user. Called from [AsrControlLoop.run] */
     override fun waitForSpeech(): NlpRequest {
         var nbytes: Int
         val b = ByteArray(4096)
 
-        while (microphone.stream.read(b).also { nbytes = it } >= 0) {
+        val stopWords = AsrProvider.stopWords(grammar)
+
+        while (microphone.stream.read(b).also { nbytes = it } > 0 && listening) {
+//            log.debug("We have $nbytes bytes for Vosk...")
             if (recognizer.acceptWaveForm(b, nbytes)) {
-                val result = tryParseResult(recognizer.result)
-                if (result.alternatives.isNotEmpty()) return result
+//                log.debug("...and Vosk has a recognition for us: ${recognizer.result}")
+                val nlpRequest = tryParseResult(recognizer.result, stopWords)
+//                log.debug("parsed NlpRequest: $nlpRequest")
+                if (nlpRequest.alternatives.isNotEmpty()) return nlpRequest
             }
         }
 
-        return tryParseResult(recognizer.finalResult)
+        return tryParseResult(recognizer.finalResult, stopWords)
     }
 
-    private fun tryParseResult(json: String): NlpRequest = NlpRequest(parseVosk(json))
+    private fun tryParseResult(json: String, stopWords: List<String>): NlpRequest = NlpRequest(parseVosk(json, stopWords))
+
 
     /** Use this instead of parseResult if alternatives > 0 */
-    private fun parseVosk(json: String): List<String> =
+    private fun parseVosk(json: String, stopWords: List<String>): List<String> =
         parseString(json).asJsonObject.let { jo ->
             jo.get("alternatives").run {
                 if (isJsonNull) listOf(jo.get("text").toString())
                 else asJsonArray.map { it.asJsonObject.get("text").asString }
             }
-        }.filter { it.isNotEmpty() }
+        }.filter {
+            // I see a LOT of "yeah" | "i" | "ah".
+            // - "yeah" could be a valid response to a question, if it is explicitly allowed in grammar
+            // - "i" could be in grammar as it helps to make utterances more natural, but probably not by itself
+            it.isNotEmpty() && !stopWords.contains(it) && it != "i"
+        }.map {
+            AsrProvider.removeStopWords(it, stopWords)
+        }
 
     private fun showNotificationForModel() {
         NotificationGroupManager.getInstance()

@@ -4,10 +4,15 @@
     <vendor email="bre@ndan.co" url="https://github.com/OpenASR/idiolect">OpenASR</vendor>
 
     <description>
-        <![CDATA[Speech recognition for IntelliJ IDEA. Idiolect listens to voice commands
-        and assists with simple actions like debugging, navigation, and refactoring. For
-        a list of example phrases, please see the
-        <a href="https://github.com/OpenASR/idiolect/blob/feature/grammar-system/docs/example-phrases.md">documentation</a>.]]>
+        <![CDATA[
+        Speech recognition for IntelliJ IDEA. Idiolect listens to voice commands and assists with simple actions
+        like debugging, navigation, and refactoring. For a list of example phrases, please see the
+        <a href="https://github.com/OpenASR/idiolect/blob/feature/grammar-system/docs/example-phrases.md">documentation</a>.
+
+        You can also ask "What can I say?" or "What can I say about 'tab'?"
+
+        <img src="https://raw.githubusercontent.com/OpenASR/idiolect/master/docs/command-search.png" alt="Command search view"/>
+    ]]>
     </description>
 
     <depends>com.intellij.modules.lang</depends>
@@ -29,8 +34,11 @@
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="org.openasr.idiolect.asr.AsrService"/>
         <applicationService serviceImplementation="org.openasr.idiolect.settings.IdiolectConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.asr.vosk.VoskConfig"/>
+        <applicationService serviceImplementation="org.openasr.idiolect.settings.openai.OpenAiConfig"/>
+        <applicationService serviceImplementation="org.openasr.idiolect.nlp.ai.AiService"/>
         <applicationConfigurable groupId="tools" displayName="Idiolect"
                                  id="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.settings.IdiolectConfigurable" dynamic="true"/>
@@ -38,11 +46,16 @@
                                  id="preferences.VoskConfiguration"
                                  parentId="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.asr.vosk.VoskConfigurable" dynamic="true"/>
+        <applicationConfigurable groupId="tools" displayName="OpenAI"
+                                 id="preferences.OpenAIConfiguration"
+                                 parentId="preferences.IdiolectConfiguration"
+                                 instance="org.openasr.idiolect.settings.openai.OpenAiConfigurable" dynamic="true"/>
 
         <notificationGroup id="Idiolect" displayType="BALLOON"/>
-        <statusBarWidgetFactory implementation="org.openasr.idiolect.presentation.RecognitionStatusBarWidgetFactory"/>
+        <statusBarWidgetFactory id="Idiolect"
+                                implementation="org.openasr.idiolect.presentation.statusbar.RecognitionStatusBarWidgetFactory"/>
         <toolWindow id="Idiolect" secondary="false" icon="AllIcons.CodeWithMe.CwmMicOn" anchor="bottom"
-                    factoryClass="org.openasr.idiolect.presentation.SpeechToolWindowFactory"/>
+                    factoryClass="org.openasr.idiolect.presentation.toolwindow.IdiolectToolWindowFactory"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.openasr.idiolect">
@@ -59,6 +72,7 @@
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.RenameActionRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.JavaActionRecognizer"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.AiChatRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.RegisteredEditorActionRecognizer"
                           id="RegisteredEditorActionRecognizer"
                           order="before RegisteredActionRecognizer"/>
@@ -68,6 +82,7 @@
 
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.IdiolectCommandIntentHandler" order="first"/>
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.IdiolectActionIntentHandler"/>
+        <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.IdiolectChatIntentHandler"/>
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.TemplateIntentHandler"/>
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.JavaActionIntentHandler"/>
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.RegisteredActionHandler" order="last"/>
@@ -79,16 +94,19 @@
     </extensions>
 
     <actions>
-        <action id="Idiolect.Start" text="Voice control" description="Start listening for voice commands"
+        <action id="Idiolect.Start" text="Voice Control" description="Start listening for voice commands"
                 class="org.openasr.idiolect.actions.VoiceRecordControllerAction"
                 icon="/org/openasr/idiolect/icons/start.svg">
             <add-to-group group-id="MainToolbarRight"/>
         </action>
 
-        <action id="Idiolect.CommandFrontTextField" text="Invoke voice command"
+        <action id="Idiolect.CommandFrontTextField" text="Invoke Voice Command"
                 class="org.openasr.idiolect.actions.ExecuteActionFromTextField"/>
 
-        <action id="Idiolect.VoiceAction" text="Invoke by voice-command"
+        <action id="Idiolect.VoiceAction" text="Invoke by Voice Command"
                 class="org.openasr.idiolect.actions.ExecuteVoiceCommandAction"/>
+
+        <action id="Idiolect.AiCompletion" text="AI Completion"
+                class="org.openasr.idiolect.actions.LlmCompletionAction"/>
     </actions>
 </idea-plugin>

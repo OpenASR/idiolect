@@ -42,7 +42,7 @@ jobs:
         branch: ${{ github.ref }}
         force: true
 
-    # Needed until Vosk provide a new release to fix Windows issues
+    # Needed until Vosk provide a new release to fix Windows issues - https://github.com/alphacep/vosk-api/releases 0.3.46?
     - name: Checkout vosk-api
       uses: actions/checkout@v3
       with:
@@ -63,7 +63,7 @@ jobs:
         sed -i '218s/^/\/\//' src/main/java/org/vosk/Recognizer.java
         gradle publishToMavenLocal
 
-    # Needed until Breandan's PR is merged & published
+    # Needed until Breandan's PR is merged & published - https://github.com/jonelo/jAdapterForNativeTTS/issues/2
     - name: Checkout jAdapterForNativeTTS
       uses: actions/checkout@v3
       with:

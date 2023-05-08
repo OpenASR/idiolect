@@ -1,10 +1,11 @@
 package org.openasr.idiolect.actions.recognition
 
-import com.intellij.openapi.actionSystem.DataContext
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpGrammar
 import org.openasr.idiolect.nlp.NlpRegexGrammar
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import java.awt.Component
 
 class FileNavigationRecognizer : IntentResolver("File Navigation", 800) {
     companion object {
@@ -24,8 +25,10 @@ class FileNavigationRecognizer : IntentResolver("File Navigation", 800) {
                 .withExamples("focus editor", "focus project", "focus symbols")
         )
 
+    override fun isSupported(context: NlpContext, component: Component?) = context.isActionMode()
+
     class FileNavigationGrammar(intentName: String, pattern: String, private val slotName: String) : NlpRegexGrammar(intentName, pattern) {
-        override fun createNlpResponse(utterance: String, values: List<String>, dataContext: DataContext): NlpResponse {
+        override fun createNlpResponse(utterance: String, values: List<String>, context: NlpContext): NlpResponse {
             logUtteranceForIntent(utterance, intentName)
             return NlpResponse(intentName, mapOf(slotName to values[1]))
         }

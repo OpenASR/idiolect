@@ -31,6 +31,6 @@ class VoskConfigurable : Configurable {
     }
 
     override fun reset() {
-        gui.reset(settings)
+        gui.reset()
     }
 }

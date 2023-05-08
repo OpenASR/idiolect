@@ -7,9 +7,71 @@
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). 
 Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. Originally developed as part of a [JetBrains hackathon](https://blog.jetbrains.com/blog/2015/08/31/jetbrains-3rd-annual-hackathon-new-generation-debugger-grabs-1st-place/), it is now a community-supported project. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
+## See Also
+
+- [idiolect-azure](https://github.com/OpenASR/idiolect-azure)
+
 ## Usage
 
 To get started, press the <img src="src/main/resources/org/openasr/idiolect/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar, then speak a command, e.g. "Hi, IDEA!" Idiolect supports a simple [grammar](src/main/resources/org/openasr/idiolect/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idiolect/wiki/Feature-Roadmap#features). Click the button once more to deactivate.
+
+### Voice Commands
+For a full list of all actions that can be activated by voice ask Idiolect:
+
+> What can I say?
+
+or
+
+> What can I say about "activate"?
+
+<img src="docs/command-search.png" alt="Command tab"/>
+
+There are _a lot_ of actions, and some of them are not easy to say or remember. To make it easier you can [customise the phrases](#CustomPhraseRecognizer).
+
+> Edit custom phrases
+
+Some of the more useful commands are:
+
+#### Navigation
+- activate project tool window (commit, database, debug, find, gradle, run, terminal...)
+- back/forward, down/up, left/right, page up/down, scroll up/down
+- next/previous word
+- method down/up
+- find, find in project
+- go to ... (class, bookmark, declaration, line, implementation...)
+- close all editors
+- next method
+- find usages
+- call hierarchy
+
+#### Editing
+- create (editor config file, grpc request action, liquibase changelog, vue single file comp)
+- new class/dockerfile/element/file...
+- code cleanup
+- code completion
+- collapse block
+- extract class/function/method/etc
+- generate getter/setter/test method...
+- new class (or "create new class "something")
+- rename (or rename to "something")
+- cut / copy / paste / delete 
+- cut line end/backward
+- delete to (line/word) (start/end)
+- toggle column mode
+- reformat code
+- fix it
+- whoops
+
+#### Debugging
+- debug
+- context debug
+- context run
+- coverage
+
+#### Git Commands
+- git add/pull/merge/push/stash...
+- checkin files
+- annotate
 
 ## Building
 
@@ -36,6 +98,9 @@ Idiolect is implemented using the [IntelliJ Platform SDK](https://www.jetbrains.
 ### Integration with Idiolect
 
 [plugin.xml](src/main/resources/META-INF/plugin.xml) defines a number of `<extensionPoint>`s which would allow other plugins to integrate with or extend/customise the capabilities of Idiolect.
+
+An example of this is provided in [idiolect-azure](https://github.com/OpenASR/idiolect-azure) which implements `AsrProvider` 
+and adds its own settings under **Tools/Idiolect**.
 
 #### AsrProvider
 Listens for audio input, recognises speech to text and returns an `NlpRequest` with possible utterances.
@@ -148,8 +213,8 @@ which typically calls `invokeAction()` and/or one or more of the methods of [`Id
 [travis-build-status]: https://travis-ci.com/OpenASR/idiolect
 [travis-status-svg]: https://travis-ci.com/OpenASR/idiolect.svg?branch=master
 [plugin-repo-page]: https://plugins.jetbrains.com/plugin/20776-idiolect
-[plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/7910-idiolect.svg
-[plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/7910-idiolect.svg
+[plugin-repo-svg]: https://img.shields.io/jetbrains/plugin/v/20776-idiolect.svg
+[plugin-download-svg]: https://img.shields.io/jetbrains/plugin/d/20776-idiolect.svg
 
 
 [AsrControlLoop]: src/main/java/org/openasr/idiolect/asr/AsrControlLoop.kt

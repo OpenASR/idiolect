@@ -9,6 +9,7 @@ import com.intellij.usages.UsageView
 import org.openasr.idiolect.actions.ActionRoutines
 import org.openasr.idiolect.actions.recognition.*
 import org.openasr.idiolect.ide.IdeService
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import org.openasr.idiolect.psi.PsiUtil.findContainingClass
@@ -21,14 +22,14 @@ class IdiolectActionIntentHandler : IntentHandler {
         private val INTENT_PREFIX = IntentResolver.INTENT_PREFIX_IDIOLECT_ACTION
     }
 
-    override fun tryFulfillIntent(response: NlpResponse, dataContext: DataContext): ActionCallInfo? {
+    override fun tryFulfillIntent(response: NlpResponse, nlpContext: NlpContext): ActionCallInfo? {
         if (!response.intentName.startsWith(INTENT_PREFIX)) {
             return null
         }
 
         return when (response.intentName) {
             ExtractFieldOrVariable.INTENT_NAME -> extractFieldOrVariable(response)
-            FindUsagesActionRecognizer.INTENT_NAME -> findUsages(response, dataContext)
+            FindUsagesActionRecognizer.INTENT_NAME -> findUsages(response, nlpContext)
             RenameActionRecognizer.INTENT_NAME -> rename(response)
             FileNavigationRecognizer.INTENT_FOCUS -> fulfillWithSlot(response, "target", ActionRoutines::routineFocus)
             FileNavigationRecognizer.INTENT_GO_TO_LINE -> fulfillWithSlot(response, "line", ActionRoutines::routineGoto)
@@ -55,16 +56,17 @@ class IdiolectActionIntentHandler : IntentHandler {
 
     private fun extractFieldOrVariable(nlpResponse: NlpResponse): ActionCallInfo =
         ActionCallInfo(nlpResponse.slots!!["actionId"]!!).apply {
-            val name = nlpResponse.slots!!["name"]!!
+            val name = nlpResponse.slots["name"]!!
             if (name.isNotEmpty()) {
                 typeAfter = name.toCamelCase()
                 hitTabAfter = true
             }
         }
 
-    private fun findUsages(nlpResponse: NlpResponse, dataContext: DataContext): ActionCallInfo {
+    private fun findUsages(nlpResponse: NlpResponse, nlpContext: NlpContext): ActionCallInfo {
         val info = ActionCallInfo(IdeActions.ACTION_FIND_USAGES)
 
+        val dataContext = nlpContext.getDataContext()
         val editor = IdeService.getEditor(dataContext)
         val project = IdeService.getProject(dataContext)
 

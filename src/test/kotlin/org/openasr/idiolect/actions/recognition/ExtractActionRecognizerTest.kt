@@ -2,11 +2,12 @@ package org.openasr.idiolect.actions.recognition
 
 import org.junit.Assert.*
 import org.junit.Test
+import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.testing.TestContext
 
 class ExtractActionRecognizerTest {
-    private val context = TestContext()
+    private val context = NlpContext(TestContext())
 
     @Test
     fun testResolveIntroduceVariable() {

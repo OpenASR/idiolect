@@ -41,7 +41,7 @@ class VoskSettingsForm : TextBrowseFolderListener(FileChooserDescriptorFactory.c
         }
     }
 
-    fun reset(settings: VoskConfig.Settings) {
+    fun reset() {
         modelPathChooser.text = VoskConfig.settings.modelPath
         languageCombo.selectedItem = VoskConfig.settings.language
     }

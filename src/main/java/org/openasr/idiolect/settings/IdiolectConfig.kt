@@ -4,6 +4,7 @@ import com.intellij.openapi.components.*
 import com.intellij.util.application
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.nlp.NlpProvider
+import org.openasr.idiolect.recognizer.CustomMicrophone
 import org.openasr.idiolect.tts.TtsProvider
 import java.util.concurrent.atomic.AtomicReference
 
@@ -19,10 +20,15 @@ class IdiolectConfig : PersistentStateComponent<IdiolectConfig.Settings>  {
     companion object {
         val settings get() = application.getService(IdiolectConfig::class.java).settings
         val idiolectHomePath = System.getProperty("user.home") + "/.idiolect"
+        private val microphone: CustomMicrophone = service()
 
         private var asrProvider = AtomicReference<AsrProvider?>()
         private var ttsProvider = AtomicReference<TtsProvider?>()
         private var nlpProvider = AtomicReference<NlpProvider?>()
+
+        init {
+            initialiseAudioInput()
+        }
 
         /** Called by AsrService */
         fun initialiseAsrSystem(): AsrSystem {
@@ -31,6 +37,12 @@ class IdiolectConfig : PersistentStateComponent<IdiolectConfig.Settings>  {
 
             return ExtensionManager.asrSystemEp.extensionList.first { e -> e.supportsAsrAndNlp(asrProvider, nlpProvider) }
                 .apply { initialise(asrProvider, nlpProvider) }
+        }
+
+        private fun initialiseAudioInput() {
+            microphone.useInputDevice(settings.audioInputDevice)
+            microphone.setVolume(settings.audioGain)
+            microphone.setNoiseLevel(settings.audioNoise)
         }
 
         // TODO: list voices by locale
@@ -68,5 +80,8 @@ class IdiolectConfig : PersistentStateComponent<IdiolectConfig.Settings>  {
 
     data class Settings(var asrService: String = "",
                         var nlpService: String = "",
-                        var ttsService: String = "")
+                        var ttsService: String = "",
+                        var audioInputDevice: String = "",
+                        var audioGain: Int = CustomMicrophone.DEFAULT_GAIN,
+                        var audioNoise: Int = CustomMicrophone.DEFAULT_NOISE)
 }

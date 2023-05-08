@@ -10,7 +10,7 @@ class AsrControlLoop : AsrSystem, Runnable {
 
     private lateinit var asrProvider: AsrProvider
     private lateinit var nlpProvider: NlpProvider
-    private var speechThread = Thread(this, "ASR Thread")
+    private var speechThread = Thread(this, "Idiolect ASR Control Loop")
     private val messageBus = ApplicationManager.getApplication().messageBus
 
     override fun supportsAsrAndNlp(asrProvider: AsrProvider, nlpProvider: NlpProvider) = true
@@ -20,33 +20,11 @@ class AsrControlLoop : AsrSystem, Runnable {
         this.nlpProvider = nlpProvider
     }
 
-    override fun start() =
-        startRecognition().also { if (!speechThread.isAlive) speechThread.start() }
-
-    override fun waitForUtterance(): String = asrProvider.waitForSpeech()?.utterance ?: ""
-
-    override fun waitForUtterance(grammar: Array<String>,
-                                  escapeWords: Array<String>): String {
-        val effectiveGrammar = grammar.plus(escapeWords)
-        asrProvider.setGrammar(effectiveGrammar)
-        var response = ""
-
-        while (response.isEmpty()) {
-            val speech = asrProvider.waitForSpeech() ?: break
-
-            for (alternative in speech.alternatives) {
-                for (expected in grammar) {
-                    if (alternative.contains(expected)) {
-                        response = expected
-                        break
-                    }
-                }
-                if (alternative in escapeWords) break
-            }
+    override fun start() {
+//        startRecognition()
+        if (!speechThread.isAlive) {
+            speechThread.start()
         }
-
-        GrammarService.useDictationGrammar()
-        return response
     }
 
     override fun setGrammar(grammar: Array<String>) = asrProvider.setGrammar(grammar)
@@ -57,14 +35,57 @@ class AsrControlLoop : AsrSystem, Runnable {
 
     override fun terminate() = asrProvider.stopRecognition()
 
+    /**
+     * Called from IntentHandlers via the likes of promptForUtterance()
+     *
+     * TODO: This probably needs to be refactored so that there's only one clear call to `asrSystem.waitForUtterance()`
+     */
+    override fun waitForUtterance(): String = asrProvider.waitForSpeech()?.utterance ?: ""
+
+    /**
+     * This will block until the user says something in grammar, or one of the escape words.
+     *
+     * @param grammar - phrases that we're expecting the user to say
+     * @param escapeWords - defaults to "don't worry", "never mind", "quit", "forget it", "escape"
+     */
+    override fun waitForUtterance(grammar: Array<String>,
+                                  escapeWords: Array<String>): String {
+        val effectiveGrammar = grammar.plus(escapeWords)
+        asrProvider.setGrammar(effectiveGrammar)
+        var response = ""
+
+        while (response.isEmpty()) {
+            val speech = asrProvider.waitForSpeech() ?: break
+//            log.debug("waitForUtterance - ASR has speech")
+
+            for (alternative in speech.alternatives) {
+                for (expected in grammar) {
+                    if (alternative.contains(expected)) {
+                        response = expected
+//                        log.debug("...and it's what we were waiting for")
+                        break
+                    }
+                }
+                if (alternative in escapeWords) {
+//                    log.debug("...escape word")
+                    break
+                }
+            }
+        }
+
+        GrammarService.useDictationGrammar()
+        return response
+    }
+
+    /** Called from the ASR Thread to capture asynchronous user requests */
     override fun run() {
         while (!ListeningState.isTerminated) {
             try {
-                ListeningState.waitIfStandby()
+                ListeningState.waitForStarted()
                 // This blocks on a recognition result
                 val nlpRequest = asrProvider.waitForSpeech()
 
-                if (nlpRequest != null) {
+                if (nlpRequest != null && nlpRequest.alternatives.isNotEmpty()) {
                     onNlpRequest(nlpRequest)
                 }
             } catch (iex: InterruptedException) {
@@ -77,6 +98,8 @@ class AsrControlLoop : AsrSystem, Runnable {
     }
 
     override fun onNlpRequest(nlpRequest: NlpRequest) {
+        // Display the request as recognised
+//        repairUtterance(nlpRequest)
         messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onRecognition(nlpRequest)
 
         nlpProvider.processNlpRequest(nlpRequest)

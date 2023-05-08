@@ -2,11 +2,16 @@ package org.openasr.idiolect.actions
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import org.openasr.idiolect.asr.AsrService
 import org.openasr.idiolect.nlp.NlpResultListener
 import org.openasr.idiolect.presentation.Icons
 
+/**
+ * Toggles the listening status of the ASR Service
+ */
 object VoiceRecordControllerAction : IdiolectAction() {
+    private val asrService = service<AsrService>()
     @Volatile private var isRecording = false
     private val messageBus = ApplicationManager.getApplication().messageBus
 
@@ -15,12 +20,12 @@ object VoiceRecordControllerAction : IdiolectAction() {
             isRecording = false
             templatePresentation.icon = Icons.RECORD_START
             isDefaultIcon = false
-            AsrService.deactivate()
+            asrService.deactivate()
         } else {
             isRecording = true
             templatePresentation.icon = Icons.RECORD_END
             isDefaultIcon = false
-            AsrService.activate()
+            asrService.activate()
         }
 
         messageBus.syncPublisher(NlpResultListener.NLP_RESULT_TOPIC).onListening(isRecording)

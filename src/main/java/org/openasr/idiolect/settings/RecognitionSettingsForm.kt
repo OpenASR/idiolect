@@ -36,6 +36,7 @@ internal class RecognitionSettingsForm {
     internal var nlpService by nlpProviderCombo
     internal var asrService by asrProviderCombo
 
+    /** Reset the UI to the current config */
     fun reset(settings: IdiolectConfig.Settings) {
         setAsrOptions(ExtensionManager.asrEp.extensionList.map { e -> e.displayName() })
         setNlpOptions(ExtensionManager.nlpEp.extensionList.map { e -> e.displayName() })
