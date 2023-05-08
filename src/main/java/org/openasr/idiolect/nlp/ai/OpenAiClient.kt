@@ -5,7 +5,6 @@ package org.openasr.idiolect.nlp.ai
 //import com.aallam.openai.client.OpenAI
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.application.invokeLater
 import com.theokanning.openai.completion.chat.ChatCompletionRequest
 import com.theokanning.openai.completion.chat.ChatMessage
 import com.theokanning.openai.completion.chat.ChatMessageRole
@@ -44,11 +43,11 @@ class OpenAiClient(private var apiKey: String?) {
 
     init {
         apiKey?.let {
-            openAi = OpenAiService(it)
+            Thread({
+                openAi = OpenAiService(it)
 
-//            invokeLater {
-//                initialiseModelLists()
-//            }
+                initialiseModelLists()
+            }, "Idiolect Open AI initialisation").start()
         }
     }
 

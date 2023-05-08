@@ -56,6 +56,7 @@ object ActionUtils {
                 .replace(Regex("Vcs\\.(?:([^.]+)\\.)?"), "Git$1")
                 .replace("Laf", "LookAndFeel")
                 .replace("XSD", "Xsd")
+                .replace("CWM", "CodeWithMe")
                 .replace("TBX", "Tbx")
                 .replace("UI", "Ui")
                 .replace("WSL", "Wsl")

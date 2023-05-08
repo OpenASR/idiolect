@@ -1,5 +1,6 @@
 package org.openasr.idiolect.presentation.toolwindow.commands
 
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.keymap.KeymapManager
 import com.intellij.ui.JBColor
@@ -14,19 +15,24 @@ import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
 import java.util.*
 import javax.swing.JComponent
 import javax.swing.RowFilter
+import javax.swing.event.AncestorEvent
+import javax.swing.event.AncestorListener
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.table.AbstractTableModel
 import javax.swing.table.TableRowSorter
 
 
-class SpeechCommandsTab {
+class SpeechCommandsTab : AncestorListener {
     companion object {
         private val SEARCH_BOX_ACCESSIBLE_NAME = "Command search"
+        private val log = logger<SpeechCommandsTab>()
     }
 
-    private val table = JBTable(SpeechCommandTableModel())
+    private val commandModel = SpeechCommandTableModel()
+    private val table = JBTable(commandModel)
     private val searchField = createSearchComponent(table)
+
 
     fun createToolBar(): JComponent {
         return panel {
@@ -42,11 +48,17 @@ class SpeechCommandsTab {
     }
 
     fun createComponent(): JComponent {
-        return panel {
+        val component = panel {
             row {
                 scrollCell(table).align(Align.FILL)
             }.resizableRow()
         }
+
+
+//        UIUtil.runWhenVisibilityChanged()
+        component.addAncestorListener(this)
+
+        return component
     }
 
     fun getSearchField() = searchField
@@ -81,10 +93,34 @@ class SpeechCommandsTab {
         return searchField
     }
 
+    override fun ancestorAdded(event: AncestorEvent?) {
+        commandModel.ensureInitialised()
+    }
+
+    override fun ancestorRemoved(event: AncestorEvent?) {}
+
+    override fun ancestorMoved(event: AncestorEvent?) {}
+
     class SpeechCommandTableModel : AbstractTableModel() {
         private var RESOLVER_EP_NAME = ExtensionPointName<IntentResolver>("org.openasr.idiolect.intentResolver")
-        private val grammars: List<NlpGrammar> by lazy { getResolvers().flatMap { it.grammars } }
+        private var grammars: List<NlpGrammar> = listOf()
         private val keymap = KeymapManager.getInstance().activeKeymap
+        private var initialised = false
+
+        fun ensureInitialised() {
+            if (!initialised) {
+                update()
+                initialised = true
+            }
+        }
+
+        fun update() {
+            Thread({
+                log.debug("Generating grammars for speech command tab...")
+                grammars = getResolvers().flatMap { it.grammars }
+                fireTableDataChanged()
+            }, "Idiolect speech commands update").start()
+        }
 
         override fun getRowCount(): Int {
             return grammars.size

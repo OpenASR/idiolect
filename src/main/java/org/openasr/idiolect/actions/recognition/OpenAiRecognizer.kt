@@ -23,21 +23,20 @@ Planning
 class OpenAiRecognizer : IntentResolver("OpenAI", Int.MAX_VALUE) {
     private val logger = Logger.getInstance(javaClass)
 
-    override val grammars = listOf(NlpGrammar("OpenAI").withExample("chat gpt"))
+    override val grammars = listOf<NlpGrammar>(
+//        NlpGrammar("OpenAI").withExample("chat gpt")
+    )
 
     init {
 //        service = OpenAiService(OpenAiConfig.apiKey)
     }
 
     override fun isSupported(context: NlpContext, component: Component?): Boolean {
-
         return true
     }
 
 
     override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext): NlpResponse? {
         return null
-
-
     }
 }

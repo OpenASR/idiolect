@@ -1,8 +1,12 @@
 package org.openasr.idiolect.presentation.toolwindow
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.SimpleToolWindowPanel
+import com.intellij.openapi.util.Computable
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.Content
@@ -72,36 +76,40 @@ class IdiolectToolWindowFactory : ToolWindowFactory, DumbAware {
      * Adds tabs (or "contents") to the Idiolect ToolWindow
      */
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        IdiolectToolWindowFactory.toolWindow = toolWindow
-        val contentFactory = ContentFactory.getInstance()
+//        ApplicationManager.getApplication().invokeLater({
+        val actionUpdateThread = ActionUpdateThread.BGT
+        actionUpdateThread.run {
+            IdiolectToolWindowFactory.toolWindow = toolWindow
+            val contentFactory = ContentFactory.getInstance()
 
-        // Log
-        val speechLogTab = SpeechLogTab(toolWindow)
-        val speechLogContent = contentFactory.createContent(speechLogTab.createComponent(), TAB_LOG, false)
-        toolWindow.contentManager.addContent(speechLogContent)
+            // Log
+            val speechLogTab = SpeechLogTab(toolWindow)
+            val speechLogContent = contentFactory.createContent(speechLogTab.createComponent(), TAB_LOG, false)
+            toolWindow.contentManager.addContent(speechLogContent)
 
-        // Commands
-        val speechCommandsTab = SpeechCommandsTab()
-        val speechCommandsPanel = SimpleToolWindowPanel(true, false)
-        speechCommandsPanel.toolbar = speechCommandsTab.createToolBar()
-        speechCommandsPanel.setContent(speechCommandsTab.createComponent())
+            // Commands
+            val speechCommandsTab = SpeechCommandsTab()
+            val speechCommandsPanel = SimpleToolWindowPanel(true, false)
+            speechCommandsPanel.toolbar = speechCommandsTab.createToolBar()
+            speechCommandsPanel.setContent(speechCommandsTab.createComponent())
 
-        val speechCommandsContent = contentFactory.createContent(speechCommandsPanel, TAB_COMMANDS, false)
-        speechCommandsContent.searchComponent = speechCommandsTab.getSearchField()
-        toolWindow.contentManager.addContent(speechCommandsContent)
+            val speechCommandsContent = contentFactory.createContent(speechCommandsPanel, TAB_COMMANDS, false)
+            speechCommandsContent.searchComponent = speechCommandsTab.getSearchField()
+            toolWindow.contentManager.addContent(speechCommandsContent)
 
-        // Audio
-        val audioTab = AudioTab()
-        val audioContent = contentFactory.createContent(audioTab, TAB_AUDIO, false)
-        audioContent.setDisposer(audioTab)
-        toolWindow.contentManager.addContent(audioContent)
+            // Audio
+            val audioTab = AudioTab()
+            val audioContent = contentFactory.createContent(audioTab, TAB_AUDIO, false)
+            audioContent.setDisposer(audioTab)
+            toolWindow.contentManager.addContent(audioContent)
 
-        // Chat
-        val chatTab = ChatTab(toolWindow)
-        val chatPanel = SimpleToolWindowPanel(true, true)
-        chatPanel.toolbar = chatTab.createToolBar()
-        chatPanel.setContent(chatTab.createComponent())
-        val chatContent = contentFactory.createContent(chatPanel, TAB_CHAT, false)
-        toolWindow.contentManager.addContent(chatContent)
+            // Chat
+            val chatTab = ChatTab(toolWindow)
+            val chatPanel = SimpleToolWindowPanel(true, true)
+            chatPanel.toolbar = chatTab.createToolBar()
+            chatPanel.setContent(chatTab.createComponent())
+            val chatContent = contentFactory.createContent(chatPanel, TAB_CHAT, false)
+            toolWindow.contentManager.addContent(chatContent)
+        }
     }
 }

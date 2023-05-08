@@ -14,18 +14,16 @@ import kotlin.reflect.KMutableProperty0
 
 class LlmModelSelector(private val type: OpenAiClient.ModelType,
                        private val property: KMutableProperty0<String>)
-    : ComboBox<String>(), ItemListener, Disposable, DumbAware
+    : ComboBox<String>(), ItemListener, Disposable
 {
     private val aiService = service<AiService>()
     private val comboBoxModel = DefaultComboBoxModel<String>()
 
     init {
-        setModel(comboBoxModel)
+        model = comboBoxModel
         addItemListener(this)
 
-        invokeLater {
-            update()
-        }
+//        update()
     }
 
     override fun dispose() {
@@ -37,7 +35,8 @@ class LlmModelSelector(private val type: OpenAiClient.ModelType,
             property.set(comboBoxModel.selectedItem as String)
         }
     }
-    //    override fun actionPerformed(e: ActionEvent?) {
+
+//    override fun actionPerformed(e: ActionEvent?) {
 //        super.actionPerformed(e)
 //        property.set(comboBoxModel.selectedItem as String)
 //    }

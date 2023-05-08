@@ -106,6 +106,6 @@
                 class="org.openasr.idiolect.actions.ExecuteVoiceCommandAction"/>
 
         <action id="Idiolect.AiCompletion" text="AI Completion"
-                class="org.openasr.idiolect.actions.AiAction"/>
+                class="org.openasr.idiolect.actions.LlmCompletionAction"/>
     </actions>
 </idea-plugin>

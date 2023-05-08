@@ -2,7 +2,6 @@ package org.openasr.idiolect.nlp.ai
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
-import com.sun.jna.platform.win32.HighLevelMonitorConfigurationAPI.MC_COLOR_TEMPERATURE
 import org.openasr.idiolect.settings.openai.OpenAiConfig
 
 @Service
@@ -11,7 +10,7 @@ class AiService {
         private val messageBus = ApplicationManager.getApplication().messageBus
     }
 
-    private var client = OpenAiClient(OpenAiConfig.apiKey)
+    private var client: OpenAiClient = OpenAiClient(OpenAiConfig.apiKey)
 
     fun setApiKey(apiKey: String) = client.setApiKey(apiKey)
     fun setCompletionModel(model: String) {
@@ -29,7 +28,7 @@ class AiService {
     fun setTopP(topP: Double) {
         client.topP = topP
     }
-    
+
     fun listModels(type: OpenAiClient.ModelType): List<String> {
         return if (client.ensureConfigured()) {
             client.listModels(type)

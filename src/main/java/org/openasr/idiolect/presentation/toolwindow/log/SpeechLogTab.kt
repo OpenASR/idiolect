@@ -24,7 +24,7 @@ import javax.swing.JTextPane
 
 class SpeechLogTab(private val toolWindow: ToolWindow) :
     Disposable,
-    DumbAware,
+//    DumbAware,
     NlpResultListener
 {
     private val maxLength = 100

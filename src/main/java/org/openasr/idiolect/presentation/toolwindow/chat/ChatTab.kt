@@ -5,14 +5,13 @@ import com.intellij.openapi.actionSystem.ActionPlaces
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
-import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.util.minimumWidth
 import com.intellij.ui.util.preferredWidth
 import com.intellij.util.application
 import com.intellij.util.ui.UIUtil
-import org.openasr.idiolect.actions.AiAction
+import org.openasr.idiolect.actions.LlmCompletionAction
 import org.openasr.idiolect.nlp.ai.AiResponseListener
 import org.openasr.idiolect.nlp.ai.AiService
 import org.openasr.idiolect.nlp.ai.OpenAiClient
@@ -31,11 +30,11 @@ import kotlin.reflect.KFunction1
 import kotlin.reflect.KMutableProperty0
 
 
-class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, AiResponseListener, DumbAware {
+class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, AiResponseListener {
     private val log = logger<ChatTab>()
     private val maxLength = 100
-    private val aiLog = mutableListOf<String>()
-    private val logPane = JEditorPane(UIUtil.HTML_MIME, aiLog.joinToString(""))
+    private val conversationLog = mutableListOf<String>()
+    private val logPane = JEditorPane(UIUtil.HTML_MIME, conversationLog.joinToString(""))
 //    private val logPane = JTextPane()//.apply { contentType = UIUtil.HTML_MIME }
 //    private val userInput = JEditorPane("text", "")
 //    private val userInput = JBTextArea(1, 20)
@@ -51,6 +50,8 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
 
         userInput.minimumWidth = 500
         userInput.emptyText.text = "Enter prompt here..."
+
+        updateModels()
     }
 
     override fun dispose() {
@@ -67,7 +68,7 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
                 cell(chatModelSelector).label("Chat model")
                 cell(completionModelSelector).label("Completion model")
 
-                intTextField(1..4096, 16).columns(COLUMNS_TINY).label("Max tokens")
+                intTextField(IntRange(1,4096), 16).columns(COLUMNS_TINY).label("Max tokens")
                     .applyToComponent {
                         toolTipText = "The maximum number of tokens the LLM will generate"
                     }
@@ -76,7 +77,7 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
                             try {
                                 val value = it.text.toInt()
                                 OpenAiConfig.settings.maxTokens = value
-                                aiService.setMaxTokens(value)
+//                                aiService.setMaxTokens(value)
                             } catch (e: Exception) {
                                 log.info("Invalid max token. Must be an integer value <= 4096")
                             }
@@ -110,8 +111,10 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
     override fun ancestorMoved(event: AncestorEvent?) {}
 
     private fun updateModels() {
-        chatModelSelector.update()
-        completionModelSelector.update()
+        Thread({
+            chatModelSelector.update()
+            completionModelSelector.update()
+        }, "Idiolect chat model list update").start()
     }
 
     fun createComponent(): JComponent {
@@ -120,7 +123,7 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
 //
 //            }
 //        }
-        val aiAction = AiAction().apply {
+        val llmCompletionAction = LlmCompletionAction().apply {
             setTextField(userInput)
         }
 //        userInput.addKeyListener { event ->
@@ -136,11 +139,10 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
             }.resizableRow()
             row {
                 cell(userInput).focused().accessibleName("prompt input")
-                actionButton(aiAction, ActionPlaces.TOOLWINDOW_CONTENT).accessibleName("send")
+                actionButton(llmCompletionAction, ActionPlaces.TOOLWINDOW_CONTENT).accessibleName("send")
             }.enabled(true)
         }
     }
-
 
 
     override fun onUserPrompt(prompt: String) {
@@ -224,13 +226,13 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
     private fun updateLog(text: String, role: String) = updateLog(formatMessage(text, role))
 
     private fun updateLog(html: String) {
-        if (aiLog.size > maxLength) {
-            aiLog.removeFirst()
+        if (conversationLog.size > maxLength) {
+            conversationLog.removeFirst()
         }
 
-        aiLog.add(html)
+        conversationLog.add(html)
 
-        logPane.text = aiLog.joinToString("\n")
+        logPane.text = conversationLog.joinToString("\n")
 
         invokeLater {
             logPane.scrollRectToVisible(Rectangle(0, logPane.height,1,1))
