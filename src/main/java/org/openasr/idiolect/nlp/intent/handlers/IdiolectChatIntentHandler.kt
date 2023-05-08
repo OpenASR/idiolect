@@ -48,9 +48,9 @@ class IdiolectChatIntentHandler : IntentHandler {
     }
 
     private fun writeTestsForFunction(nlpContext: NlpContext): ActionCallInfo {
-        // TODO: get project-specific instructions for writing tests, add to instructions
-        val instructions = "In the first line of your response you will provide the test file path," +
-            "and then test code inside triple back-ticks."
+        // TODO: get project-specific instructions for writing tests, add to instructions - test library - JUnit 4/5, assertion library...
+        val instructions = "Provide the test file path as an undecorated string in the first line of the response. " +
+            "There must be no description or commentary. This must be followed by the test code inside triple back-ticks."
         completionForParent(nlpContext, instructions,"write tests for this function", PsiMethod::class.java)
 
         return ActionCallInfo(AiChatRecognizer.INTENT_TESTS_FOR_FUNCTION, true)
@@ -58,8 +58,8 @@ class IdiolectChatIntentHandler : IntentHandler {
 
     private fun writeTestsForClass(nlpContext: NlpContext): ActionCallInfo {
         // TODO: get project-specific instructions for writing tests, add to instructions
-        val instructions = "In the first line of your response you will provide the test file path," +
-            "and then test code inside triple back-ticks."
+        val instructions = "Provide the test file path as an undecorated string in the first line of the response. " +
+            "There must be no description or commentary. This must be followed by the test code inside triple back-ticks."
         completionForParent(nlpContext, instructions,"write tests for this class", PsiClass::class.java)
 
         return ActionCallInfo(AiChatRecognizer.INTENT_TESTS_FOR_CLASS, true)
@@ -76,15 +76,17 @@ class IdiolectChatIntentHandler : IntentHandler {
             val relativePath = file.virtualFile.path.substring(project.basePath!!.length + 1)
 
             if (containingMethod != null) {
-                val aiService = service<AiService>()
-                aiService.sendChat("""
+//                Thread({
+                    val aiService = service<AiService>()
+                    aiService.sendChat("""
 The user is viewing the following function in `${relativePath}`:
 ```
 ${containingMethod.text}
 ```
 $instructions
 """.trimIndent(),
-                    prompt)
+                        prompt)
+//                }, "Idiolect chat completion").start()
 
                 IdiolectToolWindowFactory.showTab(IdiolectToolWindowFactory.Tab.CHAT)
             }

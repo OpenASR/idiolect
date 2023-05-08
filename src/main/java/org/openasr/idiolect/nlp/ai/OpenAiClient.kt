@@ -12,6 +12,7 @@ import com.theokanning.openai.service.OpenAiService
 import com.intellij.openapi.diagnostic.logger
 import com.theokanning.openai.completion.CompletionRequest
 import kotlinx.coroutines.runBlocking
+import java.time.Duration
 
 
 class OpenAiClient(private var apiKey: String?) {
@@ -44,7 +45,7 @@ class OpenAiClient(private var apiKey: String?) {
     init {
         apiKey?.let {
             Thread({
-                openAi = OpenAiService(it)
+                openAi = OpenAiService(it, Duration.ZERO)
 
                 initialiseModelLists()
             }, "Idiolect Open AI initialisation").start()
