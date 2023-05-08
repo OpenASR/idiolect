@@ -15,9 +15,10 @@ abstract class IntentResolver(open val displayName: String, open val order: Int 
 
     companion object {
         /** idiolect handlers that augment IntelliJ Actions */
-        val INTENT_PREFIX_IDIOLECT_ACTION = "idiolect.Action."
+        val INTENT_PREFIX_IDIOLECT_ACTION = "Idiolect.Action."
+        val INTENT_PREFIX_IDIOLECT_CHAT = "Idiolect.Chat."
         /** idiolect-specific commands */
-        val INTENT_PREFIX_IDIOLECT_COMMAND = "idiolect.Command."
+        val INTENT_PREFIX_IDIOLECT_COMMAND = "Idiolect.Command."
     }
 
     /**

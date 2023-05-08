@@ -72,7 +72,7 @@
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.RenameActionRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.SurroundWithNoNullCheckRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.JavaActionRecognizer"/>
-        <intentResolver implementation="org.openasr.idiolect.actions.recognition.OpenAiRecognizer"/>
+        <intentResolver implementation="org.openasr.idiolect.actions.recognition.AiChatRecognizer"/>
         <intentResolver implementation="org.openasr.idiolect.actions.recognition.RegisteredEditorActionRecognizer"
                           id="RegisteredEditorActionRecognizer"
                           order="before RegisteredActionRecognizer"/>
@@ -82,6 +82,7 @@
 
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.IdiolectCommandIntentHandler" order="first"/>
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.IdiolectActionIntentHandler"/>
+        <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.IdiolectChatIntentHandler"/>
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.TemplateIntentHandler"/>
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.JavaActionIntentHandler"/>
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.RegisteredActionHandler" order="last"/>

@@ -21,6 +21,7 @@ class NlpContext(private var dataContext: DataContext) {
 
     fun getEditor() = dataContext.getData(CommonDataKeys.EDITOR)
     fun getProject() = getEditor()?.project
+    fun getCurrentFile() = dataContext.getData(CommonDataKeys.PSI_FILE)
 
 
     fun setMode(mode: Mode) {

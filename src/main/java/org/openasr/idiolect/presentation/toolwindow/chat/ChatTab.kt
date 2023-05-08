@@ -77,7 +77,7 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
                             try {
                                 val value = it.text.toInt()
                                 OpenAiConfig.settings.maxTokens = value
-//                                aiService.setMaxTokens(value)
+                                aiService.setMaxTokens(value)
                             } catch (e: Exception) {
                                 log.info("Invalid max token. Must be an integer value <= 4096")
                             }
