@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.openasr"
-version = "1.4.9-SNAPSHOT"
+version = "1.4.9"
 
 java {
   toolchain {
