@@ -23,7 +23,7 @@ import javax.swing.JTextPane
 
 
 class SpeechLogTab(private val toolWindow: ToolWindow) :
-    Disposable,
+//    Disposable,
 //    DumbAware,
     NlpResultListener
 {
@@ -34,7 +34,7 @@ class SpeechLogTab(private val toolWindow: ToolWindow) :
 
 
     init {
-        application.messageBus.connect(this).subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
+        application.messageBus.connect().subscribe(NlpResultListener.NLP_RESULT_TOPIC, this)
 
 //        logPane.contentType = UIUtil.HTML_MIME
         logPane.isEditable = false
@@ -46,8 +46,8 @@ class SpeechLogTab(private val toolWindow: ToolWindow) :
                 ".message {color: yellow; margin: 0 0 0 20px;} ")
     }
 
-    override fun dispose() {
-    }
+//    override fun dispose() {
+//    }
 
     fun createComponent(): JComponent {
         val manualEntry = JBTextField(20)

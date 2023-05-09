@@ -32,7 +32,7 @@ import kotlin.reflect.KFunction1
 import kotlin.reflect.KMutableProperty0
 
 
-class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, AiResponseListener {
+class ChatTab(private val toolWindow: ToolWindow) : AncestorListener, AiResponseListener {
     private val log = logger<ChatTab>()
     private val maxLength = 100
     private val conversationLog = mutableListOf<String>()
@@ -46,7 +46,7 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
     private val aiService = service<AiService>()
 
     init {
-        application.messageBus.connect(this).subscribe(AiResponseListener.AI_RESPONSE_TOPIC, this)
+        application.messageBus.connect().subscribe(AiResponseListener.AI_RESPONSE_TOPIC, this)
 
         initialiseLogPane()
 
@@ -56,9 +56,8 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
         updateModels()
     }
 
-    override fun dispose() {
-    }
-
+//    override fun dispose() {
+//    }
 
     fun createToolBar(): JComponent {
 //        val group = DefaultActionGroup()
