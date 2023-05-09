@@ -3,10 +3,15 @@
 ## Unreleased
 
 ### Added
-- Tool Window with recognition log and searchable command list
-- "What can I say?", "What can I say about X"
 
 ### Changed
+
+## 1.4.9
+
+### Added
+- Tool Window with recognition log, searchable command list, audio controls & chat tab
+- "What can I say?", "What can I say about X"
+- Integration with OpenAI chat completion API.
 
 ## 1.4.0
 
