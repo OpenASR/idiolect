@@ -58,7 +58,7 @@ six@cs.utoronto.ca}
 \maketitle
 
 \begin{abstract}
-    This paper presents Idiolect, an open source~\footnote{https://github.com/OpenASR/idiolect} IDE plugin for voice coding and a novel approach to building bots that allows for users to define custom commands on-the-fly. Unlike traditional chatbots, Idiolect does not pretend to be an omniscient virtual assistant but rather a reconfigurable voice programming system that empowers users to create their own commands and actions dynamically, without rebuilding or restarting the application. We offer an experience report describing the tool itself, illustrate some example use cases, and reflect on several lessons learned during the tool's development.
+    This paper presents Idiolect, an open source~\footnote{https://github.com/OpenASR/idiolect} IDE plugin for voice coding and a novel approach to building bots that allows users to define custom commands on-the-fly. Unlike traditional chatbots, Idiolect does not pretend to be an omniscient virtual assistant, but rather a reconfigurable voice programming system that empowers users to create their own commands and actions dynamically, without rebuilding or restarting the application. We offer an experience report describing the tool itself, illustrate some example use cases, and reflect on several lessons learned during the tool's development.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -168,7 +168,7 @@ To streamline the development process and mitigate the risk of platform-specific
 
 \section{Evaluation}
 
-We conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in macOS Ventura 13.1 with IntelliJ IDEA 2023.1, VoskAPI 0.3.45 and Idiolect 1.3.3, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, then transcoded a 16000 kHz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, and finally transcribe the audio using VoskAPI to simulate a user-generated utterance. We report the average word error rate (WER) of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.63), \texttt{vosk-model-en-us-0.22-lgraph} (0.66) and \texttt{vosk-model-small-en-us-0.15} (0.73). Results on a per-voice and per-model basis are shown in  Fig.~\ref{fig:fig1} below.
+We conducted a preliminary experiment to evaluate recognition performance on synthetic speech. Using a set of English TTS voices (both male and female) included in macOS Ventura 13.1 with IntelliJ IDEA 2023.1, VoskAPI 0.3.45 and Idiolect 1.3.3, we synthesized 100 utterances from the predefined command list using the \texttt{say} command, then transcoded a 16000 Hz PCM signed 16-bit little-endian audio recording using \texttt{ffmpeg}, and finally transcribe the audio using VoskAPI to simulate a user-generated utterance. We report the average word error rate (WER) of three ASR models trained on US English speakers: \texttt{vosk-model-en-us-0.22} (0.63), \texttt{vosk-model-en-us-0.22-lgraph} (0.66) and \texttt{vosk-model-small-en-us-0.15} (0.73). Results on a per-voice and per-model basis are shown in  Fig.~\ref{fig:fig1} below.
 
 \begin{figure}[ht!]
     \centering
@@ -216,7 +216,7 @@ While voice programming may serve a niche purpose for developers, it has not bee
 
 We also acknowledge that our system is limited by its own natural language understanding capabilities. Speech is a comparatively inefficient medium for conducting programming tasks and users may be hesitant to invest time reconfiguring the system if intent recognition accuracy is low. Furthermore, the IDE plugin is currently limited to the set of actions that can be easily expressed using the IntelliJ Platform API.
 
-Finally, we acknowledge that synthetic voices are, while increasingly lifelike, an imperfect proxy for human speech. The voices available on macOS are not a representative sample of human dialects and accents, nor we have not yet conducted a systematic human evaluation. The lexicon used to generate synthetic speech is also limited to the set of commands supported by the IDE, and does not capture how the plugin would have performed in a more general-purpose setting.
+Finally, we acknowledge that synthetic voices are, while increasingly lifelike, an imperfect proxy for human speech. The predefined voices on macOS are not a representative sample of human dialects and accents, nor have we conducted a systematic human-in-the-loop evaluation. The lexicon used to generate synthetic speech is also limited to the set of IDE-supported commands, and does not capture how the plugin would perform in a more general-purpose interactive setting.
 
 \section{Future Work}
 
