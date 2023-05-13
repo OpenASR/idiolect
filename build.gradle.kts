@@ -113,7 +113,7 @@ repositories {
 dependencies {
   implementation("net.java.dev.jna:jna:5.13.0")
   implementation("com.alphacephei:vosk:0.3.45")
-  implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
+  implementation("io.github.jonelo:jadapter-for-native-tts:0.12.0")
   implementation("com.theokanning.openai-gpt3-java:service:0.12.0")
 //  implementation("com.aallam.openai:openai-client:3.2.3")  // thto
   testImplementation("org.reflections:reflections:0.10.2")

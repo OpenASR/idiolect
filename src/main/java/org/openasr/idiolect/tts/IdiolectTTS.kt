@@ -19,7 +19,6 @@ class IdiolectTTS : TtsProvider {
     fun sayWithVoice(utterance: String, voice: String? = null) =
         speechEngine.apply { setVoice( voice ?: speechEngine.availableVoices.first().name) }
             .say(utterance)
-            .waitFor()
 
     override fun dispose() = Unit
 }
