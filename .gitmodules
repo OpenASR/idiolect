@@ -1,3 +1,3 @@
 [submodule "jAdapterForNativeTTS"]
 	path = jAdapterForNativeTTS
-	url = git@github.com:OpenASR/jAdapterForNativeTTS.git
+	url = git@github.com:jonelo/jAdapterForNativeTTS.git
