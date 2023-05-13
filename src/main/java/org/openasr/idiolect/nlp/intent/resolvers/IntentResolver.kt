@@ -19,6 +19,7 @@ abstract class IntentResolver(open val displayName: String, open val order: Int 
         val INTENT_PREFIX_IDIOLECT_CHAT = "Idiolect.Chat."
         /** idiolect-specific commands */
         val INTENT_PREFIX_IDIOLECT_COMMAND = "Idiolect.Command."
+        val INTENT_PREFIX_IDIOLECT_NAVIGATION = "Idiolect.Nav."
     }
 
     /**

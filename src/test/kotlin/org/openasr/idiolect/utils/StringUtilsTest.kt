@@ -37,4 +37,12 @@ class StringUtilsTest {
         assertArrayEquals(arrayOf("go", "to", "tab", "9"), "GoToTab9".splitCamelCase().toList().toTypedArray())
         assertArrayEquals(arrayOf("disable", "pce"), "disablePCE".splitCamelCase().toList().toTypedArray())
     }
+
+    @Test
+    fun testSpeechFriendlyFileName() {
+        assertEquals("string utils test", speechFriendlyFileName("StringUtilsTest.kt"))
+        assertEquals("editor config", speechFriendlyFileName(".editorconfig"))
+        assertEquals("git ignore", speechFriendlyFileName(".gitignore"))
+        assertEquals("dot env", speechFriendlyFileName(".env"))
+    }
 }
