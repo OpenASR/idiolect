@@ -1,10 +1,16 @@
+import com.google.protobuf.gradle.id
 import org.jetbrains.changelog.Changelog.OutputType.HTML
+
+val grpcVersion = "1.55.1"
+val protobufVersion = "3.23.0"
+val grpcKotlinVersion = "1.3.0"
 
 plugins {
   kotlin("jvm") version "1.8.20"
   id("org.jetbrains.intellij") version "1.13.3"
   id("com.github.ben-manes.versions") version "0.46.0"
   id("org.jetbrains.changelog") version "2.0.0"
+  id("com.google.protobuf") version "0.9.3"
 }
 
 group = "org.openasr"
@@ -21,6 +27,32 @@ intellij {
   pluginName = "idiolect"
   updateSinceUntilBuild = false
   plugins = listOf("java")
+}
+
+
+protobuf {
+  protoc {
+    artifact = "com.google.protobuf:protoc:${protobufVersion}"
+  }
+  plugins {
+    create("grpc") {
+      artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+    }
+    create("grpckt") {
+      artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar"
+    }
+  }
+  generateProtoTasks {
+    all().forEach {
+      it.plugins {
+        create("grpc")
+        create("grpckt")
+      }
+      it.builtins {
+        create("kotlin")
+      }
+    }
+  }
 }
 
 
@@ -114,6 +146,15 @@ dependencies {
   implementation("net.java.dev.jna:jna:5.13.0")
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
+
+  // gRPC for Whisper ASR
+  implementation(group="io.grpc", name="grpc-kotlin-stub", version=grpcKotlinVersion)
+  implementation(group="io.grpc", name="grpc-stub", version=grpcVersion)
+  implementation(group="io.grpc", name="grpc-protobuf", version=grpcVersion)
+  implementation(group="com.google.protobuf", name="protobuf", version=protobufVersion)
+  implementation(group="com.google.protobuf", name="protobuf-java-util", version=protobufVersion)
+  implementation(group="com.google.protobuf", name="protobuf-kotlin", version=protobufVersion)
+
   implementation("com.theokanning.openai-gpt3-java:service:0.12.0")
 //  implementation("com.aallam.openai:openai-client:3.2.3")  // thto
   testImplementation("org.reflections:reflections:0.10.2")

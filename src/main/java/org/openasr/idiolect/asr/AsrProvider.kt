@@ -4,6 +4,10 @@ import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.idiolect.recognizer.SpeechRecognizer
 import org.openasr.idiolect.settings.ConfigurableExtension
 
+/**
+ * Processes audio input, recognises speech to text.
+ * Used by the `AsrControlLoop` which then sends the NlpRequest to the NlpProvider
+ */
 // TODO: delete SpeechRecogniser or refactor
 interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
     /**

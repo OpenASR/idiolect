@@ -89,6 +89,7 @@
 
         <asrSystem implementation="org.openasr.idiolect.asr.AsrControlLoop"/>
         <asrProvider implementation="org.openasr.idiolect.asr.vosk.VoskAsr"/>
+        <asrProvider implementation="org.openasr.idiolect.asr.WhisperAsr"/>
         <ttsProvider implementation="org.openasr.idiolect.tts.IdiolectTTS"/>
         <nlpProvider implementation="org.openasr.idiolect.nlp.PatternBasedNlpProvider"/>
     </extensions>
