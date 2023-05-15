@@ -1,8 +1,8 @@
 import com.google.protobuf.gradle.id
 import org.jetbrains.changelog.Changelog.OutputType.HTML
 
-val grpcVersion = "1.55.1"
-val protobufVersion = "3.23.0"
+val grpcVersion = "1.43.1"
+val protobufVersion = "3.19.4"
 val grpcKotlinVersion = "1.3.0"
 
 plugins {
@@ -71,6 +71,7 @@ tasks {
     }
   }
 
+
   val jvmTarget = "17"
   compileKotlin { kotlinOptions.jvmTarget = jvmTarget }
 
@@ -136,11 +137,19 @@ tasks {
     }
   }
 }
+//
+//tasks.register<GenerateProtoKotlin>("generateProtoKotlin") {
+////  classpath = configurations. compileClasspath
+////  mainClass.set("com.google.protobuf.compiler.Protoc")
+////  args = listOf("-I", "src/main/proto", "-o", "build/generated/source/proto", "whisper_server.proto")
+//
+//}
 
 repositories {
   mavenLocal()
   mavenCentral()
 }
+
 
 dependencies {
   implementation("net.java.dev.jna:jna:5.13.0")
@@ -148,12 +157,13 @@ dependencies {
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
 
   // gRPC for Whisper ASR
-  implementation(group="io.grpc", name="grpc-kotlin-stub", version=grpcKotlinVersion)
-  implementation(group="io.grpc", name="grpc-stub", version=grpcVersion)
-  implementation(group="io.grpc", name="grpc-protobuf", version=grpcVersion)
-  implementation(group="com.google.protobuf", name="protobuf", version=protobufVersion)
-  implementation(group="com.google.protobuf", name="protobuf-java-util", version=protobufVersion)
-  implementation(group="com.google.protobuf", name="protobuf-kotlin", version=protobufVersion)
+  implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+  implementation("io.grpc:grpc-protobuf:$grpcVersion")
+  implementation("io.grpc:grpc-netty-shaded:$grpcVersion")
+  implementation("com.google.protobuf:protobuf-java:$protobufVersion")
+  implementation("com.google.protobuf:protobuf-java-util:$protobufVersion")
+  implementation("com.google.protobuf:protobuf-kotlin:$protobufVersion")
+
 
   implementation("com.theokanning.openai-gpt3-java:service:0.12.0")
 //  implementation("com.aallam.openai:openai-client:3.2.3")  // thto
