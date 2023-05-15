@@ -64,7 +64,8 @@ class WhisperAsr : AsrProvider {
         return runBlocking {
             val response = server.waitForSpeech(emptyRequest)
             val alternatives = response.alternativesList.map { alt ->
-                alt.replace(Regex("[,.?!]"), "")
+                alt.replace(",", "")
+                    .replace(Regex("[.?!]$"), "")
                     .lowercase()
             }
             return@runBlocking NlpRequest(alternatives)
