@@ -62,13 +62,12 @@ class WhisperAsr : AsrProvider {
 
     override fun waitForSpeech(): NlpRequest {
         return runBlocking {
-            try {
-                val response = server.waitForSpeech(emptyRequest)
-                val alternatives = response.alternativesList
-                return@runBlocking NlpRequest(alternatives)
-            } catch (e: Exception) {
-                return@runBlocking NlpRequest(listOf(e.message!!))
+            val response = server.waitForSpeech(emptyRequest)
+            val alternatives = response.alternativesList.map { alt ->
+                alt.replace(Regex("[,.?!]"), "")
+                    .lowercase()
             }
+            return@runBlocking NlpRequest(alternatives)
         }
     }
 }
