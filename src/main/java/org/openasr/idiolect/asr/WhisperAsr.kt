@@ -8,46 +8,50 @@ import org.openasr.WhisperServerOuterClass.*
 
 class WhisperAsr : AsrProvider {
     override fun displayName(): String = "Whisper"
-    private val server: WhisperServerCoroutineStub
+    private lateinit var server: WhisperServerCoroutineStub
     private val emptyRequest = EmptyRequest.getDefaultInstance()
 
-    init {
+    override fun activate() {
+        super.activate()
         val channel = ManagedChannelBuilder
             .forAddress("localhost", 1634)
+            .userAgent("idiolect")
             .usePlaintext()
             .build()
 
         this.server = WhisperServerCoroutineStub(channel)
+    }
 
-        val model = LoadModelRequest.newBuilder()
-            .setName("base")
-            .setLanguage("en")
-            .setDevice(ProcessingDevice.cpu)
-//            .setDownloadRoot()
-//            .setInMemory()
-            .build()
+    override fun setModel(model: String) {
+        runBlocking {
+            val request = LoadModelRequest.newBuilder()
+                .setName("base")
+                .setLanguage("en")
+//                .setDevice(ProcessingDevice.cpu)
+//                .setDownloadRoot()
+//                .setInMemory()
+                .build()
 
-        suspend {
-            this.server.loadModel(model)
+            server.loadModel(request)
         }
     }
 
     override fun startRecognition(): Boolean {
-        suspend {
-            this.server.startRecognition(emptyRequest)
+        runBlocking {
+            server.startRecognition(emptyRequest)
         }
         return true
     }
 
     override fun stopRecognition(): Boolean {
-        suspend {
-            this.server.stopRecognition(emptyRequest)
+        runBlocking {
+            server.stopRecognition(emptyRequest)
         }
         return true
     }
 
     override fun setGrammar(grammar: Array<String>) {
-        suspend {
+        return runBlocking {
             val prompt = Prompt.newBuilder()
                 .setText(grammar.joinToString(" "))
                 .build()
@@ -57,11 +61,14 @@ class WhisperAsr : AsrProvider {
     }
 
     override fun waitForSpeech(): NlpRequest {
-        val server = this.server
         return runBlocking {
-            val response = server.waitForSpeech(emptyRequest)
-            val alternatives = response.alternativesList
-            return@runBlocking NlpRequest(alternatives)
+            try {
+                val response = server.waitForSpeech(emptyRequest)
+                val alternatives = response.alternativesList
+                return@runBlocking NlpRequest(alternatives)
+            } catch (e: Exception) {
+                return@runBlocking NlpRequest(listOf(e.message!!))
+            }
         }
     }
 }

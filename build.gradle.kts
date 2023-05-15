@@ -157,13 +157,12 @@ dependencies {
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
 
   // gRPC for Whisper ASR
-  implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
-  implementation("io.grpc:grpc-protobuf:$grpcVersion")
-  implementation("io.grpc:grpc-netty-shaded:$grpcVersion")
-  implementation("com.google.protobuf:protobuf-java:$protobufVersion")
-  implementation("com.google.protobuf:protobuf-java-util:$protobufVersion")
-  implementation("com.google.protobuf:protobuf-kotlin:$protobufVersion")
-
+  compileOnly("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+  compileOnly("io.grpc:grpc-protobuf:$grpcVersion")
+  compileOnly("io.grpc:grpc-netty:$grpcVersion")
+  compileOnly("com.google.protobuf:protobuf-java:$protobufVersion")
+  compileOnly("com.google.protobuf:protobuf-java-util:$protobufVersion")
+  compileOnly("com.google.protobuf:protobuf-kotlin:$protobufVersion")
 
   implementation("com.theokanning.openai-gpt3-java:service:0.12.0")
 //  implementation("com.aallam.openai:openai-client:3.2.3")  // thto

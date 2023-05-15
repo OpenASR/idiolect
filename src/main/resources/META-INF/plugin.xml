@@ -88,8 +88,8 @@
         <intentHandler implementation="org.openasr.idiolect.nlp.intent.handlers.RegisteredActionHandler" order="last"/>
 
         <asrSystem implementation="org.openasr.idiolect.asr.AsrControlLoop"/>
-        <asrProvider implementation="org.openasr.idiolect.asr.vosk.VoskAsr"/>
-        <asrProvider implementation="org.openasr.idiolect.asr.WhisperAsr"/>
+        <asrProvider implementation="org.openasr.idiolect.asr.vosk.VoskAsr" id="vosk" order="first"/>
+        <asrProvider implementation="org.openasr.idiolect.asr.WhisperAsr" order="after vosk"/>
         <ttsProvider implementation="org.openasr.idiolect.tts.IdiolectTTS"/>
         <nlpProvider implementation="org.openasr.idiolect.nlp.PatternBasedNlpProvider"/>
     </extensions>

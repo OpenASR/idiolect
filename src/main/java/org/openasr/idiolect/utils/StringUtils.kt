@@ -34,6 +34,9 @@ fun String.splitCamelCase(): Sequence<String> =
         word.toString()
     }
 
+
+// TODO: investigate ai.grazie.nlp.similarity.Levenshtein etc
+
 class SingleChar(private val char: Char) : CharSequence {
     override val length = 1
     override fun get(index: Int) = char
