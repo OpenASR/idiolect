@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.actionSystem.Presentation
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.Computable
 import com.intellij.openapi.wm.ToolWindowManager
@@ -17,6 +18,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.ui.SearchTextField
 import org.openasr.idiolect.actions.ActionRoutines
 import org.openasr.idiolect.actions.recognition.*
+import org.openasr.idiolect.asr.AsrService
 import org.openasr.idiolect.ide.IdeService
 import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
@@ -40,7 +42,7 @@ class IdiolectCommandIntentHandler : IntentHandler {
         }
 
         when (intentName) {
-            IdiolectCommandRecognizer.INTENT_HI -> TtsService.say("Hello!")
+            IdiolectCommandRecognizer.INTENT_HI -> sayWithMicOff("Hello!")
             IdiolectCommandRecognizer.INTENT_ABOUT -> ActionRoutines.routineAbout()
             IdiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
             IdiolectCommandRecognizer.INTENT_COMMANDS -> showCommands(nlpContext, nlpResponse.slots?.get(SLOT_COMMAND_TERM))
@@ -55,6 +57,11 @@ class IdiolectCommandIntentHandler : IntentHandler {
         }
 
         return ActionCallInfo(intentName, true)
+    }
+
+    private fun sayWithMicOff(message: String) {
+        val service = service<AsrService>()
+        service.sayWithMicOff(message)
     }
 
     private fun editCustomPhrases(nlpContext: NlpContext) {
