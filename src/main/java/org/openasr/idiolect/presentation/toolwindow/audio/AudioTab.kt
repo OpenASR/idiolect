@@ -4,10 +4,10 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.util.preferredWidth
 import org.openasr.idiolect.recognizer.CustomMicrophone
 import org.openasr.idiolect.settings.IdiolectConfig
 import java.awt.BorderLayout
+import java.awt.Dimension
 import java.awt.event.ItemEvent
 import java.io.ByteArrayOutputStream
 import javax.sound.sampled.AudioSystem
@@ -78,19 +78,19 @@ class AudioTab : JComponent(), Disposable, AncestorListener {
                     row {
                         label("Volume").applyToComponent {
                             horizontalAlignment = JLabel.CENTER
-                            preferredWidth = 50
+                            preferredSize = Dimension(50, preferredSize.height)
                         }
                         label("Noise").applyToComponent {
                             horizontalAlignment = JLabel.CENTER
-                            preferredWidth = 50
+                            preferredSize = Dimension(50, preferredSize.height)
                         }
                     }
                     row {
                         cell(volumeSlider).applyToComponent {
-                            preferredWidth = 50
+                            preferredSize = Dimension(50, preferredSize.height)
                         }
                         cell(noiseLevelSlider).applyToComponent {
-                            preferredWidth = 50
+                            preferredSize = Dimension(50, preferredSize.height)
                         }
                     }
                 }

@@ -5,10 +5,9 @@ import com.intellij.openapi.actionSystem.ActionPlaces
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.openapi.observable.util.whenTextChanged
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.dsl.builder.*
-import com.intellij.ui.util.minimumWidth
-import com.intellij.ui.util.preferredWidth
 import com.intellij.util.application
 import com.intellij.util.ui.UIUtil
 import org.openasr.idiolect.actions.LlmCompletionAction
@@ -18,6 +17,7 @@ import org.openasr.idiolect.nlp.ai.OpenAiClient
 import org.openasr.idiolect.presentation.components.FocusableTextArea
 import org.openasr.idiolect.presentation.components.IdiolectHtmlEditorKit
 import org.openasr.idiolect.settings.openai.OpenAiConfig
+import java.awt.Dimension
 import java.awt.Rectangle
 import java.util.*
 import javax.swing.JComponent
@@ -26,11 +26,13 @@ import javax.swing.JLabel
 import javax.swing.JSlider
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
+import javax.swing.event.DocumentEvent
+import javax.swing.event.DocumentListener
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KMutableProperty0
 
 
-class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener, AiResponseListener {
+class ChatTab(private val toolWindow: ToolWindow) : AncestorListener, AiResponseListener {
     private val log = logger<ChatTab>()
     private val maxLength = 100
     private val conversationLog = mutableListOf<String>()
@@ -44,19 +46,18 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
     private val aiService = service<AiService>()
 
     init {
-        application.messageBus.connect(this).subscribe(AiResponseListener.AI_RESPONSE_TOPIC, this)
+        application.messageBus.connect().subscribe(AiResponseListener.AI_RESPONSE_TOPIC, this)
 
         initialiseLogPane()
 
-        userInput.minimumWidth = 500
+        userInput.minimumSize = Dimension(500, userInput.minimumSize.height)
         userInput.emptyText.text = "Enter prompt here..."
 
         updateModels()
     }
 
-    override fun dispose() {
-    }
-
+//    override fun dispose() {
+//    }
 
     fun createToolBar(): JComponent {
 //        val group = DefaultActionGroup()
@@ -71,15 +72,15 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
                 intTextField(IntRange(1,4096), 16).columns(COLUMNS_TINY).label("Max tokens")
                     .applyToComponent {
                         toolTipText = "The maximum number of tokens the LLM will generate"
-                    }
-                    .onChanged {
-                        if (it.text.isNotEmpty()) {
-                            try {
-                                val value = it.text.toInt()
-                                OpenAiConfig.settings.maxTokens = value
-                                aiService.setMaxTokens(value)
-                            } catch (e: Exception) {
-                                log.info("Invalid max token. Must be an integer value <= 4096")
+                        document.whenTextChanged {
+                            if (text.isNotEmpty()) {
+                                try {
+                                    val value = text.toInt()
+                                    OpenAiConfig.settings.maxTokens = value
+                                    aiService.setMaxTokens(value)
+                                } catch (e: Exception) {
+                                    log.info("Invalid max token. Must be an integer value <= 4096")
+                                }
                             }
                         }
                     }
@@ -170,7 +171,7 @@ class ChatTab(private val toolWindow: ToolWindow) : Disposable, AncestorListener
 
         return slider(0, scale, 1, scale / 2)
             .applyToComponent {
-                preferredWidth = 100
+                preferredSize = Dimension(100,20)
 //                labelTable = sliderLabels
 //                paintTicks = false
                 paintLabels = false
