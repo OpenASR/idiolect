@@ -34,6 +34,9 @@ fun String.splitCamelCase(): Sequence<String> =
         word.toString()
     }
 
+
+// TODO: investigate ai.grazie.nlp.similarity.Levenshtein etc
+
 fun speechFriendlyFileName(name: String): String {
     val dot = name.indexOf('.')
     //
@@ -92,6 +95,7 @@ fun levenshteinDistance(s1: String, s2: String): Int {
 
     return d[m][n]
 }
+
 
 class SingleChar(private val char: Char) : CharSequence {
     override val length = 1
