@@ -41,8 +41,8 @@ class StringUtilsTest {
     @Test
     fun testSpeechFriendlyFileName() {
         assertEquals("string utils test", speechFriendlyFileName("StringUtilsTest.kt"))
-        assertEquals("editor config", speechFriendlyFileName(".editorconfig"))
-        assertEquals("git ignore", speechFriendlyFileName(".gitignore"))
-        assertEquals("dot env", speechFriendlyFileName(".env"))
+        assertEquals(".editorconfig", speechFriendlyFileName(".editorconfig"))
+        assertEquals(".gitignore", speechFriendlyFileName(".gitignore"))
+        assertEquals(".env", speechFriendlyFileName(".env"))
     }
 }
