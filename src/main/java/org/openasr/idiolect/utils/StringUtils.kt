@@ -8,12 +8,22 @@ fun String.capitalizeWord(): CharSequence =
     if (first().isUpperCase()) this
     else (StringBuilder(SingleChar(first().uppercaseChar())).append(substring(1)))
 
+/**
+ * eg: "to camel case" -> "toCamelCase"
+ */
 fun String.toCamelCase() =
     replace(toCamelCaseRegex) { SingleChar(it.groups[1]!!.value[0].uppercaseChar()) }
 
+/**
+ * eg: "to upper camel case" -> "ToUpperCamelCase"
+ */
 fun String.toUpperCamelCase() =
     replace(toUpperCamelCaseRegex) { SingleChar(it.groups[1]!!.value[0].uppercaseChar()) }
 
+/**
+ * For a (lower or upper) camelCase String returns a string of lower case words separated by space.
+ * eg: "expandCamelCase" -> "split camel case"
+ */
 fun String.expandCamelCase() =
     StringBuilder(substring(1))
         .insert(0, this[0].lowercaseChar())
@@ -25,6 +35,10 @@ fun String.expandCamelCase() =
                     .append(m.groups[2]!!.value)
         }
 
+/**
+ * For a (lower or upper) camelCase String returns a sequence of lower case Strings for each term.
+ * eg: "splitCamelCase" -> arrayOf("split", "camel", "case")
+ */
 fun String.splitCamelCase(): Sequence<String> =
     fromCamelCaseRegex.findAll(capitalizeWord()).map {
         val word = StringBuilder(it.groups[2]!!.value)
@@ -34,15 +48,20 @@ fun String.splitCamelCase(): Sequence<String> =
         word.toString()
     }
 
-fun speechFriendlyFileName(name: String): String {
-    val dot = name.indexOf('.')
-    //
-    if (dot > 0) {
-        //
-    }
-    name.substring(0, name.indexOf('.'))
+/**
+ * Expands a camelCase file name to a speech friendly String, omitting the .suffix.
+ * ".editorconfig", ".env", ".gitignore" are left intact
+ *
+ * eg: "StringUtils.kt" -> "string utils"
+ */
+fun speechFriendlyFileName(fileName: String): String {
+    val dot = fileName.indexOf('.')
+
+    val base = if (dot == 0) fileName else fileName.substring(0, fileName.indexOf('.'))
+    return base.expandCamelCase()
 }
 
+// TODO: investigate ai.grazie.nlp.similarity.Levenshtein etc
 fun findMatchingPhrase(alternatives: Collection<String>, validPhrases: Collection<String>): String? {
     var bestMatch: String? = null
     var bestDistance = Int.MAX_VALUE

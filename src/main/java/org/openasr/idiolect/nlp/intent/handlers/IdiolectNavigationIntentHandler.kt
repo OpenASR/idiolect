@@ -1,10 +1,15 @@
 package org.openasr.idiolect.nlp.intent.handlers
 
 import com.intellij.openapi.editor.EditorFactory
-import org.openasr.idiolect.actions.recognition.*
+import com.intellij.openapi.fileEditor.impl.text.TextEditorComponent
+import io.ktor.util.reflect.*
+import org.openasr.idiolect.actions.recognition.ActionCallInfo
+import org.openasr.idiolect.actions.recognition.IdiolectNavigationRecognizer
 import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
+import org.openasr.idiolect.nlp.SpeechToFileName
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import javax.swing.JComponent
 
 /** idiolect-specific commands */
 class IdiolectNavigationIntentHandler : IntentHandler {
@@ -31,11 +36,17 @@ class IdiolectNavigationIntentHandler : IntentHandler {
 
     private fun switchToTab(nlpContext: NlpContext, name: String) {
         val editorWindows = EditorFactory.getInstance().allEditors
-        val tabNames = editorWindows.map {
-            var name = it.virtualFile.name
-//            it.component.requestFocus()
-        }
+        val project = nlpContext.getProject()
+        val predicate = SpeechToFileName.pickFileByAlias(project, name)
 
+        editorWindows.firstOrNull { editor -> predicate.invoke(editor.virtualFile.name) }
+            ?.component?.apply {
+                var pane: JComponent? = this
+                while (pane != null && !pane.instanceOf(TextEditorComponent::class)) { pane = pane.rootPane }
+
+//                val pane = rootPane.rootPane
+                println("Found a tab for $name, requesting focus")
+                pane?.isVisible = true
+                pane?.requestFocus()            }
     }
-
 }
