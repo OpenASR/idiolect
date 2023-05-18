@@ -1,15 +1,16 @@
-package org.openasr.idiolect.asr.vosk
+package org.openasr.idiolect.asr.whisper.cpp.settings
 
 import com.intellij.openapi.options.Configurable
 import org.openasr.idiolect.asr.vosk.VoskConfig.Companion.settings
+import org.openasr.idiolect.asr.whisper.cpp.WhisperCppAsr
 
 /**
  * Manages the Settings UI
  */
-class VoskConfigurable : Configurable {
-    val gui by lazy(::VoskSettingsForm)
+class WhisperCppConfigurable : Configurable {
+    private val gui by lazy(::WhisperCppSettingsForm)
 
-    override fun getDisplayName() = "Vosk"
+    override fun getDisplayName() = "Whisper.cpp"
 
     override fun createComponent() = gui.rootPanel
 
@@ -21,8 +22,8 @@ class VoskConfigurable : Configurable {
     override fun apply() {
         if (gui.modelPathChooser.text != settings.modelPath) {
             settings.modelPath = gui.modelPathChooser.text
-            VoskAsr.setModel(settings.modelPath)
-            VoskAsr.activate()
+            WhisperCppAsr.setModel(settings.modelPath)
+            WhisperCppAsr.activate()
         }
 
         if (gui.languageCombo.selectedItem != settings.language) {

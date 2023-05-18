@@ -32,6 +32,6 @@ class ModelComparatorTest {
         ), sorted.map { it.size }.toTypedArray())
     }
 
-    private fun createModel(size: Int, type: String): ModelInfo =
-        ModelInfo("", "", "$size", "", size, "$size", type)
+    private fun createModel(size: Int, type: String): VoskModelInfo =
+        VoskModelInfo("", "", "$size", "", size, "$size", type)
 }

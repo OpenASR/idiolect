@@ -1,10 +1,11 @@
-package org.openasr.idiolect.asr
+package org.openasr.idiolect.asr.whisper
 
 import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.runBlocking
 import org.openasr.idiolect.nlp.NlpRequest
 import org.openasr.WhisperServerGrpcKt.WhisperServerCoroutineStub
 import org.openasr.WhisperServerOuterClass.*
+import org.openasr.idiolect.asr.AsrProvider
 
 class WhisperAsr : AsrProvider {
     override fun displayName(): String = "Whisper"
