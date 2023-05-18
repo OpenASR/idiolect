@@ -2,6 +2,10 @@ package org.openasr.idiolect.asr.whisper.cpp.params
 
 import com.sun.jna.Pointer
 import com.sun.jna.Structure
+import org.openasr.idiolect.asr.whisper.cpp.callbacks.WhisperEncoderBeginCallback
+import org.openasr.idiolect.asr.whisper.cpp.callbacks.WhisperLogitsFilterCallback
+import org.openasr.idiolect.asr.whisper.cpp.callbacks.WhisperNewSegmentCallback
+import org.openasr.idiolect.asr.whisper.cpp.callbacks.WhisperProgressCallback
 
 
 /**
@@ -133,26 +137,26 @@ class WhisperFullParams : Structure() {
     /** Beam search decoding parameters. */
     var beam_search: BeamSearchParams? = null
 
-//    /** Callback for every newly generated text segment. */
-//    var new_segment_callback: WhisperNewSegmentCallback? = null
+    /** Callback for every newly generated text segment. */
+    var new_segment_callback: WhisperNewSegmentCallback? = null
 
     /** User data for the new_segment_callback. */
     var new_segment_callback_user_data: Pointer? = null
 
-//    /** Callback on each progress update. */
-//    var progress_callback: WhisperProgressCallback? = null
+    /** Callback on each progress update. */
+    var progress_callback: WhisperProgressCallback? = null
 
     /** User data for the progress_callback. */
     var progress_callback_user_data: Pointer? = null
 
-//    /** Callback each time before the encoder starts. */
-//    var encoder_begin_callback: WhisperEncoderBeginCallback? = null
+    /** Callback each time before the encoder starts. */
+    var encoder_begin_callback: WhisperEncoderBeginCallback? = null
 
     /** User data for the encoder_begin_callback. */
     var encoder_begin_callback_user_data: Pointer? = null
 
-//    /** Callback by each decoder to filter obtained logits. */
-//    var logits_filter_callback: WhisperLogitsFilterCallback? = null
+    /** Callback by each decoder to filter obtained logits. */
+    var logits_filter_callback: WhisperLogitsFilterCallback? = null
 
     /** User data for the logits_filter_callback. */
     var logits_filter_callback_user_data: Pointer? = null

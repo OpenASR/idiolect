@@ -24,15 +24,16 @@ class WhisperContext : Structure() {
     var state: PointerByReference? = null
 
     /** populated by whisper_init_from_file()  */
-    var path_model: String? =
-        null //    public static class ByReference extends WhisperContext implements Structure.ByReference {
-    //    }
-    //
-    //    public static class ByValue extends WhisperContext implements Structure.ByValue {
-    //    }
-    //
-    //    @Override
-    //    protected List<String> getFieldOrder() {
-    //        return List.of("t_load_us", "t_start_us", "wtype", "itype", "model", "vocab", "state", "path_model");
-    //    }
+    var path_model: String? = null
+
+//    public static class ByReference extends WhisperContext implements Structure.ByReference {
+//    }
+//
+//    public static class ByValue extends WhisperContext implements Structure.ByValue {
+//    }
+//
+//    @Override
+//    protected List<String> getFieldOrder() {
+//        return List.of("t_load_us", "t_start_us", "wtype", "itype", "model", "vocab", "state", "path_model");
+//    }
 }
