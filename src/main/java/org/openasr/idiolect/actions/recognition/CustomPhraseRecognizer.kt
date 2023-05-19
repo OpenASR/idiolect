@@ -61,7 +61,8 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
     // Custom phrases may need to be enabled for all modes, but for now, only in ACTION mode
     override fun isSupported(context: NlpContext, component: Component?) = context.isActionMode()
 
-    override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext) = properties.firstOrNull {
+    override fun tryResolveIntent(nlpRequest: NlpRequest, context: NlpContext) =
+        properties.firstOrNull {
             it.boundPhrases.any { phrase ->
                 phrase in nlpRequest.alternatives
             }
@@ -93,7 +94,7 @@ class CustomPhraseRecognizer: IntentResolver("Custom Phrases", 500) {
             }
             // Check if name is a valid actionId
             .filter {
-                it.name.startsWith("idiolect.")
+                it.name.startsWith("Idiolect.")
                     || it.name.startsWith("Template.")
                     || it.name.endsWith("]")
                     || actionManager.getAction(it.name) != null

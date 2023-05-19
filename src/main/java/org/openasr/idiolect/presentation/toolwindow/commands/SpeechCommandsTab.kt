@@ -122,22 +122,17 @@ class SpeechCommandsTab : AncestorListener {
             }, "Idiolect speech commands update").start()
         }
 
-        override fun getRowCount(): Int {
-            return grammars.size
-        }
+        override fun getRowCount(): Int = grammars.size
 
-        override fun getColumnCount(): Int {
-            return 3
-        }
+        override fun getColumnCount(): Int = 3
 
-        override fun getColumnName(column: Int): String {
-            return when (column) {
+        override fun getColumnName(column: Int): String =
+            when (column) {
                 0 -> "Action"
                 1 -> "Example Phrases"
                 2 -> "Keyboard Shortcut"
                 else -> throw RuntimeException("Incorrect column index")
             }
-        }
 
         override fun getValueAt(row: Int, column: Int): Any {
             val grammar = grammars[row]

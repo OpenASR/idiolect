@@ -5,10 +5,10 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.openapi.util.Computable
-import com.intellij.openapi.wm.ToolWindow
-import com.intellij.openapi.wm.ToolWindowFactory
+import com.intellij.openapi.wm.*
 import com.intellij.ui.content.Content
 import com.intellij.ui.content.ContentFactory
 import org.openasr.idiolect.presentation.toolwindow.chat.ChatTab
@@ -48,6 +48,12 @@ class IdiolectToolWindowFactory : ToolWindowFactory, DumbAware {
         }
 
         fun showToolWindow() {
+            if (!::toolWindow.isInitialized) {
+              val project = ProjectManager.getInstance().openProjects[0]
+              val toolWindowManager = ToolWindowManager.getInstance(project)
+              toolWindow = toolWindowManager.getToolWindow("Idiolect")!!
+            }
+
             toolWindow.show()
         }
 

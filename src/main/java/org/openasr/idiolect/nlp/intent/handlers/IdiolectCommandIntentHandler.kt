@@ -10,6 +10,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.actionSystem.Presentation
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.util.Computable
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.psi.PsiDocumentManager
@@ -58,7 +59,8 @@ class IdiolectCommandIntentHandler : IntentHandler {
     }
 
     private fun editCustomPhrases(nlpContext: NlpContext) {
-        CustomPhraseRecognizer.openCustomPhrasesFile(nlpContext.getProject()!!)
+        val project = ProjectManager.getInstance().openProjects[0]
+        CustomPhraseRecognizer.openCustomPhrasesFile(project)
         showCommands(nlpContext)
     }
 
