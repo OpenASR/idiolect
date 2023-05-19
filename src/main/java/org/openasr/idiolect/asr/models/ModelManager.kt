@@ -6,6 +6,8 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.ShowSettingsUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.openasr.idiolect.asr.AsrSystemStateListener
 import org.openasr.idiolect.asr.ModelNotAvailableException
 import org.openasr.idiolect.settings.IdiolectConfig
@@ -18,6 +20,7 @@ import java.net.http.HttpResponse
 import java.util.function.Consumer
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+import kotlinx.coroutines.launch
 
 abstract class ModelManager<C : Configurable>(
     private val defaultModelURL: String,
@@ -46,15 +49,11 @@ abstract class ModelManager<C : Configurable>(
         }
     }
 
-    private fun downloadModel(url: String): InputStream {
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .build()
-        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream())
-        return response.body()
+    internal open fun installModel(modelInfo: ModelInfo) {
+        installModel(modelInfo.url)
     }
 
-    internal fun installModel(url: String): String {
+    internal open fun installModel(url: String): String {
         messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC).onAsrStatus("Installing model...")
 
         val modelPath = pathForModelUrl(url)
@@ -67,11 +66,20 @@ abstract class ModelManager<C : Configurable>(
         return modelPath
     }
 
+    internal fun downloadModel(url: String): InputStream {
+        val request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .build()
+        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream())
+        return response.body()
+    }
+
     internal fun pathForModelUrl(url: String): String {
         val modelName = url.substringAfterLast('/')
-        val modelDir = IdiolectConfig.idiolectHomePath
-        return "$modelDir/${modelName.substringBefore(".zip")}"
+        return "${modelDir()}/${modelName.substringBefore(".zip")}"
     }
+
+    internal open fun modelDir() = IdiolectConfig.idiolectHomePath
 
     protected open fun unpackModel(modelPath: String, modelZip: InputStream) {
         val modelDir = File(modelPath).parentFile
@@ -92,15 +100,20 @@ abstract class ModelManager<C : Configurable>(
     }
 
     private fun <C : Configurable> showNotificationForModel(content: String, configurable: Class<C>, onModelProvided: Consumer<String>) {
-        NotificationGroupManager.getInstance()
+        val notificationManager = NotificationGroupManager.getInstance()
             .getNotificationGroup("Idiolect")
-            .createNotification("Speech model not configured", content, NotificationType.INFORMATION
-            )
-            .addAction(NotificationAction.create("Download Default Model") { _ ->
-                val modelPath = installModel(defaultModelURL)
-                onModelProvided.accept(modelPath)
+            .createNotification("Speech model not configured", content, NotificationType.INFORMATION)
+
+        if (defaultModelURL.isNotEmpty()) {
+            notificationManager.addAction(NotificationAction.create("Download Default Model") { _ ->
+//                CoroutineScope(Dispatchers.IO).launch {
+                    val modelPath = installModel(defaultModelURL)
+                    onModelProvided.accept(modelPath)
+//                }
             })
-            .addAction(NotificationAction.create("Edit Configuration") { _ ->
+        }
+
+        notificationManager.addAction(NotificationAction.create("Edit Configuration") { _ ->
                 ShowSettingsUtil.getInstance().showSettingsDialog(null, configurable)
             })
             .notify(null)

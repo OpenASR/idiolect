@@ -5,6 +5,7 @@ import com.intellij.notification.*
 import com.intellij.openapi.application.ApplicationManager
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
+import org.openasr.idiolect.asr.offline.OfflineAsr
 import org.openasr.idiolect.nlp.NlpRequest
 import org.vosk.*
 import java.io.*
@@ -49,7 +50,7 @@ class VoskAsr : OfflineAsr<VoskConfigurable>(VoskModelManager) {
         instance = this
     }
 
-    override fun setModel(model: String) = VoskAsr.setModel(model)
+    override suspend fun setModel(model: String) = VoskAsr.setModel(model)
 
     /**
      * @param grammar eg: ["hello", "world", "[unk]"]

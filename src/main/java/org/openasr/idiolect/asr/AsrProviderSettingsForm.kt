@@ -1,6 +1,5 @@
 package org.openasr.idiolect.asr
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.Configurable
@@ -8,6 +7,9 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextBrowseFolderListener
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.dsl.builder.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.openasr.idiolect.asr.models.ModelInfo
 import org.openasr.idiolect.asr.models.ModelManager
 import java.awt.event.ItemEvent
@@ -55,13 +57,14 @@ abstract class AsrProviderSettingsForm<C : Configurable>(private val modelManage
         installButton.isEnabled = false
         installButton.text = "Installing model..."
 
-        val url = (modelInfoCombo.selectedItem as ModelInfo).url
+        val model = (modelInfoCombo.selectedItem as ModelInfo)
+        val url = model.url
         modelPathChooser.text = modelManager.pathForModelUrl(url)
         rootPanel.repaint()
 
-        ApplicationManager.getApplication().invokeLater {
+        CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
             try {
-                modelManager.installModel(url)
+                modelManager.installModel(model)
                 installButton.text = "Install"
             } catch (e: Exception) {
                 log.error("Failed to install model", e)

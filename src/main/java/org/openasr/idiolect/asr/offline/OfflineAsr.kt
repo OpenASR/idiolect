@@ -1,7 +1,11 @@
-package org.openasr.idiolect.asr
+package org.openasr.idiolect.asr.offline
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.Configurable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.openasr.idiolect.asr.AsrProvider
 import org.openasr.idiolect.asr.models.ModelManager
 import org.openasr.idiolect.recognizer.CustomMicrophone
 
@@ -14,8 +18,12 @@ abstract class OfflineAsr<C : Configurable>(private val modelManager: ModelManag
             """
                 <p>Download and configure the path to your ${displayName()} speech model.<p>
                 <p><a href="${modelManager.modelsPageUrl}">${modelManager.modelsPageUrl}</a></p>
-            """.trimIndent(),
-            this::setModel)
+            """.trimIndent()
+        ) { model ->
+            CoroutineScope(Dispatchers.IO).launch {
+                setModel(model)
+            }
+        }
 
         microphone = service()
         microphone.open()

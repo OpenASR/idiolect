@@ -26,7 +26,7 @@ interface AsrProvider : SpeechRecognizer, ConfigurableExtension {
 
     fun setGrammar(grammar: Array<String>) {}
 
-    fun setModel(model: String) {}
+    suspend fun setModel(model: String) {}
 
     companion object {
         val defaultStopWords = listOf("yeah", "ah", "oh")
