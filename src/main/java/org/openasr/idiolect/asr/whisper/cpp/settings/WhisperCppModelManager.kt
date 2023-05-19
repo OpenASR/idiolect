@@ -24,7 +24,7 @@ object WhisperCppModelManager : ModelManager<WhisperCppConfigurable>(
             WhisperCppModelInfo("small", "en", 1000, "~1.0 GB"),
             WhisperCppModelInfo("small", null, 1000, "~1.0 GB"),
             WhisperCppModelInfo("medium", "en", 2600, "~2.6 GB"),
-            WhisperCppModelInfo("medium", "en", 2600, "~2.6 GB"),
+            WhisperCppModelInfo("medium", null, 2600, "~2.6 GB"),
             WhisperCppModelInfo("large-v1", null, 4700, "~4.7 GB"),
             WhisperCppModelInfo("large", null, 4700, "~4.7 GB"),
         )

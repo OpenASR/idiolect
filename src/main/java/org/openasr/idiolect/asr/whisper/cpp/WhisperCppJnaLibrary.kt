@@ -2,11 +2,9 @@ package org.openasr.idiolect.asr.whisper.cpp
 
 import com.sun.jna.Library
 import com.sun.jna.Native
-import com.sun.jna.Platform
 import com.sun.jna.Pointer
 import org.openasr.idiolect.asr.whisper.cpp.model.WhisperModelLoader
 import org.openasr.idiolect.asr.whisper.cpp.model.WhisperTokenData
-import org.openasr.idiolect.asr.whisper.cpp.params.WhisperFullParams
 
 
 /**
@@ -30,11 +28,12 @@ import org.openasr.idiolect.asr.whisper.cpp.params.WhisperFullParams
  *     whisper_free(ctx);
  */
 @Suppress("FunctionName")
-interface WhisperJnaLibrary : Library {
+interface WhisperCppJnaLibrary : Library {
     companion object {
         val instance = Native.load(
-            if (Platform.isWindows()) "whisper.dll" else "whisper",
-            WhisperJnaLibrary::class.java
+            "whisper",
+//            if (Platform.isWindows()) "whisper.dll" else "whisper",
+            WhisperCppJnaLibrary::class.java
         )
     }
 
@@ -87,24 +86,24 @@ interface WhisperJnaLibrary : Library {
      */
     fun whisper_bench_ggml_mul_mat_str(nThreads: Int): String?
 
-    fun whisper_full_default_params(strategy: Int): WhisperFullParams
-
-    /**
-     * Run the entire model: PCM -> log mel spectrogram -> encoder -> decoder -> text.
-     * Not thread safe for same context
-     * Uses the specified decoding strategy to obtain the text.
-     */
-    fun whisper_full(ctx: Pointer, params: WhisperFullParams, samples: FloatArray, nSamples: Int): Int
-    fun whisper_full_with_state(ctx: Pointer, state: Pointer, params: WhisperFullParams, samples: FloatArray, nSamples: Int): Int
-
-    /**
-     * Split the input audio in chunks and process each chunk separately using whisper_full_with_state()
-     * Result is stored in the default state of the context
-     * Not thread safe if executed in parallel on the same context.
-     * It seems this approach can offer some speedup in some cases.
-     * However, the transcription accuracy can be worse at the beginning and end of each chunk.
-     */
-    fun whisper_full_parallel(ctx: Pointer, params: WhisperFullParams, samples: FloatArray, nSamples: Int, nProcessors: Int): Int
+//    fun whisper_full_default_params(strategy: Int): WhisperFullParams
+//
+//    /**
+//     * Run the entire model: PCM -> log mel spectrogram -> encoder -> decoder -> text.
+//     * Not thread safe for same context
+//     * Uses the specified decoding strategy to obtain the text.
+//     */
+//    fun whisper_full(ctx: Pointer, params: WhisperFullParams, samples: FloatArray, nSamples: Int): Int
+//    fun whisper_full_with_state(ctx: Pointer, state: Pointer, params: WhisperFullParams, samples: FloatArray, nSamples: Int): Int
+//
+//    /**
+//     * Split the input audio in chunks and process each chunk separately using whisper_full_with_state()
+//     * Result is stored in the default state of the context
+//     * Not thread safe if executed in parallel on the same context.
+//     * It seems this approach can offer some speedup in some cases.
+//     * However, the transcription accuracy can be worse at the beginning and end of each chunk.
+//     */
+//    fun whisper_full_parallel(ctx: Pointer, params: WhisperFullParams, samples: FloatArray, nSamples: Int, nProcessors: Int): Int
 
     /**
      * Number of generated text segments

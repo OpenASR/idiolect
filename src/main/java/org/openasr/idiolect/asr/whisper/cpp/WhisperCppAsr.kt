@@ -2,10 +2,13 @@ package org.openasr.idiolect.asr.whisper.cpp
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.openasr.idiolect.asr.AsrProvider
 import org.openasr.idiolect.asr.AsrSystemStateListener
-import org.openasr.idiolect.asr.OfflineAsr
+import org.openasr.idiolect.asr.offline.OfflineAsr
 import org.openasr.idiolect.asr.vosk.VoskAsr
 import org.openasr.idiolect.asr.whisper.cpp.params.WhisperFullParams
 import org.openasr.idiolect.asr.whisper.cpp.params.WhisperSamplingStrategy
@@ -17,23 +20,29 @@ import org.openasr.idiolect.nlp.NlpRequest
 class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager) {
     private val log = logger<VoskAsr>()
 
-    private lateinit var whiperParams: WhisperFullParams
+    private lateinit var whiperParams: WhisperJavaParams
     private var grammar: Array<String>? = null
 
-    override fun displayName(): String = "Whisper.cpp"
+    override fun displayName(): String = "whisper.cpp"
 
 
     companion object {
         private lateinit var instance: WhisperCppAsr
         private val messageBus = ApplicationManager.getApplication()!!.messageBus
+        private val whisper = WhisperCpp()
 
         fun setModel(model: String) {
             if (model.isNotEmpty()) {
-                WhisperCppConfig.saveModelPath(model)
+                CoroutineScope(Dispatchers.IO).launch {
+                    WhisperCppConfig.saveModelPath(model)
 
-                Whisper.initContext(model)
+                    whisper.initContext(model)
 
-                messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC).onAsrReady("Speech model has been applied")
+                    activate()
+
+                    messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC)
+                        .onAsrReady("Speech model has been applied")
+                }
             }
         }
 
@@ -45,15 +54,16 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
     override fun activate() {
         super.activate()
 
-        whiperParams = Whisper.getDefaultParams(WhisperSamplingStrategy.WHISPER_SAMPLING_BEAM_SEARCH)
+        whiperParams = whisper.getDefaultJavaParams(WhisperSamplingStrategy.WHISPER_SAMPLING_BEAM_SEARCH)
+//        whiperParams = whisper.getDefaultParams(WhisperSamplingStrategy.WHISPER_SAMPLING_BEAM_SEARCH)
     }
 
     fun finalize() {
-        Whisper.close()
+        whisper.close()
     }
 
-    override fun setModel(model: String) {
-        Whisper.initContext(model)
+    override suspend fun setModel(model: String) {
+        whisper.initContext(model)
     }
 
     override fun setGrammar(grammar: Array<String>) {
@@ -71,15 +81,16 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
         val stopWords = AsrProvider.stopWords(grammar)
 
         while (microphone.stream.read(b).also { nbytes = it } > 0 && listening) {
-            var j = 0
-            for (i in 0 until nbytes step 2) {
+//            var j = 0
+//            for (i in 0 until nbytes step 2) {
+            for ((j, i) in (0 until nbytes step 2).withIndex()) {
                 val sample = (((b[i + 1].toInt() shl 8) + (b[i].toInt() and 0xff)) / MAX_SAMPLE_VALUE).coerceIn(-1f..1f)
 
-                floats[j++] = sample
+                floats[j] = sample
             }
 
             val nlpRequest = runBlocking {
-                val result = Whisper.fullTranscribe(whiperParams, floats)
+                val result = whisper.fullTranscribe(whiperParams, floats)
                 println("results: $result")
 
 //                AsrProvider.removeStopWords(it, stopWords)

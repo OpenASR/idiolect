@@ -37,6 +37,7 @@
         <applicationService serviceImplementation="org.openasr.idiolect.asr.AsrService"/>
         <applicationService serviceImplementation="org.openasr.idiolect.settings.IdiolectConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.asr.vosk.VoskConfig"/>
+        <applicationService serviceImplementation="org.openasr.idiolect.asr.whisper.server.settings.WhisperServerConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.settings.openai.OpenAiConfig"/>
         <applicationService serviceImplementation="org.openasr.idiolect.nlp.ai.AiService"/>
@@ -47,7 +48,11 @@
                                  id="preferences.VoskConfiguration"
                                  parentId="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.asr.vosk.VoskConfigurable" dynamic="true"/>
-        <applicationConfigurable groupId="tools" displayName="Whisper.cpp"
+        <applicationConfigurable groupId="tools" displayName="whisper_server"
+                                 id="preferences.WhisperServerConfiguration"
+                                 parentId="preferences.IdiolectConfiguration"
+                                 instance="org.openasr.idiolect.asr.whisper.server.settings.WhisperServerConfigurable" dynamic="true"/>
+        <applicationConfigurable groupId="tools" displayName="whisper.cpp"
                                  id="preferences.WhisperCppConfiguration"
                                  parentId="preferences.IdiolectConfiguration"
                                  instance="org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfigurable" dynamic="true"/>
@@ -94,7 +99,7 @@
 
         <asrSystem implementation="org.openasr.idiolect.asr.AsrControlLoop"/>
         <asrProvider implementation="org.openasr.idiolect.asr.vosk.VoskAsr" id="vosk" order="first"/>
-        <asrProvider implementation="org.openasr.idiolect.asr.whisper.WhisperAsr" id="whisper" order="after vosk"/>
+        <asrProvider implementation="org.openasr.idiolect.asr.whisper.server.WhisperServerAsr" id="whisper" order="after vosk"/>
         <asrProvider implementation="org.openasr.idiolect.asr.whisper.cpp.WhisperCppAsr" order="after whisper"/>
         <ttsProvider implementation="org.openasr.idiolect.tts.IdiolectTTS"/>
         <nlpProvider implementation="org.openasr.idiolect.nlp.PatternBasedNlpProvider"/>

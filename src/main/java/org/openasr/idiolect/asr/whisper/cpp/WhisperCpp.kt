@@ -6,14 +6,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.openasr.idiolect.asr.whisper.cpp.params.WhisperFullParams
+import org.openasr.idiolect.asr.whisper.cpp.params.WhisperJavaParams
 import org.openasr.idiolect.asr.whisper.cpp.params.WhisperSamplingStrategy
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.concurrent.Executors
 
 /** Adapted from the whisper.cpp Android example */
-object Whisper : AutoCloseable {
-    private val lib = WhisperJnaLibrary.instance
+class WhisperCpp : AutoCloseable {
+    private val lib = WhisperCppJnaLibrary.instance
+    private val javaLib = WhisperJavaJnaLibrary.instance
     private var ctx: Pointer? = null
 
     // Meet Whisper C++ constraint: Don't access from more than one thread at a time.
@@ -22,7 +24,7 @@ object Whisper : AutoCloseable {
     )
 
 //    companion object {
-    private val log = logger<Whisper>()
+    private val log = logger<WhisperCpp>()
 
 //        init {
 //            var loadVfpv4 = false
@@ -80,17 +82,24 @@ object Whisper : AutoCloseable {
      * @param modelPath
      * @return a Pointer to the WhisperContext
      */
-    fun initContext(modelPath: String) {
+    suspend fun initContext(modelPath: String) = withContext(scope.coroutineContext) {
         if (ctx != null) {
             lib.whisper_free(ctx)
         }
         log.info("Initialising WhisperContext from '$modelPath'...")
         ctx = lib.whisper_init_from_file(modelPath) ?: throw FileNotFoundException(modelPath)
+        log.info("whisper.cpp context initialised")
     }
 
-    fun getDefaultParams(strategy: WhisperSamplingStrategy): WhisperFullParams {
-        return lib.whisper_full_default_params(strategy.value)
+    fun getDefaultJavaParams(strategy: WhisperSamplingStrategy): WhisperJavaParams {
+        javaLib.whisper_java_default_params(strategy.value)
+//        return lib.whisper_full_default_params(strategy.value)
+        return WhisperJavaParams()
     }
+
+//    fun getDefaultParams(strategy: WhisperSamplingStrategy): WhisperFullParams {
+//        return lib.whisper_full_default_params(strategy.value)
+//    }
 
     override fun close() {
         freeContext()
@@ -108,12 +117,12 @@ object Whisper : AutoCloseable {
      * Not thread safe for same context
      * Uses the specified decoding strategy to obtain the text.
      */
-    suspend fun fullTranscribe(whisperParams: WhisperFullParams, audioData: FloatArray): String = withContext(scope.coroutineContext) {
+    suspend fun fullTranscribe(whisperParams: WhisperJavaParams, audioData: FloatArray): String = withContext(scope.coroutineContext) {
         if (ctx == null) {
             throw IllegalStateException("Model not initialised")
         }
 
-        if (lib.whisper_full(ctx!!, whisperParams, audioData, audioData.size) != 0) {
+        if (javaLib.whisper_java_full(ctx!!, whisperParams, audioData, audioData.size) != 0) {
             throw IOException("Failed to process audio")
         }
 

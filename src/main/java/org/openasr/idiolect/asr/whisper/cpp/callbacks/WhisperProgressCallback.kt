@@ -1,9 +1,9 @@
 package org.openasr.idiolect.asr.whisper.cpp.callbacks
 
+import com.sun.jna.Callback
 import com.sun.jna.Pointer
 import org.openasr.idiolect.asr.whisper.cpp.model.WhisperContext
 import org.openasr.idiolect.asr.whisper.cpp.model.WhisperState
-import javax.security.auth.callback.Callback;
 
 /**
  * Callback for progress updates.

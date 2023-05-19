@@ -32,8 +32,7 @@ class WhisperContext : Structure() {
 //    public static class ByValue extends WhisperContext implements Structure.ByValue {
 //    }
 //
-//    @Override
-//    protected List<String> getFieldOrder() {
-//        return List.of("t_load_us", "t_start_us", "wtype", "itype", "model", "vocab", "state", "path_model");
-//    }
+    override fun getFieldOrder(): List<String> {
+        return listOf("t_load_us", "t_start_us", "wtype", "itype", "model", "vocab", "state", "path_model");
+    }
 }

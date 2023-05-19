@@ -1,4 +1,4 @@
-package org.openasr.idiolect.asr.whisper.cpp.settings
+package org.openasr.idiolect.asr.whisper.server.settings
 
 import com.intellij.openapi.components.*
 import com.intellij.util.application
@@ -6,15 +6,15 @@ import com.intellij.util.application
 /**
  * Persists State across IDE restarts
  */
-@State(name = "whisper.cpp",
+@State(name = "whisper-server",
     storages = [Storage("\$APP_CONFIG\$/idiolect.xml")],
     category = SettingsCategory.PLUGINS
 )
-class WhisperCppConfig : PersistentStateComponent<WhisperCppConfig.Settings> {
+class WhisperServerConfig : PersistentStateComponent<WhisperServerConfig.Settings> {
     private var settings = Settings()
 
     companion object {
-        val settings get() = application.getService(WhisperCppConfig::class.java).settings
+        val settings get() = application.getService(WhisperServerConfig::class.java).settings
 
         fun saveModelPath(modelPath: String) {
             settings.modelPath = modelPath

@@ -14,124 +14,124 @@ import org.openasr.idiolect.asr.whisper.cpp.callbacks.WhisperProgressCallback
  * whisper_full_default_params()
  */
 class WhisperFullParams : Structure() {
-    /** Sampling strategy for whisper_full() function.  */
+    /** Sampling strategy for whisper_full() function. */
     var strategy = 0
 
-    /** Number of threads.  */
-    var n_threads = 0
+    /** Number of threads. */
+    var n_threads = 4
 
-    /** Maximum tokens to use from past text as a prompt for the decoder.  */
-    var n_max_text_ctx = 0
+    /** Maximum tokens to use from past text as a prompt for the decoder. */
+    var n_max_text_ctx = 16384
 
-    /** Start offset in milliseconds.  */
+    /** Start offset in milliseconds. */
     var offset_ms = 0
 
-    /** Audio duration to process in milliseconds.  */
+    /** Audio duration to process in milliseconds. */
     var duration_ms = 0
 
-    /** Translate flag.  */
+    /** Translate flag. */
     var translate = false
 
-    /** Flag to indicate whether to use past transcription (if any) as an initial prompt for the decoder.  */
-    var no_context = false
+    /** Flag to indicate whether to use past transcription (if any) as an initial prompt for the decoder. */
+    var no_context = true
 
-    /** Flag to force single segment output (useful for streaming).  */
+    /** Flag to force single segment output (useful for streaming). */
     var single_segment = false
 
     /** Flag to print special tokens (e.g., <SOT>, <EOT>, <BEG>, etc.). </BEG></EOT></SOT> */
     var print_special = false
 
-    /** Flag to print progress information.  */
-    var print_progress = false
+    /** Flag to print progress information. */
+    var print_progress = true
 
-    /** Flag to print results from within whisper.cpp (avoid it, use callback instead).  */
+    /** Flag to print results from within whisper.cpp (avoid it, use callback instead). */
     var print_realtime = false
 
-    /** Flag to print timestamps for each text segment when printing realtime.  */
-    var print_timestamps = false
+    /** Flag to print timestamps for each text segment when printing realtime. */
+    var print_timestamps = true
 
-    /** [EXPERIMENTAL] Flag to enable token-level timestamps.  */
+    /** [EXPERIMENTAL] Flag to enable token-level timestamps. */
     var token_timestamps = false
 
-    /** [EXPERIMENTAL] Timestamp token probability threshold (~0.01).  */
-    var thold_pt = 0f
+    /** [EXPERIMENTAL] Timestamp token probability threshold (~0.01). */
+    var thold_pt = 0.01f
 
-    /** [EXPERIMENTAL] Timestamp token sum probability threshold (~0.01).  */
-    var thold_ptsum = 0f
+    /** [EXPERIMENTAL] Timestamp token sum probability threshold (~0.01). */
+    var thold_ptsum = 0.01f
 
-    /** Maximum segment length in characters.  */
+    /** Maximum segment length in characters. */
     var max_len = 0
 
-    /** Flag to split on word rather than on token (when used with max_len).  */
+    /** Flag to split on word rather than on token (when used with max_len). */
     var split_on_word = false
 
-    /** Maximum tokens per segment (0 = no limit).  */
+    /** Maximum tokens per segment (0 = no limit). */
     var max_tokens = 0
 
-    /** Flag to speed up the audio by 2x using Phase Vocoder.  */
+    /** Flag to speed up the audio by 2x using Phase Vocoder. */
     var speed_up = false
 
-    /** Overwrite the audio context size (0 = use default).  */
+    /** Overwrite the audio context size (0 = use default). */
     var audio_ctx = 0
 
     /** Tokens to provide to the whisper decoder as an initial prompt.
-     * These are prepended to any existing text context from a previous call.  */
+     * These are prepended to any existing text context from a previous call. */
     var initial_prompt: String? = null
 
-    /** Prompt tokens.  */
+    /** Prompt tokens. */
     var prompt_tokens: Pointer? = null
 
-    /** Number of prompt tokens.  */
+    /** Number of prompt tokens. */
     var prompt_n_tokens = 0
 
     /** Language for auto-detection.
-     * For auto-detection, set to `null`, `""`, or "auto".  */
-    var language: String? = null
+     * For auto-detection, set to `null`, `""`, or "auto". */
+    var language: String? = "en"
 
-    /** Flag to indicate whether to detect language automatically.  */
+    /** Flag to indicate whether to detect language automatically. */
     var detect_language = false
-    /** Common decoding parameters.  */
-    /** Flag to suppress blank tokens.  */
-    var suppress_blank = false
+    /** Common decoding parameters. */
+    /** Flag to suppress blank tokens. */
+    var suppress_blank = true
 
-    /** Flag to suppress non-speech tokens.  */
+    /** Flag to suppress non-speech tokens. */
     var suppress_non_speech_tokens = false
 
-    /** Initial decoding temperature.  */
+    /** Initial decoding temperature. */
     var temperature = 0f
 
-    /** Maximum initial timestamp.  */
-    var max_initial_ts = 0f
+    /** Maximum initial timestamp. */
+    var max_initial_ts = 1.0f
 
-    /** Length penalty.  */
-    var length_penalty = 0f
-    /** Fallback parameters.  */
-    /** Temperature increment.  */
-    var temperature_inc = 0f
+    /** Length penalty. */
+    var length_penalty = -1.0f
+    /** Fallback parameters. */
+    /** Temperature increment. */
+    var temperature_inc = 0.4f
 
-    /** Entropy threshold (similar to OpenAI's "compression_ratio_threshold").  */
-    var entropy_thold = 0f
+    /** Entropy threshold (similar to OpenAI's "compression_ratio_threshold"). */
+    var entropy_thold = 2.4f
 
-    /** Log probability threshold.  */
-    var logprob_thold = 0f
+    /** Log probability threshold. */
+    var logprob_thold = -1.0f
 
-    /** No speech threshold.  */
-    var no_speech_thold = 0f
+    /** No speech threshold. */
+    var no_speech_thold = 0.6f
 
     inner class GreedyParams : Structure() {
         /** https://github.com/openai/whisper/blob/f82bc59f5ea234d4b97fb2860842ed38519f7e65/whisper/transcribe.py#L264  */
-        var best_of = 0
+        var best_of = -1
     }
 
-    /** Greedy decoding parameters.  */
+    /** Greedy decoding parameters. */
     var greedy: GreedyParams? = null
 
     inner class BeamSearchParams : Structure() {
         /** ref: https://github.com/openai/whisper/blob/f82bc59f5ea234d4b97fb2860842ed38519f7e65/whisper/transcribe.py#L265  */
-        var beam_size = 0
+        var beam_size = -1
 
         /** ref: https://arxiv.org/pdf/2204.05424.pdf  */
-        var patience = 0f
+        var patience = -1.0f
     }
 
     /** Beam search decoding parameters. */
