@@ -81,7 +81,7 @@ object ActionRoutines {
         TtsService.say("My name is " + ai.versionName +
                 ", I was built on " + df.format(cal.time) +
                 ", I am running version " + ai.apiVersion +
-                " of the IntelliJ Platform, and I am registered to " + ai.companyName)
+                " of the IntelliJ Platform")
     }
 
 //    fun routineCheck(c: String) =

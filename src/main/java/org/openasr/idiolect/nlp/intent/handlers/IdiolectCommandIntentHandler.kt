@@ -41,7 +41,7 @@ class IdiolectCommandIntentHandler : IntentHandler {
         }
 
         when (intentName) {
-            IdiolectCommandRecognizer.INTENT_HI -> TtsService.say("Hello!")
+            IdiolectCommandRecognizer.INTENT_HI -> TtsService.say("Hello there!")
             IdiolectCommandRecognizer.INTENT_ABOUT -> ActionRoutines.routineAbout()
             IdiolectCommandRecognizer.INTENT_PAUSE -> ActionRoutines.pauseSpeech()
             IdiolectCommandRecognizer.INTENT_COMMANDS -> showCommands(nlpContext, nlpResponse.slots?.get(SLOT_COMMAND_TERM))
