@@ -1,7 +1,7 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
 
 plugins {
-  kotlin("jvm") version "1.8.21"
+  kotlin("jvm") version "1.9.0-Beta"
   id("org.jetbrains.intellij") version "1.13.3"
   id("com.github.ben-manes.versions") version "0.46.0"
   id("org.jetbrains.changelog") version "2.0.0"
