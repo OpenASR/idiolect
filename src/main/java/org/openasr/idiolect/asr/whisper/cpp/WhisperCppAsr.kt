@@ -2,6 +2,9 @@ package org.openasr.idiolect.asr.whisper.cpp
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
+import io.github.ggerganov.whispercpp.WhisperCpp
+import io.github.ggerganov.whispercpp.params.WhisperFullParams
+import io.github.ggerganov.whispercpp.params.WhisperSamplingStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -9,22 +12,17 @@ import kotlinx.coroutines.runBlocking
 import org.openasr.idiolect.asr.AsrProvider
 import org.openasr.idiolect.asr.AsrSystemStateListener
 import org.openasr.idiolect.asr.offline.OfflineAsr
-import org.openasr.idiolect.asr.vosk.VoskAsr
-import org.openasr.idiolect.asr.whisper.cpp.params.WhisperFullParams
-import org.openasr.idiolect.asr.whisper.cpp.params.WhisperSamplingStrategy
 import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfig
 import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfigurable
 import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppModelManager
 import org.openasr.idiolect.nlp.NlpRequest
 
 class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager) {
-    private val log = logger<VoskAsr>()
-
-    private lateinit var whiperParams: WhisperJavaParams
+    private val log = logger<WhisperCppAsr>()
     private var grammar: Array<String>? = null
+    private var whisperParams: WhisperFullParams? = null
 
     override fun displayName(): String = "whisper.cpp"
-
 
     companion object {
         private lateinit var instance: WhisperCppAsr
@@ -54,8 +52,15 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
     override fun activate() {
         super.activate()
 
-        whiperParams = whisper.getDefaultJavaParams(WhisperSamplingStrategy.WHISPER_SAMPLING_BEAM_SEARCH)
-//        whiperParams = whisper.getDefaultParams(WhisperSamplingStrategy.WHISPER_SAMPLING_BEAM_SEARCH)
+//        val whisperParams = whisper.getFullDefaultParams(WhisperSamplingStrategy.WHISPER_SAMPLING_BEAM_SEARCH)
+        val whisperParams = whisper.getFullDefaultParams(WhisperSamplingStrategy.WHISPER_SAMPLING_GREEDY)
+        whisperParams.printProgress(false)
+        whisperParams.suppressNonSpeechTokens(true)
+//        whisperParams.no_speech_thold = 0.75f   // default 0.6
+        whisperParams.setBestOf(4)
+//        whisperParams.setBeamSizeAndPatience(4, -1.0f)
+
+        this.whisperParams = whisperParams
     }
 
     fun finalize() {
@@ -70,7 +75,7 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
 //        Whisper.
     }
 
-    val SAMPLES_TO_PROCESS = 2048
+    val SAMPLES_TO_PROCESS = 2048 * 8
     val MAX_SAMPLE_VALUE = 32767.0f
 
     override fun waitForSpeech(): NlpRequest? {
@@ -90,14 +95,20 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
             }
 
             val nlpRequest = runBlocking {
-                val result = whisper.fullTranscribe(whiperParams, floats)
-                println("results: $result")
+                var result = whisper.fullTranscribe(whisperParams, floats)
+//                println("results: '$result'")
+                result = result.replace(",", "")
+                    .replace(Regex("[.?!]$"), "")
+                    .lowercase()
 
-//                AsrProvider.removeStopWords(it, stopWords)
-                return@runBlocking NlpRequest(listOf("TODO"))
+                result = AsrProvider.removeStopWords(result, stopWords)
+
+                return@runBlocking if (result.isEmpty()) null else NlpRequest(listOf(result))
             }
 
-            return nlpRequest
+            if (nlpRequest != null) {
+                return nlpRequest
+            }
         }
 
         return null
