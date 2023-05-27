@@ -37,8 +37,8 @@ class IdiolectConfigurable : Configurable {
     override fun apply() {
         if (isModified) {
             if (settings.asrService != gui.asrService) {
-                asrService.setAsrSystem(initialiseAsrSystem())
                 settings.asrService = gui.asrService
+                asrService.setAsrSystem(initialiseAsrSystem(gui.asrService))
             }
             settings.nlpService = gui.nlpService
             settings.ttsService = gui.ttsService

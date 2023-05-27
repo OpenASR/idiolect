@@ -31,8 +31,8 @@ class IdiolectConfig : PersistentStateComponent<IdiolectConfig.Settings>  {
         }
 
         /** Called by AsrService */
-        fun initialiseAsrSystem(): AsrSystem {
-            val asrProvider = getAsrProvider()
+        fun initialiseAsrSystem(asrService: String? = null): AsrSystem {
+            val asrProvider = getAsrProvider(asrService)
             val nlpProvider = getNlpProvider()
 
             return ExtensionManager.asrSystemEp.extensionList.first { e -> e.supportsAsrAndNlp(asrProvider, nlpProvider) }
@@ -45,12 +45,10 @@ class IdiolectConfig : PersistentStateComponent<IdiolectConfig.Settings>  {
             microphone.setNoiseLevel(settings.audioNoise)
         }
 
-        // TODO: list voices by locale
-        // TODO: allow user to select voice
         fun getTtsProvider() = activateExtension(ExtensionManager.ttsSelector, settings.ttsService, ttsProvider)
 
-        private fun getAsrProvider() =
-            activateExtension(ExtensionManager.asrSelector, settings.asrService, asrProvider)
+        private fun getAsrProvider(asrService: String?) =
+            activateExtension(ExtensionManager.asrSelector, asrService ?: settings.asrService, asrProvider)
 
         private fun getNlpProvider() = activateExtension(ExtensionManager.nlpSelector, settings.nlpService, nlpProvider)
 
