@@ -1,14 +1,11 @@
 package org.openasr.idiolect.recognizer.filter
 
 import io.mockk.*
-import org.assertj.core.api.Assertions.*
 import org.junit.Assert
 import org.junit.Test
 import org.openasr.idiolect.recognizer.AudioInputStreamWithNoiseSuppression
 import org.openasr.idiolect.recognizer.CustomMicrophone
-import org.openasr.idiolect.utils.AudioUtils
 import org.openasr.idiolect.utils.TestAudioUtils
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import javax.sound.sampled.AudioFormat
 import javax.sound.sampled.TargetDataLine
@@ -44,7 +41,7 @@ class FilterTest {
         val allBytes = audioInputStream.readAllBytes()
 
         // When
-        noiseSuppression.applySuppression(allBytes, 0, allBytes.size)
+        noiseSuppression.read(allBytes, 0, allBytes.size)
         val filteredStream = ByteArrayOutputStream(allBytes.size)
         filteredStream.writeBytes(allBytes)
 
@@ -99,7 +96,7 @@ class FilterTest {
                 break
             }
         }
-        assertThat(foundNonZeroCoefficient).isTrue()
+        Assert.assertTrue(foundNonZeroCoefficient)
     }
 
     @Test

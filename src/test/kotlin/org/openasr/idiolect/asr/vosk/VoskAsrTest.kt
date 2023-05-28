@@ -47,7 +47,7 @@ class VoskAsrTest {
 
     @Test
     fun `test recognition of laptop-noisy-fan`() {
-        val inputStream = TestAudioUtils.getInputStream("laptop-noisy-fan")
+        val inputStream = TestAudioUtils.getInputStream("talking-to-noisy-laptop")
         // When
         val recognition = vosk.processAudioInputStream(inputStream)
         // Then

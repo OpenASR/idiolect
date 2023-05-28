@@ -3,7 +3,6 @@ package org.openasr.idiolect.utils
 import org.assertj.core.internal.InputStreamsException
 import org.openasr.idiolect.recognizer.CustomMicrophone
 import java.io.*
-import javax.sound.sampled.AudioFileFormat
 import javax.sound.sampled.AudioInputStream
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.AudioFileFormat.Type.WAVE

@@ -2,6 +2,7 @@ package org.openasr.idiolect.recognizer.filter
 
 import java.util.concurrent.RecursiveAction
 import kotlin.math.*
+//import org.apache.commons.math3.transform.FastFourierTransformer
 
 
 /**
@@ -22,97 +23,51 @@ import kotlin.math.*
  * @param fftSize defaults to 4096
  */
 class FFT(private val fftSize: Int = 4096) {
-    private val expTable = DoubleArray(fftSize / 2)
-    private val cosTable = DoubleArray(fftSize / 2)
-    private val sinTable = DoubleArray(fftSize / 2)
-    private val reverseBits = IntArray(fftSize)
+    internal val twiddleFactors: Array<ComplexDouble>
+    internal val twiddle: Array<Double>
 
     init {
-        // Precompute twiddle factors
-        for (i in 0 until fftSize / 2) {
-            val angle = -2.0 * PI * i / fftSize
-            expTable[i] = exp(angle)
-            cosTable[i] = cos(angle)
-            sinTable[i] = sin(angle)
+        require(fftSize > 0 && (fftSize and (fftSize - 1)) == 0) {
+            "FFT size must be a power of 2"
         }
 
-        // Precompute bit reversal table
-        for (i in 0 until fftSize) {
-            var j = 0
-            var bit = 1
-            while (bit < fftSize) {
-                if (i and bit != 0) {
-                    j += fftSize / bit / 2
-                }
-                bit = bit shl 1
-            }
-            reverseBits[i] = j
+        // Precompute twiddle factors
+        twiddleFactors = Array(fftSize / 2) { i ->
+            val angle = -2 * PI * i / fftSize
+            ComplexDouble(cos(angle), sin(angle))
+        }
+
+        twiddle = Array(fftSize / 2) { i ->
+//            val angle = -2 * PI * i / fftSize
+//            cos(angle) + sin(angle) * i
+            exp(-2 * PI * i)
         }
     }
 
     /**
      * Computes the forward Fourier transform of the given input using the Cooley-Tukey algorithm.
+     * This implementation assumes that the input size is a power of 2. If the input size is not a power of 2,
+     * need to pad the input with zeros.
      *
      * @param input the input samples in time domain
      * @param output a buffer to which the frequency domain complex numbers will be written
      * @param magnitudes a buffer to which the magnitudes will be written
      * @param len the number of samples to process
      */
-    fun forwardTransform(input: DoubleArray, output: Array<ComplexDouble>, magnitudes: DoubleArray, len: Int) {
-       val fftSize = this.fftSize
+    fun forwardTransform(input: DoubleArray, output: Array<ComplexDouble>) {
+        require(input.size == fftSize) { "Input size must be equal to FFT size" }
+        require(output.size == fftSize) { "Output size must be equal to FFT size" }
 
-        // Bit-reverse input samples
-        for (i in 0 until fftSize) {
-            val j = reverseBits[i]
-            if (j > i) {
-                val tmpReal = input[i]
-                input[i] = input[j]
-                input[j] = tmpReal
-            }
-        }
+//        transform(input.copyOf(), output, 0, fftSize, 1)
+        transform(input, output, 0, fftSize, 1)
+    }
 
+    fun forwardTransform(input: DoubleArray, output: DoubleArray) {
+        require(input.size == fftSize) { "Input size must be equal to FFT size" }
+        require(output.size == fftSize) { "Output size must be equal to FFT size" }
 
-//        val x = DoubleArray(len)
-//        val log2n = log2(len.toDouble()).toInt()
-//        val expTable = this.expTable
-//        // Radix-2 algorithm
-//        for (s in 1 until log2n + 1) {
-//            val m = 1 shl s
-//            val wM = exp(-2 * PI / m)
-//
-//            for (k in 0 until len step m) {
-//                var w = ComplexDouble(1.0, 0.0)
-//                for (j in k until k + m / 2) {
-//                    val t = w * x[j + m / 2]
-//                    val u = x[j]
-//                    x[j] = u + t.real
-//                    x[j + m / 2] = u - t.real
-//                    w *= wM
-//                }
-//            }
-//        }
-
-        // Perform Cooley-Tukey FFT algorithm
-        val halfLen = len / 2
-        var j = halfLen
-        for (i in 0 until halfLen) {
-            val k = i * 2
-            val arg = -2.0 * PI * i / len
-            val wReal = cos(arg)
-            val wImag = sin(arg)
-            val a = ComplexDouble(input[k], 0.0)
-            val b = ComplexDouble(input[k + 1], 0.0)
-            val c = ComplexDouble(wReal, wImag)
-            val d = c * b
-            val e = a + d
-            val f = a - d
-            output[i] = e
-            output[j] = f
-
-            // Compute magnitude of each output sample
-            magnitudes[i] = sqrt(e.real * e.real + e.imag * e.imag)
-            magnitudes[j++] = sqrt(f.real * f.real + f.imag * f.imag)
-        }
+//        transform(input.copyOf(), output, 0, fftSize, 1)
+        transform(input, output, 0, fftSize, 1)
     }
 
     /**
@@ -123,21 +78,114 @@ class FFT(private val fftSize: Int = 4096) {
      * @param magnitudes a buffer to which the magnitudes will be written
      * @param len the number of samples to process
      */
-    fun inverseTransform(input: Array<ComplexDouble>, output: DoubleArray, magnitudes: DoubleArray, len: Int) {
-        // Compute complex conjugate of input samples
-        for (i in 0 until len) {
-            input[i] = input[i].conjugate()
+    fun inverseTransform(input: Array<ComplexDouble>, output: DoubleArray) {
+        val data = input.copyOf()
+        inverseTransformInternal(data, 0, fftSize, 1)
+
+        for (i in data.indices) {
+            output[i] = data[i].real / (fftSize / 2)
+            data[i].real = output[i]
+            data[i].imag = 0.0
         }
 
-        // Apply forward FFT
-        forwardTransform(output, input, magnitudes, len)
-
-        // Compute complex conjugate of output samples and scale
-        val scale = 1.0 / len
-        for (i in 0 until len) {
-            input[i] = input[i].conjugate() * scale
-            output[i] = input[i].real
+        transform(output, data, 0, fftSize, 1)
+        for (i in data.indices) {
+            output[i] = data[i].real
         }
+    }
+
+    private fun transform(data: DoubleArray, output: Array<ComplexDouble>, start: Int, end: Int, step: Int) {
+        val n = end - start
+
+        if (n == 1) {
+            output[start] = ComplexDouble(data[start], 0.0)
+            return
+        }
+
+        val evenStart = start
+        val evenEnd = start + n / 2
+        val oddStart = start + n / 2
+        val oddEnd = end
+
+        transform(data, output, evenStart, evenEnd, 2 * step)
+        transform(data, output, oddStart, oddEnd, 2 * step)
+
+        for (k in 0 until n / 2) {
+            val t = output[oddStart + k] * twiddleFactors[k * step]
+            output[start + k] = output[evenStart + k] + t
+            output[oddStart + k] = output[evenStart + k] - t
+        }
+    }
+
+    private fun transform(data: DoubleArray, output: DoubleArray, start: Int, end: Int, step: Int) {
+        val n = end - start
+
+        if (n <= 1) {
+            output[start] = data[start]
+            return
+        }
+
+        val evenStart = start
+        val evenEnd = start + n / 2
+        val oddStart = start + n / 2
+        val oddEnd = end
+
+        transform(data, output, start, evenEnd, 2 * step)
+        transform(data, output, oddStart, end, 2 * step)
+
+        for (k in 0 until n / 2) {
+            val even = output[start + k]
+            val odd = output[oddStart + k] * exp(k * -2 * PI / n)
+         // val odd = output[oddStart + k] * twiddle[k * step]
+            output[start + k] = even + odd
+            output[oddStart + k] = even - odd
+        }
+    }
+
+    private fun inverseTransformInternal(data: Array<ComplexDouble>, start: Int, end: Int, step: Int) {
+        val n = end - start
+
+        if (n == 1) {
+            return
+        }
+
+        val evenStart = start
+        val evenEnd = start + n / 2
+        val oddStart = start + n / 2
+        val oddEnd = end
+
+        inverseTransformInternal(data, evenStart, evenEnd, 2 * step)
+        inverseTransformInternal(data, oddStart, oddEnd, 2 * step)
+
+        for (k in 0 until n) {
+            val t = data[oddStart + k] * twiddleFactors[k * step].conjugate()
+            data[start + k] = data[evenStart + k] + t
+            data[start + k + n / 2] = data[evenStart + k] - t
+        }
+    }
+}
+
+
+data class ComplexDouble(var real: Double, var imag: Double) {
+    operator fun plus(other: ComplexDouble) = ComplexDouble(real + other.real, imag + other.imag)
+    operator fun minus(other: ComplexDouble) = ComplexDouble(real - other.real, imag - other.imag)
+    operator fun times(other: ComplexDouble) = ComplexDouble(real * other.real - imag * other.imag, real * other.imag + imag * other.real)
+    operator fun times(scale: Double) = ComplexDouble(real * scale, imag * scale)
+
+    fun magnitude() = sqrt(real * real + imag * imag)
+    fun conjugate() = ComplexDouble(real, -imag)
+
+    operator fun div(other: ComplexDouble): ComplexDouble {
+        val denominator = other.real * other.real + other.imag * other.imag
+        val realPart = (real * other.real + imag * other.imag) / denominator
+        val imagPart = (imag * other.real - real * other.imag) / denominator
+        return ComplexDouble(realPart, imagPart)
+    }
+
+    operator fun unaryMinus() = ComplexDouble(-real, -imag)
+
+    override fun toString(): String {
+        return "$real + $imag i"
     }
 }
 
@@ -184,32 +232,3 @@ class FFT(private val fftSize: Int = 4096) {
 //        }
 //    }
 //}
-
-
-data class ComplexDouble(var real: Double, val imag: Double) {
-    operator fun plus(other: ComplexDouble) = ComplexDouble(real + other.real, imag + other.imag)
-    operator fun minus(other: ComplexDouble) = ComplexDouble(real - other.real, imag - other.imag)
-    operator fun times(other: ComplexDouble) = ComplexDouble(real * other.real - imag * other.imag, real * other.imag + imag * other.real)
-    operator fun times(scale: Double) = ComplexDouble(real * scale, imag * scale)
-
-
-    fun magnitude() = sqrt(real * real + imag * imag)
-    fun conjugate(): ComplexDouble {
-        return ComplexDouble(real, -imag)
-    }
-
-    operator fun div(other: ComplexDouble): ComplexDouble {
-        val denominator = other.real * other.real + other.imag * other.imag
-        val realPart = (real * other.real + imag * other.imag) / denominator
-        val imagPart = (imag * other.real - real * other.imag) / denominator
-        return ComplexDouble(realPart, imagPart)
-    }
-
-    operator fun unaryMinus(): ComplexDouble {
-        return ComplexDouble(-real, -imag)
-    }
-
-    override fun toString(): String {
-        return "$real + ${imag}i"
-    }
-}
