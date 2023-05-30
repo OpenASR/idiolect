@@ -2,119 +2,32 @@ package org.openasr.idiolect.asr.vosk
 
 import com.google.gson.JsonParser.*
 import com.intellij.notification.*
-import com.intellij.notification.NotificationType.INFORMATION
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.service
-import com.intellij.openapi.diagnostic.logger
-import com.intellij.openapi.options.ShowSettingsUtil
 import org.openasr.idiolect.asr.*
 import org.openasr.idiolect.asr.AsrSystemStateListener.Companion.ASR_STATE_TOPIC
+import org.openasr.idiolect.asr.offline.OfflineAsr
 import org.openasr.idiolect.nlp.NlpRequest
-import org.openasr.idiolect.recognizer.CustomMicrophone
-import org.openasr.idiolect.settings.IdiolectConfig
 import org.vosk.*
 import java.io.*
-import java.net.URI
 import java.net.http.*
 import java.util.zip.*
 
 
-class VoskAsr : AsrProvider {
-    private val log = logger<VoskAsr>()
-    private lateinit var microphone: CustomMicrophone
-    private var grammar: Array<String>? = null
-    private var listening = false
-
+class VoskAsr : OfflineAsr<VoskConfigurable>(VoskModelManager) {
     override fun displayName() = "Vosk"
+    private var grammar: Array<String>? = null
 
     companion object {
         private lateinit var instance: VoskAsr
         private val messageBus = ApplicationManager.getApplication()!!.messageBus
-        private val httpClient = HttpClient.newBuilder().build()
+
         lateinit var recognizer: Recognizer
 
         private val alternatives = 4
-        private const val defaultModelURL = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
 
         init {
             System.setProperty("jna.nounpack", "false")
             System.setProperty("jna.noclasspath", "false")
-        }
-
-        fun listModels(): List<ModelInfo> {
-            val request = HttpRequest.newBuilder()
-                .uri(URI.create("https://alphacephei.com/vosk/models/model-list.json"))
-                .build()
-            val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
-
-            return parseModels(response.body())
-        }
-
-        private fun parseModels(json: String): List<ModelInfo> =
-            parseString(json).asJsonArray
-            .map { it.asJsonObject }
-            .filter {
-                // "small" and "big-lgraph" support grammar, "big" doesn't
-//                    it.get("type").asString != "big"
-                    it.get("obsolete").asString != "true"
-                        || it.get("version").asString.startsWith("daanzu-20200905")
-            }
-            .map {
-                ModelInfo(
-                    it.get("lang").asString,
-                    it.get("lang_text").asString,
-                    it.get("name").asString,
-                    it.get("url").asString,
-                    it.get("size").asInt,
-                    it.get("size_text").asString,
-                    it.get("type").asString
-                )
-            }
-            .sortedWith(ModelComparator())
-
-        internal fun installModel(url: String): String {
-            messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Installing model...")
-
-            val modelPath = pathForModelUrl(url)
-            if (!File(modelPath).exists()) {
-                val modelZip = downloadModel(url)
-                unpackModel(modelPath, modelZip)
-            }
-
-            messageBus.syncPublisher(ASR_STATE_TOPIC).onAsrStatus("Model installed")
-            return modelPath
-        }
-
-        private fun downloadModel(url: String): InputStream {
-            val request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .build()
-            val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream())
-            return response.body()
-        }
-
-        private fun unpackModel(modelPath: String, modelZip: InputStream) {
-            val modelDir = File(modelPath).parentFile
-            modelDir.mkdirs()
-
-            modelZip.use { zip ->
-                ZipInputStream(zip).use { zis ->
-                    var entry: ZipEntry? = zis.nextEntry
-
-                    while (entry != null) {
-                        val file = File(modelDir, entry.name)
-                        if (entry.isDirectory) file.mkdirs()
-                        else file.outputStream().use { fos -> zis.copyTo(fos) }
-                        entry = zis.nextEntry
-                    }
-                }
-            }
-        }
-
-        internal fun pathForModelUrl(url: String): String {
-            val modelName = url.substringAfterLast('/')
-            val modelDir = IdiolectConfig.idiolectHomePath
-            return "$modelDir/${modelName.substringBefore(".zip")}"
         }
 
         fun setModel(model: String) {
@@ -137,39 +50,7 @@ class VoskAsr : AsrProvider {
         instance = this
     }
 
-    override fun setModel(model: String) = VoskAsr.setModel(model)
-
-    override fun activate() {
-        if (VoskConfig.settings.modelPath.isEmpty()) {
-            showNotificationForModel()
-
-            throw ModelNotAvailableException()
-        } else {
-            setModel(VoskConfig.settings.modelPath)
-        }
-
-        microphone = service()
-        microphone.open()
-    }
-
-    override fun deactivate() = microphone.close()
-
-    /**
-     * Starts recognition process.
-     */
-    override fun startRecognition(): Boolean {
-        listening = true
-        return microphone.startRecording()
-    }
-
-    /**
-     * Stops recognition process.
-     * Recognition process is paused until the next call to startRecognition.
-     */
-    override fun stopRecognition(): Boolean {
-        listening = false
-        return microphone.stopRecording()
-    }
+    override suspend fun setModel(model: String) = VoskAsr.setModel(model)
 
     /**
      * @param grammar eg: ["hello", "world", "[unk]"]
@@ -217,22 +98,4 @@ class VoskAsr : AsrProvider {
         }.map {
             AsrProvider.removeStopWords(it, stopWords)
         }
-
-    private fun showNotificationForModel() {
-        NotificationGroupManager.getInstance()
-            .getNotificationGroup("Idiolect")
-            .createNotification("Speech model not configured",
-                """
-                    <p>Download and configure the path to your Vosk speech model.<p>
-                    <p><a href="https://alphacephei.com/vosk/models">https://alphacephei.com/vosk/models</a></p>
-                """.trimIndent(), INFORMATION)
-            .addAction(NotificationAction.create("Download Default Model") { _ ->
-                val modelPath = installModel(defaultModelURL)
-                setModel(modelPath)
-            })
-            .addAction(NotificationAction.create("Edit Configuration") { _ ->
-                ShowSettingsUtil.getInstance().showSettingsDialog(null, VoskConfigurable::class.java)
-            })
-            .notify(null)
-    }
 }

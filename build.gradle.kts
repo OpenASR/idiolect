@@ -156,6 +156,7 @@ dependencies {
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jAdapterForNativeTTS:0.9.9")
 
+  implementation("io.github.ggerganov:whispercpp:1.4.0")
   // gRPC for Whisper ASR
   compileOnly("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
   compileOnly("io.grpc:grpc-protobuf:$grpcVersion")
