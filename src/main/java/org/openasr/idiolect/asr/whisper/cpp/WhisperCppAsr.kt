@@ -17,7 +17,7 @@ import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfig
 import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfigurable
 import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppModelManager
 import org.openasr.idiolect.nlp.NlpRequest
-import org.openasr.idiolect.recognizer.CustomMicrophone
+
 
 class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager) {
     private val log = logger<WhisperCppAsr>()
@@ -33,9 +33,11 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
 
     companion object {
         private lateinit var instance: WhisperCppAsr
-        private val messageBus = ApplicationManager.getApplication()!!.messageBus
         private val whisper = WhisperCpp()
 
+        /**
+         * @param model - absolute path, or just the name (eg: "base", "base-en" or "base.en")
+         */
         fun setModel(model: String) {
             if (model.isNotEmpty()) {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -45,6 +47,7 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
 
                     activate()
 
+                    val messageBus = ApplicationManager.getApplication()!!.messageBus
                     messageBus.syncPublisher(AsrSystemStateListener.ASR_STATE_TOPIC)
                         .onAsrReady("Speech model has been applied")
                 }
@@ -74,6 +77,9 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
         whisper.close()
     }
 
+    /**
+     * @param model - absolute path, or just the name (eg: "base", "base-en" or "base.en")
+     */
     override suspend fun setModel(model: String) {
         whisper.initContext(model)
     }
@@ -111,8 +117,8 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
 //        return stopped
 //    }
 
-    private fun processSpeech(audioData: ByteArray, nbytes: Int): NlpRequest? {
-        val floats = FloatArray(SAMPLES_TO_PROCESS)
+    internal fun processSpeech(audioData: ByteArray, nbytes: Int): NlpRequest? {
+        val floats = FloatArray(nbytes / 2)
         val stopWords = AsrProvider.stopWords(grammar)
         var start = Time.epochMillis()
 
