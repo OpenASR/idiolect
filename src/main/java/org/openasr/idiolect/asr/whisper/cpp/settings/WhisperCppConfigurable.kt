@@ -1,7 +1,7 @@
 package org.openasr.idiolect.asr.whisper.cpp.settings
 
 import com.intellij.openapi.options.Configurable
-import org.openasr.idiolect.asr.vosk.VoskConfig.Companion.settings
+import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfig.Companion.settings
 import org.openasr.idiolect.asr.whisper.cpp.WhisperCppAsr
 
 /**

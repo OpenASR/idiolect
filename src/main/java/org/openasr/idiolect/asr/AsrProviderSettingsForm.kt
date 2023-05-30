@@ -106,6 +106,22 @@ abstract class AsrProviderSettingsForm<C : Configurable>(private val modelManage
         }
     }
 
+    protected fun selectModel(modelPath: String) {
+        if (!modelPath.isNullOrEmpty()) {
+            var slash = modelPath.lastIndexOf('/')
+            val modelFile = modelPath.substring(slash + 1)
+
+            for (i in 0 until modelInfoCombo.model.size) {
+                val model = modelInfoCombo.model.getElementAt(i)
+                slash = model.url.lastIndexOf('/')
+                if (model.url.substring(slash + 1) == modelFile) {
+                    modelInfoCombo.selectedItem = model
+                    break
+                }
+            }
+        }
+    }
+
     private fun filterModelInfoOptionsByLang(lang: String? = "US English") {
         modelInfoCombo.removeAllItems()
 

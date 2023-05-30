@@ -7,5 +7,6 @@ class WhisperCppSettingsForm : AsrProviderSettingsForm<WhisperCppConfigurable>(W
     override fun reset() {
         modelPathChooser.text = WhisperCppConfig.settings.modelPath
         languageCombo.selectedItem = WhisperCppConfig.settings.language
+        selectModel(WhisperCppConfig.settings.modelPath)
     }
 }

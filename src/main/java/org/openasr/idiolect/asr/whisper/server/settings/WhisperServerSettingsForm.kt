@@ -7,5 +7,6 @@ class WhisperServerSettingsForm : AsrProviderSettingsForm<WhisperServerConfigura
     override fun reset() {
         modelPathChooser.text = WhisperServerConfig.settings.modelPath
         languageCombo.selectedItem = WhisperServerConfig.settings.language
+        selectModel(WhisperServerConfig.settings.modelPath)
     }
 }
