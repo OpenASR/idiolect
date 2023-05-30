@@ -128,13 +128,11 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
             floats[j] = sample
         }
 
-//        val nlpRequest = runBlocking {
             println("audio ${Time.epochMillis() - start}ms")
             start = Time.epochMillis()
 
             var result = whisper.fullTranscribe(whisperParams, floats)
             println("results: '$result', ${Time.epochMillis() - start}ms")
-            start = Time.epochMillis()
 
             result = result.replace(",", "")
                 .replace(Regex("[.?!]$"), "")
@@ -143,12 +141,6 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
             result = AsrProvider.removeStopWords(result, stopWords)
 
             return if (result.isEmpty()) null else NlpRequest(listOf(result))
-//            return@runBlocking if (result.isEmpty()) null else NlpRequest(listOf(result))
-//        }
-//
-//        if (nlpRequest != null) {
-//            return nlpRequest
-//        }
     }
 
     override fun waitForSpeech(): NlpRequest? {

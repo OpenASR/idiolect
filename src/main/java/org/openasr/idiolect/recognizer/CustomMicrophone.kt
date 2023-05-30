@@ -89,7 +89,7 @@ class CustomMicrophone : Closeable, Disposable {
             //masterGainControl = findMGControl(line);
 
             synchronized(streamLock) {
-                stream = AudioInputStreamWithAdjustableGain(line)
+                stream = VoiceActivityStream(line)
 //            stream = AudioInputStream(line)
             }
 
@@ -150,12 +150,12 @@ class CustomMicrophone : Closeable, Disposable {
 
     /** @param level 0 to 100 */
     fun setNoiseLevel(level: Int) {
-        (stream as AudioInputStreamWithAdjustableGain).setNoiseLevel(level.toDouble())
+        (stream as VoiceActivityStream).setNoiseLevel(level.toDouble())
     }
 
     /** @param volume 0 to 100 */
     fun setVolume(volume: Int) {
-        (stream as AudioInputStreamWithAdjustableGain).setMasterGain(volume.toDouble())
+        (stream as VoiceActivityStream).setMasterGain(volume.toDouble())
 
 //        val mixer = AudioSystem.getMixer(null) as Mixer
 //        val info = mixer.mixerInfo
