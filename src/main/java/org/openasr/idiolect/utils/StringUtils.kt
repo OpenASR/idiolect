@@ -48,7 +48,6 @@ fun String.splitCamelCase(): Sequence<String> =
         word.toString()
     }
 
-
 /**
  * Expands a camelCase file name to a speech friendly String, omitting the .suffix.
  * ".editorconfig", ".env", ".gitignore" are left intact
