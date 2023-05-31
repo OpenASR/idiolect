@@ -72,7 +72,7 @@ class CustomMicrophone : Closeable, Disposable {
     fun getLine() = line
 
     /** Acquire audio resources, but do not begin the flow of data */
-    fun useLine(line: TargetDataLine) {
+    fun useLine(line: TargetDataLine, useVad: Boolean = true) {
         try {
             if (this.line != null) {
                 log.warn("call to useLine: $line")
@@ -89,8 +89,7 @@ class CustomMicrophone : Closeable, Disposable {
             //masterGainControl = findMGControl(line);
 
             synchronized(streamLock) {
-                stream = VoiceActivityStream(line)
-//            stream = AudioInputStream(line)
+                stream = if (useVad) VoiceActivityStream(line) else AudioInputStream(line)
             }
 
             this.line = line

@@ -98,7 +98,7 @@ class VuMeterTest {
             thirdArg()
         } andThenAnswer { 0 }
 
-        microphone.useLine(dataLine)
+        microphone.useLine(dataLine, false)
     }
 
 

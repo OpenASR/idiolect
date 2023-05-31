@@ -1,15 +1,17 @@
 package org.openasr.idiolect.asr.whisper.cpp
 
-import ai.grazie.utils.Time
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import io.github.ggerganov.whispercpp.WhisperCpp
 import io.github.ggerganov.whispercpp.params.WhisperFullParams
 import io.github.ggerganov.whispercpp.params.WhisperSamplingStrategy
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.openasr.idiolect.asr.AsrProvider
 import org.openasr.idiolect.asr.AsrSystemStateListener
 import org.openasr.idiolect.asr.offline.OfflineAsr
@@ -66,9 +68,17 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
         val whisperParams = whisper.getFullDefaultParams(WhisperSamplingStrategy.WHISPER_SAMPLING_GREEDY)
         whisperParams.printProgress(false)
         whisperParams.suppressNonSpeechTokens(true)
-//        whisperParams.no_speech_thold = 0.75f   // default 0.6
-//        whisperParams.setBestOf(4)
-//        whisperParams.setBeamSizeAndPatience(4, -1.0f)
+        whisperParams.temperature_inc = 0f
+        //  >= -0.3 : good
+        //     -0.4 : close
+        //  >  -0.8 : clear speech mis-recognised or
+        //  <= -0.8 : mis-pronounced
+        //  <  -1.0 : is mumbled/hard to hear
+        whisperParams.logprob_thold = -0.8f     // default -1.0
+        // ignore no_speech_prob >= 0.75
+        whisperParams.no_speech_thold = 0.75f   // default 0.6
+//        whisperParams.setBestOf(4)              // for greedy
+//        whisperParams.setBeamSizeAndPatience(40, -1.0f)
 
         this.whisperParams = whisperParams
     }
@@ -96,16 +106,11 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
 
         CoroutineScope(Dispatchers.IO).launch {
             while (microphone.stream.read(audioData).also { nbytes = it } > 0 && listening) {
-//                if (vad.isSpeech(audioData)) {
-                    CoroutineScope(Dispatchers.Default).launch {
-                        val result = processSpeech(audioData, nbytes) // Blocking call to process speech
-                        if (result != null) {
-                            _speechResults.emit(result)
-                        }
-                    }
-//                }
+                val result = processSpeech(audioData, nbytes) // Blocking call to process speech
+                if (result != null) {
+                    _speechResults.emit(result)
+                }
             }
-            println("Stopped recognition coroutine")
             _speechResults.emit(null)
         }
 
@@ -120,7 +125,6 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
     internal fun processSpeech(audioData: ByteArray, nbytes: Int): NlpRequest? {
         val floats = FloatArray(nbytes / 2)
         val stopWords = AsrProvider.stopWords(grammar)
-        var start = Time.epochMillis()
 
         for ((j, i) in (0 until nbytes step 2).withIndex()) {
             val sample = (((audioData[i + 1].toInt() shl 8) + (audioData[i].toInt() and 0xff)) / MAX_SAMPLE_VALUE).coerceIn(-1f..1f)
@@ -128,19 +132,15 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
             floats[j] = sample
         }
 
-            println("audio ${Time.epochMillis() - start}ms")
-            start = Time.epochMillis()
+        var result = whisper.fullTranscribe(whisperParams, floats)
 
-            var result = whisper.fullTranscribe(whisperParams, floats)
-            println("results: '$result', ${Time.epochMillis() - start}ms")
+        result = result.replace(",", "")
+            .replace(Regex("[.?!]$"), "")
+            .lowercase()
 
-            result = result.replace(",", "")
-                .replace(Regex("[.?!]$"), "")
-                .lowercase()
+        result = AsrProvider.removeStopWords(result, stopWords)
 
-            result = AsrProvider.removeStopWords(result, stopWords)
-
-            return if (result.isEmpty()) null else NlpRequest(listOf(result))
+        return if (result.isEmpty()) null else NlpRequest(listOf(result))
     }
 
     override fun waitForSpeech(): NlpRequest? {

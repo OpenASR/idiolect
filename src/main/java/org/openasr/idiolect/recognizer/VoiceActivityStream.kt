@@ -47,7 +47,13 @@ class VoiceActivityStream(line: TargetDataLine,
             }
 
             for ((j, i) in (0 until bytesRead step 2).withIndex()) {
-                val sample = ((frameBytes[i + 1].toInt() shl 8) or (frameBytes[i].toInt() and 0xFF)).toShort()
+                var sample = ((frameBytes[i + 1].toInt() shl 8) or (frameBytes[i].toInt() and 0xFF)).toShort()
+
+//                if (sample < noiseLevel && sample > -noiseLevel) {
+//                    sample = 0
+//                }
+                sample = (sample * masterGain).toInt().toShort()  // .coerceIn(-32768, 32767)
+
                 frame[j] = sample
             }
 
@@ -86,7 +92,7 @@ class VoiceActivityStream(line: TargetDataLine,
                 if (maxSpeech > 0 && speechTime >= maxSpeech) {
                     break
                 }
-            } else if (processedBytes != 0 && silenceTime >= maxSilence) {
+            } else if (speechTime >= minSpeech && silenceTime >= maxSilence) {
                 break
             }
         }
