@@ -72,7 +72,7 @@ class CustomMicrophone : Closeable, Disposable {
     fun getLine() = line
 
     /** Acquire audio resources, but do not begin the flow of data */
-    fun useLine(line: TargetDataLine) {
+    fun useLine(line: TargetDataLine, useVad: Boolean = true) {
         try {
             if (this.line != null) {
                 log.warn("call to useLine: $line")
@@ -89,8 +89,7 @@ class CustomMicrophone : Closeable, Disposable {
             //masterGainControl = findMGControl(line);
 
             synchronized(streamLock) {
-                stream = AudioInputStreamWithAdjustableGain(line)
-//            stream = AudioInputStream(line)
+                stream = if (useVad) VoiceActivityStream(line) else AudioInputStream(line)
             }
 
             this.line = line
@@ -150,12 +149,12 @@ class CustomMicrophone : Closeable, Disposable {
 
     /** @param level 0 to 100 */
     fun setNoiseLevel(level: Int) {
-        (stream as AudioInputStreamWithAdjustableGain).setNoiseLevel(level.toDouble())
+        (stream as VoiceActivityStream).setNoiseLevel(level.toDouble())
     }
 
     /** @param volume 0 to 100 */
     fun setVolume(volume: Int) {
-        (stream as AudioInputStreamWithAdjustableGain).setMasterGain(volume.toDouble())
+        (stream as VoiceActivityStream).setMasterGain(volume.toDouble())
 
 //        val mixer = AudioSystem.getMixer(null) as Mixer
 //        val info = mixer.mixerInfo

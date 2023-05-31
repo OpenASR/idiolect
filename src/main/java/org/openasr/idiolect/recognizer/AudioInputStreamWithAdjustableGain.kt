@@ -3,7 +3,6 @@ package org.openasr.idiolect.recognizer
 import java.io.IOException
 import java.lang.Byte.*
 import javax.sound.sampled.*
-import kotlin.math.abs
 
 class AudioInputStreamWithAdjustableGain internal constructor(line: TargetDataLine) : AudioInputStream(line) {
     private val DEFAULT_MASTER_GAIN = 1.0

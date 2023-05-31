@@ -36,7 +36,7 @@ abstract class ModelManager<C : Configurable>(
 
     abstract fun listModels(): List<ModelInfo>
 
-    fun initialiseModel(notificationContent: String, setModel: Consumer<String>) {
+    open fun initialiseModel(notificationContent: String, setModel: Consumer<String>) {
         if (configuredModelPath().isEmpty()) {
             showNotificationForModel(
                 notificationContent,
@@ -107,15 +107,15 @@ abstract class ModelManager<C : Configurable>(
         if (defaultModelURL.isNotEmpty()) {
             notificationManager.addAction(NotificationAction.create("Download Default Model") { _ ->
 //                CoroutineScope(Dispatchers.IO).launch {
-                    val modelPath = installModel(defaultModelURL)
-                    onModelProvided.accept(modelPath)
+                val modelPath = installModel(defaultModelURL)
+                onModelProvided.accept(modelPath)
 //                }
             })
         }
 
         notificationManager.addAction(NotificationAction.create("Edit Configuration") { _ ->
-                ShowSettingsUtil.getInstance().showSettingsDialog(null, configurable)
-            })
+            ShowSettingsUtil.getInstance().showSettingsDialog(null, configurable)
+        })
             .notify(null)
     }
 }

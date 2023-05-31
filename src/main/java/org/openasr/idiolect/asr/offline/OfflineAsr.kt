@@ -9,7 +9,7 @@ import org.openasr.idiolect.asr.AsrProvider
 import org.openasr.idiolect.asr.models.ModelManager
 import org.openasr.idiolect.recognizer.CustomMicrophone
 
-abstract class OfflineAsr<C : Configurable>(private val modelManager: ModelManager<C>) : AsrProvider {
+abstract class OfflineAsr<C : Configurable>(internal var modelManager: ModelManager<C>) : AsrProvider {
     protected lateinit var microphone: CustomMicrophone
     protected var listening = false
 
