@@ -15,8 +15,9 @@ import org.openasr.idiolect.asr.whisper.cpp.WhisperCppAsr
 import org.openasr.idiolect.asr.whisper.server.settings.WhisperServerConfig
 import org.openasr.idiolect.asr.whisper.server.settings.WhisperServerConfigurable
 import org.openasr.idiolect.asr.whisper.server.settings.WhisperServerModelManager
+import org.openasr.idiolect.recognizer.AudioInputDeviceSelectionListener
 
-class WhisperServerAsr : OfflineAsr<WhisperServerConfigurable>(WhisperServerModelManager) {
+class WhisperServerAsr : OfflineAsr<WhisperServerConfigurable>(WhisperServerModelManager), AudioInputDeviceSelectionListener {
     override fun displayName(): String = "whisper_server"
     private lateinit var server: WhisperServerCoroutineStub
     private val emptyRequest = EmptyRequest.getDefaultInstance()
@@ -34,13 +35,15 @@ class WhisperServerAsr : OfflineAsr<WhisperServerConfigurable>(WhisperServerMode
                     val name = parts[0]
                     val language = if (parts.size == 2) parts[1] else null
 
-                    val request = LoadModelRequest.newBuilder()
-                        .setName(name)
-                        .setLanguage(language)
+                    val builder = LoadModelRequest.newBuilder().setName(name)
 //                        .setDevice(ProcessingDevice.cpu)
 //                        .setDownloadRoot()
 //                        .setInMemory()
-                        .build()
+                    if (language != null) {
+                        builder.setLanguage(language)
+                    }
+
+                    val request = builder.build()
 
                     instance.server.loadModel(request)
 
@@ -65,6 +68,7 @@ class WhisperServerAsr : OfflineAsr<WhisperServerConfigurable>(WhisperServerMode
             .build()
 
         server = WhisperServerCoroutineStub(channel)
+        microphone.addDeviceSelectionListener(this)
     }
 
     override suspend fun setModel(model: String) {
@@ -77,6 +81,16 @@ class WhisperServerAsr : OfflineAsr<WhisperServerConfigurable>(WhisperServerMode
 //        }
         stopRecognition()
 //        server.
+    }
+
+    override fun onAudioInputDeviceSelected(deviceName: String) {
+        runBlocking {
+            val deviceSelection = AudioInputDeviceSelection.newBuilder()
+                .setDeviceName(deviceName)
+                .build()
+            println("telling whisper_server to switch to ${deviceName}")
+            server.selectAudioInputDevice(deviceSelection)
+        }
     }
 
     override fun startRecognition(): Boolean {

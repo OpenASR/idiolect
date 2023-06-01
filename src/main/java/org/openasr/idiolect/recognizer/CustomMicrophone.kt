@@ -9,6 +9,10 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.sound.sampled.*
 import javax.sound.sampled.AudioFileFormat.Type.WAVE
 
+interface AudioInputDeviceSelectionListener {
+    fun onAudioInputDeviceSelected(deviceName: String)
+}
+
 @Service
 class CustomMicrophone : Closeable, Disposable {
     companion object {
@@ -28,11 +32,14 @@ class CustomMicrophone : Closeable, Disposable {
         val format = AudioFormat(sampleRate, sampleSizeInBits, channels, true, bigEndian)
     }
 
+
     private val activeThreadCount = AtomicInteger(0)
     private var line: TargetDataLine? = null
     lateinit var stream: AudioInputStream
     private var isRecording: Boolean = false
     private val streamLock = Object()
+    private var deviceListener: AudioInputDeviceSelectionListener? = null
+
 
     fun open() {
         if (line == null) {
@@ -40,14 +47,24 @@ class CustomMicrophone : Closeable, Disposable {
         }
     }
 
+    fun addDeviceSelectionListener(listener: AudioInputDeviceSelectionListener) {
+        this.deviceListener = listener
+    }
+
+    fun removeDeviceSelectionListener(listener: AudioInputDeviceSelectionListener) {
+        this.deviceListener = null
+    }
+
     fun useDefaultLine() {
         log.debug("Microphone using default line")
         useLine(AudioSystem.getTargetDataLine(format))
+        notifyDeviceSelectionListener("")
     }
 
     fun useInputDevice(device: Mixer.Info): TargetDataLine? {
         log.debug("Microphone using device by info: ${device.name}")
         useLine(AudioSystem.getTargetDataLine(format, device))
+        notifyDeviceSelectionListener(device.name)
         return line
     }
 
@@ -146,6 +163,10 @@ class CustomMicrophone : Closeable, Disposable {
     }
 
     fun isRecording() = isRecording
+
+    private fun notifyDeviceSelectionListener(deviceName: String) {
+        deviceListener?.onAudioInputDeviceSelected(deviceName)
+    }
 
     /** @param level 0 to 100 */
     fun setNoiseLevel(level: Int) {
