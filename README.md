@@ -20,10 +20,13 @@ The default ASR implementation is [Vosk] but other options are also available:
 - [Vosk](https://github.com/alphacep/vosk-api) is bundled with idiolect and requires only that you download a [model](https://alphacephei.com/vosk/models) which you can do through the idiolect settings menu. 
 - [whisper-server](https://github.com/nalbion/whisper-server) requires Python 3.10+ and has to be started externally. 
 Choose either the official [OpenAI Whisper API](https://openai.com/research/whisper) or [faster-whisper](https://github.com/guillaumekln/faster-whisper).
-- [whisper.cpp](https://github.com/ggerganov/whisper.cpp) is bundle with idiolect but is (surprisingly) significantly slower than `whisper-server` on Windows - [Core ML](https://developer.apple.com/machine-learning/core-ml/) may give better results on OSX.
+- [whisper.cpp](https://github.com/ggerganov/whisper.cpp) is bundled with idiolect but seems to be slower than `whisper-server` on Windows, . [Core ML](https://developer.apple.com/machine-learning/core-ml/) may give better results on OSX.
 - [idiolect-azure](https://github.com/OpenASR/idiolect-azure) is another IntelliJ plugin which enables speech-to-text using [Azure's Cognitive Services](https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/get-started-speech-to-text?tabs=windows%2Cterminal&pivots=programming-language-csharp#set-up-the-environment) and also serves as an example of how idiolect can be extended by other plugins.
 - [AWS Lex](https://github.com/OpenASR/idiolect/blob/feature/lex-integration/src/main/java/org/openasr/idear/asr/awslex/LexASR.kt) and [CMU Sphinx](https://github.com/OpenASR/idiolect/blob/feature/lex-integration/src/main/java/org/openasr/idear/asr/cmusphinx/CMUSphinxASR.kt) implementations were also available in previous versions but have since been removed.
 
+For `Vosk` and `whisper.cpp` you may need to configure the `jna.library.path` to point to the relevant libraries.
+
+If you're using `whisper.cpp` with [CUDA](https://developer.nvidia.com/cuda-toolkit) you may need to ensure that `java.library.path` points to the `cublas`, `cublasLt` and `cudart` libraries.
 
 ### Voice Commands
 For a full list of all actions that can be activated by voice ask Idiolect:

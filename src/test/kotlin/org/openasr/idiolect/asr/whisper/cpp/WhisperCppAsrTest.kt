@@ -12,6 +12,8 @@ import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfig
 import org.openasr.idiolect.asr.whisper.cpp.settings.WhisperCppConfigurable
 import org.openasr.idiolect.utils.TestAudioUtils
 import java.util.function.Consumer
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 
 class WhisperCppAsrTest : Disposable {
@@ -21,6 +23,7 @@ class WhisperCppAsrTest : Disposable {
         application.registerService(WhisperCppConfig::class.java)
     }
 
+    @OptIn(ExperimentalTime::class)
     @Test
     fun testSpeechRecognition() {
         // Given
@@ -36,10 +39,14 @@ class WhisperCppAsrTest : Disposable {
         audioStream.read(audioData)
 
         // When
-        val nlpRequest = whisperCppAsr.processSpeech(audioData, nbytes)
+        val (nlpRequest, time) = measureTimedValue {
+            whisperCppAsr.processSpeech(audioData, nbytes)
+        }
 
-        // Then
-        println(nlpRequest)
+        // Then the speech should be recognised.
+        // Note: On Windows this takes about 2.8-3.5 seconds. Running whisper_full_parallel actually makes it significantly slower & less accurate
+        // Using CUBLAS brings this down to 1.6-2 seconds
+        println("'${nlpRequest?.utterance}' in $time")
         assertNotNull(nlpRequest)
         assertEquals("create a function to test the audio input. save it to", nlpRequest?.utterance)
     }

@@ -22,7 +22,6 @@ import org.openasr.idiolect.nlp.NlpRequest
 
 
 class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager) {
-    private val log = logger<WhisperCppAsr>()
     val SAMPLES_TO_PROCESS = 16 * 1024 * 4 //  CustomMicrophone.format.sampleRate.toInt() * 10 // 2048 * 16
     val MAX_SAMPLE_VALUE = 32767.0f
 
@@ -34,8 +33,24 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
     override fun displayName(): String = "whisper.cpp"
 
     companion object {
+        private val log = logger<WhisperCppAsr>()
         private lateinit var instance: WhisperCppAsr
-        private val whisper = WhisperCpp()
+        private lateinit var whisper: WhisperCpp
+
+        init {
+            try {
+//                println("jna.library.path: ${System.getenv("jna.library.path")}")
+//                println("jna.platform.library.path: ${System.getenv("jna.platform.library.path")}")
+//                System.setProperty("jna.library.path", "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.1\\bin")
+//                System.setProperty("jna.debug_load", "true")
+                whisper = WhisperCpp()
+            } catch (ex: UnsatisfiedLinkError) {
+                log.error("Failed to load whisper dependencies. " +
+                    "You may need to copy the cublas, cublasLt and cudart libraries into java.library.path:\n" +
+                    System.getProperty("java.library.path").replace(';', '\n')
+                )
+            }
+        }
 
         /**
          * @param model - absolute path, or just the name (eg: "base", "base-en" or "base.en")
@@ -79,6 +94,13 @@ class WhisperCppAsr : OfflineAsr<WhisperCppConfigurable>(WhisperCppModelManager)
         whisperParams.no_speech_thold = 0.75f   // default 0.6
 //        whisperParams.setBestOf(4)              // for greedy
 //        whisperParams.setBeamSizeAndPatience(40, -1.0f)
+
+        // ---- performance tuning
+//        whisperParams.speedUp(true)     // does not improve latency, drops words from the end
+//        whisperParams.n_threads = 4     // did not observe any improvements
+
+        // ---- other
+//        whisperParams.splitOnWord(true)
 
         this.whisperParams = whisperParams
     }
