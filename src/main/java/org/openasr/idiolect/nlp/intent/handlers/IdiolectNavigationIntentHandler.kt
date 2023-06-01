@@ -1,15 +1,14 @@
 package org.openasr.idiolect.nlp.intent.handlers
 
+import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.editor.EditorFactory
-import com.intellij.openapi.fileEditor.impl.text.TextEditorComponent
-import io.ktor.util.reflect.*
+import com.intellij.openapi.fileEditor.FileEditorManager
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.actions.recognition.IdiolectNavigationRecognizer
 import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.SpeechToFileName
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
-import javax.swing.JComponent
 
 /** idiolect-specific commands */
 class IdiolectNavigationIntentHandler : IntentHandler {
@@ -27,7 +26,6 @@ class IdiolectNavigationIntentHandler : IntentHandler {
 
         when (intentName) {
             IdiolectNavigationRecognizer.INTENT_SWITCH_TO_TAB -> switchToTab(nlpContext, nlpResponse.slots?.get(SLOT_NAME)!!)
-
             else -> return null
         }
 
@@ -35,18 +33,23 @@ class IdiolectNavigationIntentHandler : IntentHandler {
     }
 
     private fun switchToTab(nlpContext: NlpContext, name: String) {
-        val editorWindows = EditorFactory.getInstance().allEditors
-        val project = nlpContext.getProject()
-        val predicate = SpeechToFileName.pickFileByAlias(project, name)
+        val project = nlpContext.getProject()?.let { project ->
+            val fileEditorManager: FileEditorManager = FileEditorManager.getInstance(project)
 
-        editorWindows.firstOrNull { editor -> predicate.invoke(editor.virtualFile.name) }
-            ?.component?.apply {
-                var pane: JComponent? = this
-                while (pane != null && !pane.instanceOf(TextEditorComponent::class)) { pane = pane.rootPane }
+            val editorWindows = EditorFactory.getInstance().allEditors
+            val predicate = SpeechToFileName.pickFileByAlias(project, name)
+            val editor = editorWindows.firstOrNull { editor -> predicate.invoke(editor.virtualFile.name) }
+            println("editor: " + editor.toString())
 
-//                val pane = rootPane.rootPane
-                println("Found a tab for $name, requesting focus")
-                pane?.isVisible = true
-                pane?.requestFocus()            }
+            if (editor != null) {
+                invokeLater {
+                    // open the file, even if it's not already open
+                    fileEditorManager.openFile(editor.virtualFile, true)
+                    // or only focus if it's already open...
+//                    val openFile = OpenFileDescriptor(project, editor.virtualFile)
+//                    fileEditorManager.openTextEditor(openFile, true)
+                }
+            }
+        }
     }
 }
