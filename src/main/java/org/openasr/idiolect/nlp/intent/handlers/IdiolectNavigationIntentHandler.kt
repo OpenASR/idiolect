@@ -1,14 +1,15 @@
 package org.openasr.idiolect.nlp.intent.handlers
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.editor.EditorFactory
-import com.intellij.openapi.fileEditor.FileEditorManager
 import org.openasr.idiolect.actions.recognition.ActionCallInfo
 import org.openasr.idiolect.actions.recognition.IdiolectNavigationRecognizer
 import org.openasr.idiolect.nlp.NlpContext
 import org.openasr.idiolect.nlp.NlpResponse
 import org.openasr.idiolect.nlp.SpeechToFileName
 import org.openasr.idiolect.nlp.intent.resolvers.IntentResolver
+import org.openasr.idiolect.psi.PsiUtil
 
 /** idiolect-specific commands */
 class IdiolectNavigationIntentHandler : IntentHandler {
@@ -25,6 +26,7 @@ class IdiolectNavigationIntentHandler : IntentHandler {
         }
 
         when (intentName) {
+            IdiolectNavigationRecognizer.INTENT_OPEN_PROJECT_FILE -> openProjectFile(nlpContext, nlpResponse.slots?.get(SLOT_NAME)!!)
             IdiolectNavigationRecognizer.INTENT_SWITCH_TO_TAB -> switchToTab(nlpContext, nlpResponse.slots?.get(SLOT_NAME)!!)
             else -> return null
         }
@@ -32,22 +34,32 @@ class IdiolectNavigationIntentHandler : IntentHandler {
         return ActionCallInfo(intentName, true)
     }
 
-    private fun switchToTab(nlpContext: NlpContext, name: String) {
-        val project = nlpContext.getProject()?.let { project ->
-            val fileEditorManager: FileEditorManager = FileEditorManager.getInstance(project)
+    private fun openProjectFile(nlpContext: NlpContext, name: String) {
+        nlpContext.getProject()?.let { project ->
+            ApplicationManager.getApplication().runReadAction {
+                val projectFiles = PsiUtil.getAllFilesInProject(project)
 
+                val predicate = SpeechToFileName.pickFileByAlias(project, name)
+                val file = projectFiles.firstOrNull { predicate.invoke(it.name) }
+
+                if (file != null) {
+                    invokeLater {
+                        PsiUtil.openFileInEditor(project, file)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun switchToTab(nlpContext: NlpContext, name: String) {
+        nlpContext.getProject()?.let { project ->
             val editorWindows = EditorFactory.getInstance().allEditors
             val predicate = SpeechToFileName.pickFileByAlias(project, name)
             val editor = editorWindows.firstOrNull { editor -> predicate.invoke(editor.virtualFile.name) }
-            println("editor: " + editor.toString())
 
             if (editor != null) {
                 invokeLater {
-                    // open the file, even if it's not already open
-                    fileEditorManager.openFile(editor.virtualFile, true)
-                    // or only focus if it's already open...
-//                    val openFile = OpenFileDescriptor(project, editor.virtualFile)
-//                    fileEditorManager.openTextEditor(openFile, true)
+                    PsiUtil.focusFileInEditor(project, editor.virtualFile)
                 }
             }
         }

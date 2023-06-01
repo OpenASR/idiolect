@@ -57,7 +57,7 @@ fun String.splitCamelCase(): Sequence<String> =
 fun speechFriendlyFileName(fileName: String): String {
     val dot = fileName.indexOf('.')
 
-    val base = if (dot == 0) fileName else fileName.substring(0, fileName.indexOf('.'))
+    val base = if (dot <= 0) fileName else fileName.substring(0, fileName.indexOf('.'))
     return base.expandCamelCase()
 }
 
