@@ -7,13 +7,23 @@
 A general purpose [voice user interface](https://en.wikipedia.org/wiki/Voice_user_interface) for the IntelliJ Platform, inspired by [Tavis Rudd](https://www.youtube.com/watch?v=8SkdfdXWYaI). 
 Possible use cases: visually impaired and [RSI](https://en.wikipedia.org/wiki/Repetitive_strain_injury) users. Originally developed as part of a [JetBrains hackathon](https://blog.jetbrains.com/blog/2015/08/31/jetbrains-3rd-annual-hackathon-new-generation-debugger-grabs-1st-place/), it is now a community-supported project. For background information, check out [this presentation](https://speakerdeck.com/breandan/programming-java-by-voice).
 
-## See Also
-
-- [idiolect-azure](https://github.com/OpenASR/idiolect-azure)
 
 ## Usage
 
-To get started, press the <img src="src/main/resources/org/openasr/idiolect/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar, then speak a command, e.g. "Hi, IDEA!" Idiolect supports a simple [grammar](src/main/resources/org/openasr/idiolect/grammars/command.gram). For a complete list of commands, please refer to [the wiki](https://github.com/OpenASR/idiolect/wiki/Feature-Roadmap#features). Click the button once more to deactivate.
+To get started, press the <img src="src/main/resources/org/openasr/idiolect/icons/start.svg" height="24" alt="Voice control"/> button in the toolbar, then speak a command, e.g. "what can I say?". For a complete list of commands, please refer to [example-phrases.md](https://github.com/OpenASR/idiolect/blob/master/docs/example-phrases.md). Click the button once more to deactivate.
+
+
+### ASR (Automatic Speech Recognition) Options
+
+The default ASR implementation is [Vosk] but other options are also available:
+
+- [Vosk](https://github.com/alphacep/vosk-api) is bundled with idiolect and requires only that you download a [model](https://alphacephei.com/vosk/models) which you can do through the idiolect settings menu. 
+- [whisper-server](https://github.com/nalbion/whisper-server) requires Python 3.10+ and has to be started externally. 
+Choose either the official [OpenAI Whisper API](https://openai.com/research/whisper) or [faster-whisper](https://github.com/guillaumekln/faster-whisper).
+- [whisper.cpp](https://github.com/ggerganov/whisper.cpp) is bundle with idiolect but is (surprisingly) significantly slower than `whisper-server` on Windows - [Core ML](https://developer.apple.com/machine-learning/core-ml/) may give better results on OSX.
+- [idiolect-azure](https://github.com/OpenASR/idiolect-azure) is another IntelliJ plugin which enables speech-to-text using [Azure's Cognitive Services](https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/get-started-speech-to-text?tabs=windows%2Cterminal&pivots=programming-language-csharp#set-up-the-environment) and also serves as an example of how idiolect can be extended by other plugins.
+- [AWS Lex](https://github.com/OpenASR/idiolect/blob/feature/lex-integration/src/main/java/org/openasr/idear/asr/awslex/LexASR.kt) and [CMU Sphinx](https://github.com/OpenASR/idiolect/blob/feature/lex-integration/src/main/java/org/openasr/idear/asr/cmusphinx/CMUSphinxASR.kt) implementations were also available in previous versions but have since been removed.
+
 
 ### Voice Commands
 For a full list of all actions that can be activated by voice ask Idiolect:
