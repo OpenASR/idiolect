@@ -1,10 +1,10 @@
 import org.jetbrains.changelog.Changelog.OutputType.HTML
 
 plugins {
-  kotlin("jvm") version "1.9.0-Beta"
-  id("org.jetbrains.intellij") version "1.13.3"
-  id("com.github.ben-manes.versions") version "0.46.0"
-  id("org.jetbrains.changelog") version "2.0.0"
+  kotlin("jvm") version "1.9.0"
+  id("org.jetbrains.intellij") version "1.15.0"
+  id("com.github.ben-manes.versions") version "0.47.0"
+  id("org.jetbrains.changelog") version "2.1.2"
 }
 
 group = "org.openasr"
@@ -114,7 +114,7 @@ dependencies {
   implementation("net.java.dev.jna:jna:5.13.0")
   implementation("com.alphacephei:vosk:0.3.45")
   implementation("io.github.jonelo:jadapter-for-native-tts:0.12.0")
-  implementation("com.theokanning.openai-gpt3-java:service:0.12.0")
+  implementation("com.theokanning.openai-gpt3-java:service:0.14.0")
 //  implementation("com.aallam.openai:openai-client:3.2.3")  // thto
   testImplementation("org.reflections:reflections:0.10.2")
   testImplementation("ai.hypergraph:kaliningraph:0.2.1") {

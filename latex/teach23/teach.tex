@@ -115,7 +115,7 @@ Primarily, Idiolect observes the following design principles: be (1) natural to 
 
 Early attempts to build keyboardless programming systems can be traced back at least two decades to \citet{leopold1997keyboardless}, later revisited by \citet{arnold2000programming}, \citet{begel2005spoken} and others. These systems allow users to write code by speaking into a microphone, however early voice programming systems were limited by a small vocabularies. Another stream of work from \citet{chkroun2019lia} targets teachable voice user interfaces, but unlike our work, do not consider IDE integration or configuration. It also predates many of the recent breakthroughs on large language modeling, which we consider a transformative enabling technology for the adoption of voice programming.
 
-Although related, voice assistants such as Siri and Alexa are not configurable nor intended for programming. Our approach is more akin to a programmable bot with audio I/O than a dedicated voice assistant, which are often more distracting than helpful when programming. Spoken programs are also closely related to natural language programming, an idea once scorned~\cite{dijkstra1979foolishness}, but now becoming increasingly plausible, thanks to the emergence of large language models. \citet{shaw2022myths} calls for new programming languages to address the needs of ``vernacular developers''.
+A few commercial solutions such as GitHub Copilot Voice, Serande.ai, and Talon Voice have been developed, but there is comparatively little supporting research on spoken programming. Spoken programs are closely related to natural language programming, an idea once scorned~\cite{dijkstra1979foolishness}, but now becoming increasingly plausible, thanks to the emergence of large language models. \citet{shaw2022myths} calls for new programming languages to address the needs of ``vernacular developers''. As noted by \citet{pandey2022accessibility}, most IDEs are inaccessible to screenreaders and other assistive technologies used by the visually impaired, thus motivating the need for more context-aware voice programming tools.
 
 \section{Architecture}
 
@@ -146,17 +146,17 @@ Several users reported confusion when first installing our plugin. To address th
 
 \subsection{Plugin Observability}
 
-Recognition failure is a common issue, often caused by transcription errors in the ASR model, due to, e.g., noise in the audio signal, stopwords, or poor recognition accuracy. To address this issue, we added a visual cue that displays the phrase transcribed, any action triggered upon intent recognition, and the raw audio waveform. This allows users to more easily diagnose and correct recognition errors.
+Recognition failure is a common issue, often caused by transcription errors in the ASR model, due to, e.g., noise in the audio signal, stopwords, or mistranscription. To address this issue, we added visual cues displaying the phrase transcribed, the action triggered upon intent recognition, and the raw audio waveform. These cues allow users to more easily diagnose and prevent recognition errors from reoccurring.
 
 \subsection{API Extensibility}
 
-Idiolect tries to anticipate users actions and expose default action bindings, however certain functionality is best left implemented by downstream developers, who are better-equipped to understand their users' needs. In addition to end-user configurability, Idiolect is designed to be extensible by other IntelliJ Platform plugins, for defining recognition handlers and custom actions. We offer a simple message-passing API for plugins to communicate with Idiolect, and a DSL for defining custom commands and grammars.
+Idiolect tries to anticipate users' actions and expose default action bindings, however certain functionality is often best left implemented by downstream developers, who are better-equipped to understand their users' needs. In addition to end-user configurability, Idiolect is designed to be extensible by other IntelliJ Platform plugins, for defining recognition handlers and custom actions. We offer a simple message-passing API for plugins to communicate with Idiolect, and a DSL for defining custom commands and grammars.
 
 \subsection{Error Recovery}\label{sec:error}
 
-Another common usability barrier is when transcription is accurate, but the utterance does not correspond to an actionable command, possibly due to stopwords, verbal fillers or extraneous text which cannot be directly parsed. To correct recognition errors, we apply \citet{considine2022tidyparse}, which supports recognition and parsing of context-free and mildly context-sensitive grammars, and computing language edit distance. We use a SAT solver to find the smallest edit transforming a string outside the language to a string inside the language. Only when the utterance is one or two tokens away from a known command do we attempt a repair.
+Another common usability barrier is when transcription is accurate, but the utterance does not correspond to an actionable command, possibly due to stopwords, verbal fillers or extraneous words which cannot be directly parsed. To recover from recognition failure, we adapt \citet{considine2022tidyparse}, which supports the recognition and parsing of context-free and mildly context-sensitive grammars, and computing language edit distance. This allows Idiolect to recover from minor recognition errors by searching for the closest matching command in a user-defined grammar.
 
-VoskAPI is also capable of returning a list of alternate utterances alongside a confidence score for each, which can be used to determine if any recognized utterance is sufficiently close to an actionable command in the Idiolect grammar.
+%VoskAPI is also capable of returning a list of alternate utterances alongside a confidence score for each, which can be used to determine if any recognized utterance is sufficiently close to an actionable command in the Idiolect grammar.
 
 %\section{Evaluation}
 %
@@ -185,11 +185,7 @@ VoskAPI is also capable of returning a list of alternate utterances alongside a 
 %
 %Two primary trends are evident. First, model size has a weak, but observable effect on recognition performance, consistent with prior work on large-vocabulary continuous speech recognition. Based on plentiful evidence in the scaling literature~\cite{droppo2021scaling}, we expect this trend to hold for larger models across natural languages. Out of the three models we tested, \texttt{vosk-model-small-en-us-0.22} exhibits the lowest average WER across all voices. Second, we note the presence of gender bias in the MacOS/Vosk TTS/ASR pipeline. Despite the apparent intelligibility of both sets of voices, WER is substantially lower on female voices (Flo, et al.) than their corresponding male counterparts (Eddy, et al.). The cause of this discrepancy is unclear, but merits further investigation.
 
-
 \section{Conclusion}
-
-%
-
 
 On one end of the design spectrum are embedded domain specific languages (eDSLs). These systems can be powerful, but require a high upfront investment from the user. On the other end are static languages, which can be challenging to maintain and extend. In the middle of this language design spectrum are \textit{idiolects}, which give users the freedom to create, share and reconfigure conversational domain-specific languages for their own idiomatic needs. By targeting developers, who are typically comfortable with configuration languages, commands with more complex semantics can be expressed programmatically, then invoked on-the-fly.
 
