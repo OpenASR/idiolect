@@ -1,0 +1,258 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% From a template maintained at https://github.com/jamesrobertlloyd/cbl-tikz-poster
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[portrait,a0b,final,a4resizeable]{a0poster}
+\setlength{\paperwidth}{36in} % A0 width: 46.8in
+\setlength{\paperheight}{48in} % A0 width: 46.8in
+
+\usepackage{atbegshi}% http://ctan.org/pkg/atbegshi
+\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
+\usepackage{qrcode}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{mathtools}
+%\usepackage{color}
+%\usepackage{morefloats}
+%\usepackage[pdftex]{graphicx}
+%\usepackage{rotating}
+\usepackage{amsmath, amsthm, amssymb, bm}
+%\usepackage{array}
+%\usepackage{booktabs}
+\usepackage{multirow}
+%\usepackage{hyperref}
+\usepackage{pgf-soroban}
+\usepackage{bussproofs}
+\usetikzlibrary{cd,shapes.geometric,arrows,chains,matrix,positioning,scopes,calc}
+\tikzstyle{mybox} = [draw=white, rectangle]
+%\definecolor{darkblue}{rgb}{0,0.08,0.45}
+%\definecolor{blue}{rgb}{0,0,1}
+%\usepackage{dsfont}
+\usepackage[margin=0.5in]{geometry}
+%\usepackage{fp}
+
+\input{include/jlposter.tex}
+
+\usepackage{include/preamble}
+
+
+% Custom notation
+\newcommand{\fdeep}{\vf^{(1:L)}}
+\newcommand{\flast}{\vf^{(L)}}
+\newcommand{\Jx}{J_{\vx \rightarrow \vy}}
+\newcommand{\Jxx}{J_{\vx \rightarrow \vy}(\vx)}
+\newcommand{\Jy}{J_{\vy \rightarrow \vx}}
+\newcommand{\Jyy}{J_{\vy \rightarrow \vx}(\vy)}
+\newcommand{\detJyy}{ \left| J_{\vy \rightarrow \vx}(\vy) \right|}
+
+\newcommand\transpose{{\textrm{\tiny{\sf{T}}}}}
+\newcommand{\note}[1]{}
+\newcommand{\hlinespace}{~\vspace*{-0.15cm}~\\\hline\\\vspace*{0.15cm}}
+\newcommand{\embeddingletter}{g}
+\newcommand{\bo}{{\sc bo}}
+\newcommand{\agp}{Arc \gp}
+
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\y}{y}
+\newcommand{\data} {\X, \y}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\f}{\mathit{f}}
+
+\newcommand{\fx}{ f(\mathbf{x}) }
+\newcommand{\U}{\mathcal{U}}
+\newcommand{\E}{\mathbf{E}}
+
+
+\newcommand{\bardist}[0]{\hspace{-0.2cm}}
+
+\newlength{\arrowsize}
+\pgfarrowsdeclare{biggertip}{biggertip}{
+    \setlength{\arrowsize}{10pt}
+    \addtolength{\arrowsize}{2\pgflinewidth}
+    \pgfarrowsrightextend{0}
+    \pgfarrowsleftextend{-5\arrowsize}
+}{
+    \setlength{\arrowsize}{1pt}
+    \addtolength{\arrowsize}{\pgflinewidth}
+    \pgfpathmoveto{\pgfpoint{-5\arrowsize}{4\arrowsize}}
+    \pgfpathlineto{\pgfpointorigin}
+    \pgfpathlineto{\pgfpoint{-5\arrowsize}{-4\arrowsize}}
+    \pgfusepathqstroke
+}
+
+
+% Custom commmands.
+
+\def\jointspacing{\vspace{0.3in}}
+
+\def\boxwidth{0.21\columnwidth}
+\newcommand{\gpdrawbox}[1]{
+    \setlength\fboxsep{0pt}
+    \hspace{-0.36in}
+    \fbox{\hspace{-4mm}
+%\includegraphics[width=\boxwidth]{../figures/deep_draws/deep_gp_sample_layer_#1}
+    \hspace{-4mm}}}
+
+\newcommand{\mappic}[1]{
+%\hspace{-0.05in}\includegraphics[width=\boxwidth]{../../figures/seed-0-map/latent_coord_map_layer_#1}
+}
+
+\newcommand{\mappiccon}[1]{
+%\hspace{-0.05in}\includegraphics[width=\boxwidth]{../../figures/seed-0-map-connected/latent_coord_map_layer_#1}
+}
+
+\newcommand{\spectrumpic}[1]{
+%\includegraphics[trim=4.5mm 0mm 4mm 3mm, clip, width=0.44\columnwidth]{../figures/spectrum/layer-#1}
+}
+
+\newcommand{\feat}{\vh}
+
+
+
+
+
+\begin{document}
+\begin{poster}
+    \vspace{1\baselineskip}   % Add some space at the top of the poster
+
+
+    %%% Header
+    \begin{center}
+        \begin{pcolumn}{1.03}
+            %%% Title
+            \begin{minipage}[c][9cm][c]{0.85\textwidth}
+                \begin{center}
+                {\veryHuge \textbf{Idiolect: A Reconfigurable Voice Coding Assistant}}\\[10mm]
+                {\huge Breandan Considine, Nicholas Albion, Xujie Si\\[7.5mm]
+                }
+                \end{center}
+            \end{minipage}
+        \end{pcolumn}
+    \end{center}
+
+    \vspace*{1.5cm}
+
+    \large
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%% Beginning of Document
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \Large
+
+    \begin{multicols}{2}
+
+
+        \begin{aquote}{--Charles Sanders Peirce, How to Make Our Ideas Clear (1878)}
+            To ascertain the meaning of an intellectual conception one should consider what practical consequences might result from the truth of that conception—and the sum of these consequences constitute the entire meaning of the conception.
+        \end{aquote}
+
+        \vspace{20pt}
+
+        \begin{aquote}{--Ludwig Wittgenstein, Philosophical Investigations
+        (1953)}
+            The language is meant to serve for communication between a builder A and an assistant B. A is building with building-stones: there are blocks, pillars, slabs and beams. B has to pass the stones, in the order in which A needs them. For this purpose they use a language consisting of the words `block', `pillar', `slab', `beam'. A calls them out; — B brings the stone which he has learnt to bring at such-and-such a call. Conceive this as a complete primitive language.
+        \end{aquote}
+        \vspace{10pt}
+
+        \mysection{Main Idea}
+        \null\hspace*{3cm}\begin{minipage}[c]{0.85\columnwidth}
+        \begin{itemize}[labelsep=1em]
+            \setlength\itemsep{0.5em}
+            \item Verbally instruct a computer to program itself as a human being does.
+            \item How do humans interact with computers? Using a screen and a keyboard.
+            \item Visually parse the workspace and offer affordances as navigable choices.
+        \end{itemize}
+        \end{minipage}
+
+        \jointspacing
+
+        \mysection{AceJump}
+
+        \null\hspace*{1.8cm}\begin{minipage}[c]{0.90\columnwidth}
+            Helps developers search and navigate source code by assigning tags to search results in an unambiguous way while minimizing total keystrokes.\\
+            \href{https://github.com/acejump/acejump}{\includegraphics[width=\textwidth]{acejump_screenshot.png}}
+
+
+        Given a set of indices $I$ in document $d$, and a set of tags $T$, find a bijection $f: T^*\subset T \leftrightarrow I^*\subset I$, maximizing $|I^*|$, such that:
+
+        \begin{equation*}
+            d[i\ldots k] + t \notin d[i'\ldots(k + |t|)], \forall i' \in I\setminus\{i\}, \forall k \in (i, |d| - |t|]
+        \end{equation*}
+
+        where $t \in T, i \in I$. This can be relaxed to $t=t[0]$ and $\forall k \in (i, i+K]$ for some fixed $K$, in most natural documents.
+
+        \vspace{10pt}
+        \textbf{Natural language:}
+        \textit{Maximizes tags assigned to search results in uniquely-selectable manner, i.e., should never be possible to select a tag by mistake.}
+        \end{minipage}
+
+        \jointspacing
+
+        \mysection{TraceJump}
+        \null\hspace*{1.8cm}\begin{minipage}[c]{0.90\columnwidth}
+                              Screenreading, object detection and visual navigation from raw screen pixels. \\
+
+                              \hspace{-10pt}\begin{tabular}{ c c c }
+                                  \includegraphics[width=12.94cm]{tracejump1.png} &
+                                  \includegraphics[width=12.94cm]{tracejump2.png} &
+                                  \includegraphics[width=12.94cm]{tracejump3.png}\\
+                                  \small{\textbf{Activate}} & \small{\textbf{Select}} & \small{\textbf{Jump}}
+                              \end{tabular}
+        \end{minipage}
+        \jointspacing
+
+        \mysection{SourceJump}
+
+        \null\hspace*{1.8cm}\begin{minipage}[c]{0.90\columnwidth}
+                                Learn to retrieve contextually relevant source code from an unindexed corpus by learning to write a query which captures semantically similar documents.\\
+
+                                \href{https://github.com/acejump/sourcejump}{\includegraphics[width=\textwidth]{sourcejump.png}}\\
+        \end{minipage}
+
+        \jointspacing
+
+        \mysection{Tidyparse}
+
+        \null\hspace*{1.8cm}\begin{minipage}[c]{0.90\columnwidth}
+                                Suggests minimal syntax repairs ranked by naturalness and Levenshtein distance.\\
+
+                                \href{https://github.com/tidyparse/tidyparse}{\includegraphics[width=\textwidth]{tidyparse_screenshot.png}}
+        \end{minipage}
+
+        \jointspacing
+
+        \mysection{Idiolect}
+
+        \null\hspace*{1.8cm}\begin{minipage}[c]{0.90\columnwidth}
+                                Bind custom phrases in a reconfigurable IDE plugin with instant adaptation.\\
+
+                                \href{https://github.com/openasr/idiolect}{\includegraphics[width=\textwidth]{architecture.png}}
+        \end{minipage}
+
+        \jointspacing
+
+    \end{multicols}
+
+    \bottombox{
+    %% QR code
+    %    \hfill\bottomboxlogo{img/kotlin_logo.png}
+    % Comment out the line below out to hide logo
+        \begin{minipage}[c][0.1\paperheight][c]{0.18\textwidth}\qrcode[height=2.6in]{teach.ndan.co} \end{minipage}
+        \hspace{-2.5cm}\begin{minipage}[l][0.1\paperheight][c]{0.33\textwidth}\includegraphics[height=2.6in]{mcgill.png} \end{minipage}
+        \hspace{-4.5cm}\begin{minipage}[l][0.1\paperheight][c]{0.33\textwidth}\includegraphics[height=2.6in]{mila.png} \end{minipage}
+        \hspace{-10cm}\begin{minipage}[c][0.1\paperheight][c]{0.20\textwidth}\includegraphics[height=2.6in]{icons.png} \end{minipage}
+
+    %    \hfill\bottomboxlogo{img/mila_mauve.png} % \hfill shifts the logo across so it meets the right hand side margin
+    % Note that \bottomboxlogo takes an optional width argument. It defaults to the following:
+    % \hfill\bottomboxlogo[width=\textwidth]{<path_to_image_file>}
+    % where \textwidth is actually the width of a minipage which is defined in the \bottombox command of
+    % betterportaitposter.cls It's a standard \includegraphics command in there, so easy to change if
+    % you need to add a border etc.
+    }
+\end{poster}
+\end{document}
